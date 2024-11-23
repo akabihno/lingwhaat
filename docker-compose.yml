@@ -1,0 +1,16 @@
+services:
+  web:
+    image: php:8.2-apache
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    volumes:
+      - ./web:/var/www/html
+  db:
+    image: mysql:8.1.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./mysql_data:/var/lib/mysql
