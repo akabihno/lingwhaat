@@ -1,6 +1,6 @@
 <?php
 
-use web\src\TransliterationService;
+use App\TransliterationService;
 
 $transliterationService = new TransliterationService();
 

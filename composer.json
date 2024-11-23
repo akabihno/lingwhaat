@@ -1,0 +1,22 @@
+{
+  "name": "akabihno/whatlanguage",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "GNU General Public License v3.0",
+  "autoload": {
+    "psr-4": {
+      "App": "web/src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "akabihno"
+    }
+  ],
+  "config": {
+    "platform": {
+      "php": "8.2"
+    }
+  },
+  "require": {}
+}
