@@ -1,17 +1,29 @@
 services:
   web:
     image: php:8.2-apache
+    container_name: php-app
     ports:
       - "80:80"
     depends_on:
       - db
+      - composer
     volumes:
       - ./web:/var/www/html
       - ./vendor:/var/www/html/vendor
+
   db:
     image: mysql:8.1.0
+    container_name: database
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     volumes:
       - ./mysql_data:/var/lib/mysql
+
+  composer:
+    image: composer:latest
+    container_name: composer-installer
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+    command: [ "composer", "install" ]
