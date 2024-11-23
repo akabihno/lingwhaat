@@ -7,7 +7,7 @@ services:
       - db
     volumes:
       - ./web:/var/www/html
-      - ./vendor:/var/www/vendor
+      - ./vendor:/var/www/html/vendor
   db:
     image: mysql:8.1.0
     environment:
