@@ -6,8 +6,7 @@ services:
     depends_on:
       - db
     volumes:
-      - ./web:/var/www/web
-      - ./src:/var/www/src
+      - ./web:/var/www/html
       - ./vendor:/var/www/vendor
   db:
     image: mysql:8.1.0
