@@ -1,6 +1,6 @@
 <?php
 
-namespace web\src;
+namespace App;
 class TransliterationService
 {
     public function transliterate($text) {
