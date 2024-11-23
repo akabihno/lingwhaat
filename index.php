@@ -2,8 +2,8 @@
 
 require 'vendor/autoload.php';
 
-use App\TransliterationService;
+use App\LandingWebPage;
 
-$transliterationService = new TransliterationService();
+$landingPage = new LandingWebPage();
 
-$transliterationService->transliterate('Beobahten');
+$landingPage->drawHtml();
