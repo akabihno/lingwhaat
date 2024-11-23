@@ -6,6 +6,7 @@ class LandingWebPage
 {
     private const FREETEXT_MIN_LENGTH = 20;
     private const FREETEXT_MAX_LENGTH = 1000;
+    private const FREETEXT_SIZE = 200;
     public function drawHtml(): void
     {
         $this->drawPageTitle();
@@ -21,7 +22,7 @@ class LandingWebPage
     {
         echo('<input type="text" id="name" name="name" required minlength="'
             .self::FREETEXT_MIN_LENGTH.'" maxlength="'
-            .self::FREETEXT_MAX_LENGTH.'" size="1000" />'
+            .self::FREETEXT_MAX_LENGTH.'" size="'.self::FREETEXT_SIZE.'" />'
         );
     }
 
