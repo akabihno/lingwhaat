@@ -5,11 +5,12 @@ namespace App;
 class LandingWebPage
 {
     private const FREETEXT_MIN_LENGTH = 20;
-    private const FREETEXT_MAX_LENGTH = 1000;
-    private const FREETEXT_SIZE = 200;
+    private const FREETEXT_MAX_LENGTH = 500;
+    private const FREETEXT_SIZE = 100;
     public function drawHtml(): void
     {
         $this->drawPageTitle();
+        $this->drawDelimiter();
         $this->drawTextInputForm();
     }
 
@@ -24,6 +25,16 @@ class LandingWebPage
             .self::FREETEXT_MIN_LENGTH.'" maxlength="'
             .self::FREETEXT_MAX_LENGTH.'" size="'.self::FREETEXT_SIZE.'" />'
         );
+    }
+
+    protected function drawSubmitButton(): void
+    {
+
+    }
+
+    protected function drawDelimiter(): void
+    {
+        echo('<br>');
     }
 
 }
