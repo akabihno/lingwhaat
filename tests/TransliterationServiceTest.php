@@ -6,7 +6,7 @@ use App\ValueObject\CyrillicLatinMapping;
 
 class TransliterationServiceTest
 {
-    public function testTransliteration()
+    public function testTransliteration(): void
     {
         $mapping = new CyrillicLatinMapping();
 
