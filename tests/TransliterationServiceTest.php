@@ -2,15 +2,21 @@
 
 namespace Tests;
 
+use App\Service\TransliterationService;
 use App\ValueObject\CyrillicLatinMapping;
 
 class TransliterationServiceTest
 {
-    public function testTransliteration(): void
+    public function __construct(protected TransliterationService $transliterationService)
+    {
+    }
+    public function testTransliteration(string $text): void
     {
         $mapping = new CyrillicLatinMapping();
 
-        var_dump($mapping);
+        $result = $this->transliterationService->transliterate($text);
+
+
     }
 
 }

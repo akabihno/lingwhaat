@@ -2,8 +2,10 @@
 
 require 'vendor/autoload.php';
 
+use App\Service\TransliterationService;
 use Tests\TransliterationServiceTest;
 
-$test = new TransliterationServiceTest();
+$transliterationService = new TransliterationService();
+$test = new TransliterationServiceTest($transliterationService);
 
-$test->testTransliteration();
+$test->testTransliteration('абвгде');
