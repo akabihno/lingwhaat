@@ -16,6 +16,6 @@
   ],
   "require": {
     "php": "^8.2",
-    "symphony": "^7.1"
+    "symfony": "^7.1"
   }
 }
