@@ -18,9 +18,19 @@ class TransliterationService
         return $result;
     }
 
+    protected function textIsLatin($text): bool
+    {
+        return (bool) preg_match('/\p{Latin}/u', $text);
+    }
+
     protected function textIsCyrillic($text): bool
     {
         return (bool) preg_match('/\p{Cyrillic}/u', $text);
+    }
+
+    protected function textIsDevanagari($text): bool
+    {
+        return (bool) preg_match('/\p{Devanagari}/u', $text);
     }
 
 }
