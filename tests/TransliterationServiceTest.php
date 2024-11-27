@@ -12,11 +12,7 @@ class TransliterationServiceTest
     }
     public function testTransliteration(string $text): void
     {
-        $mapping = new CyrillicLatinMapping();
-
         $result = $this->transliterationService->transliterate($text);
-
-
     }
 
 }

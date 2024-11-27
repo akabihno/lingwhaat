@@ -2,7 +2,7 @@
 
 namespace App\ValueObject;
 
-class CyrillicLatinMapping
+class CyrillicLatinMapping extends MappingValueObject
 {
     public function __construct(
         protected array $values = [

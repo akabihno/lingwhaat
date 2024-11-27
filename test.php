@@ -9,3 +9,4 @@ $transliterationService = new TransliterationService();
 $test = new TransliterationServiceTest($transliterationService);
 
 $test->testTransliteration('абвгде');
+$test->testTransliteration('abcde');
