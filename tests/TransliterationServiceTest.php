@@ -3,7 +3,6 @@
 namespace Tests;
 
 use App\Service\TransliterationService;
-use App\ValueObject\CyrillicLatinMapping;
 
 class TransliterationServiceTest
 {

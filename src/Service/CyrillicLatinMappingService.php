@@ -2,13 +2,13 @@
 
 namespace App\Service;
 
-use App\ValueObject\CyrillicLatinMapping;
+use App\ValueObject\IpaMapping\BaltoSlavic\Slavic\EastSlavic\RussianIpaMapping;
 
 class CyrillicLatinMappingService extends TransliterationMappingService
 {
-    public function get(): CyrillicLatinMapping
+    public function get(): RussianIpaMapping
     {
-        return new CyrillicLatinMapping();
+        return new RussianIpaMapping();
     }
 
 }
