@@ -17,7 +17,7 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - ${DB_PORT}
     network_mode: host
     volumes:
       - ./mysql_data:/var/lib/mysql
