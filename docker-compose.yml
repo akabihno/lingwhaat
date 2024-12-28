@@ -17,13 +17,12 @@ services:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
-      - ${DB_PORT}
+      - "${DB_PORT}:3306"
     network_mode: host
     volumes:
       - ./mysql_data:/var/lib/mysql
       - ./migrations:/docker-entrypoint-initdb.d
       - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
-    command: [ "/bin/sh", "-c", "/docker-entrypoint-initdb.d/init-db.sh" ]
 
   composer:
     image: composer:latest
