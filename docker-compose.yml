@@ -22,6 +22,8 @@ services:
     volumes:
       - ./mysql_data:/var/lib/mysql
       - ./migrations:/docker-entrypoint-initdb.d
+      - ./init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
+    command: [ "/bin/sh", "-c", "/docker-entrypoint-initdb.d/init-db.sh" ]
 
   composer:
     image: composer:latest
