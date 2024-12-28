@@ -1,5 +1,5 @@
 [mysqld]
-innodb_buffer_pool_size=512M
+innodb_buffer_pool_size=1G
 max_allowed_packet=64M
 tmp_table_size=256M
 max_heap_table_size=256M
