@@ -2,4 +2,6 @@
 .idea
 vendor
 mysql_data
+migrations/*.sql
+migrations/init-db.sh
 composer.lock
