@@ -1,4 +1,4 @@
 #!/bin/sh
 
-gunzip /docker-entrypoint-initdb.d/*.sql.gz
+gunzip -k /docker-entrypoint-initdb.d/*.sql.gz
 exec "$@"
