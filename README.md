@@ -13,7 +13,9 @@ docker compose up -d
 
 gunzip -k imports/import.sql.gz
 
-docker exec -i database mysql -u root -ppassword -P 3327 lingwhaat < imports/import.sql
+docker exec -i database mysql -u root -ppassword -P 3327 -e "ALTER DATABASE lingwhaat CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;"
+docker exec -i database mysql -u root -ppassword -P 3327 -e "ALTER TABLE pronunciation CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
+docker exec -i database mysql --default-character-set=utf8mb4 -u root -ppassword -P 3327 lingwhaat < imports/import.sql
 ```
 
 Database listens on port 3327 by default - configurable in my.cnf
