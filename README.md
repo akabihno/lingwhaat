@@ -13,5 +13,5 @@ docker compose up -d
 
 gunzip -k imports/import.sql.gz
 
-docker exec -i database mysql -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < import.sql
+docker exec -i database mysql -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < imports/import.sql
 ```
