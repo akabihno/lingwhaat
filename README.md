@@ -13,5 +13,7 @@ docker compose up -d
 
 gunzip -k imports/import.sql.gz
 
-docker exec -i database mysql -u root -p${MYSQL_ROOT_PASSWORD} ${MYSQL_DATABASE} < imports/import.sql
+docker exec -i database mysql -u root -p${MYSQL_ROOT_PASSWORD} -P 3327 lingwhaat < imports/import.sql
 ```
+
+Database listens on port 3327 by default - configurable in my.cnf
