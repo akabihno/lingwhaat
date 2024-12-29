@@ -28,6 +28,7 @@ services:
           cpus: '1.0'
         reservations:
           memory: 512m
+    restart: on-failure
 
   composer:
     image: composer:latest
