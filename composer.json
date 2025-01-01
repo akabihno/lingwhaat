@@ -1,8 +1,8 @@
 {
-  "name": "akabihno/whatlanguage",
+  "name": "akabihno/lingwhaat",
   "description": "description",
   "minimum-stability": "stable",
-  "license": "GNU General Public License v3.0",
+  "license": "CC-BY-SA and GFDL",
   "autoload": {
     "psr-4": {
       "App\\": "src",
@@ -11,7 +11,8 @@
   },
   "authors": [
     {
-      "name": "akabihno"
+      "name": "akabihno",
+      "email": "arsenijs.kabihno@gmail.com"
     }
   ],
   "require": {
