@@ -3,10 +3,9 @@
 require 'vendor/autoload.php';
 
 use App\Service\WiktionaryArticlesIpaParserService;
-use Dotenv\Dotenv;
 
 
-Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/../')->load();
+Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
 
 $wiktionaryArticlesService = new WiktionaryArticlesIpaParserService();
 
