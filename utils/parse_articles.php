@@ -9,6 +9,4 @@ Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
 
 $wiktionaryArticlesService = new WiktionaryArticlesIpaParserService();
 
-echo getenv('WIKTIONARY_UA_EMAIL');
-
-$wiktionaryArticlesService->run();
+$wiktionaryArticlesService->run($_ENV['WIKTIONARY_UA_EMAIL']);
