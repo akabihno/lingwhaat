@@ -16,6 +16,7 @@
     }
   ],
   "require": {
-    "php": "^8.2"
+    "php": "^8.2",
+    "vlucas/phpdotenv": ">=v5.6.1"
   }
 }

@@ -9,9 +9,17 @@ class LandingWebPage
     private const FREETEXT_SIZE = 100;
     public function drawHtml(): void
     {
+        $this->drawPhpInfo();
+        /*
         $this->drawPageTitle();
         $this->drawDelimiter();
         $this->drawTextInputForm();
+        */
+    }
+
+    protected function drawPhpInfo(): void
+    {
+        phpinfo();
     }
 
     public function drawPageTitle(): void
@@ -25,11 +33,6 @@ class LandingWebPage
             .self::FREETEXT_MIN_LENGTH.'" maxlength="'
             .self::FREETEXT_MAX_LENGTH.'" size="'.self::FREETEXT_SIZE.'" />'
         );
-    }
-
-    protected function drawSubmitButton(): void
-    {
-
     }
 
     protected function drawDelimiter(): void
