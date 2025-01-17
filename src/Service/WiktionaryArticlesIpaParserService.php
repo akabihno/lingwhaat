@@ -24,7 +24,7 @@ class WiktionaryArticlesIpaParserService
         $dom->loadHTML($html);
         //echo $dom->saveHTML();
 
-        echo $dom->querySelector('section')->innerHTML;
+        echo $dom->querySelector('.IPA')->innerHTML;
     }
 
     protected function wiktionaryGetRequest(string $uaEmail, string $title): string
