@@ -20,7 +20,7 @@ class WiktionaryArticlesIpaParserService
 
     protected function parseWiktionaryResult(string $html)
     {
-        $dom = new IvoPetkov\HTML5DOMDocument();
+        $dom = new \IvoPetkov\HTML5DOMDocument();
         $dom->loadHTML($html);
         echo $dom->saveHTML();
 
