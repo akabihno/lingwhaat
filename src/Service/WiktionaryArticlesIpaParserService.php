@@ -5,19 +5,29 @@ namespace App\Service;
 class WiktionaryArticlesIpaParserService
 {
     const WIKTIONARY_BASE_API_LINK = 'https://en.wiktionary.org/api/rest_v1/page/html/';
-    public function run(string $uaEmail): void
+    public function run(string $uaEmail, string $article): void
     {
-        $this->getPageForTitle($uaEmail, 'apple');
+        $html = $this->getPageForTitle($uaEmail, $article);
+
+        $this->parseWiktionaryResult($html);
 
     }
 
-    protected function getPageForTitle(string $uaEmail, string $title): void
+    protected function getPageForTitle(string $uaEmail, string $title): string
     {
-        $this->wiktionaryGetRequest($uaEmail, $title);
-
+        return $this->wiktionaryGetRequest($uaEmail, $title);
     }
 
-    protected function wiktionaryGetRequest(string $uaEmail, string $title): void
+    protected function parseWiktionaryResult(string $html)
+    {
+        $dom = new IvoPetkov\HTML5DOMDocument();
+        $dom->loadHTML($html);
+        echo $dom->saveHTML();
+
+        echo $dom->querySelector('h3 id="Pronunciation"')->innerHTML;
+    }
+
+    protected function wiktionaryGetRequest(string $uaEmail, string $title): string
     {
         $ch = curl_init();
 
@@ -28,7 +38,7 @@ class WiktionaryArticlesIpaParserService
 
         curl_close($ch);
 
-        var_dump($response);
+        return $response;
 
     }
 
