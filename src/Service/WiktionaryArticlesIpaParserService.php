@@ -22,9 +22,9 @@ class WiktionaryArticlesIpaParserService
     {
         $dom = new \IvoPetkov\HTML5DOMDocument();
         $dom->loadHTML($html);
-        echo $dom->saveHTML();
+        //echo $dom->saveHTML();
 
-        echo $dom->querySelector('h3 id="Pronunciation"')->innerHTML;
+        echo $dom->querySelector('section')->innerHTML;
     }
 
     protected function wiktionaryGetRequest(string $uaEmail, string $title): string
