@@ -36,4 +36,4 @@ services:
     working_dir: /var/www/html
     volumes:
       - .:/var/www/html
-    command: [ "composer", "update" ]
+    command: [ "composer", "install" ]
