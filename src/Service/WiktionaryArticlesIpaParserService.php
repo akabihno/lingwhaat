@@ -54,6 +54,9 @@ class WiktionaryArticlesIpaParserService
         if ($ipa) {
             $this->query->update($ipa, $article);
             $this->query->insert($article, $this->generateWiktionaryLink($article));
+        } else {
+            $this->query->update('Not available', $article);
+            $this->query->insert($article, $this->generateWiktionaryLink($article));
         }
     }
 
