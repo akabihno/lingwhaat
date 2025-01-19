@@ -14,6 +14,22 @@ class PronunciationQueryRussianLanguage extends AbstractQuery
 
     }
 
+    public function insert(string $name, string $link)
+    {
+        $query = 'INSERT INTO '.$this->getTable().' (name, link) VALUES (:name, :link)';
+
+        $this->insertLinks($query, $name, $link);
+
+    }
+
+    public function update(string $ipa, string $name)
+    {
+        $query = 'UPDATE '.$this->getTable().' SET ipa = :ipa WHERE name = :name';
+
+        $this->connect();
+        $this->updateIpa($query, $ipa, $name);
+    }
+
     protected function getTable(): string
     {
         return 'pronunciation_russian_language';

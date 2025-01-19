@@ -7,6 +7,7 @@ use App\Query\PronunciationQueryRussianLanguage;
 class WiktionaryArticlesIpaParserService
 {
     const WIKTIONARY_BASE_API_LINK = 'https://en.wiktionary.org/api/rest_v1/page/html/';
+    const WIKTIONARY_BASE_URL = 'https://en.wiktionary.org/wiki/';
 
     public function __construct(
         protected PronunciationQueryRussianLanguage $query
@@ -23,7 +24,7 @@ class WiktionaryArticlesIpaParserService
 
         foreach ($articles as $article) {
             $html = $this->getPageForTitle($uaEmail, $article);
-            $this->parseWiktionaryResult($html);
+            $this->processWiktionaryResult($html, $article);
         }
 
     }
@@ -45,12 +46,33 @@ class WiktionaryArticlesIpaParserService
         return $this->wiktionaryGetRequest($uaEmail, $title);
     }
 
-    protected function parseWiktionaryResult(string $html)
+    protected function processWiktionaryResult(string $html, string $article): void
+    {
+        $ipa = $this->parseWiktionaryResult($html);
+
+        if ($ipa) {
+            $this->query->update($ipa, $article);
+            $this->query->insert($article, $this->generateWiktionaryLink($article));
+        }
+    }
+
+    protected function generateWiktionaryLink($article): string
+    {
+        return self::WIKTIONARY_BASE_URL.$article;
+    }
+
+    protected function parseWiktionaryResult(string $html): string
     {
         $dom = new \IvoPetkov\HTML5DOMDocument();
         $dom->loadHTML($html);
 
-        echo $dom->querySelector('.IPA')->innerHTML;
+        $result = $dom->querySelector('.IPA')->innerHTML;
+
+        if ($result) {
+            return $result;
+        } else {
+            return '';
+        }
     }
 
     protected function wiktionaryGetRequest(string $uaEmail, string $title): string

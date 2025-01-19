@@ -42,4 +42,25 @@ class AbstractQuery
         return $result;
     }
 
+    protected function updateIpa(string $query, string $ipa, string $name): void
+    {
+        $stmt = $this->pdo->prepare($query);
+
+        $stmt->execute([
+            ':ipa' => $ipa,
+            ':name' => $name
+        ]);
+    }
+
+    protected function insertLinks(string $query, $name, $link): void
+    {
+        $stmt = $this->pdo->prepare($query);
+
+        $stmt->execute([
+            ':name' => $name,
+            ':link' => $link
+        ]);
+
+    }
+
 }
