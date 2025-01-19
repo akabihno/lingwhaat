@@ -18,7 +18,6 @@ class AbstractQuery
         $dbPassword = $_ENV['MYSQL_ROOT_PASSWORD'];
 
         $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $dbHost, self::DB_PORT, $dbName);
-        echo $dsn."\n";
         $username = 'root';
 
         try {
