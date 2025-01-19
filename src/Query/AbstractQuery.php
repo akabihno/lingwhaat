@@ -7,6 +7,7 @@ use PDOException;
 
 class AbstractQuery
 {
+    const DB_PORT = 3327;
     protected $pdo;
     protected function connect()
     {
@@ -16,7 +17,7 @@ class AbstractQuery
         $dbName = $_ENV['MYSQL_DATABASE'];
         $dbPassword = $_ENV['MYSQL_ROOT_PASSWORD'];
 
-        $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $dbHost, $dbName);
+        $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $dbHost, self::DB_PORT, $dbName);
         echo $dsn."\n";
         $username = 'root';
 
