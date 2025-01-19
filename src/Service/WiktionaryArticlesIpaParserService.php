@@ -23,6 +23,7 @@ class WiktionaryArticlesIpaParserService
         $articles = $this->getArticleNamesFromDb();
 
         foreach ($articles as $article) {
+            echo "Processing: ".$article."\n";
             $html = $this->getPageForTitle($uaEmail, $article);
             $this->processWiktionaryResult($html, $article);
         }
