@@ -4,13 +4,13 @@ namespace App\Query;
 
 class PronunciationQueryRussianLanguage extends AbstractQuery
 {
-    const PROCESSING_LIMIT = 10;
-    public function getArticleName(): void
+    const PROCESSING_LIMIT = 2;
+    public function getArticleNames(): array
     {
         $query = 'SELECT name,ts_created FROM lingwhaat.'.$this->getTable().' WHERE name LIKE "а%" ORDER BY ts_created ASC LIMIT '.self::PROCESSING_LIMIT;
 
         $this->connect();
-        var_dump($this->fetch($query));
+        return $this->fetch($query);
 
     }
 

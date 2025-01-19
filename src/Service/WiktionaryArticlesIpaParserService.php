@@ -19,19 +19,25 @@ class WiktionaryArticlesIpaParserService
 
         $uaEmail = $_ENV['WIKTIONARY_UA_EMAIL'];
 
-        $article = $this->getArticleNameFromDb();
+        $articles = $this->getArticleNamesFromDb();
 
-        $html = $this->getPageForTitle($uaEmail, $article);
-
-        $this->parseWiktionaryResult($html);
+        foreach ($articles as $article) {
+            $html = $this->getPageForTitle($uaEmail, $article);
+            $this->parseWiktionaryResult($html);
+        }
 
     }
 
-    protected function getArticleNameFromDb(): string
+    protected function getArticleNamesFromDb(): array
     {
-        $this->query->getArticleName();
+        $result = [];
+        $articleNamesArray = $this->query->getArticleNames();
 
-        return 'apple';
+        foreach ($articleNamesArray as $articleNameArray) {
+            $result[] = $articleNameArray['name'];
+        }
+
+        return $result;
     }
 
     protected function getPageForTitle(string $uaEmail, string $title): string
