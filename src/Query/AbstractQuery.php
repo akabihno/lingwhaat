@@ -10,7 +10,7 @@ class AbstractQuery
     protected $pdo;
     protected function connect()
     {
-        \Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
+        \Dotenv\Dotenv::createImmutable('/var/www/html/')->load();
 
         $dbHost = $_ENV['DB_HOST'];
         $dbName = $_ENV['MYSQL_DATABASE'];

@@ -15,7 +15,7 @@ class WiktionaryArticlesIpaParserService
     }
     public function run(): void
     {
-        \Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
+        \Dotenv\Dotenv::createImmutable('/var/www/html/')->load();
 
         $uaEmail = $_ENV['WIKTIONARY_UA_EMAIL'];
 
