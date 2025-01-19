@@ -17,14 +17,15 @@ class AbstractQuery
         $dbPassword = $_ENV['MYSQL_ROOT_PASSWORD'];
 
         $dsn = sprintf('mysql:host=%s;dbname=%s;charset=utf8mb4', $dbHost, $dbName);
-        $username = "root";
+        echo $dsn."\n";
+        $username = 'root';
 
         try {
             $this->pdo = new PDO($dsn, $username, $dbPassword);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            echo "Connected successfully";
+            echo 'Connected successfully';
         } catch (PDOException $e) {
-            echo "Connection failed: " . $e->getMessage();
+            echo 'Connection failed: ' . $e->getMessage();
         }
     }
 
