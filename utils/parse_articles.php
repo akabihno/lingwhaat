@@ -9,4 +9,4 @@ $query = new PronunciationQueryRussianLanguage();
 
 $wiktionaryArticlesService = new WiktionaryArticlesIpaParserService($query);
 
-$wiktionaryArticlesService->run($_ENV['WIKTIONARY_UA_EMAIL']);
+$wiktionaryArticlesService->run();

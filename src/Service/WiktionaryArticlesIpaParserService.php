@@ -13,9 +13,11 @@ class WiktionaryArticlesIpaParserService
     )
     {
     }
-    public function run(string $uaEmail): void
+    public function run(): void
     {
         \Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
+
+        $uaEmail = $_ENV['WIKTIONARY_UA_EMAIL'];
 
         $article = $this->getArticleNameFromDb();
 
