@@ -4,12 +4,13 @@ namespace App\Query;
 
 class PronunciationQueryRussianLanguage extends AbstractQuery
 {
+    const PROCESSING_LIMIT = 10;
     public function getArticleName(): void
     {
-        $query = 'SELECT * FROM lingwhaat.'.$this->getTable().' LIMIT 100';
+        $query = 'SELECT * FROM lingwhaat.'.$this->getTable().' LIMIT '.self::PROCESSING_LIMIT;
 
         $this->connect();
-        $this->fetch($query);
+        var_dump($this->fetch($query));
 
     }
 

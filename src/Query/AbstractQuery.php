@@ -30,13 +30,16 @@ class AbstractQuery
         }
     }
 
-    protected function fetch($sql)
+    protected function fetch($sql): array
     {
+        $result = [];
         $stmt = $this->pdo->query($sql);
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            echo "id: " . $row["id"] . " - Name: " . $row["name"] . "<br>";
+            $result[] = $row;
         }
+
+        return $result;
     }
 
 }
