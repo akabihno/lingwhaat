@@ -2,15 +2,11 @@
 
 require 'vendor/autoload.php';
 
+use App\Query\PronunciationQueryRussianLanguage;
 use App\Service\WiktionaryArticlesIpaParserService;
 
+$query = new PronunciationQueryRussianLanguage();
 
-Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
+$wiktionaryArticlesService = new WiktionaryArticlesIpaParserService($query);
 
-$wiktionaryArticlesService = new WiktionaryArticlesIpaParserService();
-
-$article = $argv[1];
-
-if ($article) {
-    $wiktionaryArticlesService->run($_ENV['WIKTIONARY_UA_EMAIL'], $article);
-}
+$wiktionaryArticlesService->run($_ENV['WIKTIONARY_UA_EMAIL']);

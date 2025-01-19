@@ -2,15 +2,34 @@
 
 namespace App\Service;
 
+use App\Query\PronunciationQueryRussianLanguage;
+
 class WiktionaryArticlesIpaParserService
 {
     const WIKTIONARY_BASE_API_LINK = 'https://en.wiktionary.org/api/rest_v1/page/html/';
-    public function run(string $uaEmail, string $article): void
+
+    public function __construct(
+        protected PronunciationQueryRussianLanguage $query
+    )
     {
+    }
+    public function run(string $uaEmail): void
+    {
+        \Dotenv\Dotenv::createImmutable(__DIR__ . '/../')->load();
+
+        $article = $this->getArticleNameFromDb();
+
         $html = $this->getPageForTitle($uaEmail, $article);
 
         $this->parseWiktionaryResult($html);
 
+    }
+
+    protected function getArticleNameFromDb(): string
+    {
+        $this->query->getArticleName();
+
+        return 'apple';
     }
 
     protected function getPageForTitle(string $uaEmail, string $title): string
@@ -22,7 +41,6 @@ class WiktionaryArticlesIpaParserService
     {
         $dom = new \IvoPetkov\HTML5DOMDocument();
         $dom->loadHTML($html);
-        //echo $dom->saveHTML();
 
         echo $dom->querySelector('.IPA')->innerHTML;
     }

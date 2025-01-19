@@ -18,6 +18,7 @@
   "require": {
     "php": "^8.2",
     "vlucas/phpdotenv": ">=v5.6.1",
-    "ivopetkov/html5-dom-document-php": "2.*"
+    "ivopetkov/html5-dom-document-php": "2.*",
+    "ext-pdo": "*"
   }
 }
