@@ -7,7 +7,7 @@ class PronunciationQueryRussianLanguage extends AbstractQuery
     const PROCESSING_LIMIT = 2;
     public function getArticleNames(): array
     {
-        $query = 'SELECT name,ts_created FROM lingwhaat.'.$this->getTable().' WHERE name LIKE "а%" ORDER BY ts_created ASC LIMIT '.self::PROCESSING_LIMIT;
+        $query = 'SELECT name,ts_created FROM lingwhaat.'.$this->getBaseTable().' WHERE name LIKE "а%" ORDER BY ts_created ASC LIMIT '.self::PROCESSING_LIMIT;
 
         $this->connect();
         return $this->fetch($query);
@@ -16,7 +16,7 @@ class PronunciationQueryRussianLanguage extends AbstractQuery
 
     public function insert(string $name, string $link)
     {
-        $query = 'INSERT INTO '.$this->getTable().' (name, link) VALUES (:name, :link)';
+        $query = 'INSERT INTO '.$this->getLinksTable().' (name, link) VALUES (:name, :link)';
 
         $this->insertLinks($query, $name, $link);
 
@@ -24,15 +24,20 @@ class PronunciationQueryRussianLanguage extends AbstractQuery
 
     public function update(string $ipa, string $name)
     {
-        $query = 'UPDATE '.$this->getTable().' SET ipa = :ipa WHERE name = :name';
+        $query = 'UPDATE '.$this->getBaseTable().' SET ipa = :ipa, ts_created = NOW() WHERE name = :name';
 
         $this->connect();
         $this->updateIpa($query, $ipa, $name);
     }
 
-    protected function getTable(): string
+    protected function getBaseTable(): string
     {
         return 'pronunciation_russian_language';
+    }
+
+    protected function getLinksTable(): string
+    {
+        return 'russian_links';
     }
 
 }
