@@ -1,5 +1,7 @@
 |link|
 |----|
+|https://en.wiktionary.org/wiki/аканье|
+|https://en.wiktionary.org/wiki/алфавитный|
 |https://en.wiktionary.org/wiki/арабский|
 |https://en.wiktionary.org/wiki/августовский|
 |https://en.wiktionary.org/wiki/Австралийский%20Союз|
