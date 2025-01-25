@@ -7,7 +7,7 @@ class PronunciationQueryRussianLanguage extends AbstractQuery
     const PROCESSING_LIMIT = 5;
     public function getArticleNames(): array
     {
-        $query = 'SELECT name,ts_created FROM lingwhaat.'.$this->getBaseTable().' WHERE name LIKE "б%" ORDER BY ts_created ASC LIMIT '.self::PROCESSING_LIMIT;
+        $query = 'SELECT name,ts_created FROM lingwhaat.'.$this->getBaseTable().' WHERE name LIKE "в%" ORDER BY ts_created ASC LIMIT '.self::PROCESSING_LIMIT;
 
         $this->connect();
         return $this->fetch($query);
