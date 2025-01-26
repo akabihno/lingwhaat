@@ -7,8 +7,9 @@ RUN a2enmod ssl
 
 RUN echo "PassEnv DOMAIN" >> /etc/apache2/apache2.conf
 COPY 000-default.conf /etc/apache2/sites-available/
+
 RUN mkdir -p /etc/ssl/certs
-COPY /etc/letsencrypt/live/${DOMAIN}/* /etc/ssl/certs
+COPY ssl-certs/* /etc/ssl/certs
 
 RUN a2ensite 000-default
 
