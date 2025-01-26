@@ -3,6 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-php
+    environment:
+      - DOMAIN=${DOMAIN}
     image: php:8.2-apache
     container_name: php-app
     network_mode: host
