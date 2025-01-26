@@ -1,17 +1,17 @@
 FROM php:8.2-apache
 
+RUN mkdir -p /etc/ssl/certs
+
 RUN docker-php-ext-install pdo pdo_mysql
 
 RUN a2enmod rewrite
 RUN a2enmod ssl
-
-WORKDIR /var/www/html
 
 RUN echo "PassEnv DOMAIN" >> /etc/apache2/apache2.conf
 COPY 000-default.conf /etc/apache2/sites-available/
 
 RUN a2ensite 000-default
 
-RUN mkdir -p /etc/ssl/certs
-
 EXPOSE 80 443
+
+WORKDIR /var/www/html
