@@ -5,7 +5,7 @@ RUN a2enmod rewrite
 
 WORKDIR /var/www/html
 
-RUN echo "PassEnv SERVER_NAME SERVER_ALIAS" >> /etc/apache2/apache2.conf
+RUN echo "PassEnv DOMAIN" >> /etc/apache2/apache2.conf
 COPY 000-default.conf /etc/apache2/sites-available/
 
 RUN a2ensite 000-default
