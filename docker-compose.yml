@@ -16,7 +16,6 @@ services:
       - composer
     volumes:
       - .:/var/www/html
-      - /etc/letsencrypt/live/${DOMAIN}:/etc/ssl/certs:ro
 
   db:
     image: mysql:8.1.0

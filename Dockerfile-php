@@ -1,7 +1,5 @@
 FROM php:8.2-apache
 
-RUN mkdir -p /etc/ssl/certs
-
 RUN docker-php-ext-install pdo pdo_mysql
 
 RUN a2enmod rewrite
@@ -9,6 +7,8 @@ RUN a2enmod ssl
 
 RUN echo "PassEnv DOMAIN" >> /etc/apache2/apache2.conf
 COPY 000-default.conf /etc/apache2/sites-available/
+RUN mkdir -p /etc/ssl/certs
+COPY /etc/letsencrypt/live/${DOMAIN}/* /etc/ssl/certs
 
 RUN a2ensite 000-default
 
