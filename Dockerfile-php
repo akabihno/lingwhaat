@@ -4,3 +4,12 @@ RUN docker-php-ext-install pdo pdo_mysql
 RUN a2enmod rewrite
 
 WORKDIR /var/www/html
+
+RUN echo "PassEnv SERVER_NAME SERVER_ALIAS" >> /etc/apache2/apache2.conf
+COPY 000-default.conf /etc/apache2/sites-available/
+
+RUN a2ensite 000-default
+
+RUN mkdir -p /etc/ssl/certs
+
+EXPOSE 80 443

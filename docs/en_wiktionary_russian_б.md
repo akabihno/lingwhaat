@@ -1,5 +1,6 @@
 |link|
 |----|
+|https://en.wiktionary.org/wiki/большевиками|
 |https://en.wiktionary.org/wiki/большой|
 |https://en.wiktionary.org/wiki/баской|
 |https://en.wiktionary.org/wiki/баять|
@@ -14,22 +15,22 @@
 |https://en.wiktionary.org/wiki/быличка|
 |https://en.wiktionary.org/wiki/буево|
 |https://en.wiktionary.org/wiki/бёрдо|
-|https://en.wiktionary.org/wiki/будь здоров|
+|https://en.wiktionary.org/wiki/будь%20здоров|
 |https://en.wiktionary.org/wiki/беркут|
 |https://en.wiktionary.org/wiki/борьба|
 |https://en.wiktionary.org/wiki/бабий|
-|https://en.wiktionary.org/wiki/бабье лето|
+|https://en.wiktionary.org/wiki/бабье%20лето|
 |https://en.wiktionary.org/wiki/бабочка|
 |https://en.wiktionary.org/wiki/бесёнок|
 |https://en.wiktionary.org/wiki/ботинок|
 |https://en.wiktionary.org/wiki/быть|
 |https://en.wiktionary.org/wiki/более|
 |https://en.wiktionary.org/wiki/брать|
-|https://en.wiktionary.org/wiki/Босния и Герцеговина|
+|https://en.wiktionary.org/wiki/Босния%20и%20Герцеговина|
 |https://en.wiktionary.org/wiki/Бразилиа|
 |https://en.wiktionary.org/wiki/Босния|
 |https://en.wiktionary.org/wiki/британка|
-|https://en.wiktionary.org/wiki/белая кость|
+|https://en.wiktionary.org/wiki/белая%20кость|
 |https://en.wiktionary.org/wiki/бумага|
 |https://en.wiktionary.org/wiki/болезнь|
 |https://en.wiktionary.org/wiki/белый|
@@ -59,7 +60,7 @@
 |https://en.wiktionary.org/wiki/быстро|
 |https://en.wiktionary.org/wiki/будущий|
 |https://en.wiktionary.org/wiki/Балканы|
-|https://en.wiktionary.org/wiki/Британские острова|
+|https://en.wiktionary.org/wiki/Британские%20острова|
 |https://en.wiktionary.org/wiki/Белоруссия|
 |https://en.wiktionary.org/wiki/богемный|
 |https://en.wiktionary.org/wiki/Бухарест|
@@ -76,10 +77,10 @@
 |https://en.wiktionary.org/wiki/бархан|
 |https://en.wiktionary.org/wiki/брегах|
 |https://en.wiktionary.org/wiki/Бомбей|
-|https://en.wiktionary.org/wiki/Берег Слоновой Кости|
-|https://en.wiktionary.org/wiki/Белое море|
-|https://en.wiktionary.org/wiki/Берингово море|
-|https://en.wiktionary.org/wiki/Балтийское море|
+|https://en.wiktionary.org/wiki/Берег%20Слоновой%20Кости|
+|https://en.wiktionary.org/wiki/Белое%20море|
+|https://en.wiktionary.org/wiki/Берингово%20море|
+|https://en.wiktionary.org/wiki/Балтийское%20море|
 |https://en.wiktionary.org/wiki/Буг|
 |https://en.wiktionary.org/wiki/Буэнос-Айрес|
 |https://en.wiktionary.org/wiki/буквица|
@@ -98,7 +99,7 @@
 |https://en.wiktionary.org/wiki/батюшка|
 |https://en.wiktionary.org/wiki/батенька|
 |https://en.wiktionary.org/wiki/батя|
-|https://en.wiktionary.org/wiki/без кота мышам раздолье|
+|https://en.wiktionary.org/wiki/без%20кота%20мышам%20раздолье|
 |https://en.wiktionary.org/wiki/быстрый|
 |https://en.wiktionary.org/wiki/больной|
 |https://en.wiktionary.org/wiki/букв|
@@ -121,37 +122,37 @@
 |https://en.wiktionary.org/wiki/бушма|
 |https://en.wiktionary.org/wiki/бакланка|
 |https://en.wiktionary.org/wiki/бензоколонка|
-|https://en.wiktionary.org/wiki/бензозаправочная колонка|
+|https://en.wiktionary.org/wiki/бензозаправочная%20колонка|
 |https://en.wiktionary.org/wiki/блокадным|
-|https://en.wiktionary.org/wiki/бензиновая колонка|
+|https://en.wiktionary.org/wiki/бензиновая%20колонка|
 |https://en.wiktionary.org/wiki/бремя|
-|https://en.wiktionary.org/wiki/бензозаправочная станция|
+|https://en.wiktionary.org/wiki/бензозаправочная%20станция|
 |https://en.wiktionary.org/wiki/блюдо|
 |https://en.wiktionary.org/wiki/бемоль|
 |https://en.wiktionary.org/wiki/баул|
-|https://en.wiktionary.org/wiki/будущее время|
+|https://en.wiktionary.org/wiki/будущее%20время|
 |https://en.wiktionary.org/wiki/Близнецы|
-|https://en.wiktionary.org/wiki/Британское Содружество наций|
+|https://en.wiktionary.org/wiki/Британское%20Содружество%20наций|
 |https://en.wiktionary.org/wiki/бесхозяйственность|
-|https://en.wiktionary.org/wiki/Британская империя|
+|https://en.wiktionary.org/wiki/Британская%20империя|
 |https://en.wiktionary.org/wiki/британский|
 |https://en.wiktionary.org/wiki/британец|
 |https://en.wiktionary.org/wiki/бровь|
 |https://en.wiktionary.org/wiki/Барнаул|
-|https://en.wiktionary.org/wiki/большому кораблю большое плавание|
-|https://en.wiktionary.org/wiki/большое спасибо|
+|https://en.wiktionary.org/wiki/большому%20кораблю%20большое%20плавание|
+|https://en.wiktionary.org/wiki/большое%20спасибо|
 |https://en.wiktionary.org/wiki/близ|
 |https://en.wiktionary.org/wiki/бездельник|
 |https://en.wiktionary.org/wiki/бездельники|
 |https://en.wiktionary.org/wiki/блоха|
 |https://en.wiktionary.org/wiki/битьё|
 |https://en.wiktionary.org/wiki/бр-р|
-|https://en.wiktionary.org/wiki/будет дождь|
+|https://en.wiktionary.org/wiki/будет%20дождь|
 |https://en.wiktionary.org/wiki/бессмертный|
-|https://en.wiktionary.org/wiki/брусок мыла|
-|https://en.wiktionary.org/wiki/бритва Оккама|
-|https://en.wiktionary.org/wiki/Белорусская ССР|
-|https://en.wiktionary.org/wiki/Большой Пёс|
+|https://en.wiktionary.org/wiki/брусок%20мыла|
+|https://en.wiktionary.org/wiki/бритва%20Оккама|
+|https://en.wiktionary.org/wiki/Белорусская%20ССР|
+|https://en.wiktionary.org/wiki/Большой%20Пёс|
 |https://en.wiktionary.org/wiki/бНОПНЯ|
 |https://en.wiktionary.org/wiki/Брайль|
 |https://en.wiktionary.org/wiki/большевик|
@@ -172,19 +173,19 @@
 |https://en.wiktionary.org/wiki/бакенбарда|
 |https://en.wiktionary.org/wiki/бачки|
 |https://en.wiktionary.org/wiki/бакенбарды|
-|https://en.wiktionary.org/wiki/биение сердца|
+|https://en.wiktionary.org/wiki/биение%20сердца|
 |https://en.wiktionary.org/wiki/беркелий|
 |https://en.wiktionary.org/wiki/болванка|
-|https://en.wiktionary.org/wiki/банковская выписка|
+|https://en.wiktionary.org/wiki/банковская%20выписка|
 |https://en.wiktionary.org/wiki/бегом|
 |https://en.wiktionary.org/wiki/босиком|
 |https://en.wiktionary.org/wiki/брелок|
 |https://en.wiktionary.org/wiki/беременность|
-|https://en.wiktionary.org/wiki/безоткатное орудие|
+|https://en.wiktionary.org/wiki/безоткатное%20орудие|
 |https://en.wiktionary.org/wiki/боеприпасы|
 |https://en.wiktionary.org/wiki/боепитание|
 |https://en.wiktionary.org/wiki/Байкал|
-|https://en.wiktionary.org/wiki/Большая Медведица|
+|https://en.wiktionary.org/wiki/Большая%20Медведица|
 |https://en.wiktionary.org/wiki/боеприпас|
 |https://en.wiktionary.org/wiki/бросаться|
 |https://en.wiktionary.org/wiki/бурка|
@@ -192,8 +193,8 @@
 |https://en.wiktionary.org/wiki/будешь|
 |https://en.wiktionary.org/wiki/батальон|
 |https://en.wiktionary.org/wiki/бублик|
-|https://en.wiktionary.org/wiki/большой палец|
-|https://en.wiktionary.org/wiki/безымянный палец|
+|https://en.wiktionary.org/wiki/большой%20палец|
+|https://en.wiktionary.org/wiki/безымянный%20палец|
 |https://en.wiktionary.org/wiki/брань|
 |https://en.wiktionary.org/wiki/благодарить|
 |https://en.wiktionary.org/wiki/беспокоиться|
@@ -204,7 +205,7 @@
 |https://en.wiktionary.org/wiki/бороться|
 |https://en.wiktionary.org/wiki/бледнеть|
 |https://en.wiktionary.org/wiki/бетонировать|
-|https://en.wiktionary.org/wiki/без поводка|
+|https://en.wiktionary.org/wiki/без%20поводка|
 |https://en.wiktionary.org/wiki/басконка|
 |https://en.wiktionary.org/wiki/басконский|
 |https://en.wiktionary.org/wiki/баск|
@@ -216,7 +217,7 @@
 |https://en.wiktionary.org/wiki/болгарин|
 |https://en.wiktionary.org/wiki/болгарский|
 |https://en.wiktionary.org/wiki/блеск|
-|https://en.wiktionary.org/wiki/благородный газ|
+|https://en.wiktionary.org/wiki/благородный%20газ|
 |https://en.wiktionary.org/wiki/бойкот|
 |https://en.wiktionary.org/wiki/бойкотировать|
 |https://en.wiktionary.org/wiki/блин|
@@ -250,29 +251,29 @@
 |https://en.wiktionary.org/wiki/битва|
 |https://en.wiktionary.org/wiki/бакс|
 |https://en.wiktionary.org/wiki/барка|
-|https://en.wiktionary.org/wiki/божья коровка|
+|https://en.wiktionary.org/wiki/божья%20коровка|
 |https://en.wiktionary.org/wiki/Богоматерь|
 |https://en.wiktionary.org/wiki/блевануть|
-|https://en.wiktionary.org/wiki/булево множество|
+|https://en.wiktionary.org/wiki/булево%20множество|
 |https://en.wiktionary.org/wiki/ближний|
 |https://en.wiktionary.org/wiki/ближнего|
 |https://en.wiktionary.org/wiki/бирюзовый|
-|https://en.wiktionary.org/wiki/будь верен сам себе|
+|https://en.wiktionary.org/wiki/будь%20верен%20сам%20себе|
 |https://en.wiktionary.org/wiki/берилл|
 |https://en.wiktionary.org/wiki/биохимия|
 |https://en.wiktionary.org/wiki/Буркина-Фасо|
 |https://en.wiktionary.org/wiki/бадан|
 |https://en.wiktionary.org/wiki/брюки-галифе|
 |https://en.wiktionary.org/wiki/бухгалтер|
-|https://en.wiktionary.org/wiki/баллистическая ракета|
+|https://en.wiktionary.org/wiki/баллистическая%20ракета|
 |https://en.wiktionary.org/wiki/бронетранспортёр|
 |https://en.wiktionary.org/wiki/бомбометание|
 |https://en.wiktionary.org/wiki/безоткатный|
 |https://en.wiktionary.org/wiki/бомбёжка|
 |https://en.wiktionary.org/wiki/барражирование|
-|https://en.wiktionary.org/wiki/бронетанковые войска|
+|https://en.wiktionary.org/wiki/бронетанковые%20войска|
 |https://en.wiktionary.org/wiki/буксировщик|
-|https://en.wiktionary.org/wiki/боевой порядок|
+|https://en.wiktionary.org/wiki/боевой%20порядок|
 |https://en.wiktionary.org/wiki/будто|
 |https://en.wiktionary.org/wiki/бодом|
 |https://en.wiktionary.org/wiki/Брянск|
@@ -413,13 +414,13 @@
 |https://en.wiktionary.org/wiki/бушприт|
 |https://en.wiktionary.org/wiki/бригантина|
 |https://en.wiktionary.org/wiki/булькать|
-|https://en.wiktionary.org/wiki/броуновское движение|
+|https://en.wiktionary.org/wiki/броуновское%20движение|
 |https://en.wiktionary.org/wiki/бирманец|
 |https://en.wiktionary.org/wiki/бесцельность|
 |https://en.wiktionary.org/wiki/башкирский|
 |https://en.wiktionary.org/wiki/браузер|
-|https://en.wiktionary.org/wiki/блошиный рынок|
-|https://en.wiktionary.org/wiki/бальзам на душу|
+|https://en.wiktionary.org/wiki/блошиный%20рынок|
+|https://en.wiktionary.org/wiki/бальзам%20на%20душу|
 |https://en.wiktionary.org/wiki/Брест|
 |https://en.wiktionary.org/wiki/бризантность|
 |https://en.wiktionary.org/wiki/бытность|
@@ -442,7 +443,7 @@
 |https://en.wiktionary.org/wiki/бессонница|
 |https://en.wiktionary.org/wiki/битум|
 |https://en.wiktionary.org/wiki/бумажник|
-|https://en.wiktionary.org/wiki/база данных|
+|https://en.wiktionary.org/wiki/база%20данных|
 |https://en.wiktionary.org/wiki/бревно|
 |https://en.wiktionary.org/wiki/беззубый|
 |https://en.wiktionary.org/wiki/барьер|
@@ -454,7 +455,7 @@
 |https://en.wiktionary.org/wiki/бромид|
 |https://en.wiktionary.org/wiki/беспошлинный|
 |https://en.wiktionary.org/wiki/бакалавр|
-|https://en.wiktionary.org/wiki/банковский счёт|
+|https://en.wiktionary.org/wiki/банковский%20счёт|
 |https://en.wiktionary.org/wiki/Брежнев|
 |https://en.wiktionary.org/wiki/баюкать|
 |https://en.wiktionary.org/wiki/буквально|
@@ -468,27 +469,27 @@
 |https://en.wiktionary.org/wiki/боснийский|
 |https://en.wiktionary.org/wiki/баянист|
 |https://en.wiktionary.org/wiki/баянистка|
-|https://en.wiktionary.org/wiki/Багамские Острова|
+|https://en.wiktionary.org/wiki/Багамские%20Острова|
 |https://en.wiktionary.org/wiki/бесстрастный|
 |https://en.wiktionary.org/wiki/беременная|
 |https://en.wiktionary.org/wiki/беременный|
 |https://en.wiktionary.org/wiki/Багамы|
-|https://en.wiktionary.org/wiki/бить баклуши|
+|https://en.wiktionary.org/wiki/бить%20баклуши|
 |https://en.wiktionary.org/wiki/бинарный|
 |https://en.wiktionary.org/wiki/блоггер|
 |https://en.wiktionary.org/wiki/баобаб|
 |https://en.wiktionary.org/wiki/бигамия|
 |https://en.wiktionary.org/wiki/башкир|
-|https://en.wiktionary.org/wiki/будь что будет|
+|https://en.wiktionary.org/wiki/будь%20что%20будет|
 |https://en.wiktionary.org/wiki/бухло|
 |https://en.wiktionary.org/wiki/Бирма|
-|https://en.wiktionary.org/wiki/будьте здоровы|
+|https://en.wiktionary.org/wiki/будьте%20здоровы|
 |https://en.wiktionary.org/wiki/бирка|
 |https://en.wiktionary.org/wiki/буфет|
 |https://en.wiktionary.org/wiki/босниец|
 |https://en.wiktionary.org/wiki/бонсай|
 |https://en.wiktionary.org/wiki/брандер|
-|https://en.wiktionary.org/wiki/белый карлик|
+|https://en.wiktionary.org/wiki/белый%20карлик|
 |https://en.wiktionary.org/wiki/брандмауэр|
 |https://en.wiktionary.org/wiki/Браззавиль|
 |https://en.wiktionary.org/wiki/биссектриса|
@@ -500,7 +501,7 @@
 |https://en.wiktionary.org/wiki/Белоснежка|
 |https://en.wiktionary.org/wiki/Брисбен|
 |https://en.wiktionary.org/wiki/Букалему|
-|https://en.wiktionary.org/wiki/бред сивой кобылы|
+|https://en.wiktionary.org/wiki/бред%20сивой%20кобылы|
 |https://en.wiktionary.org/wiki/Банги|
 |https://en.wiktionary.org/wiki/Бисау|
 |https://en.wiktionary.org/wiki/брюхо|
@@ -530,14 +531,14 @@
 |https://en.wiktionary.org/wiki/бездыханный|
 |https://en.wiktionary.org/wiki/безвизовый|
 |https://en.wiktionary.org/wiki/браконьер|
-|https://en.wiktionary.org/wiki/белое вино|
+|https://en.wiktionary.org/wiki/белое%20вино|
 |https://en.wiktionary.org/wiki/бонг|
 |https://en.wiktionary.org/wiki/бельгийский|
 |https://en.wiktionary.org/wiki/Борнео|
 |https://en.wiktionary.org/wiki/бритоголовый|
 |https://en.wiktionary.org/wiki/Блок|
 |https://en.wiktionary.org/wiki/Барышников|
-|https://en.wiktionary.org/wiki/Баффинова Земля|
+|https://en.wiktionary.org/wiki/Баффинова%20Земля|
 |https://en.wiktionary.org/wiki/бусы|
 |https://en.wiktionary.org/wiki/безволосый|
 |https://en.wiktionary.org/wiki/брезент|
@@ -555,7 +556,7 @@
 |https://en.wiktionary.org/wiki/буйный|
 |https://en.wiktionary.org/wiki/блат-хата|
 |https://en.wiktionary.org/wiki/бикса|
-|https://en.wiktionary.org/wiki/без утайки|
+|https://en.wiktionary.org/wiki/без%20утайки|
 |https://en.wiktionary.org/wiki/Батуми|
 |https://en.wiktionary.org/wiki/бывший|
 |https://en.wiktionary.org/wiki/белье|
@@ -574,13 +575,13 @@
 |https://en.wiktionary.org/wiki/бесконечный|
 |https://en.wiktionary.org/wiki/Белфаст|
 |https://en.wiktionary.org/wiki/Бастер|
-|https://en.wiktionary.org/wiki/бережёного бог бережёт|
+|https://en.wiktionary.org/wiki/бережёного%20бог%20бережёт|
 |https://en.wiktionary.org/wiki/балованный|
 |https://en.wiktionary.org/wiki/басмачество|
 |https://en.wiktionary.org/wiki/бесить|
 |https://en.wiktionary.org/wiki/барыня|
 |https://en.wiktionary.org/wiki/Булгаков|
-|https://en.wiktionary.org/wiki/бульбоуретральная железа|
+|https://en.wiktionary.org/wiki/бульбоуретральная%20железа|
 |https://en.wiktionary.org/wiki/безмозглый|
 |https://en.wiktionary.org/wiki/Бафомет|
 |https://en.wiktionary.org/wiki/бандикут|
@@ -589,7 +590,7 @@
 |https://en.wiktionary.org/wiki/бухой|
 |https://en.wiktionary.org/wiki/брифы|
 |https://en.wiktionary.org/wiki/боксёры|
-|https://en.wiktionary.org/wiki/белый медведь|
+|https://en.wiktionary.org/wiki/белый%20медведь|
 |https://en.wiktionary.org/wiki/балда|
 |https://en.wiktionary.org/wiki/Бриджтаун|
 |https://en.wiktionary.org/wiki/бисексуалы|
@@ -612,13 +613,13 @@
 |https://en.wiktionary.org/wiki/беспокойство|
 |https://en.wiktionary.org/wiki/браниться|
 |https://en.wiktionary.org/wiki/бездушный|
-|https://en.wiktionary.org/wiki/бог из машины|
+|https://en.wiktionary.org/wiki/бог%20из%20машины|
 |https://en.wiktionary.org/wiki/башенка|
-|https://en.wiktionary.org/wiki/бюро находок|
+|https://en.wiktionary.org/wiki/бюро%20находок|
 |https://en.wiktionary.org/wiki/брошюра|
 |https://en.wiktionary.org/wiki/бронировать|
 |https://en.wiktionary.org/wiki/бухать|
-|https://en.wiktionary.org/wiki/боже мой|
+|https://en.wiktionary.org/wiki/боже%20мой|
 |https://en.wiktionary.org/wiki/были|
 |https://en.wiktionary.org/wiki/будут|
 |https://en.wiktionary.org/wiki/будем|
@@ -642,19 +643,19 @@
 |https://en.wiktionary.org/wiki/биг-мак|
 |https://en.wiktionary.org/wiki/биг-маку|
 |https://en.wiktionary.org/wiki/биг-мака|
-|https://en.wiktionary.org/wiki/Биг Мак|
+|https://en.wiktionary.org/wiki/Биг%20Мак|
 |https://en.wiktionary.org/wiki/бат|
 |https://en.wiktionary.org/wiki/борсетка|
 |https://en.wiktionary.org/wiki/барбекю|
-|https://en.wiktionary.org/wiki/брюшная полость|
+|https://en.wiktionary.org/wiki/брюшная%20полость|
 |https://en.wiktionary.org/wiki/бойня|
 |https://en.wiktionary.org/wiki/благоговение|
 |https://en.wiktionary.org/wiki/беззаботность|
 |https://en.wiktionary.org/wiki/брюшко|
 |https://en.wiktionary.org/wiki/бесцеремонно|
 |https://en.wiktionary.org/wiki/бесцеремонный|
-|https://en.wiktionary.org/wiki/бухгалтерская книга|
-|https://en.wiktionary.org/wiki/болезнь Аддисона|
+|https://en.wiktionary.org/wiki/бухгалтерская%20книга|
+|https://en.wiktionary.org/wiki/болезнь%20Аддисона|
 |https://en.wiktionary.org/wiki/бэкграунд|
 |https://en.wiktionary.org/wiki/брюшной|
 |https://en.wiktionary.org/wiki/беззвёздный|
@@ -667,13 +668,13 @@
 |https://en.wiktionary.org/wiki/бдительный|
 |https://en.wiktionary.org/wiki/безосновательный|
 |https://en.wiktionary.org/wiki/беспочвенный|
-|https://en.wiktionary.org/wiki/борт о борт|
-|https://en.wiktionary.org/wiki/бок о бок|
+|https://en.wiktionary.org/wiki/борт%20о%20борт|
+|https://en.wiktionary.org/wiki/бок%20о%20бок|
 |https://en.wiktionary.org/wiki/боготворить|
 |https://en.wiktionary.org/wiki/благоприятный|
 |https://en.wiktionary.org/wiki/боящийся|
 |https://en.wiktionary.org/wiki/безразличие|
-|https://en.wiktionary.org/wiki/берестяная грамота|
+|https://en.wiktionary.org/wiki/берестяная%20грамота|
 |https://en.wiktionary.org/wiki/береста|
 |https://en.wiktionary.org/wiki/баста|
 |https://en.wiktionary.org/wiki/безобидный|
@@ -691,25 +692,25 @@
 |https://en.wiktionary.org/wiki/Благовещение|
 |https://en.wiktionary.org/wiki/беспокойный|
 |https://en.wiktionary.org/wiki/безразличный|
-|https://en.wiktionary.org/wiki/будто бы|
+|https://en.wiktionary.org/wiki/будто%20бы|
 |https://en.wiktionary.org/wiki/будни|
 |https://en.wiktionary.org/wiki/будничный|
 |https://en.wiktionary.org/wiki/беседка|
-|https://en.wiktionary.org/wiki/болезнь Альцгеймера|
+|https://en.wiktionary.org/wiki/болезнь%20Альцгеймера|
 |https://en.wiktionary.org/wiki/благодать|
 |https://en.wiktionary.org/wiki/библиотекарша|
-|https://en.wiktionary.org/wiki/бег трусцой|
+|https://en.wiktionary.org/wiki/бег%20трусцой|
 |https://en.wiktionary.org/wiki/благотворный|
 |https://en.wiktionary.org/wiki/брехать|
 |https://en.wiktionary.org/wiki/бомбардировать|
 |https://en.wiktionary.org/wiki/бомбардировка|
 |https://en.wiktionary.org/wiki/бесплодный|
 |https://en.wiktionary.org/wiki/бактриан|
-|https://en.wiktionary.org/wiki/бенгальский тигр|
+|https://en.wiktionary.org/wiki/бенгальский%20тигр|
 |https://en.wiktionary.org/wiki/бомбист|
 |https://en.wiktionary.org/wiki/близлежащий|
 |https://en.wiktionary.org/wiki/бесспорно|
-|https://en.wiktionary.org/wiki/бубновый туз|
+|https://en.wiktionary.org/wiki/бубновый%20туз|
 |https://en.wiktionary.org/wiki/бодрствование|
 |https://en.wiktionary.org/wiki/броневой|
 |https://en.wiktionary.org/wiki/бронированный|
@@ -719,9 +720,9 @@
 |https://en.wiktionary.org/wiki/бездетность|
 |https://en.wiktionary.org/wiki/безличный|
 |https://en.wiktionary.org/wiki/бубны|
-|https://en.wiktionary.org/wiki/брак по договорённости|
+|https://en.wiktionary.org/wiki/брак%20по%20договорённости|
 |https://en.wiktionary.org/wiki/бубновый|
-|https://en.wiktionary.org/wiki/безличный глагол|
+|https://en.wiktionary.org/wiki/безличный%20глагол|
 |https://en.wiktionary.org/wiki/быстрее|
 |https://en.wiktionary.org/wiki/боснийка|
 |https://en.wiktionary.org/wiki/блести|
@@ -730,17 +731,17 @@
 |https://en.wiktionary.org/wiki/бельгийка|
 |https://en.wiktionary.org/wiki/бельгиец|
 |https://en.wiktionary.org/wiki/бирманка|
-|https://en.wiktionary.org/wiki/будем здоровы|
-|https://en.wiktionary.org/wiki/борьба на руках|
+|https://en.wiktionary.org/wiki/будем%20здоровы|
+|https://en.wiktionary.org/wiki/борьба%20на%20руках|
 |https://en.wiktionary.org/wiki/безбожница|
 |https://en.wiktionary.org/wiki/беженка|
 |https://en.wiktionary.org/wiki/буссоль|
-|https://en.wiktionary.org/wiki/барабанный бой|
+|https://en.wiktionary.org/wiki/барабанный%20бой|
 |https://en.wiktionary.org/wiki/бурчать|
 |https://en.wiktionary.org/wiki/брюзжать|
 |https://en.wiktionary.org/wiki/боестолкновение|
 |https://en.wiktionary.org/wiki/бренчать|
-|https://en.wiktionary.org/wiki/белый клевер|
+|https://en.wiktionary.org/wiki/белый%20клевер|
 |https://en.wiktionary.org/wiki/боливарианский|
 |https://en.wiktionary.org/wiki/барсучонок|
 |https://en.wiktionary.org/wiki/бельчонок|
@@ -769,9 +770,9 @@
 |https://en.wiktionary.org/wiki/барельеф|
 |https://en.wiktionary.org/wiki/бесчеловечный|
 |https://en.wiktionary.org/wiki/беспрестанно|
-|https://en.wiktionary.org/wiki/больше всего|
+|https://en.wiktionary.org/wiki/больше%20всего|
 |https://en.wiktionary.org/wiki/братец|
-|https://en.wiktionary.org/wiki/более всего|
+|https://en.wiktionary.org/wiki/более%20всего|
 |https://en.wiktionary.org/wiki/безалаберно|
 |https://en.wiktionary.org/wiki/беспечно|
 |https://en.wiktionary.org/wiki/благодарный|
@@ -787,14 +788,14 @@
 |https://en.wiktionary.org/wiki/бабахнуть|
 |https://en.wiktionary.org/wiki/бычить|
 |https://en.wiktionary.org/wiki/бредить|
-|https://en.wiktionary.org/wiki/буря в стакане воды|
+|https://en.wiktionary.org/wiki/буря%20в%20стакане%20воды|
 |https://en.wiktionary.org/wiki/бьёшь|
 |https://en.wiktionary.org/wiki/бью|
 |https://en.wiktionary.org/wiki/бьют|
 |https://en.wiktionary.org/wiki/бьём|
 |https://en.wiktionary.org/wiki/бьёте|
 |https://en.wiktionary.org/wiki/бьёт|
-|https://en.wiktionary.org/wiki/большая буква|
+|https://en.wiktionary.org/wiki/большая%20буква|
 |https://en.wiktionary.org/wiki/брызнуть|
 |https://en.wiktionary.org/wiki/басурманин|
 |https://en.wiktionary.org/wiki/благополучно|
@@ -802,21 +803,21 @@
 |https://en.wiktionary.org/wiki/беспристрастно|
 |https://en.wiktionary.org/wiki/бейте|
 |https://en.wiktionary.org/wiki/бесформенный|
-|https://en.wiktionary.org/wiki/брюки клёш|
+|https://en.wiktionary.org/wiki/брюки%20клёш|
 |https://en.wiktionary.org/wiki/благоприятно|
 |https://en.wiktionary.org/wiki/белоручка|
 |https://en.wiktionary.org/wiki/благополучие|
 |https://en.wiktionary.org/wiki/благосостояние|
 |https://en.wiktionary.org/wiki/бежит|
 |https://en.wiktionary.org/wiki/бежишь|
-|https://en.wiktionary.org/wiki/без ведома|
+|https://en.wiktionary.org/wiki/без%20ведома|
 |https://en.wiktionary.org/wiki/бежите|
 |https://en.wiktionary.org/wiki/бегут|
 |https://en.wiktionary.org/wiki/бежим|
 |https://en.wiktionary.org/wiki/блядовать|
 |https://en.wiktionary.org/wiki/беги|
 |https://en.wiktionary.org/wiki/бегите|
-|https://en.wiktionary.org/wiki/большие половые губы|
+|https://en.wiktionary.org/wiki/большие%20половые%20губы|
 |https://en.wiktionary.org/wiki/бант|
 |https://en.wiktionary.org/wiki/быстрота|
 |https://en.wiktionary.org/wiki/басенджи|
@@ -824,8 +825,8 @@
 |https://en.wiktionary.org/wiki/болельщик|
 |https://en.wiktionary.org/wiki/бальзам|
 |https://en.wiktionary.org/wiki/биеннале|
-|https://en.wiktionary.org/wiki/без дураков|
-|https://en.wiktionary.org/wiki/без посторонней помощи|
+|https://en.wiktionary.org/wiki/без%20дураков|
+|https://en.wiktionary.org/wiki/без%20посторонней%20помощи|
 |https://en.wiktionary.org/wiki/браться|
 |https://en.wiktionary.org/wiki/бракованный|
 |https://en.wiktionary.org/wiki/баритона|
@@ -833,8 +834,8 @@
 |https://en.wiktionary.org/wiki/благословить|
 |https://en.wiktionary.org/wiki/богомол|
 |https://en.wiktionary.org/wiki/благодарю|
-|https://en.wiktionary.org/wiki/без ума|
-|https://en.wiktionary.org/wiki/боевой припас|
+|https://en.wiktionary.org/wiki/без%20ума|
+|https://en.wiktionary.org/wiki/боевой%20припас|
 |https://en.wiktionary.org/wiki/буханка|
 |https://en.wiktionary.org/wiki/бяка|
 |https://en.wiktionary.org/wiki/бессрочный|
@@ -845,17 +846,17 @@
 |https://en.wiktionary.org/wiki/безмолвие|
 |https://en.wiktionary.org/wiki/борошно|
 |https://en.wiktionary.org/wiki/бахча|
-|https://en.wiktionary.org/wiki/бенгальский огонь|
+|https://en.wiktionary.org/wiki/бенгальский%20огонь|
 |https://en.wiktionary.org/wiki/бестолковый|
 |https://en.wiktionary.org/wiki/бога|
 |https://en.wiktionary.org/wiki/бытиё|
 |https://en.wiktionary.org/wiki/бытие|
 |https://en.wiktionary.org/wiki/балакать|
-|https://en.wiktionary.org/wiki/боль не менее|
-|https://en.wiktionary.org/wiki/более или менее|
+|https://en.wiktionary.org/wiki/боль%20не%20менее|
+|https://en.wiktionary.org/wiki/более%20или%20менее|
 |https://en.wiktionary.org/wiki/более-менее|
 |https://en.wiktionary.org/wiki/бопомофо|
-|https://en.wiktionary.org/wiki/Ближний Восток|
+|https://en.wiktionary.org/wiki/Ближний%20Восток|
 |https://en.wiktionary.org/wiki/брильянт|
 |https://en.wiktionary.org/wiki/бриллиантовый|
 |https://en.wiktionary.org/wiki/босанский|
@@ -881,7 +882,7 @@
 |https://en.wiktionary.org/wiki/бургомистр|
 |https://en.wiktionary.org/wiki/бархат|
 |https://en.wiktionary.org/wiki/безденежье|
-|https://en.wiktionary.org/wiki/боевое искусство|
+|https://en.wiktionary.org/wiki/боевое%20искусство|
 |https://en.wiktionary.org/wiki/балаган|
 |https://en.wiktionary.org/wiki/байка|
 |https://en.wiktionary.org/wiki/базирование|
@@ -962,8 +963,8 @@
 |https://en.wiktionary.org/wiki/блицкриг|
 |https://en.wiktionary.org/wiki/бактериология|
 |https://en.wiktionary.org/wiki/балалайки|
-|https://en.wiktionary.org/wiki/благодаря чему|
-|https://en.wiktionary.org/wiki/благодаря тому, что|
+|https://en.wiktionary.org/wiki/благодаря%20чему|
+|https://en.wiktionary.org/wiki/благодаря%20тому,%20что|
 |https://en.wiktionary.org/wiki/безвластный|
 |https://en.wiktionary.org/wiki/бережок|
 |https://en.wiktionary.org/wiki/безмолвный|
@@ -1162,7 +1163,7 @@
 |https://en.wiktionary.org/wiki/бестактность|
 |https://en.wiktionary.org/wiki/бейся|
 |https://en.wiktionary.org/wiki/бабушкин|
-|https://en.wiktionary.org/wiki/баба с возу — кобыле легче|
+|https://en.wiktionary.org/wiki/баба%20с%20возу%20—%20кобыле%20легче|
 |https://en.wiktionary.org/wiki/барьера|
 |https://en.wiktionary.org/wiki/бьеннале|
 |https://en.wiktionary.org/wiki/беженцев|
@@ -1417,7 +1418,7 @@
 |https://en.wiktionary.org/wiki/Босфор|
 |https://en.wiktionary.org/wiki/бездумный|
 |https://en.wiktionary.org/wiki/бесфитильный|
-|https://en.wiktionary.org/wiki/будет ли дождь|
+|https://en.wiktionary.org/wiki/будет%20ли%20дождь|
 |https://en.wiktionary.org/wiki/банджоист|
 |https://en.wiktionary.org/wiki/бесшумный|
 |https://en.wiktionary.org/wiki/бакинец|
@@ -3420,22 +3421,22 @@
 |https://en.wiktionary.org/wiki/бабника|
 |https://en.wiktionary.org/wiki/бабники|
 |https://en.wiktionary.org/wiki/бабла|
-|https://en.wiktionary.org/wiki/бабьего лета|
+|https://en.wiktionary.org/wiki/бабьего%20лета|
 |https://en.wiktionary.org/wiki/бабулек|
 |https://en.wiktionary.org/wiki/бабуинов|
 |https://en.wiktionary.org/wiki/бабульки|
 |https://en.wiktionary.org/wiki/бабуины|
 |https://en.wiktionary.org/wiki/багатура|
 |https://en.wiktionary.org/wiki/багов|
-|https://en.wiktionary.org/wiki/бабьих лет|
+|https://en.wiktionary.org/wiki/бабьих%20лет|
 |https://en.wiktionary.org/wiki/баги|
-|https://en.wiktionary.org/wiki/бабьи лета|
+|https://en.wiktionary.org/wiki/бабьи%20лета|
 |https://en.wiktionary.org/wiki/баданы|
 |https://en.wiktionary.org/wiki/бадана|
 |https://en.wiktionary.org/wiki/багатуров|
 |https://en.wiktionary.org/wiki/багры|
 |https://en.wiktionary.org/wiki/багатуры|
-|https://en.wiktionary.org/wiki/базы данных|
+|https://en.wiktionary.org/wiki/базы%20данных|
 |https://en.wiktionary.org/wiki/бадей|
 |https://en.wiktionary.org/wiki/бадминтона|
 |https://en.wiktionary.org/wiki/бадьи|
@@ -3444,7 +3445,7 @@
 |https://en.wiktionary.org/wiki/базальтов|
 |https://en.wiktionary.org/wiki/базальта|
 |https://en.wiktionary.org/wiki/базальты|
-|https://en.wiktionary.org/wiki/баз данных|
+|https://en.wiktionary.org/wiki/баз%20данных|
 |https://en.wiktionary.org/wiki/байдар|
 |https://en.wiktionary.org/wiki/байдары|
 |https://en.wiktionary.org/wiki/баи|
@@ -3490,8 +3491,8 @@
 |https://en.wiktionary.org/wiki/балбеса|
 |https://en.wiktionary.org/wiki/балбесы|
 |https://en.wiktionary.org/wiki/балаболок|
-|https://en.wiktionary.org/wiki/баллистические ракеты|
-|https://en.wiktionary.org/wiki/баллистической ракеты|
+|https://en.wiktionary.org/wiki/баллистические%20ракеты|
+|https://en.wiktionary.org/wiki/баллистической%20ракеты|
 |https://en.wiktionary.org/wiki/баллистики|
 |https://en.wiktionary.org/wiki/баллистик|
 |https://en.wiktionary.org/wiki/балд|
@@ -3499,11 +3500,11 @@
 |https://en.wiktionary.org/wiki/баловников|
 |https://en.wiktionary.org/wiki/баловника|
 |https://en.wiktionary.org/wiki/баловники|
-|https://en.wiktionary.org/wiki/баллистических ракет|
-|https://en.wiktionary.org/wiki/бальзамов на душу|
-|https://en.wiktionary.org/wiki/бальзамы на душу|
+|https://en.wiktionary.org/wiki/баллистических%20ракет|
+|https://en.wiktionary.org/wiki/бальзамов%20на%20душу|
+|https://en.wiktionary.org/wiki/бальзамы%20на%20душу|
 |https://en.wiktionary.org/wiki/балыков|
-|https://en.wiktionary.org/wiki/бальзама на душу|
+|https://en.wiktionary.org/wiki/бальзама%20на%20душу|
 |https://en.wiktionary.org/wiki/балыки|
 |https://en.wiktionary.org/wiki/бамбуков|
 |https://en.wiktionary.org/wiki/бамбуки|
@@ -3520,23 +3521,23 @@
 |https://en.wiktionary.org/wiki/банджоисты|
 |https://en.wiktionary.org/wiki/банджоистов|
 |https://en.wiktionary.org/wiki/банджоиста|
-|https://en.wiktionary.org/wiki/банковской выписки|
+|https://en.wiktionary.org/wiki/банковской%20выписки|
 |https://en.wiktionary.org/wiki/банкнотов|
 |https://en.wiktionary.org/wiki/бандуры|
 |https://en.wiktionary.org/wiki/бандур|
 |https://en.wiktionary.org/wiki/бандикутов|
-|https://en.wiktionary.org/wiki/банковских счетов|
-|https://en.wiktionary.org/wiki/банковские счета|
-|https://en.wiktionary.org/wiki/банковских выписок|
-|https://en.wiktionary.org/wiki/банковского счёта|
-|https://en.wiktionary.org/wiki/банковские выписки|
+|https://en.wiktionary.org/wiki/банковских%20счетов|
+|https://en.wiktionary.org/wiki/банковские%20счета|
+|https://en.wiktionary.org/wiki/банковских%20выписок|
+|https://en.wiktionary.org/wiki/банковского%20счёта|
+|https://en.wiktionary.org/wiki/банковские%20выписки|
 |https://en.wiktionary.org/wiki/банщиц|
 |https://en.wiktionary.org/wiki/банщицы|
 |https://en.wiktionary.org/wiki/банкоматы|
 |https://en.wiktionary.org/wiki/банкоматов|
 |https://en.wiktionary.org/wiki/банкомата|
-|https://en.wiktionary.org/wiki/барабанные бои|
-|https://en.wiktionary.org/wiki/барабанного боя|
+|https://en.wiktionary.org/wiki/барабанные%20бои|
+|https://en.wiktionary.org/wiki/барабанного%20боя|
 |https://en.wiktionary.org/wiki/баобабы|
 |https://en.wiktionary.org/wiki/баобабов|
 |https://en.wiktionary.org/wiki/баобаба|
@@ -3544,7 +3545,7 @@
 |https://en.wiktionary.org/wiki/барбершопа|
 |https://en.wiktionary.org/wiki/барахолки|
 |https://en.wiktionary.org/wiki/барахолок|
-|https://en.wiktionary.org/wiki/барабанных боёв|
+|https://en.wiktionary.org/wiki/барабанных%20боёв|
 |https://en.wiktionary.org/wiki/барельефа|
 |https://en.wiktionary.org/wiki/барвинков|
 |https://en.wiktionary.org/wiki/барвинка|
@@ -3642,9 +3643,9 @@
 |https://en.wiktionary.org/wiki/баяниста|
 |https://en.wiktionary.org/wiki/бегунов|
 |https://en.wiktionary.org/wiki/бегуны|
-|https://en.wiktionary.org/wiki/бегов трусцой|
+|https://en.wiktionary.org/wiki/бегов%20трусцой|
 |https://en.wiktionary.org/wiki/бегуна|
-|https://en.wiktionary.org/wiki/бега трусцой|
+|https://en.wiktionary.org/wiki/бега%20трусцой|
 |https://en.wiktionary.org/wiki/беженок|
 |https://en.wiktionary.org/wiki/беженки|
 |https://en.wiktionary.org/wiki/бедуины|
@@ -3675,16 +3676,16 @@
 |https://en.wiktionary.org/wiki/бездетности|
 |https://en.wiktionary.org/wiki/бездетностей|
 |https://en.wiktionary.org/wiki/безденежий|
-|https://en.wiktionary.org/wiki/безличного глагола|
+|https://en.wiktionary.org/wiki/безличного%20глагола|
 |https://en.wiktionary.org/wiki/беззубок|
 |https://en.wiktionary.org/wiki/беззаботностей|
 |https://en.wiktionary.org/wiki/беззубки|
 |https://en.wiktionary.org/wiki/беззаботности|
 |https://en.wiktionary.org/wiki/безнравственности|
 |https://en.wiktionary.org/wiki/безмятежностей|
-|https://en.wiktionary.org/wiki/безличных глаголов|
+|https://en.wiktionary.org/wiki/безличных%20глаголов|
 |https://en.wiktionary.org/wiki/безмятежности|
-|https://en.wiktionary.org/wiki/безличные глаголы|
+|https://en.wiktionary.org/wiki/безличные%20глаголы|
 |https://en.wiktionary.org/wiki/безобразниц|
 |https://en.wiktionary.org/wiki/безобразницы|
 |https://en.wiktionary.org/wiki/безобразники|
@@ -3692,13 +3693,13 @@
 |https://en.wiktionary.org/wiki/безобразника|
 |https://en.wiktionary.org/wiki/безрукавок|
 |https://en.wiktionary.org/wiki/безрукавки|
-|https://en.wiktionary.org/wiki/безоткатные орудия|
-|https://en.wiktionary.org/wiki/безоткатных орудий|
-|https://en.wiktionary.org/wiki/безоткатного орудия|
+|https://en.wiktionary.org/wiki/безоткатные%20орудия|
+|https://en.wiktionary.org/wiki/безоткатных%20орудий|
+|https://en.wiktionary.org/wiki/безоткатного%20орудия|
 |https://en.wiktionary.org/wiki/бея|
-|https://en.wiktionary.org/wiki/безымянных пальцев|
-|https://en.wiktionary.org/wiki/безымянного пальца|
-|https://en.wiktionary.org/wiki/безымянные пальцы|
+|https://en.wiktionary.org/wiki/безымянных%20пальцев|
+|https://en.wiktionary.org/wiki/безымянного%20пальца|
+|https://en.wiktionary.org/wiki/безымянные%20пальцы|
 |https://en.wiktionary.org/wiki/безъятия|
 |https://en.wiktionary.org/wiki/беконов|
 |https://en.wiktionary.org/wiki/беконы|
@@ -3706,19 +3707,19 @@
 |https://en.wiktionary.org/wiki/бейсбола|
 |https://en.wiktionary.org/wiki/беи|
 |https://en.wiktionary.org/wiki/белены|
-|https://en.wiktionary.org/wiki/белых костей|
-|https://en.wiktionary.org/wiki/белой кости|
-|https://en.wiktionary.org/wiki/белые кости|
+|https://en.wiktionary.org/wiki/белых%20костей|
+|https://en.wiktionary.org/wiki/белой%20кости|
+|https://en.wiktionary.org/wiki/белые%20кости|
 |https://en.wiktionary.org/wiki/белов|
 |https://en.wiktionary.org/wiki/белогвардейца|
 |https://en.wiktionary.org/wiki/белладонн|
 |https://en.wiktionary.org/wiki/белилен|
 |https://en.wiktionary.org/wiki/белладонны|
 |https://en.wiktionary.org/wiki/белильни|
-|https://en.wiktionary.org/wiki/белых вин|
-|https://en.wiktionary.org/wiki/белые вина|
+|https://en.wiktionary.org/wiki/белых%20вин|
+|https://en.wiktionary.org/wiki/белые%20вина|
 |https://en.wiktionary.org/wiki/белогвардейцев|
-|https://en.wiktionary.org/wiki/белого вина|
+|https://en.wiktionary.org/wiki/белого%20вина|
 |https://en.wiktionary.org/wiki/белогвардейцы|
 |https://en.wiktionary.org/wiki/белоручек|
 |https://en.wiktionary.org/wiki/белоручки|
@@ -3730,21 +3731,21 @@
 |https://en.wiktionary.org/wiki/белошвеек|
 |https://en.wiktionary.org/wiki/белуги|
 |https://en.wiktionary.org/wiki/белошвейки|
-|https://en.wiktionary.org/wiki/белых карликов|
-|https://en.wiktionary.org/wiki/белые карлики|
+|https://en.wiktionary.org/wiki/белых%20карликов|
+|https://en.wiktionary.org/wiki/белые%20карлики|
 |https://en.wiktionary.org/wiki/Белфаста|
-|https://en.wiktionary.org/wiki/белого карлика|
+|https://en.wiktionary.org/wiki/белого%20карлика|
 |https://en.wiktionary.org/wiki/белух|
-|https://en.wiktionary.org/wiki/белые медведи|
-|https://en.wiktionary.org/wiki/белого медведя|
-|https://en.wiktionary.org/wiki/белые клевера|
-|https://en.wiktionary.org/wiki/белых клеверов|
-|https://en.wiktionary.org/wiki/белого клевера|
+|https://en.wiktionary.org/wiki/белые%20медведи|
+|https://en.wiktionary.org/wiki/белого%20медведя|
+|https://en.wiktionary.org/wiki/белые%20клевера|
+|https://en.wiktionary.org/wiki/белых%20клеверов|
+|https://en.wiktionary.org/wiki/белого%20клевера|
 |https://en.wiktionary.org/wiki/бельгийки|
 |https://en.wiktionary.org/wiki/бельгийцев|
 |https://en.wiktionary.org/wiki/бельгийца|
 |https://en.wiktionary.org/wiki/бельгийцы|
-|https://en.wiktionary.org/wiki/белых медведей|
+|https://en.wiktionary.org/wiki/белых%20медведей|
 |https://en.wiktionary.org/wiki/беляка|
 |https://en.wiktionary.org/wiki/бельчат|
 |https://en.wiktionary.org/wiki/бельчонка|
@@ -3755,31 +3756,31 @@
 |https://en.wiktionary.org/wiki/беляков|
 |https://en.wiktionary.org/wiki/бемоля|
 |https://en.wiktionary.org/wiki/беляки|
-|https://en.wiktionary.org/wiki/бенгальские тигры|
-|https://en.wiktionary.org/wiki/бенгальского тигра|
-|https://en.wiktionary.org/wiki/бенгальские огни|
-|https://en.wiktionary.org/wiki/бенгальских огней|
-|https://en.wiktionary.org/wiki/бенгальского огня|
-|https://en.wiktionary.org/wiki/бензиновой колонки|
+|https://en.wiktionary.org/wiki/бенгальские%20тигры|
+|https://en.wiktionary.org/wiki/бенгальского%20тигра|
+|https://en.wiktionary.org/wiki/бенгальские%20огни|
+|https://en.wiktionary.org/wiki/бенгальских%20огней|
+|https://en.wiktionary.org/wiki/бенгальского%20огня|
+|https://en.wiktionary.org/wiki/бензиновой%20колонки|
 |https://en.wiktionary.org/wiki/бензелей|
 |https://en.wiktionary.org/wiki/бензеля|
 |https://en.wiktionary.org/wiki/бензели|
-|https://en.wiktionary.org/wiki/бенгальских тигров|
+|https://en.wiktionary.org/wiki/бенгальских%20тигров|
 |https://en.wiktionary.org/wiki/бензобаков|
 |https://en.wiktionary.org/wiki/бензобаки|
-|https://en.wiktionary.org/wiki/бензиновых колонок|
+|https://en.wiktionary.org/wiki/бензиновых%20колонок|
 |https://en.wiktionary.org/wiki/бензобака|
-|https://en.wiktionary.org/wiki/бензиновые колонки|
-|https://en.wiktionary.org/wiki/бензозаправочных колонок|
-|https://en.wiktionary.org/wiki/бензозаправочные колонки|
+|https://en.wiktionary.org/wiki/бензиновые%20колонки|
+|https://en.wiktionary.org/wiki/бензозаправочных%20колонок|
+|https://en.wiktionary.org/wiki/бензозаправочные%20колонки|
 |https://en.wiktionary.org/wiki/бензозаправок|
-|https://en.wiktionary.org/wiki/бензозаправочной колонки|
+|https://en.wiktionary.org/wiki/бензозаправочной%20колонки|
 |https://en.wiktionary.org/wiki/бензозаправки|
 |https://en.wiktionary.org/wiki/бензоколонок|
 |https://en.wiktionary.org/wiki/бензоколонки|
-|https://en.wiktionary.org/wiki/бензозаправочные станции|
-|https://en.wiktionary.org/wiki/бензозаправочных станций|
-|https://en.wiktionary.org/wiki/бензозаправочной станции|
+|https://en.wiktionary.org/wiki/бензозаправочные%20станции|
+|https://en.wiktionary.org/wiki/бензозаправочных%20станций|
+|https://en.wiktionary.org/wiki/бензозаправочной%20станции|
 |https://en.wiktionary.org/wiki/бердыши|
 |https://en.wiktionary.org/wiki/бердыша|
 |https://en.wiktionary.org/wiki/берберы|
@@ -3791,9 +3792,9 @@
 |https://en.wiktionary.org/wiki/бережки|
 |https://en.wiktionary.org/wiki/бердышей|
 |https://en.wiktionary.org/wiki/берилла|
-|https://en.wiktionary.org/wiki/берестяных грамот|
-|https://en.wiktionary.org/wiki/берестяной грамоты|
-|https://en.wiktionary.org/wiki/берестяные грамоты|
+|https://en.wiktionary.org/wiki/берестяных%20грамот|
+|https://en.wiktionary.org/wiki/берестяной%20грамоты|
+|https://en.wiktionary.org/wiki/берестяные%20грамоты|
 |https://en.wiktionary.org/wiki/берестов|
 |https://en.wiktionary.org/wiki/бериллиев|
 |https://en.wiktionary.org/wiki/бериллии|
@@ -3846,9 +3847,9 @@
 |https://en.wiktionary.org/wiki/библиофилы|
 |https://en.wiktionary.org/wiki/библиотекарш|
 |https://en.wiktionary.org/wiki/биг-маки|
-|https://en.wiktionary.org/wiki/Биг Маков|
-|https://en.wiktionary.org/wiki/Биг Мака|
-|https://en.wiktionary.org/wiki/Биг Маки|
+|https://en.wiktionary.org/wiki/Биг%20Маков|
+|https://en.wiktionary.org/wiki/Биг%20Мака|
+|https://en.wiktionary.org/wiki/Биг%20Маки|
 |https://en.wiktionary.org/wiki/бивней|
 |https://en.wiktionary.org/wiki/бигамии|
 |https://en.wiktionary.org/wiki/биг-мэков|
@@ -3857,8 +3858,8 @@
 |https://en.wiktionary.org/wiki/биг-маков|
 |https://en.wiktionary.org/wiki/бизоны|
 |https://en.wiktionary.org/wiki/бизона|
-|https://en.wiktionary.org/wiki/биения сердца|
-|https://en.wiktionary.org/wiki/биений сердца|
+|https://en.wiktionary.org/wiki/биения%20сердца|
+|https://en.wiktionary.org/wiki/биений%20сердца|
 |https://en.wiktionary.org/wiki/бигамий|
 |https://en.wiktionary.org/wiki/биксы|
 |https://en.wiktionary.org/wiki/бикамерализмов|
@@ -3916,9 +3917,9 @@
 |https://en.wiktionary.org/wiki/благозвучия|
 |https://en.wiktionary.org/wiki/благодеяния|
 |https://en.wiktionary.org/wiki/благостыни|
-|https://en.wiktionary.org/wiki/благородных газов|
-|https://en.wiktionary.org/wiki/благородного газа|
-|https://en.wiktionary.org/wiki/благородные газы|
+|https://en.wiktionary.org/wiki/благородных%20газов|
+|https://en.wiktionary.org/wiki/благородного%20газа|
+|https://en.wiktionary.org/wiki/благородные%20газы|
 |https://en.wiktionary.org/wiki/благоразумий|
 |https://en.wiktionary.org/wiki/блат-хат|
 |https://en.wiktionary.org/wiki/блат-хаты|
@@ -3942,7 +3943,7 @@
 |https://en.wiktionary.org/wiki/блесны|
 |https://en.wiktionary.org/wiki/блога|
 |https://en.wiktionary.org/wiki/близорукостей|
-|https://en.wiktionary.org/wiki/Ближнего Востока|
+|https://en.wiktionary.org/wiki/Ближнего%20Востока|
 |https://en.wiktionary.org/wiki/близорукости|
 |https://en.wiktionary.org/wiki/блеяний|
 |https://en.wiktionary.org/wiki/блоггеров|
@@ -3962,9 +3963,9 @@
 |https://en.wiktionary.org/wiki/блокбастера|
 |https://en.wiktionary.org/wiki/блудника|
 |https://en.wiktionary.org/wiki/блуда|
-|https://en.wiktionary.org/wiki/блошиные рынки|
-|https://en.wiktionary.org/wiki/блошиных рынков|
-|https://en.wiktionary.org/wiki/блошиного рынка|
+|https://en.wiktionary.org/wiki/блошиные%20рынки|
+|https://en.wiktionary.org/wiki/блошиных%20рынков|
+|https://en.wiktionary.org/wiki/блошиного%20рынка|
 |https://en.wiktionary.org/wiki/блузы|
 |https://en.wiktionary.org/wiki/блудниц|
 |https://en.wiktionary.org/wiki/блудников|
@@ -4005,26 +4006,26 @@
 |https://en.wiktionary.org/wiki/богоносцы|
 |https://en.wiktionary.org/wiki/богоносцев|
 |https://en.wiktionary.org/wiki/богоносца|
-|https://en.wiktionary.org/wiki/боевого искусства|
+|https://en.wiktionary.org/wiki/боевого%20искусства|
 |https://en.wiktionary.org/wiki/бодрствований|
 |https://en.wiktionary.org/wiki/бодов|
 |https://en.wiktionary.org/wiki/бодрствования|
 |https://en.wiktionary.org/wiki/боды|
-|https://en.wiktionary.org/wiki/боевых отделений|
-|https://en.wiktionary.org/wiki/боевые отделения|
-|https://en.wiktionary.org/wiki/боевых искусств|
-|https://en.wiktionary.org/wiki/боевого отделения|
-|https://en.wiktionary.org/wiki/боевые искусства|
-|https://en.wiktionary.org/wiki/боевые порядки|
-|https://en.wiktionary.org/wiki/боевого порядка|
-|https://en.wiktionary.org/wiki/боевые комплекты|
-|https://en.wiktionary.org/wiki/боевых комплектов|
-|https://en.wiktionary.org/wiki/боевого комплекта|
+|https://en.wiktionary.org/wiki/боевых%20отделений|
+|https://en.wiktionary.org/wiki/боевые%20отделения|
+|https://en.wiktionary.org/wiki/боевых%20искусств|
+|https://en.wiktionary.org/wiki/боевого%20отделения|
+|https://en.wiktionary.org/wiki/боевые%20искусства|
+|https://en.wiktionary.org/wiki/боевые%20порядки|
+|https://en.wiktionary.org/wiki/боевого%20порядка|
+|https://en.wiktionary.org/wiki/боевые%20комплекты|
+|https://en.wiktionary.org/wiki/боевых%20комплектов|
+|https://en.wiktionary.org/wiki/боевого%20комплекта|
 |https://en.wiktionary.org/wiki/боеготовности|
-|https://en.wiktionary.org/wiki/боевых припасов|
-|https://en.wiktionary.org/wiki/боевого припаса|
-|https://en.wiktionary.org/wiki/боевые припасы|
-|https://en.wiktionary.org/wiki/боевых порядков|
+|https://en.wiktionary.org/wiki/боевых%20припасов|
+|https://en.wiktionary.org/wiki/боевого%20припаса|
+|https://en.wiktionary.org/wiki/боевые%20припасы|
+|https://en.wiktionary.org/wiki/боевых%20порядков|
 |https://en.wiktionary.org/wiki/боепитания|
 |https://en.wiktionary.org/wiki/боекомплектов|
 |https://en.wiktionary.org/wiki/боекомплекта|
@@ -4035,10 +4036,10 @@
 |https://en.wiktionary.org/wiki/боеспособности|
 |https://en.wiktionary.org/wiki/боеспособностей|
 |https://en.wiktionary.org/wiki/боепитаний|
-|https://en.wiktionary.org/wiki/божьих коровок|
-|https://en.wiktionary.org/wiki/божьи коровки|
+|https://en.wiktionary.org/wiki/божьих%20коровок|
+|https://en.wiktionary.org/wiki/божьи%20коровки|
 |https://en.wiktionary.org/wiki/божественностей|
-|https://en.wiktionary.org/wiki/божьей коровки|
+|https://en.wiktionary.org/wiki/божьей%20коровки|
 |https://en.wiktionary.org/wiki/божественности|
 |https://en.wiktionary.org/wiki/бойкоты|
 |https://en.wiktionary.org/wiki/бойкота|
@@ -4060,31 +4061,31 @@
 |https://en.wiktionary.org/wiki/бокчоя|
 |https://en.wiktionary.org/wiki/бокчои|
 |https://en.wiktionary.org/wiki/бойфрендов|
-|https://en.wiktionary.org/wiki/болезни Аддисона|
+|https://en.wiktionary.org/wiki/болезни%20Аддисона|
 |https://en.wiktionary.org/wiki/болгарок|
 |https://en.wiktionary.org/wiki/болванок|
 |https://en.wiktionary.org/wiki/болгарки|
 |https://en.wiktionary.org/wiki/болванки|
 |https://en.wiktionary.org/wiki/болотца|
 |https://en.wiktionary.org/wiki/болоны|
-|https://en.wiktionary.org/wiki/болезни Альцгеймера|
-|https://en.wiktionary.org/wiki/болезней Альцгеймера|
-|https://en.wiktionary.org/wiki/болезней Аддисона|
+|https://en.wiktionary.org/wiki/болезни%20Альцгеймера|
+|https://en.wiktionary.org/wiki/болезней%20Альцгеймера|
+|https://en.wiktionary.org/wiki/болезней%20Аддисона|
 |https://en.wiktionary.org/wiki/болотцев|
-|https://en.wiktionary.org/wiki/большой буквы|
+|https://en.wiktionary.org/wiki/большой%20буквы|
 |https://en.wiktionary.org/wiki/большаков|
 |https://en.wiktionary.org/wiki/большака|
 |https://en.wiktionary.org/wiki/большаки|
-|https://en.wiktionary.org/wiki/большие пальцы|
-|https://en.wiktionary.org/wiki/большого пальца|
-|https://en.wiktionary.org/wiki/больших букв|
-|https://en.wiktionary.org/wiki/больших половых губ|
-|https://en.wiktionary.org/wiki/большие буквы|
+|https://en.wiktionary.org/wiki/большие%20пальцы|
+|https://en.wiktionary.org/wiki/большого%20пальца|
+|https://en.wiktionary.org/wiki/больших%20букв|
+|https://en.wiktionary.org/wiki/больших%20половых%20губ|
+|https://en.wiktionary.org/wiki/большие%20буквы|
 |https://en.wiktionary.org/wiki/бомбисты|
 |https://en.wiktionary.org/wiki/бомбиста|
 |https://en.wiktionary.org/wiki/бомбардиры|
 |https://en.wiktionary.org/wiki/бомбардиров|
-|https://en.wiktionary.org/wiki/больших пальцев|
+|https://en.wiktionary.org/wiki/больших%20пальцев|
 |https://en.wiktionary.org/wiki/бомбомёты|
 |https://en.wiktionary.org/wiki/бомбомёта|
 |https://en.wiktionary.org/wiki/бомбометания|
@@ -4130,7 +4131,7 @@
 |https://en.wiktionary.org/wiki/бортника|
 |https://en.wiktionary.org/wiki/бортники|
 |https://en.wiktionary.org/wiki/борсеток|
-|https://en.wiktionary.org/wiki/борьбы на руках|
+|https://en.wiktionary.org/wiki/борьбы%20на%20руках|
 |https://en.wiktionary.org/wiki/борщевиков|
 |https://en.wiktionary.org/wiki/борщевика|
 |https://en.wiktionary.org/wiki/борщевики|
@@ -4170,8 +4171,8 @@
 |https://en.wiktionary.org/wiki/брадобреев|
 |https://en.wiktionary.org/wiki/бражника|
 |https://en.wiktionary.org/wiki/брадобреи|
-|https://en.wiktionary.org/wiki/браки по договорённости|
-|https://en.wiktionary.org/wiki/брака по договорённости|
+|https://en.wiktionary.org/wiki/браки%20по%20договорённости|
+|https://en.wiktionary.org/wiki/брака%20по%20договорённости|
 |https://en.wiktionary.org/wiki/бразильянки|
 |https://en.wiktionary.org/wiki/бразильянок|
 |https://en.wiktionary.org/wiki/бразд|
@@ -4179,7 +4180,7 @@
 |https://en.wiktionary.org/wiki/браконьеров|
 |https://en.wiktionary.org/wiki/браконьера|
 |https://en.wiktionary.org/wiki/браконьеры|
-|https://en.wiktionary.org/wiki/браков по договорённости|
+|https://en.wiktionary.org/wiki/браков%20по%20договорённости|
 |https://en.wiktionary.org/wiki/брандеров|
 |https://en.wiktionary.org/wiki/брандеры|
 |https://en.wiktionary.org/wiki/брамселей|
@@ -4200,7 +4201,7 @@
 |https://en.wiktionary.org/wiki/братынь|
 |https://en.wiktionary.org/wiki/брачущихся|
 |https://en.wiktionary.org/wiki/братыни|
-|https://en.wiktionary.org/wiki/бреда сивой кобылы|
+|https://en.wiktionary.org/wiki/бреда%20сивой%20кобылы|
 |https://en.wiktionary.org/wiki/брегетов|
 |https://en.wiktionary.org/wiki/брегов|
 |https://en.wiktionary.org/wiki/брегеты|
@@ -4241,7 +4242,7 @@
 |https://en.wiktionary.org/wiki/бризантностей|
 |https://en.wiktionary.org/wiki/бризов|
 |https://en.wiktionary.org/wiki/бритта|
-|https://en.wiktionary.org/wiki/бритвы Оккама|
+|https://en.wiktionary.org/wiki/бритвы%20Оккама|
 |https://en.wiktionary.org/wiki/британки|
 |https://en.wiktionary.org/wiki/британок|
 |https://en.wiktionary.org/wiki/брильянтов|
@@ -4271,29 +4272,29 @@
 |https://en.wiktionary.org/wiki/бронепоезда|
 |https://en.wiktionary.org/wiki/броненосцы|
 |https://en.wiktionary.org/wiki/бронирования|
-|https://en.wiktionary.org/wiki/бронетанковых войск|
+|https://en.wiktionary.org/wiki/бронетанковых%20войск|
 |https://en.wiktionary.org/wiki/бронестёкла|
 |https://en.wiktionary.org/wiki/бронестёкол|
 |https://en.wiktionary.org/wiki/бронестекла|
-|https://en.wiktionary.org/wiki/броуновского движения|
+|https://en.wiktionary.org/wiki/броуновского%20движения|
 |https://en.wiktionary.org/wiki/бронхитов|
 |https://en.wiktionary.org/wiki/бронхита|
 |https://en.wiktionary.org/wiki/бронхиты|
 |https://en.wiktionary.org/wiki/бронирований|
 |https://en.wiktionary.org/wiki/брюк-галифе|
-|https://en.wiktionary.org/wiki/брюк клёш|
-|https://en.wiktionary.org/wiki/бруски мыла|
-|https://en.wiktionary.org/wiki/брусков мыла|
-|https://en.wiktionary.org/wiki/бруска мыла|
-|https://en.wiktionary.org/wiki/брюшных полостей|
-|https://en.wiktionary.org/wiki/брюшные полости|
+|https://en.wiktionary.org/wiki/брюк%20клёш|
+|https://en.wiktionary.org/wiki/бруски%20мыла|
+|https://en.wiktionary.org/wiki/брусков%20мыла|
+|https://en.wiktionary.org/wiki/бруска%20мыла|
+|https://en.wiktionary.org/wiki/брюшных%20полостей|
+|https://en.wiktionary.org/wiki/брюшные%20полости|
 |https://en.wiktionary.org/wiki/брюхоногого|
-|https://en.wiktionary.org/wiki/брюшной полости|
+|https://en.wiktionary.org/wiki/брюшной%20полости|
 |https://en.wiktionary.org/wiki/брюхоногих|
-|https://en.wiktionary.org/wiki/бубновых тузов|
-|https://en.wiktionary.org/wiki/бубновые тузы|
+|https://en.wiktionary.org/wiki/бубновых%20тузов|
+|https://en.wiktionary.org/wiki/бубновые%20тузы|
 |https://en.wiktionary.org/wiki/бубён|
-|https://en.wiktionary.org/wiki/бубнового туза|
+|https://en.wiktionary.org/wiki/бубнового%20туза|
 |https://en.wiktionary.org/wiki/бубей|
 |https://en.wiktionary.org/wiki/будёновок|
 |https://en.wiktionary.org/wiki/будёновки|
@@ -4302,9 +4303,9 @@
 |https://en.wiktionary.org/wiki/бугеля|
 |https://en.wiktionary.org/wiki/буев|
 |https://en.wiktionary.org/wiki/буева|
-|https://en.wiktionary.org/wiki/будущие времена|
-|https://en.wiktionary.org/wiki/будущих времён|
-|https://en.wiktionary.org/wiki/будущего времени|
+|https://en.wiktionary.org/wiki/будущие%20времена|
+|https://en.wiktionary.org/wiki/будущих%20времён|
+|https://en.wiktionary.org/wiki/будущего%20времени|
 |https://en.wiktionary.org/wiki/бузины|
 |https://en.wiktionary.org/wiki/бузы|
 |https://en.wiktionary.org/wiki/буеры|
@@ -4330,32 +4331,32 @@
 |https://en.wiktionary.org/wiki/буккера|
 |https://en.wiktionary.org/wiki/буккеры|
 |https://en.wiktionary.org/wiki/буквочек|
-|https://en.wiktionary.org/wiki/буксирные крюки|
-|https://en.wiktionary.org/wiki/буксирного крюка|
+|https://en.wiktionary.org/wiki/буксирные%20крюки|
+|https://en.wiktionary.org/wiki/буксирного%20крюка|
 |https://en.wiktionary.org/wiki/буковки|
 |https://en.wiktionary.org/wiki/буковок|
 |https://en.wiktionary.org/wiki/буклей|
 |https://en.wiktionary.org/wiki/буксировщики|
 |https://en.wiktionary.org/wiki/буксировщика|
-|https://en.wiktionary.org/wiki/буксирных крюков|
-|https://en.wiktionary.org/wiki/буксирных крючьев|
-|https://en.wiktionary.org/wiki/буксирные крючья|
-|https://en.wiktionary.org/wiki/булевы множества|
-|https://en.wiktionary.org/wiki/булева множества|
+|https://en.wiktionary.org/wiki/буксирных%20крюков|
+|https://en.wiktionary.org/wiki/буксирных%20крючьев|
+|https://en.wiktionary.org/wiki/буксирные%20крючья|
+|https://en.wiktionary.org/wiki/булевы%20множества|
+|https://en.wiktionary.org/wiki/булева%20множества|
 |https://en.wiktionary.org/wiki/булавы|
 |https://en.wiktionary.org/wiki/булав|
 |https://en.wiktionary.org/wiki/буксировщиков|
-|https://en.wiktionary.org/wiki/булочек с начинкой|
-|https://en.wiktionary.org/wiki/булочки с начинкой|
+|https://en.wiktionary.org/wiki/булочек%20с%20начинкой|
+|https://en.wiktionary.org/wiki/булочки%20с%20начинкой|
 |https://en.wiktionary.org/wiki/буллы|
 |https://en.wiktionary.org/wiki/булл|
-|https://en.wiktionary.org/wiki/булевых множеств|
-|https://en.wiktionary.org/wiki/бульбоуретральные железы|
-|https://en.wiktionary.org/wiki/бульбоуретральной железы|
+|https://en.wiktionary.org/wiki/булевых%20множеств|
+|https://en.wiktionary.org/wiki/бульбоуретральные%20железы|
+|https://en.wiktionary.org/wiki/бульбоуретральной%20железы|
 |https://en.wiktionary.org/wiki/бульбаши|
 |https://en.wiktionary.org/wiki/бульбашей|
 |https://en.wiktionary.org/wiki/бульбаша|
-|https://en.wiktionary.org/wiki/бульбоуретральных желёз|
+|https://en.wiktionary.org/wiki/бульбоуретральных%20желёз|
 |https://en.wiktionary.org/wiki/бумера|
 |https://en.wiktionary.org/wiki/бульдогов|
 |https://en.wiktionary.org/wiki/бульдога|
@@ -4385,8 +4386,8 @@
 |https://en.wiktionary.org/wiki/бурок|
 |https://en.wiktionary.org/wiki/буруна|
 |https://en.wiktionary.org/wiki/бурки|
-|https://en.wiktionary.org/wiki/бурь в стакане воды|
-|https://en.wiktionary.org/wiki/бури в стакане воды|
+|https://en.wiktionary.org/wiki/бурь%20в%20стакане%20воды|
+|https://en.wiktionary.org/wiki/бури%20в%20стакане%20воды|
 |https://en.wiktionary.org/wiki/бурундуки|
 |https://en.wiktionary.org/wiki/бурундуков|
 |https://en.wiktionary.org/wiki/бурундука|
@@ -4410,10 +4411,10 @@
 |https://en.wiktionary.org/wiki/бутираты|
 |https://en.wiktionary.org/wiki/бутиратов|
 |https://en.wiktionary.org/wiki/бутирата|
-|https://en.wiktionary.org/wiki/бухгалтерских книг|
-|https://en.wiktionary.org/wiki/бухгалтерские книги|
+|https://en.wiktionary.org/wiki/бухгалтерских%20книг|
+|https://en.wiktionary.org/wiki/бухгалтерские%20книги|
 |https://en.wiktionary.org/wiki/бухарцев|
-|https://en.wiktionary.org/wiki/бухгалтерской книги|
+|https://en.wiktionary.org/wiki/бухгалтерской%20книги|
 |https://en.wiktionary.org/wiki/бухарцы|
 |https://en.wiktionary.org/wiki/бухм|
 |https://en.wiktionary.org/wiki/бухмы|
@@ -6653,16 +6654,16 @@
 |https://en.wiktionary.org/wiki/бабулькой|
 |https://en.wiktionary.org/wiki/бабулькою|
 |https://en.wiktionary.org/wiki/бабульку|
-|https://en.wiktionary.org/wiki/бабьим летам|
-|https://en.wiktionary.org/wiki/бабьем лете|
-|https://en.wiktionary.org/wiki/бабьему лету|
-|https://en.wiktionary.org/wiki/бабьим летом|
+|https://en.wiktionary.org/wiki/бабьим%20летам|
+|https://en.wiktionary.org/wiki/бабьем%20лете|
+|https://en.wiktionary.org/wiki/бабьему%20лету|
+|https://en.wiktionary.org/wiki/бабьим%20летом|
 |https://en.wiktionary.org/wiki/бабульках|
 |https://en.wiktionary.org/wiki/баге|
 |https://en.wiktionary.org/wiki/багом|
-|https://en.wiktionary.org/wiki/бабьих летах|
+|https://en.wiktionary.org/wiki/бабьих%20летах|
 |https://en.wiktionary.org/wiki/багу|
-|https://en.wiktionary.org/wiki/бабьими летами|
+|https://en.wiktionary.org/wiki/бабьими%20летами|
 |https://en.wiktionary.org/wiki/багатуром|
 |https://en.wiktionary.org/wiki/багатуру|
 |https://en.wiktionary.org/wiki/багами|
@@ -6693,16 +6694,16 @@
 |https://en.wiktionary.org/wiki/бадьёй|
 |https://en.wiktionary.org/wiki/бадьёю|
 |https://en.wiktionary.org/wiki/бадью|
-|https://en.wiktionary.org/wiki/базою данных|
-|https://en.wiktionary.org/wiki/базой данных|
-|https://en.wiktionary.org/wiki/базе данных|
-|https://en.wiktionary.org/wiki/базу данных|
+|https://en.wiktionary.org/wiki/базою%20данных|
+|https://en.wiktionary.org/wiki/базой%20данных|
+|https://en.wiktionary.org/wiki/базе%20данных|
+|https://en.wiktionary.org/wiki/базу%20данных|
 |https://en.wiktionary.org/wiki/бадьях|
-|https://en.wiktionary.org/wiki/базам данных|
+|https://en.wiktionary.org/wiki/базам%20данных|
 |https://en.wiktionary.org/wiki/базальтом|
 |https://en.wiktionary.org/wiki/базальту|
-|https://en.wiktionary.org/wiki/базами данных|
-|https://en.wiktionary.org/wiki/базах данных|
+|https://en.wiktionary.org/wiki/базами%20данных|
+|https://en.wiktionary.org/wiki/базах%20данных|
 |https://en.wiktionary.org/wiki/базилику|
 |https://en.wiktionary.org/wiki/базальтах|
 |https://en.wiktionary.org/wiki/базальтам|
@@ -6843,36 +6844,36 @@
 |https://en.wiktionary.org/wiki/балдах|
 |https://en.wiktionary.org/wiki/баллистике|
 |https://en.wiktionary.org/wiki/балдами|
-|https://en.wiktionary.org/wiki/баллистической ракете|
+|https://en.wiktionary.org/wiki/баллистической%20ракете|
 |https://en.wiktionary.org/wiki/баллистиках|
 |https://en.wiktionary.org/wiki/баллистикам|
 |https://en.wiktionary.org/wiki/баллистиками|
 |https://en.wiktionary.org/wiki/баллистикою|
-|https://en.wiktionary.org/wiki/баллистическими ракетами|
-|https://en.wiktionary.org/wiki/баллистическим ракетам|
-|https://en.wiktionary.org/wiki/баллистической ракетой|
-|https://en.wiktionary.org/wiki/баллистическою ракетою|
-|https://en.wiktionary.org/wiki/баллистическую ракету|
+|https://en.wiktionary.org/wiki/баллистическими%20ракетами|
+|https://en.wiktionary.org/wiki/баллистическим%20ракетам|
+|https://en.wiktionary.org/wiki/баллистической%20ракетой|
+|https://en.wiktionary.org/wiki/баллистическою%20ракетою|
+|https://en.wiktionary.org/wiki/баллистическую%20ракету|
 |https://en.wiktionary.org/wiki/баловникам|
 |https://en.wiktionary.org/wiki/баловнике|
 |https://en.wiktionary.org/wiki/баловнику|
 |https://en.wiktionary.org/wiki/баловником|
-|https://en.wiktionary.org/wiki/баллистических ракетах|
+|https://en.wiktionary.org/wiki/баллистических%20ракетах|
 |https://en.wiktionary.org/wiki/балыке|
 |https://en.wiktionary.org/wiki/балыком|
 |https://en.wiktionary.org/wiki/баловниках|
 |https://en.wiktionary.org/wiki/балыку|
 |https://en.wiktionary.org/wiki/баловниками|
-|https://en.wiktionary.org/wiki/бальзамом на душу|
-|https://en.wiktionary.org/wiki/бальзаму на душу|
+|https://en.wiktionary.org/wiki/бальзамом%20на%20душу|
+|https://en.wiktionary.org/wiki/бальзаму%20на%20душу|
 |https://en.wiktionary.org/wiki/балыками|
 |https://en.wiktionary.org/wiki/балыках|
 |https://en.wiktionary.org/wiki/балыкам|
 |https://en.wiktionary.org/wiki/балюстраде|
-|https://en.wiktionary.org/wiki/бальзамах на душу|
-|https://en.wiktionary.org/wiki/бальзамам на душу|
-|https://en.wiktionary.org/wiki/бальзамами на душу|
-|https://en.wiktionary.org/wiki/бальзаме на душу|
+|https://en.wiktionary.org/wiki/бальзамах%20на%20душу|
+|https://en.wiktionary.org/wiki/бальзамам%20на%20душу|
+|https://en.wiktionary.org/wiki/бальзамами%20на%20душу|
+|https://en.wiktionary.org/wiki/бальзаме%20на%20душу|
 |https://en.wiktionary.org/wiki/балюстрадами|
 |https://en.wiktionary.org/wiki/балюстрадам|
 |https://en.wiktionary.org/wiki/балюстрадой|
@@ -6918,21 +6919,21 @@
 |https://en.wiktionary.org/wiki/бандурам|
 |https://en.wiktionary.org/wiki/бандурами|
 |https://en.wiktionary.org/wiki/бандурою|
-|https://en.wiktionary.org/wiki/банковским выпискам|
-|https://en.wiktionary.org/wiki/банковскою выпискою|
-|https://en.wiktionary.org/wiki/банковскую выписку|
-|https://en.wiktionary.org/wiki/банковской выпиской|
-|https://en.wiktionary.org/wiki/банковской выписке|
-|https://en.wiktionary.org/wiki/банковском счёте|
-|https://en.wiktionary.org/wiki/банковским счётом|
-|https://en.wiktionary.org/wiki/банковских выписках|
-|https://en.wiktionary.org/wiki/банковскому счёту|
-|https://en.wiktionary.org/wiki/банковскими выписками|
+|https://en.wiktionary.org/wiki/банковским%20выпискам|
+|https://en.wiktionary.org/wiki/банковскою%20выпискою|
+|https://en.wiktionary.org/wiki/банковскую%20выписку|
+|https://en.wiktionary.org/wiki/банковской%20выпиской|
+|https://en.wiktionary.org/wiki/банковской%20выписке|
+|https://en.wiktionary.org/wiki/банковском%20счёте|
+|https://en.wiktionary.org/wiki/банковским%20счётом|
+|https://en.wiktionary.org/wiki/банковских%20выписках|
+|https://en.wiktionary.org/wiki/банковскому%20счёту|
+|https://en.wiktionary.org/wiki/банковскими%20выписками|
 |https://en.wiktionary.org/wiki/банкоматом|
 |https://en.wiktionary.org/wiki/банкомату|
-|https://en.wiktionary.org/wiki/банковскими счетами|
-|https://en.wiktionary.org/wiki/банковских счетах|
-|https://en.wiktionary.org/wiki/банковским счетам|
+|https://en.wiktionary.org/wiki/банковскими%20счетами|
+|https://en.wiktionary.org/wiki/банковских%20счетах|
+|https://en.wiktionary.org/wiki/банковским%20счетам|
 |https://en.wiktionary.org/wiki/банщице|
 |https://en.wiktionary.org/wiki/банкоматах|
 |https://en.wiktionary.org/wiki/банкоматам|
@@ -6948,16 +6949,16 @@
 |https://en.wiktionary.org/wiki/баобабу|
 |https://en.wiktionary.org/wiki/баобабом|
 |https://en.wiktionary.org/wiki/банщицах|
-|https://en.wiktionary.org/wiki/барабанном бое|
-|https://en.wiktionary.org/wiki/барабанным боем|
+|https://en.wiktionary.org/wiki/барабанном%20бое|
+|https://en.wiktionary.org/wiki/барабанным%20боем|
 |https://en.wiktionary.org/wiki/баобабах|
-|https://en.wiktionary.org/wiki/барабанному бою|
+|https://en.wiktionary.org/wiki/барабанному%20бою|
 |https://en.wiktionary.org/wiki/баобабами|
 |https://en.wiktionary.org/wiki/барахолку|
 |https://en.wiktionary.org/wiki/барахолке|
-|https://en.wiktionary.org/wiki/барабанными боями|
-|https://en.wiktionary.org/wiki/барабанных боях|
-|https://en.wiktionary.org/wiki/барабанным боям|
+|https://en.wiktionary.org/wiki/барабанными%20боями|
+|https://en.wiktionary.org/wiki/барабанных%20боях|
+|https://en.wiktionary.org/wiki/барабанным%20боям|
 |https://en.wiktionary.org/wiki/барахолках|
 |https://en.wiktionary.org/wiki/барахолками|
 |https://en.wiktionary.org/wiki/барахолкою|
@@ -7183,16 +7184,16 @@
 |https://en.wiktionary.org/wiki/баянистах|
 |https://en.wiktionary.org/wiki/баянистке|
 |https://en.wiktionary.org/wiki/баянистами|
-|https://en.wiktionary.org/wiki/бегу трусцой|
+|https://en.wiktionary.org/wiki/бегу%20трусцой|
 |https://en.wiktionary.org/wiki/баянистках|
 |https://en.wiktionary.org/wiki/баянисткам|
 |https://en.wiktionary.org/wiki/баянистками|
 |https://en.wiktionary.org/wiki/баянисткою|
-|https://en.wiktionary.org/wiki/бегах трусцой|
-|https://en.wiktionary.org/wiki/бегами трусцой|
-|https://en.wiktionary.org/wiki/беге трусцой|
-|https://en.wiktionary.org/wiki/бегам трусцой|
-|https://en.wiktionary.org/wiki/бегом трусцой|
+|https://en.wiktionary.org/wiki/бегах%20трусцой|
+|https://en.wiktionary.org/wiki/бегами%20трусцой|
+|https://en.wiktionary.org/wiki/беге%20трусцой|
+|https://en.wiktionary.org/wiki/бегам%20трусцой|
+|https://en.wiktionary.org/wiki/бегом%20трусцой|
 |https://en.wiktionary.org/wiki/бегунами|
 |https://en.wiktionary.org/wiki/бегунам|
 |https://en.wiktionary.org/wiki/бегуном|
@@ -7288,16 +7289,16 @@
 |https://en.wiktionary.org/wiki/беззубкой|
 |https://en.wiktionary.org/wiki/беззубкою|
 |https://en.wiktionary.org/wiki/беззубку|
-|https://en.wiktionary.org/wiki/безличным глаголам|
-|https://en.wiktionary.org/wiki/безличном глаголе|
-|https://en.wiktionary.org/wiki/безличному глаголу|
-|https://en.wiktionary.org/wiki/безличным глаголом|
+|https://en.wiktionary.org/wiki/безличным%20глаголам|
+|https://en.wiktionary.org/wiki/безличном%20глаголе|
+|https://en.wiktionary.org/wiki/безличному%20глаголу|
+|https://en.wiktionary.org/wiki/безличным%20глаголом|
 |https://en.wiktionary.org/wiki/беззубках|
 |https://en.wiktionary.org/wiki/безмятежностями|
 |https://en.wiktionary.org/wiki/безмятежностям|
-|https://en.wiktionary.org/wiki/безличных глаголах|
+|https://en.wiktionary.org/wiki/безличных%20глаголах|
 |https://en.wiktionary.org/wiki/безмятежностью|
-|https://en.wiktionary.org/wiki/безличными глаголами|
+|https://en.wiktionary.org/wiki/безличными%20глаголами|
 |https://en.wiktionary.org/wiki/безобразнике|
 |https://en.wiktionary.org/wiki/безобразником|
 |https://en.wiktionary.org/wiki/безнравственностью|
@@ -7313,31 +7314,31 @@
 |https://en.wiktionary.org/wiki/безобразницею|
 |https://en.wiktionary.org/wiki/безобразницам|
 |https://en.wiktionary.org/wiki/безобразницей|
-|https://en.wiktionary.org/wiki/безоткатными орудиями|
-|https://en.wiktionary.org/wiki/безоткатным орудиям|
-|https://en.wiktionary.org/wiki/безоткатным орудием|
-|https://en.wiktionary.org/wiki/безоткатном орудии|
-|https://en.wiktionary.org/wiki/безоткатному орудию|
+|https://en.wiktionary.org/wiki/безоткатными%20орудиями|
+|https://en.wiktionary.org/wiki/безоткатным%20орудиям|
+|https://en.wiktionary.org/wiki/безоткатным%20орудием|
+|https://en.wiktionary.org/wiki/безоткатном%20орудии|
+|https://en.wiktionary.org/wiki/безоткатному%20орудию|
 |https://en.wiktionary.org/wiki/безрукавкою|
 |https://en.wiktionary.org/wiki/безрукавкой|
 |https://en.wiktionary.org/wiki/безрукавке|
 |https://en.wiktionary.org/wiki/безрукавку|
-|https://en.wiktionary.org/wiki/безоткатных орудиях|
+|https://en.wiktionary.org/wiki/безоткатных%20орудиях|
 |https://en.wiktionary.org/wiki/безъятием|
 |https://en.wiktionary.org/wiki/безъятию|
 |https://en.wiktionary.org/wiki/безрукавками|
 |https://en.wiktionary.org/wiki/безрукавках|
 |https://en.wiktionary.org/wiki/безрукавкам|
-|https://en.wiktionary.org/wiki/безымянным пальцам|
-|https://en.wiktionary.org/wiki/безымянном пальце|
-|https://en.wiktionary.org/wiki/безымянному пальцу|
-|https://en.wiktionary.org/wiki/безымянным пальцем|
+|https://en.wiktionary.org/wiki/безымянным%20пальцам|
+|https://en.wiktionary.org/wiki/безымянном%20пальце|
+|https://en.wiktionary.org/wiki/безымянному%20пальцу|
+|https://en.wiktionary.org/wiki/безымянным%20пальцем|
 |https://en.wiktionary.org/wiki/безъятии|
 |https://en.wiktionary.org/wiki/бее|
 |https://en.wiktionary.org/wiki/беем|
-|https://en.wiktionary.org/wiki/безымянных пальцах|
+|https://en.wiktionary.org/wiki/безымянных%20пальцах|
 |https://en.wiktionary.org/wiki/бею|
-|https://en.wiktionary.org/wiki/безымянными пальцами|
+|https://en.wiktionary.org/wiki/безымянными%20пальцами|
 |https://en.wiktionary.org/wiki/бейсболом|
 |https://en.wiktionary.org/wiki/бейсболу|
 |https://en.wiktionary.org/wiki/беями|
@@ -7353,16 +7354,16 @@
 |https://en.wiktionary.org/wiki/беконах|
 |https://en.wiktionary.org/wiki/белу|
 |https://en.wiktionary.org/wiki/беконами|
-|https://en.wiktionary.org/wiki/белою костью|
-|https://en.wiktionary.org/wiki/белой костью|
+|https://en.wiktionary.org/wiki/белою%20костью|
+|https://en.wiktionary.org/wiki/белой%20костью|
 |https://en.wiktionary.org/wiki/белах|
-|https://en.wiktionary.org/wiki/белую кость|
+|https://en.wiktionary.org/wiki/белую%20кость|
 |https://en.wiktionary.org/wiki/белами|
 |https://en.wiktionary.org/wiki/белену|
 |https://en.wiktionary.org/wiki/белене|
-|https://en.wiktionary.org/wiki/белыми костями|
-|https://en.wiktionary.org/wiki/белых костях|
-|https://en.wiktionary.org/wiki/белым костям|
+|https://en.wiktionary.org/wiki/белыми%20костями|
+|https://en.wiktionary.org/wiki/белых%20костях|
+|https://en.wiktionary.org/wiki/белым%20костям|
 |https://en.wiktionary.org/wiki/белилах|
 |https://en.wiktionary.org/wiki/белилами|
 |https://en.wiktionary.org/wiki/беленою|
@@ -7388,16 +7389,16 @@
 |https://en.wiktionary.org/wiki/белогвардейце|
 |https://en.wiktionary.org/wiki/белогвардейцам|
 |https://en.wiktionary.org/wiki/белогвардейцем|
-|https://en.wiktionary.org/wiki/белыми винами|
-|https://en.wiktionary.org/wiki/белым винам|
-|https://en.wiktionary.org/wiki/белым вином|
-|https://en.wiktionary.org/wiki/белом вине|
-|https://en.wiktionary.org/wiki/белому вину|
+|https://en.wiktionary.org/wiki/белыми%20винами|
+|https://en.wiktionary.org/wiki/белым%20винам|
+|https://en.wiktionary.org/wiki/белым%20вином|
+|https://en.wiktionary.org/wiki/белом%20вине|
+|https://en.wiktionary.org/wiki/белому%20вину|
 |https://en.wiktionary.org/wiki/белокровиям|
 |https://en.wiktionary.org/wiki/белокровии|
 |https://en.wiktionary.org/wiki/белокровию|
 |https://en.wiktionary.org/wiki/белокровием|
-|https://en.wiktionary.org/wiki/белых винах|
+|https://en.wiktionary.org/wiki/белых%20винах|
 |https://en.wiktionary.org/wiki/белоруской|
 |https://en.wiktionary.org/wiki/белоруску|
 |https://en.wiktionary.org/wiki/белокровиях|
@@ -7438,26 +7439,26 @@
 |https://en.wiktionary.org/wiki/белухах|
 |https://en.wiktionary.org/wiki/Белфасту|
 |https://en.wiktionary.org/wiki/белухами|
-|https://en.wiktionary.org/wiki/белыми карликами|
-|https://en.wiktionary.org/wiki/белым карликам|
-|https://en.wiktionary.org/wiki/белым карликом|
-|https://en.wiktionary.org/wiki/белом карлике|
-|https://en.wiktionary.org/wiki/белому карлику|
-|https://en.wiktionary.org/wiki/белым клеверам|
-|https://en.wiktionary.org/wiki/белом клевере|
-|https://en.wiktionary.org/wiki/белому клеверу|
-|https://en.wiktionary.org/wiki/белым клевером|
-|https://en.wiktionary.org/wiki/белых карликах|
-|https://en.wiktionary.org/wiki/белом медведе|
-|https://en.wiktionary.org/wiki/белым медведем|
-|https://en.wiktionary.org/wiki/белых клеверах|
-|https://en.wiktionary.org/wiki/белому медведю|
-|https://en.wiktionary.org/wiki/белыми клеверами|
+|https://en.wiktionary.org/wiki/белыми%20карликами|
+|https://en.wiktionary.org/wiki/белым%20карликам|
+|https://en.wiktionary.org/wiki/белым%20карликом|
+|https://en.wiktionary.org/wiki/белом%20карлике|
+|https://en.wiktionary.org/wiki/белому%20карлику|
+|https://en.wiktionary.org/wiki/белым%20клеверам|
+|https://en.wiktionary.org/wiki/белом%20клевере|
+|https://en.wiktionary.org/wiki/белому%20клеверу|
+|https://en.wiktionary.org/wiki/белым%20клевером|
+|https://en.wiktionary.org/wiki/белых%20карликах|
+|https://en.wiktionary.org/wiki/белом%20медведе|
+|https://en.wiktionary.org/wiki/белым%20медведем|
+|https://en.wiktionary.org/wiki/белых%20клеверах|
+|https://en.wiktionary.org/wiki/белому%20медведю|
+|https://en.wiktionary.org/wiki/белыми%20клеверами|
 |https://en.wiktionary.org/wiki/бельгийцем|
 |https://en.wiktionary.org/wiki/бельгийцу|
-|https://en.wiktionary.org/wiki/белыми медведями|
-|https://en.wiktionary.org/wiki/белых медведях|
-|https://en.wiktionary.org/wiki/белым медведям|
+|https://en.wiktionary.org/wiki/белыми%20медведями|
+|https://en.wiktionary.org/wiki/белых%20медведях|
+|https://en.wiktionary.org/wiki/белым%20медведям|
 |https://en.wiktionary.org/wiki/бельгийке|
 |https://en.wiktionary.org/wiki/бельгийцах|
 |https://en.wiktionary.org/wiki/бельгийцам|
@@ -7488,36 +7489,36 @@
 |https://en.wiktionary.org/wiki/бемолям|
 |https://en.wiktionary.org/wiki/бемолями|
 |https://en.wiktionary.org/wiki/бемоле|
-|https://en.wiktionary.org/wiki/бенгальском огне|
-|https://en.wiktionary.org/wiki/бенгальским огнём|
+|https://en.wiktionary.org/wiki/бенгальском%20огне|
+|https://en.wiktionary.org/wiki/бенгальским%20огнём|
 |https://en.wiktionary.org/wiki/бенгальском|
-|https://en.wiktionary.org/wiki/бенгальскому огню|
+|https://en.wiktionary.org/wiki/бенгальскому%20огню|
 |https://en.wiktionary.org/wiki/бенгальским|
-|https://en.wiktionary.org/wiki/бенгальским тигром|
-|https://en.wiktionary.org/wiki/бенгальскому тигру|
-|https://en.wiktionary.org/wiki/бенгальскими огнями|
-|https://en.wiktionary.org/wiki/бенгальских огнях|
-|https://en.wiktionary.org/wiki/бенгальским огням|
+|https://en.wiktionary.org/wiki/бенгальским%20тигром|
+|https://en.wiktionary.org/wiki/бенгальскому%20тигру|
+|https://en.wiktionary.org/wiki/бенгальскими%20огнями|
+|https://en.wiktionary.org/wiki/бенгальских%20огнях|
+|https://en.wiktionary.org/wiki/бенгальским%20огням|
 |https://en.wiktionary.org/wiki/бензелю|
-|https://en.wiktionary.org/wiki/бенгальских тиграх|
-|https://en.wiktionary.org/wiki/бенгальским тиграм|
-|https://en.wiktionary.org/wiki/бенгальскими тиграми|
-|https://en.wiktionary.org/wiki/бенгальском тигре|
+|https://en.wiktionary.org/wiki/бенгальских%20тиграх|
+|https://en.wiktionary.org/wiki/бенгальским%20тиграм|
+|https://en.wiktionary.org/wiki/бенгальскими%20тиграми|
+|https://en.wiktionary.org/wiki/бенгальском%20тигре|
 |https://en.wiktionary.org/wiki/бензелях|
 |https://en.wiktionary.org/wiki/бензелями|
 |https://en.wiktionary.org/wiki/бензеле|
 |https://en.wiktionary.org/wiki/бензелям|
 |https://en.wiktionary.org/wiki/бензелем|
-|https://en.wiktionary.org/wiki/бензиновым колонкам|
-|https://en.wiktionary.org/wiki/бензиновою колонкою|
-|https://en.wiktionary.org/wiki/бензиновую колонку|
-|https://en.wiktionary.org/wiki/бензиновой колонкой|
-|https://en.wiktionary.org/wiki/бензиновой колонке|
+|https://en.wiktionary.org/wiki/бензиновым%20колонкам|
+|https://en.wiktionary.org/wiki/бензиновою%20колонкою|
+|https://en.wiktionary.org/wiki/бензиновую%20колонку|
+|https://en.wiktionary.org/wiki/бензиновой%20колонкой|
+|https://en.wiktionary.org/wiki/бензиновой%20колонке|
 |https://en.wiktionary.org/wiki/бензобаке|
 |https://en.wiktionary.org/wiki/бензобаком|
-|https://en.wiktionary.org/wiki/бензиновых колонках|
+|https://en.wiktionary.org/wiki/бензиновых%20колонках|
 |https://en.wiktionary.org/wiki/бензобаку|
-|https://en.wiktionary.org/wiki/бензиновыми колонками|
+|https://en.wiktionary.org/wiki/бензиновыми%20колонками|
 |https://en.wiktionary.org/wiki/бензозаправку|
 |https://en.wiktionary.org/wiki/бензозаправке|
 |https://en.wiktionary.org/wiki/бензобаками|
@@ -7528,21 +7529,21 @@
 |https://en.wiktionary.org/wiki/бензозаправкою|
 |https://en.wiktionary.org/wiki/бензозаправкам|
 |https://en.wiktionary.org/wiki/бензозаправкой|
-|https://en.wiktionary.org/wiki/бензозаправочным колонкам|
-|https://en.wiktionary.org/wiki/бензозаправочною колонкою|
-|https://en.wiktionary.org/wiki/бензозаправочную колонку|
-|https://en.wiktionary.org/wiki/бензозаправочной колонкой|
-|https://en.wiktionary.org/wiki/бензозаправочной колонке|
-|https://en.wiktionary.org/wiki/бензозаправочною станциею|
-|https://en.wiktionary.org/wiki/бензозаправочной станцией|
-|https://en.wiktionary.org/wiki/бензозаправочных колонках|
-|https://en.wiktionary.org/wiki/бензозаправочную станцию|
-|https://en.wiktionary.org/wiki/бензозаправочными колонками|
+|https://en.wiktionary.org/wiki/бензозаправочным%20колонкам|
+|https://en.wiktionary.org/wiki/бензозаправочною%20колонкою|
+|https://en.wiktionary.org/wiki/бензозаправочную%20колонку|
+|https://en.wiktionary.org/wiki/бензозаправочной%20колонкой|
+|https://en.wiktionary.org/wiki/бензозаправочной%20колонке|
+|https://en.wiktionary.org/wiki/бензозаправочною%20станциею|
+|https://en.wiktionary.org/wiki/бензозаправочной%20станцией|
+|https://en.wiktionary.org/wiki/бензозаправочных%20колонках|
+|https://en.wiktionary.org/wiki/бензозаправочную%20станцию|
+|https://en.wiktionary.org/wiki/бензозаправочными%20колонками|
 |https://en.wiktionary.org/wiki/бензоколонку|
 |https://en.wiktionary.org/wiki/бензоколонке|
-|https://en.wiktionary.org/wiki/бензозаправочными станциями|
-|https://en.wiktionary.org/wiki/бензозаправочных станциях|
-|https://en.wiktionary.org/wiki/бензозаправочным станциям|
+|https://en.wiktionary.org/wiki/бензозаправочными%20станциями|
+|https://en.wiktionary.org/wiki/бензозаправочных%20станциях|
+|https://en.wiktionary.org/wiki/бензозаправочным%20станциям|
 |https://en.wiktionary.org/wiki/бензоколонках|
 |https://en.wiktionary.org/wiki/бензоколонками|
 |https://en.wiktionary.org/wiki/бензоколонкою|
@@ -7568,16 +7569,16 @@
 |https://en.wiktionary.org/wiki/бережками|
 |https://en.wiktionary.org/wiki/бережках|
 |https://en.wiktionary.org/wiki/бережкам|
-|https://en.wiktionary.org/wiki/берестяную грамоту|
-|https://en.wiktionary.org/wiki/берестяной грамоте|
+|https://en.wiktionary.org/wiki/берестяную%20грамоту|
+|https://en.wiktionary.org/wiki/берестяной%20грамоте|
 |https://en.wiktionary.org/wiki/берестами|
 |https://en.wiktionary.org/wiki/берестах|
 |https://en.wiktionary.org/wiki/берестам|
-|https://en.wiktionary.org/wiki/берестяных грамотах|
-|https://en.wiktionary.org/wiki/берестяными грамотами|
-|https://en.wiktionary.org/wiki/берестяною грамотою|
-|https://en.wiktionary.org/wiki/берестяным грамотам|
-|https://en.wiktionary.org/wiki/берестяной грамотой|
+|https://en.wiktionary.org/wiki/берестяных%20грамотах|
+|https://en.wiktionary.org/wiki/берестяными%20грамотами|
+|https://en.wiktionary.org/wiki/берестяною%20грамотою|
+|https://en.wiktionary.org/wiki/берестяным%20грамотам|
+|https://en.wiktionary.org/wiki/берестяной%20грамотой|
 |https://en.wiktionary.org/wiki/бериллами|
 |https://en.wiktionary.org/wiki/бериллам|
 |https://en.wiktionary.org/wiki/бериллом|
@@ -7703,16 +7704,16 @@
 |https://en.wiktionary.org/wiki/бивнями|
 |https://en.wiktionary.org/wiki/бивне|
 |https://en.wiktionary.org/wiki/бивням|
-|https://en.wiktionary.org/wiki/Биг Маками|
-|https://en.wiktionary.org/wiki/Биг Макам|
-|https://en.wiktionary.org/wiki/Биг Маком|
-|https://en.wiktionary.org/wiki/Биг Маке|
-|https://en.wiktionary.org/wiki/Биг Маку|
+|https://en.wiktionary.org/wiki/Биг%20Маками|
+|https://en.wiktionary.org/wiki/Биг%20Макам|
+|https://en.wiktionary.org/wiki/Биг%20Маком|
+|https://en.wiktionary.org/wiki/Биг%20Маке|
+|https://en.wiktionary.org/wiki/Биг%20Маку|
 |https://en.wiktionary.org/wiki/биг-маками|
 |https://en.wiktionary.org/wiki/биг-макам|
 |https://en.wiktionary.org/wiki/биг-маком|
 |https://en.wiktionary.org/wiki/биг-маке|
-|https://en.wiktionary.org/wiki/Биг Маках|
+|https://en.wiktionary.org/wiki/Биг%20Маках|
 |https://en.wiktionary.org/wiki/биг-мэкам|
 |https://en.wiktionary.org/wiki/биг-мэке|
 |https://en.wiktionary.org/wiki/биг-мэку|
@@ -7723,16 +7724,16 @@
 |https://en.wiktionary.org/wiki/биг-мэках|
 |https://en.wiktionary.org/wiki/бигамию|
 |https://en.wiktionary.org/wiki/биг-мэками|
-|https://en.wiktionary.org/wiki/биением сердца|
-|https://en.wiktionary.org/wiki/биению сердца|
+|https://en.wiktionary.org/wiki/биением%20сердца|
+|https://en.wiktionary.org/wiki/биению%20сердца|
 |https://en.wiktionary.org/wiki/бигамиями|
 |https://en.wiktionary.org/wiki/бигамиях|
 |https://en.wiktionary.org/wiki/бигамиям|
 |https://en.wiktionary.org/wiki/бизону|
-|https://en.wiktionary.org/wiki/биениях сердца|
-|https://en.wiktionary.org/wiki/биениям сердца|
-|https://en.wiktionary.org/wiki/биениями сердца|
-|https://en.wiktionary.org/wiki/биении сердца|
+|https://en.wiktionary.org/wiki/биениях%20сердца|
+|https://en.wiktionary.org/wiki/биениям%20сердца|
+|https://en.wiktionary.org/wiki/биениями%20сердца|
+|https://en.wiktionary.org/wiki/биении%20сердца|
 |https://en.wiktionary.org/wiki/бизонах|
 |https://en.wiktionary.org/wiki/бизонами|
 |https://en.wiktionary.org/wiki/бизоне|
@@ -7883,21 +7884,21 @@
 |https://en.wiktionary.org/wiki/благозвучиях|
 |https://en.wiktionary.org/wiki/благоразумию|
 |https://en.wiktionary.org/wiki/благозвучиями|
-|https://en.wiktionary.org/wiki/благородным газом|
-|https://en.wiktionary.org/wiki/благородному газу|
+|https://en.wiktionary.org/wiki/благородным%20газом|
+|https://en.wiktionary.org/wiki/благородному%20газу|
 |https://en.wiktionary.org/wiki/благоразумиями|
 |https://en.wiktionary.org/wiki/благоразумиях|
 |https://en.wiktionary.org/wiki/благоразумиям|
-|https://en.wiktionary.org/wiki/благородными газами|
-|https://en.wiktionary.org/wiki/благородным газам|
-|https://en.wiktionary.org/wiki/благородном газу|
-|https://en.wiktionary.org/wiki/благородного газу|
-|https://en.wiktionary.org/wiki/благородном газе|
+|https://en.wiktionary.org/wiki/благородными%20газами|
+|https://en.wiktionary.org/wiki/благородным%20газам|
+|https://en.wiktionary.org/wiki/благородном%20газу|
+|https://en.wiktionary.org/wiki/благородного%20газу|
+|https://en.wiktionary.org/wiki/благородном%20газе|
 |https://en.wiktionary.org/wiki/благостынею|
 |https://en.wiktionary.org/wiki/благостыней|
 |https://en.wiktionary.org/wiki/благостыне|
 |https://en.wiktionary.org/wiki/благостыню|
-|https://en.wiktionary.org/wiki/благородных газах|
+|https://en.wiktionary.org/wiki/благородных%20газах|
 |https://en.wiktionary.org/wiki/благоуханием|
 |https://en.wiktionary.org/wiki/благоуханию|
 |https://en.wiktionary.org/wiki/благостынями|
@@ -7948,16 +7949,16 @@
 |https://en.wiktionary.org/wiki/блефом|
 |https://en.wiktionary.org/wiki/блефе|
 |https://en.wiktionary.org/wiki/блефу|
-|https://en.wiktionary.org/wiki/Ближнему Востоку|
+|https://en.wiktionary.org/wiki/Ближнему%20Востоку|
 |https://en.wiktionary.org/wiki/блеяниях|
 |https://en.wiktionary.org/wiki/блеяниям|
 |https://en.wiktionary.org/wiki/блеяниями|
 |https://en.wiktionary.org/wiki/блеянии|
 |https://en.wiktionary.org/wiki/близорукостями|
 |https://en.wiktionary.org/wiki/близорукостям|
-|https://en.wiktionary.org/wiki/Ближнем Востоке|
+|https://en.wiktionary.org/wiki/Ближнем%20Востоке|
 |https://en.wiktionary.org/wiki/близорукостью|
-|https://en.wiktionary.org/wiki/Ближним Востоком|
+|https://en.wiktionary.org/wiki/Ближним%20Востоком|
 |https://en.wiktionary.org/wiki/блогам|
 |https://en.wiktionary.org/wiki/блоге|
 |https://en.wiktionary.org/wiki/блогу|
@@ -7993,16 +7994,16 @@
 |https://en.wiktionary.org/wiki/блокбастерах|
 |https://en.wiktionary.org/wiki/блокированию|
 |https://en.wiktionary.org/wiki/блокбастерами|
-|https://en.wiktionary.org/wiki/блошиным рынком|
-|https://en.wiktionary.org/wiki/блошиному рынку|
+|https://en.wiktionary.org/wiki/блошиным%20рынком|
+|https://en.wiktionary.org/wiki/блошиному%20рынку|
 |https://en.wiktionary.org/wiki/блокированиями|
 |https://en.wiktionary.org/wiki/блокированиях|
 |https://en.wiktionary.org/wiki/блокированиям|
 |https://en.wiktionary.org/wiki/блуду|
-|https://en.wiktionary.org/wiki/блошиных рынках|
-|https://en.wiktionary.org/wiki/блошиным рынкам|
-|https://en.wiktionary.org/wiki/блошиными рынками|
-|https://en.wiktionary.org/wiki/блошином рынке|
+|https://en.wiktionary.org/wiki/блошиных%20рынках|
+|https://en.wiktionary.org/wiki/блошиным%20рынкам|
+|https://en.wiktionary.org/wiki/блошиными%20рынками|
+|https://en.wiktionary.org/wiki/блошином%20рынке|
 |https://en.wiktionary.org/wiki/блуднике|
 |https://en.wiktionary.org/wiki/блудником|
 |https://en.wiktionary.org/wiki/блуде|
@@ -8118,41 +8119,41 @@
 |https://en.wiktionary.org/wiki/бодрствовании|
 |https://en.wiktionary.org/wiki/бодрствованием|
 |https://en.wiktionary.org/wiki/бодрствованию|
-|https://en.wiktionary.org/wiki/боевым искусством|
-|https://en.wiktionary.org/wiki/боевому искусству|
+|https://en.wiktionary.org/wiki/боевым%20искусством|
+|https://en.wiktionary.org/wiki/боевому%20искусству|
 |https://en.wiktionary.org/wiki/бодрствованиями|
 |https://en.wiktionary.org/wiki/бодрствованиях|
 |https://en.wiktionary.org/wiki/бодрствованиям|
-|https://en.wiktionary.org/wiki/боевому отделению|
-|https://en.wiktionary.org/wiki/боевых искусствах|
-|https://en.wiktionary.org/wiki/боевым искусствам|
-|https://en.wiktionary.org/wiki/боевыми искусствами|
-|https://en.wiktionary.org/wiki/боевом искусстве|
-|https://en.wiktionary.org/wiki/боевых отделениях|
-|https://en.wiktionary.org/wiki/боевыми отделениями|
-|https://en.wiktionary.org/wiki/боевом отделении|
-|https://en.wiktionary.org/wiki/боевым отделениям|
-|https://en.wiktionary.org/wiki/боевым отделением|
-|https://en.wiktionary.org/wiki/боевыми комплектами|
-|https://en.wiktionary.org/wiki/боевым комплектам|
-|https://en.wiktionary.org/wiki/боевым комплектом|
-|https://en.wiktionary.org/wiki/боевом комплекте|
-|https://en.wiktionary.org/wiki/боевому комплекту|
-|https://en.wiktionary.org/wiki/боевым порядкам|
-|https://en.wiktionary.org/wiki/боевом порядке|
-|https://en.wiktionary.org/wiki/боевому порядку|
-|https://en.wiktionary.org/wiki/боевым порядком|
-|https://en.wiktionary.org/wiki/боевых комплектах|
-|https://en.wiktionary.org/wiki/боевом припасе|
-|https://en.wiktionary.org/wiki/боевым припасом|
-|https://en.wiktionary.org/wiki/боевых порядках|
-|https://en.wiktionary.org/wiki/боевому припасу|
-|https://en.wiktionary.org/wiki/боевыми порядками|
+|https://en.wiktionary.org/wiki/боевому%20отделению|
+|https://en.wiktionary.org/wiki/боевых%20искусствах|
+|https://en.wiktionary.org/wiki/боевым%20искусствам|
+|https://en.wiktionary.org/wiki/боевыми%20искусствами|
+|https://en.wiktionary.org/wiki/боевом%20искусстве|
+|https://en.wiktionary.org/wiki/боевых%20отделениях|
+|https://en.wiktionary.org/wiki/боевыми%20отделениями|
+|https://en.wiktionary.org/wiki/боевом%20отделении|
+|https://en.wiktionary.org/wiki/боевым%20отделениям|
+|https://en.wiktionary.org/wiki/боевым%20отделением|
+|https://en.wiktionary.org/wiki/боевыми%20комплектами|
+|https://en.wiktionary.org/wiki/боевым%20комплектам|
+|https://en.wiktionary.org/wiki/боевым%20комплектом|
+|https://en.wiktionary.org/wiki/боевом%20комплекте|
+|https://en.wiktionary.org/wiki/боевому%20комплекту|
+|https://en.wiktionary.org/wiki/боевым%20порядкам|
+|https://en.wiktionary.org/wiki/боевом%20порядке|
+|https://en.wiktionary.org/wiki/боевому%20порядку|
+|https://en.wiktionary.org/wiki/боевым%20порядком|
+|https://en.wiktionary.org/wiki/боевых%20комплектах|
+|https://en.wiktionary.org/wiki/боевом%20припасе|
+|https://en.wiktionary.org/wiki/боевым%20припасом|
+|https://en.wiktionary.org/wiki/боевых%20порядках|
+|https://en.wiktionary.org/wiki/боевому%20припасу|
+|https://en.wiktionary.org/wiki/боевыми%20порядками|
 |https://en.wiktionary.org/wiki/боеготовностям|
 |https://en.wiktionary.org/wiki/боеготовностью|
-|https://en.wiktionary.org/wiki/боевыми припасами|
-|https://en.wiktionary.org/wiki/боевых припасах|
-|https://en.wiktionary.org/wiki/боевым припасам|
+|https://en.wiktionary.org/wiki/боевыми%20припасами|
+|https://en.wiktionary.org/wiki/боевых%20припасах|
+|https://en.wiktionary.org/wiki/боевым%20припасам|
 |https://en.wiktionary.org/wiki/боекомплекте|
 |https://en.wiktionary.org/wiki/боекомплектом|
 |https://en.wiktionary.org/wiki/боеготовностях|
@@ -8178,16 +8179,16 @@
 |https://en.wiktionary.org/wiki/боестолкновениям|
 |https://en.wiktionary.org/wiki/боестолкновениями|
 |https://en.wiktionary.org/wiki/боестолкновении|
-|https://en.wiktionary.org/wiki/божью коровку|
-|https://en.wiktionary.org/wiki/божьей коровке|
+|https://en.wiktionary.org/wiki/божью%20коровку|
+|https://en.wiktionary.org/wiki/божьей%20коровке|
 |https://en.wiktionary.org/wiki/божественностями|
 |https://en.wiktionary.org/wiki/божественностях|
 |https://en.wiktionary.org/wiki/божественностям|
-|https://en.wiktionary.org/wiki/божьих коровках|
-|https://en.wiktionary.org/wiki/божьими коровками|
-|https://en.wiktionary.org/wiki/божьею коровкою|
-|https://en.wiktionary.org/wiki/божьим коровкам|
-|https://en.wiktionary.org/wiki/божьей коровкой|
+|https://en.wiktionary.org/wiki/божьих%20коровках|
+|https://en.wiktionary.org/wiki/божьими%20коровками|
+|https://en.wiktionary.org/wiki/божьею%20коровкою|
+|https://en.wiktionary.org/wiki/божьим%20коровкам|
+|https://en.wiktionary.org/wiki/божьей%20коровкой|
 |https://en.wiktionary.org/wiki/бозонами|
 |https://en.wiktionary.org/wiki/бозонам|
 |https://en.wiktionary.org/wiki/бозоном|
@@ -8248,16 +8249,16 @@
 |https://en.wiktionary.org/wiki/болгарку|
 |https://en.wiktionary.org/wiki/болгаркой|
 |https://en.wiktionary.org/wiki/болгарке|
-|https://en.wiktionary.org/wiki/болезнями Аддисона|
-|https://en.wiktionary.org/wiki/болезням Аддисона|
+|https://en.wiktionary.org/wiki/болезнями%20Аддисона|
+|https://en.wiktionary.org/wiki/болезням%20Аддисона|
 |https://en.wiktionary.org/wiki/болгарках|
-|https://en.wiktionary.org/wiki/болезнью Аддисона|
+|https://en.wiktionary.org/wiki/болезнью%20Аддисона|
 |https://en.wiktionary.org/wiki/болгарками|
-|https://en.wiktionary.org/wiki/болезнью Альцгеймера|
-|https://en.wiktionary.org/wiki/болезням Альцгеймера|
-|https://en.wiktionary.org/wiki/болезнях Аддисона|
-|https://en.wiktionary.org/wiki/болезнях Альцгеймера|
-|https://en.wiktionary.org/wiki/болезнями Альцгеймера|
+|https://en.wiktionary.org/wiki/болезнью%20Альцгеймера|
+|https://en.wiktionary.org/wiki/болезням%20Альцгеймера|
+|https://en.wiktionary.org/wiki/болезнях%20Аддисона|
+|https://en.wiktionary.org/wiki/болезнях%20Альцгеймера|
+|https://en.wiktionary.org/wiki/болезнями%20Альцгеймера|
 |https://en.wiktionary.org/wiki/болонам|
 |https://en.wiktionary.org/wiki/болоною|
 |https://en.wiktionary.org/wiki/болону|
@@ -8273,26 +8274,26 @@
 |https://en.wiktionary.org/wiki/болотцах|
 |https://en.wiktionary.org/wiki/большаку|
 |https://en.wiktionary.org/wiki/болотцами|
-|https://en.wiktionary.org/wiki/большую букву|
-|https://en.wiktionary.org/wiki/большой букве|
+|https://en.wiktionary.org/wiki/большую%20букву|
+|https://en.wiktionary.org/wiki/большой%20букве|
 |https://en.wiktionary.org/wiki/большаками|
 |https://en.wiktionary.org/wiki/большаках|
 |https://en.wiktionary.org/wiki/большакам|
-|https://en.wiktionary.org/wiki/больших буквах|
-|https://en.wiktionary.org/wiki/большими буквами|
-|https://en.wiktionary.org/wiki/большою буквою|
-|https://en.wiktionary.org/wiki/большим буквам|
-|https://en.wiktionary.org/wiki/большой буквой|
-|https://en.wiktionary.org/wiki/большим пальцем|
-|https://en.wiktionary.org/wiki/большому пальцу|
-|https://en.wiktionary.org/wiki/большими половыми губами|
-|https://en.wiktionary.org/wiki/больших половых губах|
-|https://en.wiktionary.org/wiki/большим половым губам|
+|https://en.wiktionary.org/wiki/больших%20буквах|
+|https://en.wiktionary.org/wiki/большими%20буквами|
+|https://en.wiktionary.org/wiki/большою%20буквою|
+|https://en.wiktionary.org/wiki/большим%20буквам|
+|https://en.wiktionary.org/wiki/большой%20буквой|
+|https://en.wiktionary.org/wiki/большим%20пальцем|
+|https://en.wiktionary.org/wiki/большому%20пальцу|
+|https://en.wiktionary.org/wiki/большими%20половыми%20губами|
+|https://en.wiktionary.org/wiki/больших%20половых%20губах|
+|https://en.wiktionary.org/wiki/большим%20половым%20губам|
 |https://en.wiktionary.org/wiki/бомбардиру|
-|https://en.wiktionary.org/wiki/больших пальцах|
-|https://en.wiktionary.org/wiki/большим пальцам|
-|https://en.wiktionary.org/wiki/большими пальцами|
-|https://en.wiktionary.org/wiki/большом пальце|
+|https://en.wiktionary.org/wiki/больших%20пальцах|
+|https://en.wiktionary.org/wiki/большим%20пальцам|
+|https://en.wiktionary.org/wiki/большими%20пальцами|
+|https://en.wiktionary.org/wiki/большом%20пальце|
 |https://en.wiktionary.org/wiki/бомбистом|
 |https://en.wiktionary.org/wiki/бомбисту|
 |https://en.wiktionary.org/wiki/бомбардире|
@@ -8424,10 +8425,10 @@
 |https://en.wiktionary.org/wiki/борщевикам|
 |https://en.wiktionary.org/wiki/борщевиком|
 |https://en.wiktionary.org/wiki/боснийцу|
-|https://en.wiktionary.org/wiki/борьбою на руках|
-|https://en.wiktionary.org/wiki/борьбу на руках|
-|https://en.wiktionary.org/wiki/борьбой на руках|
-|https://en.wiktionary.org/wiki/борьбе на руках|
+|https://en.wiktionary.org/wiki/борьбою%20на%20руках|
+|https://en.wiktionary.org/wiki/борьбу%20на%20руках|
+|https://en.wiktionary.org/wiki/борьбой%20на%20руках|
+|https://en.wiktionary.org/wiki/борьбе%20на%20руках|
 |https://en.wiktionary.org/wiki/боснийцах|
 |https://en.wiktionary.org/wiki/боснийцами|
 |https://en.wiktionary.org/wiki/боснийце|
@@ -8528,16 +8529,16 @@
 |https://en.wiktionary.org/wiki/браздах|
 |https://en.wiktionary.org/wiki/бразильянке|
 |https://en.wiktionary.org/wiki/браздами|
-|https://en.wiktionary.org/wiki/браку по договорённости|
+|https://en.wiktionary.org/wiki/браку%20по%20договорённости|
 |https://en.wiktionary.org/wiki/бразильянках|
 |https://en.wiktionary.org/wiki/бразильянкам|
 |https://en.wiktionary.org/wiki/бразильянками|
 |https://en.wiktionary.org/wiki/бразильянкою|
-|https://en.wiktionary.org/wiki/браках по договорённости|
-|https://en.wiktionary.org/wiki/браками по договорённости|
-|https://en.wiktionary.org/wiki/браке по договорённости|
-|https://en.wiktionary.org/wiki/бракам по договорённости|
-|https://en.wiktionary.org/wiki/браком по договорённости|
+|https://en.wiktionary.org/wiki/браках%20по%20договорённости|
+|https://en.wiktionary.org/wiki/браками%20по%20договорённости|
+|https://en.wiktionary.org/wiki/браке%20по%20договорённости|
+|https://en.wiktionary.org/wiki/бракам%20по%20договорённости|
+|https://en.wiktionary.org/wiki/браком%20по%20договорённости|
 |https://en.wiktionary.org/wiki/браконьеру|
 |https://en.wiktionary.org/wiki/браконьерами|
 |https://en.wiktionary.org/wiki/браконьерам|
@@ -8609,9 +8610,9 @@
 |https://en.wiktionary.org/wiki/брегете|
 |https://en.wiktionary.org/wiki/брегету|
 |https://en.wiktionary.org/wiki/бредню|
-|https://en.wiktionary.org/wiki/бреде сивой кобылы|
-|https://en.wiktionary.org/wiki/бреду сивой кобылы|
-|https://en.wiktionary.org/wiki/бредом сивой кобылы|
+|https://en.wiktionary.org/wiki/бреде%20сивой%20кобылы|
+|https://en.wiktionary.org/wiki/бреду%20сивой%20кобылы|
+|https://en.wiktionary.org/wiki/бредом%20сивой%20кобылы|
 |https://en.wiktionary.org/wiki/брегетах|
 |https://en.wiktionary.org/wiki/бреднях|
 |https://en.wiktionary.org/wiki/бреднями|
@@ -8698,10 +8699,10 @@
 |https://en.wiktionary.org/wiki/британкой|
 |https://en.wiktionary.org/wiki/британкою|
 |https://en.wiktionary.org/wiki/британку|
-|https://en.wiktionary.org/wiki/бритвою Оккама|
-|https://en.wiktionary.org/wiki/бритвой Оккама|
-|https://en.wiktionary.org/wiki/бритве Оккама|
-|https://en.wiktionary.org/wiki/бритву Оккама|
+|https://en.wiktionary.org/wiki/бритвою%20Оккама|
+|https://en.wiktionary.org/wiki/бритвой%20Оккама|
+|https://en.wiktionary.org/wiki/бритве%20Оккама|
+|https://en.wiktionary.org/wiki/бритву%20Оккама|
 |https://en.wiktionary.org/wiki/британках|
 |https://en.wiktionary.org/wiki/бриттами|
 |https://en.wiktionary.org/wiki/бриттам|
@@ -8768,10 +8769,10 @@
 |https://en.wiktionary.org/wiki/бронестеклу|
 |https://en.wiktionary.org/wiki/бронестеклом|
 |https://en.wiktionary.org/wiki/бронесилах|
-|https://en.wiktionary.org/wiki/бронетанковых войсках|
-|https://en.wiktionary.org/wiki/бронетанковыми войсками|
+|https://en.wiktionary.org/wiki/бронетанковых%20войсках|
+|https://en.wiktionary.org/wiki/бронетанковыми%20войсками|
 |https://en.wiktionary.org/wiki/бронестёклах|
-|https://en.wiktionary.org/wiki/бронетанковым войскам|
+|https://en.wiktionary.org/wiki/бронетанковым%20войскам|
 |https://en.wiktionary.org/wiki/бронестёклами|
 |https://en.wiktionary.org/wiki/бронированиями|
 |https://en.wiktionary.org/wiki/бронированиям|
@@ -8783,51 +8784,51 @@
 |https://en.wiktionary.org/wiki/бронхиту|
 |https://en.wiktionary.org/wiki/бронхитом|
 |https://en.wiktionary.org/wiki/бронированиях|
-|https://en.wiktionary.org/wiki/броуновском движении|
-|https://en.wiktionary.org/wiki/броуновским движением|
+|https://en.wiktionary.org/wiki/броуновском%20движении|
+|https://en.wiktionary.org/wiki/броуновским%20движением|
 |https://en.wiktionary.org/wiki/бронхитах|
-|https://en.wiktionary.org/wiki/броуновскому движению|
+|https://en.wiktionary.org/wiki/броуновскому%20движению|
 |https://en.wiktionary.org/wiki/бронхитами|
-|https://en.wiktionary.org/wiki/брусками мыла|
-|https://en.wiktionary.org/wiki/брускам мыла|
-|https://en.wiktionary.org/wiki/бруском мыла|
-|https://en.wiktionary.org/wiki/бруске мыла|
-|https://en.wiktionary.org/wiki/бруску мыла|
-|https://en.wiktionary.org/wiki/брюкам клёш|
+|https://en.wiktionary.org/wiki/брусками%20мыла|
+|https://en.wiktionary.org/wiki/брускам%20мыла|
+|https://en.wiktionary.org/wiki/бруском%20мыла|
+|https://en.wiktionary.org/wiki/бруске%20мыла|
+|https://en.wiktionary.org/wiki/бруску%20мыла|
+|https://en.wiktionary.org/wiki/брюкам%20клёш|
 |https://en.wiktionary.org/wiki/брюквах|
 |https://en.wiktionary.org/wiki/брюквам|
 |https://en.wiktionary.org/wiki/брюквами|
-|https://en.wiktionary.org/wiki/брусках мыла|
+|https://en.wiktionary.org/wiki/брусках%20мыла|
 |https://en.wiktionary.org/wiki/брюках-галифе|
 |https://en.wiktionary.org/wiki/брюками-галифе|
-|https://en.wiktionary.org/wiki/брюках клёш|
+|https://en.wiktionary.org/wiki/брюках%20клёш|
 |https://en.wiktionary.org/wiki/брюкам-галифе|
-|https://en.wiktionary.org/wiki/брюками клёш|
-|https://en.wiktionary.org/wiki/брюшную полость|
+|https://en.wiktionary.org/wiki/брюками%20клёш|
+|https://en.wiktionary.org/wiki/брюшную%20полость|
 |https://en.wiktionary.org/wiki/брюхоногом|
 |https://en.wiktionary.org/wiki/брюхоногими|
 |https://en.wiktionary.org/wiki/брюхоногому|
 |https://en.wiktionary.org/wiki/брюхоногим|
-|https://en.wiktionary.org/wiki/брюшных полостях|
-|https://en.wiktionary.org/wiki/брюшными полостями|
-|https://en.wiktionary.org/wiki/брюшною полостью|
-|https://en.wiktionary.org/wiki/брюшным полостям|
-|https://en.wiktionary.org/wiki/брюшной полостью|
+|https://en.wiktionary.org/wiki/брюшных%20полостях|
+|https://en.wiktionary.org/wiki/брюшными%20полостями|
+|https://en.wiktionary.org/wiki/брюшною%20полостью|
+|https://en.wiktionary.org/wiki/брюшным%20полостям|
+|https://en.wiktionary.org/wiki/брюшной%20полостью|
 |https://en.wiktionary.org/wiki/бубною|
 |https://en.wiktionary.org/wiki/бубной|
 |https://en.wiktionary.org/wiki/бубями|
 |https://en.wiktionary.org/wiki/бубях|
 |https://en.wiktionary.org/wiki/бубям|
-|https://en.wiktionary.org/wiki/бубновыми тузами|
-|https://en.wiktionary.org/wiki/бубновым тузам|
-|https://en.wiktionary.org/wiki/бубновым тузом|
-|https://en.wiktionary.org/wiki/бубновом тузе|
-|https://en.wiktionary.org/wiki/бубновому тузу|
+|https://en.wiktionary.org/wiki/бубновыми%20тузами|
+|https://en.wiktionary.org/wiki/бубновым%20тузам|
+|https://en.wiktionary.org/wiki/бубновым%20тузом|
+|https://en.wiktionary.org/wiki/бубновом%20тузе|
+|https://en.wiktionary.org/wiki/бубновому%20тузу|
 |https://en.wiktionary.org/wiki/бугелям|
 |https://en.wiktionary.org/wiki/бугеле|
 |https://en.wiktionary.org/wiki/бугелю|
 |https://en.wiktionary.org/wiki/бугелем|
-|https://en.wiktionary.org/wiki/бубновых тузах|
+|https://en.wiktionary.org/wiki/бубновых%20тузах|
 |https://en.wiktionary.org/wiki/будёновкой|
 |https://en.wiktionary.org/wiki/будёновку|
 |https://en.wiktionary.org/wiki/бугелях|
@@ -8838,16 +8839,16 @@
 |https://en.wiktionary.org/wiki/будёновкам|
 |https://en.wiktionary.org/wiki/будёновками|
 |https://en.wiktionary.org/wiki/будёновкою|
-|https://en.wiktionary.org/wiki/будущему времени|
+|https://en.wiktionary.org/wiki/будущему%20времени|
 |https://en.wiktionary.org/wiki/будочках|
 |https://en.wiktionary.org/wiki/будочкам|
 |https://en.wiktionary.org/wiki/будочками|
 |https://en.wiktionary.org/wiki/будочкою|
-|https://en.wiktionary.org/wiki/будущих временах|
-|https://en.wiktionary.org/wiki/будущими временами|
-|https://en.wiktionary.org/wiki/будущем времени|
-|https://en.wiktionary.org/wiki/будущим временам|
-|https://en.wiktionary.org/wiki/будущим временем|
+|https://en.wiktionary.org/wiki/будущих%20временах|
+|https://en.wiktionary.org/wiki/будущими%20временами|
+|https://en.wiktionary.org/wiki/будущем%20времени|
+|https://en.wiktionary.org/wiki/будущим%20временам|
+|https://en.wiktionary.org/wiki/будущим%20временем|
 |https://en.wiktionary.org/wiki/буевами|
 |https://en.wiktionary.org/wiki/буевам|
 |https://en.wiktionary.org/wiki/буевом|
@@ -8933,21 +8934,21 @@
 |https://en.wiktionary.org/wiki/буковке|
 |https://en.wiktionary.org/wiki/буковку|
 |https://en.wiktionary.org/wiki/буклях|
-|https://en.wiktionary.org/wiki/буксирным крюком|
-|https://en.wiktionary.org/wiki/буксирному крюку|
+|https://en.wiktionary.org/wiki/буксирным%20крюком|
+|https://en.wiktionary.org/wiki/буксирному%20крюку|
 |https://en.wiktionary.org/wiki/буковками|
 |https://en.wiktionary.org/wiki/буковках|
 |https://en.wiktionary.org/wiki/буковкам|
-|https://en.wiktionary.org/wiki/буксирными крючьями|
-|https://en.wiktionary.org/wiki/буксирными крюками|
-|https://en.wiktionary.org/wiki/буксирным крюкам|
-|https://en.wiktionary.org/wiki/буксирным крючьям|
-|https://en.wiktionary.org/wiki/буксирном крюке|
+|https://en.wiktionary.org/wiki/буксирными%20крючьями|
+|https://en.wiktionary.org/wiki/буксирными%20крюками|
+|https://en.wiktionary.org/wiki/буксирным%20крюкам|
+|https://en.wiktionary.org/wiki/буксирным%20крючьям|
+|https://en.wiktionary.org/wiki/буксирном%20крюке|
 |https://en.wiktionary.org/wiki/буксировщике|
 |https://en.wiktionary.org/wiki/буксировщиком|
-|https://en.wiktionary.org/wiki/буксирных крючьях|
+|https://en.wiktionary.org/wiki/буксирных%20крючьях|
 |https://en.wiktionary.org/wiki/буксировщику|
-|https://en.wiktionary.org/wiki/буксирных крюках|
+|https://en.wiktionary.org/wiki/буксирных%20крюках|
 |https://en.wiktionary.org/wiki/булаву|
 |https://en.wiktionary.org/wiki/булаве|
 |https://en.wiktionary.org/wiki/буксировщиками|
@@ -8958,41 +8959,41 @@
 |https://en.wiktionary.org/wiki/булавою|
 |https://en.wiktionary.org/wiki/булавам|
 |https://en.wiktionary.org/wiki/булавой|
-|https://en.wiktionary.org/wiki/булевыми множествами|
-|https://en.wiktionary.org/wiki/булевым множествам|
-|https://en.wiktionary.org/wiki/булевым множеством|
-|https://en.wiktionary.org/wiki/булевом множестве|
-|https://en.wiktionary.org/wiki/булеву множеству|
+|https://en.wiktionary.org/wiki/булевыми%20множествами|
+|https://en.wiktionary.org/wiki/булевым%20множествам|
+|https://en.wiktionary.org/wiki/булевым%20множеством|
+|https://en.wiktionary.org/wiki/булевом%20множестве|
+|https://en.wiktionary.org/wiki/булеву%20множеству|
 |https://en.wiktionary.org/wiki/булле|
-|https://en.wiktionary.org/wiki/булевых множествах|
+|https://en.wiktionary.org/wiki/булевых%20множествах|
 |https://en.wiktionary.org/wiki/буллою|
 |https://en.wiktionary.org/wiki/буллой|
 |https://en.wiktionary.org/wiki/буллу|
-|https://en.wiktionary.org/wiki/булочку с начинкой|
-|https://en.wiktionary.org/wiki/булочке с начинкой|
+|https://en.wiktionary.org/wiki/булочку%20с%20начинкой|
+|https://en.wiktionary.org/wiki/булочке%20с%20начинкой|
 |https://en.wiktionary.org/wiki/буллами|
 |https://en.wiktionary.org/wiki/буллах|
 |https://en.wiktionary.org/wiki/буллам|
-|https://en.wiktionary.org/wiki/булочках с начинкой|
-|https://en.wiktionary.org/wiki/булочками с начинкой|
-|https://en.wiktionary.org/wiki/булочкою с начинкой|
-|https://en.wiktionary.org/wiki/булочкам с начинкой|
-|https://en.wiktionary.org/wiki/булочкой с начинкой|
+|https://en.wiktionary.org/wiki/булочках%20с%20начинкой|
+|https://en.wiktionary.org/wiki/булочками%20с%20начинкой|
+|https://en.wiktionary.org/wiki/булочкою%20с%20начинкой|
+|https://en.wiktionary.org/wiki/булочкам%20с%20начинкой|
+|https://en.wiktionary.org/wiki/булочкой%20с%20начинкой|
 |https://en.wiktionary.org/wiki/бульбашами|
 |https://en.wiktionary.org/wiki/бульбашам|
 |https://en.wiktionary.org/wiki/бульбашом|
 |https://en.wiktionary.org/wiki/бульбаше|
 |https://en.wiktionary.org/wiki/бульбашу|
-|https://en.wiktionary.org/wiki/бульбоуретральною железою|
-|https://en.wiktionary.org/wiki/бульбоуретральной железой|
-|https://en.wiktionary.org/wiki/бульбоуретральной железе|
-|https://en.wiktionary.org/wiki/бульбоуретральную железу|
+|https://en.wiktionary.org/wiki/бульбоуретральною%20железою|
+|https://en.wiktionary.org/wiki/бульбоуретральной%20железой|
+|https://en.wiktionary.org/wiki/бульбоуретральной%20железе|
+|https://en.wiktionary.org/wiki/бульбоуретральную%20железу|
 |https://en.wiktionary.org/wiki/бульбашах|
 |https://en.wiktionary.org/wiki/бульдогом|
 |https://en.wiktionary.org/wiki/бульдогу|
-|https://en.wiktionary.org/wiki/бульбоуретральными железами|
-|https://en.wiktionary.org/wiki/бульбоуретральных железах|
-|https://en.wiktionary.org/wiki/бульбоуретральным железам|
+|https://en.wiktionary.org/wiki/бульбоуретральными%20железами|
+|https://en.wiktionary.org/wiki/бульбоуретральных%20железах|
+|https://en.wiktionary.org/wiki/бульбоуретральным%20железам|
 |https://en.wiktionary.org/wiki/бумеру|
 |https://en.wiktionary.org/wiki/бульдогах|
 |https://en.wiktionary.org/wiki/бульдогам|
@@ -9058,16 +9059,16 @@
 |https://en.wiktionary.org/wiki/бурунах|
 |https://en.wiktionary.org/wiki/бурундуку|
 |https://en.wiktionary.org/wiki/бурунами|
-|https://en.wiktionary.org/wiki/бурю в стакане воды|
-|https://en.wiktionary.org/wiki/буре в стакане воды|
+|https://en.wiktionary.org/wiki/бурю%20в%20стакане%20воды|
+|https://en.wiktionary.org/wiki/буре%20в%20стакане%20воды|
 |https://en.wiktionary.org/wiki/бурундуками|
 |https://en.wiktionary.org/wiki/бурундуках|
 |https://en.wiktionary.org/wiki/бурундукам|
-|https://en.wiktionary.org/wiki/бурях в стакане воды|
-|https://en.wiktionary.org/wiki/бурями в стакане воды|
-|https://en.wiktionary.org/wiki/бурею в стакане воды|
-|https://en.wiktionary.org/wiki/бурям в стакане воды|
-|https://en.wiktionary.org/wiki/бурей в стакане воды|
+|https://en.wiktionary.org/wiki/бурях%20в%20стакане%20воды|
+|https://en.wiktionary.org/wiki/бурями%20в%20стакане%20воды|
+|https://en.wiktionary.org/wiki/бурею%20в%20стакане%20воды|
+|https://en.wiktionary.org/wiki/бурям%20в%20стакане%20воды|
+|https://en.wiktionary.org/wiki/бурей%20в%20стакане%20воды|
 |https://en.wiktionary.org/wiki/буряками|
 |https://en.wiktionary.org/wiki/бурякам|
 |https://en.wiktionary.org/wiki/буряком|
@@ -9118,16 +9119,16 @@
 |https://en.wiktionary.org/wiki/бухарце|
 |https://en.wiktionary.org/wiki/бухарцам|
 |https://en.wiktionary.org/wiki/бухарцем|
-|https://en.wiktionary.org/wiki/бухгалтерским книгам|
-|https://en.wiktionary.org/wiki/бухгалтерскою книгою|
-|https://en.wiktionary.org/wiki/бухгалтерскую книгу|
-|https://en.wiktionary.org/wiki/бухгалтерской книгой|
-|https://en.wiktionary.org/wiki/бухгалтерской книге|
+|https://en.wiktionary.org/wiki/бухгалтерским%20книгам|
+|https://en.wiktionary.org/wiki/бухгалтерскою%20книгою|
+|https://en.wiktionary.org/wiki/бухгалтерскую%20книгу|
+|https://en.wiktionary.org/wiki/бухгалтерской%20книгой|
+|https://en.wiktionary.org/wiki/бухгалтерской%20книге|
 |https://en.wiktionary.org/wiki/бухгалтершей|
 |https://en.wiktionary.org/wiki/бухгалтершу|
-|https://en.wiktionary.org/wiki/бухгалтерских книгах|
+|https://en.wiktionary.org/wiki/бухгалтерских%20книгах|
 |https://en.wiktionary.org/wiki/бухгалтерше|
-|https://en.wiktionary.org/wiki/бухгалтерскими книгами|
+|https://en.wiktionary.org/wiki/бухгалтерскими%20книгами|
 |https://en.wiktionary.org/wiki/бухлу|
 |https://en.wiktionary.org/wiki/бухгалтершах|
 |https://en.wiktionary.org/wiki/бухгалтершам|
@@ -9275,7 +9276,7 @@
 |https://en.wiktionary.org/wiki/бурлить|
 |https://en.wiktionary.org/wiki/беременеть|
 |https://en.wiktionary.org/wiki/блуждать|
-|https://en.wiktionary.org/wiki/блок питания|
+|https://en.wiktionary.org/wiki/блок%20питания|
 |https://en.wiktionary.org/wiki/баснословный|
 |https://en.wiktionary.org/wiki/брезговать|
 |https://en.wiktionary.org/wiki/брезгать|
@@ -10868,21 +10869,21 @@
 |https://en.wiktionary.org/wiki/блицкригу|
 |https://en.wiktionary.org/wiki/блицкригом|
 |https://en.wiktionary.org/wiki/блицкрига|
-|https://en.wiktionary.org/wiki/блока питания|
+|https://en.wiktionary.org/wiki/блока%20питания|
 |https://en.wiktionary.org/wiki/блицкригах|
 |https://en.wiktionary.org/wiki/блицкригам|
 |https://en.wiktionary.org/wiki/блицкригами|
 |https://en.wiktionary.org/wiki/блицкригов|
-|https://en.wiktionary.org/wiki/блоков питания|
-|https://en.wiktionary.org/wiki/блоки питания|
-|https://en.wiktionary.org/wiki/блоком питания|
-|https://en.wiktionary.org/wiki/блоке питания|
-|https://en.wiktionary.org/wiki/блоку питания|
+|https://en.wiktionary.org/wiki/блоков%20питания|
+|https://en.wiktionary.org/wiki/блоки%20питания|
+|https://en.wiktionary.org/wiki/блоком%20питания|
+|https://en.wiktionary.org/wiki/блоке%20питания|
+|https://en.wiktionary.org/wiki/блоку%20питания|
 |https://en.wiktionary.org/wiki/блокировке|
 |https://en.wiktionary.org/wiki/блокировки|
-|https://en.wiktionary.org/wiki/блоками питания|
-|https://en.wiktionary.org/wiki/блоках питания|
-|https://en.wiktionary.org/wiki/блокам питания|
+|https://en.wiktionary.org/wiki/блоками%20питания|
+|https://en.wiktionary.org/wiki/блоках%20питания|
+|https://en.wiktionary.org/wiki/блокам%20питания|
 |https://en.wiktionary.org/wiki/блокировкам|
 |https://en.wiktionary.org/wiki/блокировок|
 |https://en.wiktionary.org/wiki/блокировкой|
@@ -10898,16 +10899,16 @@
 |https://en.wiktionary.org/wiki/блюстители|
 |https://en.wiktionary.org/wiki/блюстителей|
 |https://en.wiktionary.org/wiki/блюстителе|
-|https://en.wiktionary.org/wiki/боге из машины|
-|https://en.wiktionary.org/wiki/богом из машины|
-|https://en.wiktionary.org/wiki/бога из машины|
-|https://en.wiktionary.org/wiki/богу из машины|
+|https://en.wiktionary.org/wiki/боге%20из%20машины|
+|https://en.wiktionary.org/wiki/богом%20из%20машины|
+|https://en.wiktionary.org/wiki/бога%20из%20машины|
+|https://en.wiktionary.org/wiki/богу%20из%20машины|
 |https://en.wiktionary.org/wiki/блюстителях|
-|https://en.wiktionary.org/wiki/богах из машины|
-|https://en.wiktionary.org/wiki/богами из машины|
-|https://en.wiktionary.org/wiki/богов из машины|
-|https://en.wiktionary.org/wiki/богам из машины|
-|https://en.wiktionary.org/wiki/боги из машины|
+|https://en.wiktionary.org/wiki/богах%20из%20машины|
+|https://en.wiktionary.org/wiki/богами%20из%20машины|
+|https://en.wiktionary.org/wiki/богов%20из%20машины|
+|https://en.wiktionary.org/wiki/богам%20из%20машины|
+|https://en.wiktionary.org/wiki/боги%20из%20машины|
 |https://en.wiktionary.org/wiki/богородицу|
 |https://en.wiktionary.org/wiki/богородице|
 |https://en.wiktionary.org/wiki/богоматерью|
@@ -11160,7 +11161,7 @@
 |https://en.wiktionary.org/wiki/благодарение|
 |https://en.wiktionary.org/wiki/бульбоуретральный|
 |https://en.wiktionary.org/wiki/буксирный|
-|https://en.wiktionary.org/wiki/брать на откуп|
+|https://en.wiktionary.org/wiki/брать%20на%20откуп|
 |https://en.wiktionary.org/wiki/бровка|
 |https://en.wiktionary.org/wiki/бесстыдство|
 |https://en.wiktionary.org/wiki/балахон|
@@ -12354,8 +12355,8 @@
 |https://en.wiktionary.org/wiki/бесхозяйственный|
 |https://en.wiktionary.org/wiki/боронь|
 |https://en.wiktionary.org/wiki/бранный|
-|https://en.wiktionary.org/wiki/брюссельская капуста|
-|https://en.wiktionary.org/wiki/брюссельское кружево|
+|https://en.wiktionary.org/wiki/брюссельская%20капуста|
+|https://en.wiktionary.org/wiki/брюссельское%20кружево|
 |https://en.wiktionary.org/wiki/быльё|
 |https://en.wiktionary.org/wiki/брателло|
 |https://en.wiktionary.org/wiki/бервно|
@@ -12728,26 +12729,26 @@
 |https://en.wiktionary.org/wiki/борошне|
 |https://en.wiktionary.org/wiki/бритоголового|
 |https://en.wiktionary.org/wiki/борошном|
-|https://en.wiktionary.org/wiki/брюссельской капусты|
+|https://en.wiktionary.org/wiki/брюссельской%20капусты|
 |https://en.wiktionary.org/wiki/бритоголовыми|
 |https://en.wiktionary.org/wiki/бритоголовые|
 |https://en.wiktionary.org/wiki/бритоголовых|
 |https://en.wiktionary.org/wiki/бритоголовом|
-|https://en.wiktionary.org/wiki/брюссельского кружева|
-|https://en.wiktionary.org/wiki/брюссельскою капустою|
-|https://en.wiktionary.org/wiki/брюссельскую капусту|
-|https://en.wiktionary.org/wiki/брюссельской капустой|
-|https://en.wiktionary.org/wiki/брюссельской капусте|
-|https://en.wiktionary.org/wiki/брюссельских кружев|
-|https://en.wiktionary.org/wiki/брюссельские кружева|
-|https://en.wiktionary.org/wiki/брюссельским кружевом|
-|https://en.wiktionary.org/wiki/брюссельском кружеве|
-|https://en.wiktionary.org/wiki/брюссельскому кружеву|
+|https://en.wiktionary.org/wiki/брюссельского%20кружева|
+|https://en.wiktionary.org/wiki/брюссельскою%20капустою|
+|https://en.wiktionary.org/wiki/брюссельскую%20капусту|
+|https://en.wiktionary.org/wiki/брюссельской%20капустой|
+|https://en.wiktionary.org/wiki/брюссельской%20капусте|
+|https://en.wiktionary.org/wiki/брюссельских%20кружев|
+|https://en.wiktionary.org/wiki/брюссельские%20кружева|
+|https://en.wiktionary.org/wiki/брюссельским%20кружевом|
+|https://en.wiktionary.org/wiki/брюссельском%20кружеве|
+|https://en.wiktionary.org/wiki/брюссельскому%20кружеву|
 |https://en.wiktionary.org/wiki/брюшине|
 |https://en.wiktionary.org/wiki/брюшины|
-|https://en.wiktionary.org/wiki/брюссельскими кружевами|
-|https://en.wiktionary.org/wiki/брюссельских кружевах|
-|https://en.wiktionary.org/wiki/брюссельским кружевам|
+|https://en.wiktionary.org/wiki/брюссельскими%20кружевами|
+|https://en.wiktionary.org/wiki/брюссельских%20кружевах|
+|https://en.wiktionary.org/wiki/брюссельским%20кружевам|
 |https://en.wiktionary.org/wiki/брюшинам|
 |https://en.wiktionary.org/wiki/брюшин|
 |https://en.wiktionary.org/wiki/брюшиной|
@@ -12784,8 +12785,8 @@
 |https://en.wiktionary.org/wiki/брехун|
 |https://en.wiktionary.org/wiki/брехло|
 |https://en.wiktionary.org/wiki/благодарствовать|
-|https://en.wiktionary.org/wiki/бог весть какой|
-|https://en.wiktionary.org/wiki/бог знает какой|
+|https://en.wiktionary.org/wiki/бог%20весть%20какой|
+|https://en.wiktionary.org/wiki/бог%20знает%20какой|
 |https://en.wiktionary.org/wiki/бренность|
 |https://en.wiktionary.org/wiki/брадатый|
 |https://en.wiktionary.org/wiki/бобрёнок|
@@ -12807,7 +12808,7 @@
 |https://en.wiktionary.org/wiki/бесчестный|
 |https://en.wiktionary.org/wiki/Белоус|
 |https://en.wiktionary.org/wiki/белоус|
-|https://en.wiktionary.org/wiki/будь другом|
+|https://en.wiktionary.org/wiki/будь%20другом|
 |https://en.wiktionary.org/wiki/брасс|
 |https://en.wiktionary.org/wiki/бочар|
 |https://en.wiktionary.org/wiki/бивуак|
@@ -12835,7 +12836,7 @@
 |https://en.wiktionary.org/wiki/безмен|
 |https://en.wiktionary.org/wiki/бензовоз|
 |https://en.wiktionary.org/wiki/биполярный|
-|https://en.wiktionary.org/wiki/бесплатный сыр бывает только в мышеловке|
+|https://en.wiktionary.org/wiki/бесплатный%20сыр%20бывает%20только%20в%20мышеловке|
 |https://en.wiktionary.org/wiki/близняшка|
 |https://en.wiktionary.org/wiki/близнята|
 |https://en.wiktionary.org/wiki/близняшки|
@@ -13275,20 +13276,20 @@
 |https://en.wiktionary.org/wiki/борзело|
 |https://en.wiktionary.org/wiki/борзев|
 |https://en.wiktionary.org/wiki/борзевши|
-|https://en.wiktionary.org/wiki/без пизды|
+|https://en.wiktionary.org/wiki/без%20пизды|
 |https://en.wiktionary.org/wiki/березозол|
 |https://en.wiktionary.org/wiki/Беларуси|
 |https://en.wiktionary.org/wiki/Беларусью|
 |https://en.wiktionary.org/wiki/баасист|
 |https://en.wiktionary.org/wiki/баасистский|
 |https://en.wiktionary.org/wiki/баасизм|
-|https://en.wiktionary.org/wiki/белая ворона|
+|https://en.wiktionary.org/wiki/белая%20ворона|
 |https://en.wiktionary.org/wiki/Байден|
 |https://en.wiktionary.org/wiki/Боря|
 |https://en.wiktionary.org/wiki/безгневный|
 |https://en.wiktionary.org/wiki/большого|
-|https://en.wiktionary.org/wiki/Белорусской ССР|
-|https://en.wiktionary.org/wiki/Баварская Советская Республика|
+|https://en.wiktionary.org/wiki/Белорусской%20ССР|
+|https://en.wiktionary.org/wiki/Баварская%20Советская%20Республика|
 |https://en.wiktionary.org/wiki/биоразнообразие|
 |https://en.wiktionary.org/wiki/барство|
 |https://en.wiktionary.org/wiki/Бахи|
@@ -13300,11 +13301,11 @@
 |https://en.wiktionary.org/wiki/БСЭ|
 |https://en.wiktionary.org/wiki/байховый|
 |https://en.wiktionary.org/wiki/бегунья|
-|https://en.wiktionary.org/wiki/брать с потолка|
+|https://en.wiktionary.org/wiki/брать%20с%20потолка|
 |https://en.wiktionary.org/wiki/белобровик|
-|https://en.wiktionary.org/wiki/броситься на амбразуру|
+|https://en.wiktionary.org/wiki/броситься%20на%20амбразуру|
 |https://en.wiktionary.org/wiki/бавовна|
-|https://en.wiktionary.org/wiki/бросаться в глаза|
+|https://en.wiktionary.org/wiki/бросаться%20в%20глаза|
 |https://en.wiktionary.org/wiki/БЦЖ|
 |https://en.wiktionary.org/wiki/бесчестить|
 |https://en.wiktionary.org/wiki/Бабарико|
@@ -13313,9 +13314,9 @@
 |https://en.wiktionary.org/wiki/биоскоп|
 |https://en.wiktionary.org/wiki/баннер|
 |https://en.wiktionary.org/wiki/Близнюк|
-|https://en.wiktionary.org/wiki/борьба с ветряными мельницами|
+|https://en.wiktionary.org/wiki/борьба%20с%20ветряными%20мельницами|
 |https://en.wiktionary.org/wiki/бо-бо|
-|https://en.wiktionary.org/wiki/бежать впереди паровоза|
+|https://en.wiktionary.org/wiki/бежать%20впереди%20паровоза|
 |https://en.wiktionary.org/wiki/Бабуров|
 |https://en.wiktionary.org/wiki/Берия|
 |https://en.wiktionary.org/wiki/Богатырёв|
@@ -13336,19 +13337,19 @@
 |https://en.wiktionary.org/wiki/боркан|
 |https://en.wiktionary.org/wiki/буддистский|
 |https://en.wiktionary.org/wiki/Баталов|
-|https://en.wiktionary.org/wiki/бурый медведь|
+|https://en.wiktionary.org/wiki/бурый%20медведь|
 |https://en.wiktionary.org/wiki/биржевик|
 |https://en.wiktionary.org/wiki/бонго|
 |https://en.wiktionary.org/wiki/Блохин|
 |https://en.wiktionary.org/wiki/Бастрыкин|
 |https://en.wiktionary.org/wiki/Белозёров|
 |https://en.wiktionary.org/wiki/Белоусов|
-|https://en.wiktionary.org/wiki/Боже упаси|
-|https://en.wiktionary.org/wiki/боже упаси|
+|https://en.wiktionary.org/wiki/Боже%20упаси|
+|https://en.wiktionary.org/wiki/боже%20упаси|
 |https://en.wiktionary.org/wiki/бритвенный|
 |https://en.wiktionary.org/wiki/Буданов|
-|https://en.wiktionary.org/wiki/без комментариев|
-|https://en.wiktionary.org/wiki/банановая республика|
+|https://en.wiktionary.org/wiki/без%20комментариев|
+|https://en.wiktionary.org/wiki/банановая%20республика|
 |https://en.wiktionary.org/wiki/банщик|
 |https://en.wiktionary.org/wiki/булочный|
 |https://en.wiktionary.org/wiki/беллетрист|
@@ -13371,26 +13372,26 @@
 |https://en.wiktionary.org/wiki/брыкнуть|
 |https://en.wiktionary.org/wiki/брыкнуться|
 |https://en.wiktionary.org/wiki/брыкаться|
-|https://en.wiktionary.org/wiki/бабка надвое сказала|
+|https://en.wiktionary.org/wiki/бабка%20надвое%20сказала|
 |https://en.wiktionary.org/wiki/бесик|
-|https://en.wiktionary.org/wiki/бедный родственник|
+|https://en.wiktionary.org/wiki/бедный%20родственник|
 |https://en.wiktionary.org/wiki/бакалавриат|
 |https://en.wiktionary.org/wiki/бандотдел|
 |https://en.wiktionary.org/wiki/большая|
-|https://en.wiktionary.org/wiki/брать на себя смелость|
+|https://en.wiktionary.org/wiki/брать%20на%20себя%20смелость|
 |https://en.wiktionary.org/wiki/Буча|
 |https://en.wiktionary.org/wiki/бухлишко|
-|https://en.wiktionary.org/wiki/Бывшая Югославская Республика Македония|
+|https://en.wiktionary.org/wiki/Бывшая%20Югославская%20Республика%20Македония|
 |https://en.wiktionary.org/wiki/БСБ|
 |https://en.wiktionary.org/wiki/бело-сине-красный|
-|https://en.wiktionary.org/wiki/быть может|
+|https://en.wiktionary.org/wiki/быть%20может|
 |https://en.wiktionary.org/wiki/Бенуа|
 |https://en.wiktionary.org/wiki/блядина|
 |https://en.wiktionary.org/wiki/бегония|
 |https://en.wiktionary.org/wiki/берковец|
 |https://en.wiktionary.org/wiki/БРИКС|
 |https://en.wiktionary.org/wiki/бело-сине-белый|
-|https://en.wiktionary.org/wiki/блокада Ленинграда|
+|https://en.wiktionary.org/wiki/блокада%20Ленинграда|
 |https://en.wiktionary.org/wiki/бурдюк|
 |https://en.wiktionary.org/wiki/брускетта|
 |https://en.wiktionary.org/wiki/Бархударов|
@@ -13433,14 +13434,14 @@
 |https://en.wiktionary.org/wiki/баоаням|
 |https://en.wiktionary.org/wiki/бархатец|
 |https://en.wiktionary.org/wiki/Булычёв|
-|https://en.wiktionary.org/wiki/Большое Солёное озеро|
+|https://en.wiktionary.org/wiki/Большое%20Солёное%20озеро|
 |https://en.wiktionary.org/wiki/богопротивный|
 |https://en.wiktionary.org/wiki/беспосадочный|
 |https://en.wiktionary.org/wiki/безударный|
 |https://en.wiktionary.org/wiki/Бердичев|
-|https://en.wiktionary.org/wiki/Белая Церковь|
+|https://en.wiktionary.org/wiki/Белая%20Церковь|
 |https://en.wiktionary.org/wiki/Борисполь|
-|https://en.wiktionary.org/wiki/Бог не выдаст, свинья не съест|
+|https://en.wiktionary.org/wiki/Бог%20не%20выдаст,%20свинья%20не%20съест|
 |https://en.wiktionary.org/wiki/бензопровод|
 |https://en.wiktionary.org/wiki/босота|
 |https://en.wiktionary.org/wiki/бряцание|
@@ -13505,7 +13506,7 @@
 |https://en.wiktionary.org/wiki/Балаклея|
 |https://en.wiktionary.org/wiki/Баямо|
 |https://en.wiktionary.org/wiki/Буттиджич|
-|https://en.wiktionary.org/wiki/ботоксный дед|
+|https://en.wiktionary.org/wiki/ботоксный%20дед|
 |https://en.wiktionary.org/wiki/Бурятию|
 |https://en.wiktionary.org/wiki/Бурятии|
 |https://en.wiktionary.org/wiki/Бурятиею|
@@ -13515,7 +13516,7 @@
 |https://en.wiktionary.org/wiki/белую|
 |https://en.wiktionary.org/wiki/Болград|
 |https://en.wiktionary.org/wiki/Берислав|
-|https://en.wiktionary.org/wiki/бункерный дед|
+|https://en.wiktionary.org/wiki/бункерный%20дед|
 |https://en.wiktionary.org/wiki/брахиацию|
 |https://en.wiktionary.org/wiki/брахиация|
 |https://en.wiktionary.org/wiki/брахиацией|
@@ -13542,7 +13543,7 @@
 |https://en.wiktionary.org/wiki/батоно|
 |https://en.wiktionary.org/wiki/берестология|
 |https://en.wiktionary.org/wiki/благовидный|
-|https://en.wiktionary.org/wiki/без толку|
+|https://en.wiktionary.org/wiki/без%20толку|
 |https://en.wiktionary.org/wiki/безраздельный|
 |https://en.wiktionary.org/wiki/безубыточный|
 |https://en.wiktionary.org/wiki/бродяжничать|
@@ -13567,8 +13568,8 @@
 |https://en.wiktionary.org/wiki/Беркович|
 |https://en.wiktionary.org/wiki/бзик|
 |https://en.wiktionary.org/wiki/Бреда|
-|https://en.wiktionary.org/wiki/благодарю покорно|
-|https://en.wiktionary.org/wiki/Большая семёрка|
+|https://en.wiktionary.org/wiki/благодарю%20покорно|
+|https://en.wiktionary.org/wiki/Большая%20семёрка|
 |https://en.wiktionary.org/wiki/борщахъ|
 |https://en.wiktionary.org/wiki/борщамъ|
 |https://en.wiktionary.org/wiki/борщомъ|
@@ -13579,17 +13580,17 @@
 |https://en.wiktionary.org/wiki/Болливуд|
 |https://en.wiktionary.org/wiki/быстрая|
 |https://en.wiktionary.org/wiki/буль|
-|https://en.wiktionary.org/wiki/бы только|
+|https://en.wiktionary.org/wiki/бы%20только|
 |https://en.wiktionary.org/wiki/Борзунов|
 |https://en.wiktionary.org/wiki/биективный|
 |https://en.wiktionary.org/wiki/Безруков|
 |https://en.wiktionary.org/wiki/Болконский|
 |https://en.wiktionary.org/wiki/Безухов|
-|https://en.wiktionary.org/wiki/без Б|
-|https://en.wiktionary.org/wiki/без балды|
+|https://en.wiktionary.org/wiki/без%20Б|
+|https://en.wiktionary.org/wiki/без%20балды|
 |https://en.wiktionary.org/wiki/будировать|
-|https://en.wiktionary.org/wiki/белый гриб|
-|https://en.wiktionary.org/wiki/башня из слоновой кости|
+|https://en.wiktionary.org/wiki/белый%20гриб|
+|https://en.wiktionary.org/wiki/башня%20из%20слоновой%20кости|
 |https://en.wiktionary.org/wiki/безотзывный|
 |https://en.wiktionary.org/wiki/бурта|
 |https://en.wiktionary.org/wiki/бурт|
@@ -13602,26 +13603,26 @@
 |https://en.wiktionary.org/wiki/буртах|
 |https://en.wiktionary.org/wiki/буртам|
 |https://en.wiktionary.org/wiki/бонмо|
-|https://en.wiktionary.org/wiki/без задних ног|
-|https://en.wiktionary.org/wiki/брать себя в руки|
+|https://en.wiktionary.org/wiki/без%20задних%20ног|
+|https://en.wiktionary.org/wiki/брать%20себя%20в%20руки|
 |https://en.wiktionary.org/wiki/Боб|
 |https://en.wiktionary.org/wiki/блокатор|
 |https://en.wiktionary.org/wiki/блокировщик|
 |https://en.wiktionary.org/wiki/баиньки|
 |https://en.wiktionary.org/wiki/блокиратор|
 |https://en.wiktionary.org/wiki/буксировать|
-|https://en.wiktionary.org/wiki/более того|
+|https://en.wiktionary.org/wiki/более%20того|
 |https://en.wiktionary.org/wiki/Братск|
 |https://en.wiktionary.org/wiki/бляха-муха|
-|https://en.wiktionary.org/wiki/бляха муха|
+|https://en.wiktionary.org/wiki/бляха%20муха|
 |https://en.wiktionary.org/wiki/бзднуть|
 |https://en.wiktionary.org/wiki/безальтернативный|
 |https://en.wiktionary.org/wiki/безапелляционный|
 |https://en.wiktionary.org/wiki/бардачный|
 |https://en.wiktionary.org/wiki/безапелляционно|
 |https://en.wiktionary.org/wiki/богохульник|
-|https://en.wiktionary.org/wiki/биполярное расстройство|
-|https://en.wiktionary.org/wiki/была не была|
+|https://en.wiktionary.org/wiki/биполярное%20расстройство|
+|https://en.wiktionary.org/wiki/была%20не%20была|
 |https://en.wiktionary.org/wiki/брызгануть|
 |https://en.wiktionary.org/wiki/бессребренник|
 |https://en.wiktionary.org/wiki/бессеребреник|
@@ -13648,7 +13649,7 @@
 |https://en.wiktionary.org/wiki/Бёрёлёхом|
 |https://en.wiktionary.org/wiki/Бёрёлёха|
 |https://en.wiktionary.org/wiki/Бёрёлёху|
-|https://en.wiktionary.org/wiki/Большой террор|
+|https://en.wiktionary.org/wiki/Большой%20террор|
 |https://en.wiktionary.org/wiki/большею|
 |https://en.wiktionary.org/wiki/беседочный|
 |https://en.wiktionary.org/wiki/большей|
@@ -13659,7 +13660,7 @@
 |https://en.wiktionary.org/wiki/ботный|
 |https://en.wiktionary.org/wiki/былыми|
 |https://en.wiktionary.org/wiki/былые|
-|https://en.wiktionary.org/wiki/бросаться на амбразуру|
+|https://en.wiktionary.org/wiki/бросаться%20на%20амбразуру|
 |https://en.wiktionary.org/wiki/биткоин|
 |https://en.wiktionary.org/wiki/Батна|
 |https://en.wiktionary.org/wiki/бунтарство|
@@ -13673,7 +13674,7 @@
 |https://en.wiktionary.org/wiki/безделица|
 |https://en.wiktionary.org/wiki/браниваться|
 |https://en.wiktionary.org/wiki/болонка|
-|https://en.wiktionary.org/wiki/большое киданьское письмо|
+|https://en.wiktionary.org/wiki/большое%20киданьское%20письмо|
 |https://en.wiktionary.org/wiki/белуджка|
 |https://en.wiktionary.org/wiki/белорусскоязычный|
 |https://en.wiktionary.org/wiki/биополитика|
@@ -13704,12 +13705,12 @@
 |https://en.wiktionary.org/wiki/барежевый|
 |https://en.wiktionary.org/wiki/борнейский|
 |https://en.wiktionary.org/wiki/бареж|
-|https://en.wiktionary.org/wiki/бриллиантовый жук|
+|https://en.wiktionary.org/wiki/бриллиантовый%20жук|
 |https://en.wiktionary.org/wiki/Бульбостан|
 |https://en.wiktionary.org/wiki/буковый|
 |https://en.wiktionary.org/wiki/бромный|
 |https://en.wiktionary.org/wiki/бромовый|
-|https://en.wiktionary.org/wiki/белая ночь|
+|https://en.wiktionary.org/wiki/белая%20ночь|
 |https://en.wiktionary.org/wiki/безлёгочный|
 |https://en.wiktionary.org/wiki/бутылочница|
 |https://en.wiktionary.org/wiki/бутылочник|
@@ -13734,7 +13735,7 @@
 |https://en.wiktionary.org/wiki/безбарьерный|
 |https://en.wiktionary.org/wiki/бальзамный|
 |https://en.wiktionary.org/wiki/бальзамический|
-|https://en.wiktionary.org/wiki/бронзовка гладкая|
+|https://en.wiktionary.org/wiki/бронзовка%20гладкая|
 |https://en.wiktionary.org/wiki/барбарисный|
 |https://en.wiktionary.org/wiki/барбарисовый|
 |https://en.wiktionary.org/wiki/бамперный|

@@ -8,11 +8,13 @@ services:
     network_mode: host
     ports:
       - "80:80"
+      - "443:443"
     depends_on:
       - db
       - composer
     volumes:
       - .:/var/www/html
+      - /etc/letsencrypt/live/${DOMAIN}:/etc/ssl/certs:ro
 
   db:
     image: mysql:8.1.0
