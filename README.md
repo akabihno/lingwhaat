@@ -6,7 +6,9 @@ Initial IPA data for universal transliteration was parsed from [Wiktionary](http
 List of all articles IPA data has been taken from:
 * Russian:
 [а](docs/en_wiktionary_russian_а.md), 
-[б](docs/en_wiktionary_russian_б.md)
+[б](docs/en_wiktionary_russian_б.md),
+[в](docs/en_wiktionary_russian_в.md),
+[г](docs/en_wiktionary_russian_г.md),
 
 ## Requirements
 * docker
