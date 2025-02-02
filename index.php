@@ -2,8 +2,10 @@
 
 require 'vendor/autoload.php';
 
-use App\LandingWebPage;
+use App\Model\LayoutModel;
+use App\View\IndexView;
 
-$landingPage = new LandingWebPage();
+$layoutModel = new LayoutModel();
+$landingPage = new IndexView($layoutModel);
 
 $landingPage->drawHtml();
