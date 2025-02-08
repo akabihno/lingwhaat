@@ -67,14 +67,19 @@ class WiktionaryArticlesIpaParserService
 
     protected function parseWiktionaryResult(string $html): string
     {
-        $dom = new \IvoPetkov\HTML5DOMDocument();
-        $dom->loadHTML($html, $dom::ALLOW_DUPLICATE_IDS);
+        try {
+            $dom = new \IvoPetkov\HTML5DOMDocument();
+            $dom->loadHTML($html);
 
-        $result = $dom->querySelector('.IPA')->innerHTML;
+            $result = $dom->querySelector('.IPA')->innerHTML;
 
-        if ($result) {
-            return $result;
-        } else {
+            if ($result) {
+                return $result;
+            } else {
+                return '';
+            }
+        } catch (\Exception $e) {
+            var_dump('Error parsing Wiktionary result: ' . $e->getMessage());
             return '';
         }
     }
