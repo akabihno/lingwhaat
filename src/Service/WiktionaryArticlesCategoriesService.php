@@ -35,6 +35,7 @@ class WiktionaryArticlesCategoriesService
         $result = json_decode( $output, true );
 
         foreach($result["query"]["categorymembers"] as $categoryMember) {
+            var_dump($categoryMember["title"]);
             $this->queryLatvianLanguage->add($categoryMember["title"]);
         }
     }
