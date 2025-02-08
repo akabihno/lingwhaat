@@ -26,9 +26,9 @@ class WiktionaryArticlesCategoriesService
         $result = json_decode( $output, true );
         var_dump($result);
 
-        foreach( $result["query"]["pages"] as $k => $v ) {
-            foreach( $v["categories"] as $k => $v ) {
-                echo( $v["title"] . "\n" );
+        foreach($result["query"]["categorymembers"] as $lemmaArray) {
+            foreach ($lemmaArray as $lemma) {
+                echo( $lemma["title"] . "\n" );
             }
         }
     }
