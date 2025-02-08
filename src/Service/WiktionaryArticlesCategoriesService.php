@@ -7,7 +7,7 @@ use App\Query\PronunciationQueryLatvianLanguage;
 class WiktionaryArticlesCategoriesService
 {
     const WIKTIONARY_BASE_API_LINK = 'https://en.wiktionary.org/w/api.php';
-    const WIKTIONARY_RESULT_LIMIT = 100;
+    const WIKTIONARY_RESULT_LIMIT = 15000;
 
     public function __construct(protected PronunciationQueryLatvianLanguage $queryLatvianLanguage)
     {
