@@ -21,6 +21,6 @@ class WiktionaryArticlesCategoriesPolishService extends WiktionaryArticlesCatego
 
     protected function add($name): void
     {
-        $this->queryLatvianLanguage->add($name);
+        $this->queryPolishLanguage->add($name);
     }
 }
