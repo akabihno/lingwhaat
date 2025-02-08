@@ -24,14 +24,9 @@ class WiktionaryArticlesCategoriesService
         curl_close( $ch );
 
         $result = json_decode( $output, true );
-        var_dump($result);
 
-        foreach($result["query"]["categorymembers"] as $lemmaArray) {
-            foreach ($lemmaArray as $lemmaItem) {
-                foreach ($lemmaItem as $lemma) {
-                    echo($lemma["title"] . "\n" );
-                }
-            }
+        foreach($result["query"]["categorymembers"] as $categoryMember) {
+            echo($categoryMember["title"] . "\n");
         }
     }
 
