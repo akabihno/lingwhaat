@@ -12,7 +12,7 @@ class WiktionaryArticlesCategoriesService
             "format" => "json",
             "list" => "categorymembers",
             "action" => "query",
-            "cmtitle" => "Category::Latvian_lemmas",
+            "cmtitle" => "Category:Latvian_lemmas",
             "cmsort" => "timestamp"
         ];
 
