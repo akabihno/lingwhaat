@@ -24,6 +24,7 @@ class WiktionaryArticlesCategoriesService
         curl_close( $ch );
 
         $result = json_decode( $output, true );
+        var_dump($result);
 
         foreach( $result["query"]["pages"] as $k => $v ) {
             foreach( $v["categories"] as $k => $v ) {
