@@ -27,8 +27,10 @@ class WiktionaryArticlesCategoriesService
         var_dump($result);
 
         foreach($result["query"]["categorymembers"] as $lemmaArray) {
-            foreach ($lemmaArray as $lemma) {
-                echo( $lemma["title"] . "\n" );
+            foreach ($lemmaArray as $lemmaItem) {
+                foreach ($lemmaItem as $lemma) {
+                    echo($lemma["title"] . "\n" );
+                }
             }
         }
     }
