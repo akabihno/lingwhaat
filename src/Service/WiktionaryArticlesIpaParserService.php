@@ -68,7 +68,7 @@ class WiktionaryArticlesIpaParserService
     protected function parseWiktionaryResult(string $html): string
     {
         $dom = new \IvoPetkov\HTML5DOMDocument();
-        $dom->loadHTML($html, HTML5DOMDocument::ALLOW_DUPLICATE_IDS);
+        $dom->loadHTML($html, $dom::ALLOW_DUPLICATE_IDS);
 
         $result = $dom->querySelector('.IPA')->innerHTML;
 
