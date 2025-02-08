@@ -61,4 +61,13 @@ class AbstractQuery
 
     }
 
+    protected function insertNames(string $query, string $name): void
+    {
+        $stmt = $this->pdo->prepare($query);
+
+        $stmt->execute([
+            ':name' => $name
+        ]);
+    }
+
 }

@@ -14,4 +14,11 @@ class PronunciationQueryLatvianLanguage extends PronunciationQueryRussianLanguag
         return 'latvian_links';
     }
 
+    public function add($name): void
+    {
+        $query = 'INSERT INTO '.$this->getBaseTable().' (name) VALUES (:name)';
+
+        $this->insertNames($query, $name);
+    }
+
 }
