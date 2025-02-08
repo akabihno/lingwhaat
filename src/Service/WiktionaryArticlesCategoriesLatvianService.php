@@ -4,7 +4,7 @@ namespace App\Service;
 
 use App\Query\PronunciationQueryLatvianLanguage;
 
-class WiktionaryArticlesCategoriesService
+class WiktionaryArticlesCategoriesLatvianService
 {
     const WIKTIONARY_BASE_API_LINK = 'https://en.wiktionary.org/w/api.php';
     const WIKTIONARY_RESULT_LIMIT = 500;
@@ -21,7 +21,7 @@ class WiktionaryArticlesCategoriesService
             "format" => "json",
             "list" => "categorymembers",
             "action" => "query",
-            "cmtitle" => "Category:Latvian_lemmas",
+            "cmtitle" => $this->getCmtitle(),
             "cmsort" => "timestamp",
             "cmlimit" => self::WIKTIONARY_RESULT_LIMIT
         ];
@@ -38,7 +38,7 @@ class WiktionaryArticlesCategoriesService
 
             foreach($result["query"]["categorymembers"] as $categoryMember) {
                 var_dump($categoryMember["title"]);
-                $this->queryLatvianLanguage->add($categoryMember["title"]);
+                $this->add($categoryMember["title"]);
             }
 
             if (isset($result["continue"])) {
@@ -47,6 +47,16 @@ class WiktionaryArticlesCategoriesService
                 break;
             }
         } while (true);
+    }
+
+    protected function getCmtitle(): string
+    {
+        return "Category:Latvian_lemmas";
+    }
+
+    protected function add($name): void
+    {
+        $this->queryLatvianLanguage->add($name);
     }
 
 }

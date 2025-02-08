@@ -1,11 +1,16 @@
 <?php
 
 use App\Query\PronunciationQueryLatvianLanguage;
-use App\Service\WiktionaryArticlesCategoriesService;
+use App\Query\PronunciationQueryPolishLanguage;
+use App\Service\WiktionaryArticlesCategoriesLatvianService;
+use App\Service\WiktionaryArticlesCategoriesPolishService;
 
 require 'vendor/autoload.php';
 
-$query = new PronunciationQueryLatvianLanguage();
-$categoriesService = new WiktionaryArticlesCategoriesService($query);
+$queryLatvian = new PronunciationQueryLatvianLanguage();
+//$categoriesService = new WiktionaryArticlesCategoriesLatvianService($queryLatvian);
+
+$queryPolish = new PronunciationQueryPolishLanguage();
+$categoriesService = new WiktionaryArticlesCategoriesPolishService($queryLatvian, $queryPolish);
 
 $categoriesService->getArticlesByCategory();
