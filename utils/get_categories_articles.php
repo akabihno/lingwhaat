@@ -1,16 +1,17 @@
 <?php
 
+use App\Query\PronunciationQueryGermanLanguage;
 use App\Query\PronunciationQueryLatvianLanguage;
 use App\Query\PronunciationQueryPolishLanguage;
+use App\Service\WiktionaryArticlesCategoriesGermanService;
 use App\Service\WiktionaryArticlesCategoriesLatvianService;
 use App\Service\WiktionaryArticlesCategoriesPolishService;
 
 require 'vendor/autoload.php';
 
 $queryLatvian = new PronunciationQueryLatvianLanguage();
-//$categoriesService = new WiktionaryArticlesCategoriesLatvianService($queryLatvian);
+$queryGerman = new PronunciationQueryGermanLanguage();
 
-$queryPolish = new PronunciationQueryPolishLanguage();
-$categoriesService = new WiktionaryArticlesCategoriesPolishService($queryLatvian, $queryPolish);
+$categoriesService = new WiktionaryArticlesCategoriesGermanService($queryLatvian, $queryGerman);
 
 $categoriesService->getArticlesByCategory();

@@ -14,12 +14,4 @@ class PronunciationQueryPolishLanguage extends PronunciationQueryRussianLanguage
         return 'polish_links';
     }
 
-    public function add($name): void
-    {
-        $this->connect();
-        $query = 'INSERT INTO '.$this->getBaseTable().' (name) VALUES (:name)';
-
-        $this->insertNames($query, $name);
-    }
-
 }

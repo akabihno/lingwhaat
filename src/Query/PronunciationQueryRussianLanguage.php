@@ -40,4 +40,12 @@ class PronunciationQueryRussianLanguage extends AbstractQuery
         return 'russian_links';
     }
 
+    public function add($name): void
+    {
+        $this->connect();
+        $query = 'INSERT INTO '.$this->getBaseTable().' (name) VALUES (:name)';
+
+        $this->insertNames($query, $name);
+    }
+
 }
