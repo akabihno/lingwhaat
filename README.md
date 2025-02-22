@@ -27,6 +27,11 @@ List of all articles IPA data has been taken from:
 [u/ū](docs/Latvian/en_wiktionary_latvian_u.md),
 [v](docs/Latvian/en_wiktionary_latvian_v.md),
 [z/ž](docs/Latvian/en_wiktionary_latvian_z.md)
+* Polish
+[а/ą](docs/Polish/en_wiktionary_polish_a.md),
+[b](docs/Polish/en_wiktionary_polish_b.md),
+[c/ć](docs/Polish/en_wiktionary_polish_c.md),
+[d](docs/Polish/en_wiktionary_polish_d.md)
 * Russian:
 [а](docs/Russian/en_wiktionary_russian_а.md), 
 [б](docs/Russian/en_wiktionary_russian_б.md),
