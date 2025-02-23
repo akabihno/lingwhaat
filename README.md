@@ -31,7 +31,10 @@ List of all articles IPA data has been taken from:
 [а/ą](docs/Polish/en_wiktionary_polish_a.md),
 [b](docs/Polish/en_wiktionary_polish_b.md),
 [c/ć](docs/Polish/en_wiktionary_polish_c.md),
-[d](docs/Polish/en_wiktionary_polish_d.md)
+[d](docs/Polish/en_wiktionary_polish_d.md),
+[e/ę](docs/Polish/en_wiktionary_polish_e.md),
+[f](docs/Polish/en_wiktionary_polish_f.md),
+[g](docs/Polish/en_wiktionary_polish_g.md)
 * Russian:
 [а](docs/Russian/en_wiktionary_russian_а.md), 
 [б](docs/Russian/en_wiktionary_russian_б.md),

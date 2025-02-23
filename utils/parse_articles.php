@@ -8,6 +8,7 @@ use App\Query\PronunciationQueryLatvianLanguage;
 use App\Query\PronunciationQueryPolishLanguage;
 use App\Query\PronunciationQueryPortugueseLanguage;
 use App\Query\PronunciationQueryRussianLanguage;
+use App\Query\PronunciationQuerySerboCroatianLanguage;
 use App\Query\PronunciationQueryTagalogLanguage;
 use App\Service\WiktionaryArticlesIpaParserService;
 
@@ -17,7 +18,8 @@ use App\Service\WiktionaryArticlesIpaParserService;
 //$query = new PronunciationQueryGermanLanguage();
 //$query = new PronunciationQueryFrenchLanguage();
 //$query = new PronunciationQueryTagalogLanguage();
-$query = new PronunciationQueryPortugueseLanguage();
+//$query = new PronunciationQueryPortugueseLanguage();
+$query = new PronunciationQuerySerboCroatianLanguage();
 
 $wiktionaryArticlesService = new WiktionaryArticlesIpaParserService($query);
 
