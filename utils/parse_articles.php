@@ -10,6 +10,7 @@ use App\Query\PronunciationQueryPortugueseLanguage;
 use App\Query\PronunciationQueryRussianLanguage;
 use App\Query\PronunciationQuerySerboCroatianLanguage;
 use App\Query\PronunciationQueryTagalogLanguage;
+use App\Query\PronunciationQueryUkrainianLanguage;
 use App\Service\WiktionaryArticlesIpaParserService;
 
 // $query = new PronunciationQueryRussianLanguage();
@@ -19,7 +20,8 @@ use App\Service\WiktionaryArticlesIpaParserService;
 //$query = new PronunciationQueryFrenchLanguage();
 //$query = new PronunciationQueryTagalogLanguage();
 //$query = new PronunciationQueryPortugueseLanguage();
-$query = new PronunciationQuerySerboCroatianLanguage();
+//$query = new PronunciationQuerySerboCroatianLanguage();
+$query = new PronunciationQueryUkrainianLanguage();
 
 $wiktionaryArticlesService = new WiktionaryArticlesIpaParserService($query);
 
