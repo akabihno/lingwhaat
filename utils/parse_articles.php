@@ -2,26 +2,10 @@
 
 require 'vendor/autoload.php';
 
-use App\Query\PronunciationQueryFrenchLanguage;
-use App\Query\PronunciationQueryGermanLanguage;
-use App\Query\PronunciationQueryLatvianLanguage;
-use App\Query\PronunciationQueryPolishLanguage;
-use App\Query\PronunciationQueryPortugueseLanguage;
-use App\Query\PronunciationQueryRussianLanguage;
-use App\Query\PronunciationQuerySerboCroatianLanguage;
-use App\Query\PronunciationQueryTagalogLanguage;
-use App\Query\PronunciationQueryUkrainianLanguage;
+use App\Query\PronunciationQueryRomanianLanguage;
 use App\Service\WiktionaryArticlesIpaParserService;
 
-// $query = new PronunciationQueryRussianLanguage();
-//$query = new PronunciationQueryLatvianLanguage();
-//$query = new PronunciationQueryPolishLanguage();
-//$query = new PronunciationQueryGermanLanguage();
-//$query = new PronunciationQueryFrenchLanguage();
-//$query = new PronunciationQueryTagalogLanguage();
-//$query = new PronunciationQueryPortugueseLanguage();
-//$query = new PronunciationQuerySerboCroatianLanguage();
-$query = new PronunciationQueryUkrainianLanguage();
+$query = new PronunciationQueryRomanianLanguage();
 
 $wiktionaryArticlesService = new WiktionaryArticlesIpaParserService($query);
 
