@@ -28,7 +28,7 @@ class AbstractQuery
         }
     }
 
-    protected function fetch($sql): array
+    public function fetch($sql): array
     {
         $result = [];
         $stmt = $this->pdo->query($sql);
