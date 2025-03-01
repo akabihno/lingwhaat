@@ -28,7 +28,8 @@ class IndexView
 
     protected function drawSubmitForm(): void
     {
-        echo '<form action="process.php" method="POST">'.
+        echo '<form action="process.php" method="POST">
+                <b>Input text</b>'.
                 $this->drawLanguageInputField().'
                 <input type="submit">
             </form>';
@@ -36,15 +37,13 @@ class IndexView
 
     protected function drawLanguageInputField(): string
     {
-        $languageInputField = $this->layoutModel->freeTextField(
+        return $this->layoutModel->freeTextField(
             'language_input',
             'language_input',
             10,
             300,
             80
         );
-
-        return $languageInputField;
 
     }
 

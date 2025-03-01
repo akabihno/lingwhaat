@@ -3,19 +3,21 @@
 namespace App\Service;
 class TransliterationService
 {
-    protected TransliterationMappingService $mappingService;
-    public function transliterate($text) {
-        $result = '';
-
-        if ($this->textIsCyrillic($text)) {
-            $this->mappingService = new CyrillicLatinMappingService();
-            var_dump($this->mappingService->get());
-        } else {
-            var_dump('No transliteration needed');
+    public function transliterate($text): void
+    {
+        switch ($text) {
+            case $this->textIsLatin($text):
+                var_dump($text . ' is Latin');
+                break;
+            case $this->textIsCyrillic($text):
+                var_dump($text . ' is Cyrillic');
+                break;
+            case $this->textIsDevanagari($text):
+                var_dump($text . ' is Devanagari');
+                break;
+            default:
+                var_dump($text . 'is unknown');
         }
-
-
-        return $result;
     }
 
     protected function textIsLatin($text): bool
