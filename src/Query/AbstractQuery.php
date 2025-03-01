@@ -9,7 +9,7 @@ class AbstractQuery
 {
     const DB_PORT = 3327;
     protected $pdo;
-    protected function connect()
+    public function connect()
     {
         \Dotenv\Dotenv::createImmutable('/var/www/html/')->load();
 
