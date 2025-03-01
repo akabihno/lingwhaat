@@ -4,12 +4,12 @@ namespace App\Query;
 
 class PronunciationQueryPolishLanguage extends PronunciationQueryRussianLanguage
 {
-    protected function getBaseTable(): string
+    public function getBaseTable(): string
     {
         return 'pronunciation_polish_language';
     }
 
-    protected function getLinksTable(): string
+    public function getLinksTable(): string
     {
         return 'polish_links';
     }

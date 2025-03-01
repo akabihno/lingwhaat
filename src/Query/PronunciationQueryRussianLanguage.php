@@ -30,12 +30,12 @@ class PronunciationQueryRussianLanguage extends AbstractQuery
         $this->updateIpa($query, $ipa, $name);
     }
 
-    protected function getBaseTable(): string
+    public function getBaseTable(): string
     {
         return 'pronunciation_russian_language';
     }
 
-    protected function getLinksTable(): string
+    public function getLinksTable(): string
     {
         return 'russian_links';
     }
