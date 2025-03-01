@@ -75,7 +75,7 @@ class MarkdownGeneratorService
 
     protected function getFileName(string $language, string $letter): string
     {
-        return '/opt/lingwhaat/docs/Unsorted/'.self::WIKTIONARY_PREFIX.$language.'_'.$letter.'.md';
+        return '/var/www/html/docs/Unsorted/'.self::WIKTIONARY_PREFIX.$language.'_'.$letter.'.md';
     }
 
 
