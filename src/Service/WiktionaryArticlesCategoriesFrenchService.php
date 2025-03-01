@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Query\PronunciationQueryFrenchLanguage;
-use App\Query\PronunciationQueryGermanLanguage;
 use App\Query\PronunciationQueryLatvianLanguage;
 
 class WiktionaryArticlesCategoriesFrenchService extends WiktionaryArticlesCategoriesLatvianService
