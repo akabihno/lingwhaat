@@ -29,7 +29,7 @@ class IndexView
     protected function drawSubmitForm(): void
     {
         echo '<form action="process.php" method="POST">
-                <b>Input text</b>'.
+                <b>Input text:</b> '.
                 $this->drawLanguageInputField().'
                 <input type="submit">
             </form>';

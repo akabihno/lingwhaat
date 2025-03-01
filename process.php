@@ -10,4 +10,4 @@ $inputValidationController = new InputValidationController();
 
 $input = $inputValidationController->validate($_POST['language_input']);
 
-$transliterationService->transliterate($_POST);
+$transliterationService->transliterate($_POST['language_input']);
