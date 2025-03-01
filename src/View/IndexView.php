@@ -34,7 +34,7 @@ class IndexView
             </form>';
     }
 
-    protected function drawLanguageInputField(): void
+    protected function drawLanguageInputField(): string
     {
         $languageInputField = $this->layoutModel->freeTextField(
             'language_input',
@@ -44,7 +44,7 @@ class IndexView
             80
         );
 
-        echo $languageInputField;
+        return $languageInputField;
 
     }
 
