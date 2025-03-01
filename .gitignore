@@ -2,6 +2,5 @@
 .idea
 vendor
 mysql_data
-imports/import.sql
 composer.lock
 ssl-certs/*.pem
