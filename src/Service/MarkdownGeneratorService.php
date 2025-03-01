@@ -36,6 +36,8 @@ class MarkdownGeneratorService
 
         $linksTable = $languageQuery->getLinksTable();
 
+        $language = strtolower($language);
+
         foreach ($letters as $letter) {
 
             $query = 'SELECT DISTINCT link FROM lingwhaat.'.$linksTable.' WHERE name LIKE "'.$letter.'%"';
@@ -46,8 +48,10 @@ class MarkdownGeneratorService
             if (!empty($links)) {
                 $this->writeFileHeader($language, $letter);
 
-                foreach ($links as $link) {
-                    $this->writeLink($language, $letter, $link);
+                foreach ($links as $linkArr) {
+                    foreach ($linkArr as $link) {
+                        $this->writeLink($language, $letter, $link);
+                    }
                 }
             }
 
