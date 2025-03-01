@@ -27,14 +27,33 @@ List of all articles IPA data has been taken from:
 [u/ū](docs/Latvian/en_wiktionary_latvian_u.md),
 [v](docs/Latvian/en_wiktionary_latvian_v.md),
 [z/ž](docs/Latvian/en_wiktionary_latvian_z.md)
-* Polish
+* Polish:
 [а/ą](docs/Polish/en_wiktionary_polish_a.md),
 [b](docs/Polish/en_wiktionary_polish_b.md),
 [c/ć](docs/Polish/en_wiktionary_polish_c.md),
 [d](docs/Polish/en_wiktionary_polish_d.md),
 [e/ę](docs/Polish/en_wiktionary_polish_e.md),
 [f](docs/Polish/en_wiktionary_polish_f.md),
-[g](docs/Polish/en_wiktionary_polish_g.md)
+[g](docs/Polish/en_wiktionary_polish_g.md),
+[h](docs/Polish/en_wiktionary_polish_h.md),
+[i](docs/Polish/en_wiktionary_polish_i.md),
+[j](docs/Polish/en_wiktionary_polish_j.md),
+[k](docs/Polish/en_wiktionary_polish_k.md),
+[l/ł](docs/Polish/en_wiktionary_polish_l.md),
+[m](docs/Polish/en_wiktionary_polish_m.md),
+[n](docs/Polish/en_wiktionary_polish_n.md),
+[o/ó](docs/Polish/en_wiktionary_polish_o.md),
+[p](docs/Polish/en_wiktionary_polish_p.md),
+[q](docs/Polish/en_wiktionary_polish_q.md),
+[r](docs/Polish/en_wiktionary_polish_r.md),
+[s/ś](docs/Polish/en_wiktionary_polish_s.md),
+[t](docs/Polish/en_wiktionary_polish_t.md),
+[u](docs/Polish/en_wiktionary_polish_u.md),
+[v](docs/Polish/en_wiktionary_polish_v.md),
+[w](docs/Polish/en_wiktionary_polish_w.md),
+[x](docs/Polish/en_wiktionary_polish_x.md),
+[y](docs/Polish/en_wiktionary_polish_y.md),
+[z/ź/ż](docs/Polish/en_wiktionary_polish_z.md)
 * Russian:
 [а](docs/Russian/en_wiktionary_russian_а.md), 
 [б](docs/Russian/en_wiktionary_russian_б.md),
@@ -69,7 +88,6 @@ List of all articles IPA data has been taken from:
 
 ## Requirements
 * docker
-* gunzip
 
 ## Start
 
@@ -78,10 +96,6 @@ cp env.dist .env #adjust the values for your needs
 
 docker compose up -d
 
-gunzip -k imports/import.sql.gz
-
-docker exec -i database mysql -u root -ppassword -P 3327 -e "ALTER DATABASE lingwhaat CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;"
-docker exec -i database mysql -u root -ppassword -P 3327 -e "ALTER TABLE lingwhaat.pronunciation CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;"
 docker exec -i database mysql --default-character-set=utf8mb4 --force -u root -ppassword -P 3327 lingwhaat < imports/import.sql
 ```
 
