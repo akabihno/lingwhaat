@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/York|
+|https://en.wiktionary.org/wiki/y|
+|https://en.wiktionary.org/wiki/youtuber|
+|https://en.wiktionary.org/wiki/youtuberka|
+|https://en.wiktionary.org/wiki/yeti|
+|https://en.wiktionary.org/wiki/yakuza|
+|https://en.wiktionary.org/wiki/ypsylon|
+|https://en.wiktionary.org/wiki/yerba%20mate|
+|https://en.wiktionary.org/wiki/YouTube|
+|https://en.wiktionary.org/wiki/ylid|

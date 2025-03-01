@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Quito|
+|https://en.wiktionary.org/wiki/queer|
+|https://en.wiktionary.org/wiki/Quaoar|
+|https://en.wiktionary.org/wiki/qui%20pro%20quo|
+|https://en.wiktionary.org/wiki/quiz|
+|https://en.wiktionary.org/wiki/quetzal|
+|https://en.wiktionary.org/wiki/quiche|
+|https://en.wiktionary.org/wiki/queerowy|
+|https://en.wiktionary.org/wiki/Quebec|
+|https://en.wiktionary.org/wiki/quorum|
+|https://en.wiktionary.org/wiki/quasi-|
+|https://en.wiktionary.org/wiki/quizowy|
+|https://en.wiktionary.org/wiki/quad|

@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/x.|
+|https://en.wiktionary.org/wiki/xtałt|
+|https://en.wiktionary.org/wiki/xże|
+|https://en.wiktionary.org/wiki/xiężna|
+|https://en.wiktionary.org/wiki/xżna|
+|https://en.wiktionary.org/wiki/xiężyc|
+|https://en.wiktionary.org/wiki/xiążę|
+|https://en.wiktionary.org/wiki/xiążka|
+|https://en.wiktionary.org/wiki/xięga|
+|https://en.wiktionary.org/wiki/xiądz|
+|https://en.wiktionary.org/wiki/xenia|
+|https://en.wiktionary.org/wiki/Xbox|
