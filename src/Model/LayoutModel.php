@@ -26,7 +26,7 @@ class LayoutModel
         );
     }
 
-    protected function validateInput($input)
+    public function validateInput($input)
     {
 
     }

@@ -14,7 +14,7 @@ class IndexView
     public function drawHtml(): void
     {
         $this->drawFavicon();
-        $this->drawLanguageInputField();
+        $this->drawSubmitForm();
     }
 
     protected function drawFavicon(): void
@@ -26,6 +26,14 @@ class IndexView
 
     }
 
+    protected function drawSubmitForm(): void
+    {
+        echo '<form action="process.php" method="POST">'.
+                $this->drawLanguageInputField().'
+                <input type="submit">
+            </form>';
+    }
+
     protected function drawLanguageInputField(): void
     {
         $languageInputField = $this->layoutModel->freeTextField(
@@ -33,16 +41,11 @@ class IndexView
             'language_input',
             10,
             300,
-            100
+            80
         );
 
         echo $languageInputField;
 
-    }
-
-    protected function drawPhpInfo(): void
-    {
-        phpinfo();
     }
 
 }
