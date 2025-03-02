@@ -27,7 +27,11 @@ class MarkdownGeneratorService
             throw new \Exception("Missing letters");
         }
 
-        $language = ucfirst($this->args[1]);
+        if ($this->args[1] == 'serbocroatian') {
+            $language = 'SerboCroatian';
+        } else {
+            $language = ucfirst($this->args[1]);
+        }
         $letters = explode(',', $this->args[2]);
 
         $queryClassName = 'App\Query\PronunciationQuery'.$language.'Language';
