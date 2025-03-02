@@ -132,10 +132,10 @@ cp env.dist .env #adjust the values for your needs
 docker compose up -d
 ```
 ```bash
-dotenv -e .env -- docker exec -i database mysql --default-character-set=utf8mb4 --force -u root -p$MYSQL_ROOT_PASSWORD -P $MYSQL_PORT lingwhaat < imports/import.sql
+dotenv -e .env -- docker exec -i database mysql --default-character-set=utf8mb4 --force -u root -ppassword -P 3327 lingwhaat < imports/import.sql
 ```
 ```bash
-dotenv -e .env -- docker exec -i database mysql --default-character-set=utf8mb4 --force -u root -p$MYSQL_ROOT_PASSWORD -P $MYSQL_PORT lingwhaat < imports/create_web_user.sql
+dotenv -e .env -- docker exec -i database mysql --default-character-set=utf8mb4 --force -u root -ppassword -P 3327 lingwhaat < imports/create_web_user.sql
 ```
 
-Note: database listens on port 3327 by default, if you change it in .env, make sure to adjust in my.cnf too
+Note: database listens on port 3327 by default, if you wish to change it, make sure to adjust it in my.cnf
