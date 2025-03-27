@@ -19,6 +19,10 @@
     "php": "^8.2",
     "vlucas/phpdotenv": ">=v5.6.1",
     "ivopetkov/html5-dom-document-php": "2.*",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "symfony/orm-pack": "^v2.4.1"
+  },
+  "require-dev": {
+    "symfony/maker-bundle": "^v1.62.1"
   }
 }
