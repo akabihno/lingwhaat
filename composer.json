@@ -21,7 +21,7 @@
     "ivopetkov/html5-dom-document-php": "2.*",
     "ext-pdo": "*",
     "symfony/orm-pack": "^v2.4.1",
-    "doctrine/dbal": "^4.2.3"
+    "doctrine/dbal": "^3.9.4"
   },
   "require-dev": {
     "symfony/maker-bundle": "^v1.62.1"
