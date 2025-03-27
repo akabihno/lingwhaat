@@ -120,22 +120,22 @@ List of all articles IPA data has been taken from:
 ## Start
 
 ```bash
-apt install npm
-```
-```bash
-npm install -g dotenv-cli
-```
-```bash
 cp env.dist .env #adjust the values for your needs
 ```
 ```bash
 docker compose up -d
 ```
 ```bash
-dotenv -e .env -- docker exec -i database mysql --default-character-set=utf8mb4 --force -u root -ppassword -P 3327 lingwhaat < imports/import.sql
+cd /opt/lingwhaat #or other location where you have the project
 ```
 ```bash
-dotenv -e .env -- docker exec -i database mysql --default-character-set=utf8mb4 --force -u root -ppassword -P 3327 lingwhaat < imports/create_web_user.sql
+export $(grep -v '^#' .env | xargs)
+```
+```bash
+docker exec -i database mysql --default-character-set=utf8mb4 --force -u root -p"${MYSQL_ROOT_PASSWORD}" -P "${MYSQL_PORT}" "${MYSQL_DATABASE}" < imports/import.sql
+```
+```bash
+envsubst < imports/create_web_user.sql | docker exec -i database mysql --default-character-set=utf8mb4 --force -u root -p"${MYSQL_ROOT_PASSWORD}" -P "${MYSQL_PORT}" "${MYSQL_DATABASE}"
 ```
 
 Note: database listens on port 3327 by default, if you wish to change it, make sure to adjust it in my.cnf
