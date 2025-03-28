@@ -22,7 +22,7 @@ services:
     container_name: database
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: lingwhaat
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     network_mode: host
     volumes:
       - ./mysql_data:/var/lib/mysql

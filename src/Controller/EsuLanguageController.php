@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\EsuLanguageEntity;
+use App\Repository\EsuLanguageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,6 +19,11 @@ class EsuLanguageController extends AbstractController
         //$entityManager->persist($language);
 
         //$entityManager->flush();
+
+        $esuLanguageRepository = new EsuLanguageRepository();
+        $result = $esuLanguageRepository->findAllOrderedByName();
+
+        echo $result;
 
         return new Response('Saved new language record with id '.$language->getId());
     }
