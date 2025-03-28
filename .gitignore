@@ -13,11 +13,8 @@ mysql_data
 .idea
 
 #Symfony
-/var/
 /config/secrets/
-/.env.local
 .env.*.local
-/.env.local.php
 ###> symfony/framework-bundle ###
 /.env.local
 /.env.local.php
