@@ -1,10 +1,18 @@
 <?php
 
 namespace App\Service;
+use App\Controller\EsuLanguageController;
+
 class TransliterationService
 {
+    public function __construct(protected EsuLanguageController $esuLanguageController)
+    {
+    }
     public function transliterate($text): void
     {
+        $test = $this->esuLanguageController->getLanguageData();
+        echo $test;
+
         switch ($text) {
             case $this->textIsLatin($text):
                 var_dump($text . ' is Latin');
