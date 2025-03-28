@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\EsuLanguageEntity;
-use App\Repository\EsuLanguageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 class EsuLanguageController extends AbstractController
 {
+    #[Route('/language', name: 'get_language', methods: ['GET', 'POST'])]
     public function getLanguageData(EntityManagerInterface $entityManager): Response
     {
         $language = new EsuLanguageEntity();
@@ -20,7 +20,7 @@ class EsuLanguageController extends AbstractController
 
         //$entityManager->flush();
 
-        $esuLanguageRepository = $entityManager->getRepository(EsuLanguageRepository::class);
+        $esuLanguageRepository = $entityManager->getRepository(EsuLanguageEntity::class);
         $result = $esuLanguageRepository->findAllOrderedByName();
 
         echo $result;
