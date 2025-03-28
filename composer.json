@@ -40,26 +40,34 @@
   },
   "require": {
     "php": "^8.2",
-    "vlucas/phpdotenv": ">=v5.6.1",
-    "ivopetkov/html5-dom-document-php": "2.*",
     "ext-pdo": "*",
-    "symfony/orm-pack": "^v2.4.1",
     "doctrine/dbal": "^3.9.4",
-    "symfony/framework-bundle": "^v7.2.3",
-    "symfony/http-kernel": "^v7.2.3",
-    "symfony/http-foundation": "^v7.2.3",
-    "symfony/routing": "^v7.2.3",
-    "symfony/dependency-injection": "^v7.2.3",
+    "doctrine/doctrine-bundle": "^2.14",
+    "doctrine/doctrine-migrations-bundle": "^3.4",
+    "doctrine/orm": "^3.3",
+    "ivopetkov/html5-dom-document-php": "^2.8",
     "symfony/config": "^v7.2.3",
+    "symfony/console": "^7.2.5",
+    "symfony/dependency-injection": "^7.2.5",
     "symfony/dotenv": "^v7.2.0",
-    "symfony/console": "^v7.2.1",
-    "twig/twig": "^v3.20.0",
-    "symfony/twig-bundle": "^v7.2.0",
-    "symfony/flex": "^2",
+    "symfony/flex": "^2.5",
+    "symfony/framework-bundle": "^7.2.5",
+    "symfony/http-foundation": "^7.2.5",
+    "symfony/http-kernel": "^7.2.5",
+    "symfony/routing": "^v7.2.3",
     "symfony/runtime": "7.2.*",
-    "symfony/yaml": "7.2.*"
+    "symfony/twig-bundle": "^v7.2.0",
+    "symfony/yaml": "7.2.*",
+    "twig/twig": "^v3.20.0",
+    "vlucas/phpdotenv": ">=v5.6.1"
   },
   "require-dev": {
     "symfony/maker-bundle": "^v1.62.1"
+  },
+  "scripts": {
+    "auto-scripts": {
+      "cache:clear": "symfony-cmd",
+      "assets:install %PUBLIC_DIR%": "symfony-cmd"
+    }
   }
 }
