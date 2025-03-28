@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EsuLanguageController extends AbstractController
 {
-    public function getLanguageData(): Response
+    public function getLanguageData(EntityManagerInterface $entityManager): Response
     {
         $language = new EsuLanguageEntity();
         $language->setId(1);
@@ -20,7 +20,7 @@ class EsuLanguageController extends AbstractController
 
         //$entityManager->flush();
 
-        $esuLanguageRepository = new EsuLanguageRepository();
+        $esuLanguageRepository = $entityManager->getRepository(EsuLanguageRepository::class);
         $result = $esuLanguageRepository->findAllOrderedByName();
 
         echo $result;

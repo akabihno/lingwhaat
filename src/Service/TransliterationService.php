@@ -2,6 +2,7 @@
 
 namespace App\Service;
 use App\Controller\EsuLanguageController;
+use Doctrine\ORM\EntityManagerInterface;
 
 class TransliterationService
 {
@@ -10,7 +11,7 @@ class TransliterationService
     }
     public function transliterate($text): void
     {
-        $test = $this->esuLanguageController->getLanguageData();
+        $test = $this->esuLanguageController->getLanguageData(new EntityManagerInterface());
         echo $test;
 
         switch ($text) {
