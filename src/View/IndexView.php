@@ -28,7 +28,7 @@ class IndexView
 
     protected function drawSubmitForm(): void
     {
-        echo '<form action="language" method="POST">
+        echo '<form action="/language" method="POST">
                 <b>Input text:</b> '.
                 $this->drawLanguageInputField().'
                 <input type="submit">
