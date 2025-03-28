@@ -6,12 +6,15 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class TransliterationService
 {
-    public function __construct(protected EsuLanguageController $esuLanguageController)
+    public function __construct(
+        protected EsuLanguageController $esuLanguageController,
+        protected EntityManagerInterface $entityManager
+    )
     {
     }
     public function transliterate($text): void
     {
-        $test = $this->esuLanguageController->getLanguageData(new EntityManagerInterface());
+        $test = $this->esuLanguageController->getLanguageData($this->entityManager);
         echo $test;
 
         switch ($text) {
