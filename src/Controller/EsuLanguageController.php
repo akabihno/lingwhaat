@@ -17,7 +17,7 @@ class EsuLanguageController extends AbstractController
         //$esuLanguageRepository = $entityManager->getRepository(EsuLanguageEntity::class);
         //$result = $esuLanguageRepository->findAllOrderedByName();
 
-        return new Response($_ENV['DATABASE_URL']);
+        return new Response($_SERVER['DATABASE_URL']);
     }
 
 }
