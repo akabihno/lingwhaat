@@ -19,7 +19,7 @@ class EsuLanguageController extends AbstractController
         $dotenv->loadEnv(dirname(__DIR__, 2).'/.env');
     }
 
-    #[Route('/language')]
+    #[Route('/language', name: 'get_language', methods: ['GET'])]
     public function getLanguageData(EntityManagerInterface $entityManager): Response
     {
 

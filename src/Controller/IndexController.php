@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class IndexController extends AbstractController
 {
     const TEXT_PROMPT = 'Enter text to detect language';
-    #[Route('/')]
+    #[Route('/', name: 'index', methods: ['GET'])]
     public function index(): Response
     {
         return $this->render('index.html.twig', [
