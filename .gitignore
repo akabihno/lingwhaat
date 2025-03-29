@@ -1,6 +1,26 @@
+#General
 .env
-.idea
-vendor
-mysql_data
-composer.lock
 ssl-certs/*.pem
+
+#PHP
+vendor
+composer.lock
+
+#MySQL
+mysql_data
+
+#IDE
+.idea
+
+#Symfony
+/config/secrets/
+.env.*.local
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###

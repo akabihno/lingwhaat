@@ -112,10 +112,39 @@ List of all articles IPA data has been taken from:
 [э](docs/Russian/en_wiktionary_russian_э.md),
 [ю](docs/Russian/en_wiktionary_russian_ю.md),
 [я](docs/Russian/en_wiktionary_russian_я.md)
+* Serbo-croatian:
+[а](docs/SerboCroatian/en_wiktionary_serbocroatian_a.md),
+[b](docs/SerboCroatian/en_wiktionary_serbocroatian_b.md),
+[c](docs/SerboCroatian/en_wiktionary_serbocroatian_c.md),
+[d](docs/SerboCroatian/en_wiktionary_serbocroatian_d.md),
+[dž](docs/SerboCroatian/en_wiktionary_serbocroatian_dž.md),
+[e](docs/SerboCroatian/en_wiktionary_serbocroatian_e.md),
+[f](docs/SerboCroatian/en_wiktionary_serbocroatian_f.md),
+[g](docs/SerboCroatian/en_wiktionary_serbocroatian_g.md),
+[h](docs/SerboCroatian/en_wiktionary_serbocroatian_h.md),
+[i](docs/SerboCroatian/en_wiktionary_serbocroatian_i.md),
+[j](docs/SerboCroatian/en_wiktionary_serbocroatian_j.md),
+[k](docs/SerboCroatian/en_wiktionary_serbocroatian_k.md),
+[l](docs/SerboCroatian/en_wiktionary_serbocroatian_l.md),
+[lj](docs/SerboCroatian/en_wiktionary_serbocroatian_lj.md),
+[m](docs/SerboCroatian/en_wiktionary_serbocroatian_m.md),
+[n](docs/SerboCroatian/en_wiktionary_serbocroatian_n.md),
+[nj](docs/SerboCroatian/en_wiktionary_serbocroatian_nj.md),
+[o](docs/SerboCroatian/en_wiktionary_serbocroatian_o.md),
+[p](docs/SerboCroatian/en_wiktionary_serbocroatian_p.md),
+[r](docs/SerboCroatian/en_wiktionary_serbocroatian_r.md),
+[s](docs/SerboCroatian/en_wiktionary_serbocroatian_s.md),
+[t](docs/SerboCroatian/en_wiktionary_serbocroatian_t.md),
+[u](docs/SerboCroatian/en_wiktionary_serbocroatian_u.md),
+[v](docs/SerboCroatian/en_wiktionary_serbocroatian_v.md),
+[z](docs/SerboCroatian/en_wiktionary_serbocroatian_z.md),
+[ć](docs/SerboCroatian/en_wiktionary_serbocroatian_ć.md),
+[đ](docs/SerboCroatian/en_wiktionary_serbocroatian_đ.md),
+[š](docs/SerboCroatian/en_wiktionary_serbocroatian_š.md),
+[ž](docs/SerboCroatian/en_wiktionary_serbocroatian_ž.md)
 
 ## Requirements
 * docker
-* npm
 
 ## Start
 
