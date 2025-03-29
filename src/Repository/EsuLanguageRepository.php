@@ -2,9 +2,9 @@
 
 namespace App\Repository;
 
-use Doctrine\ORM\ServiceEntityRepository;
+use Doctrine\ORM\EntityRepository;
 
-class EsuLanguageRepository extends ServiceEntityRepository
+class EsuLanguageRepository extends EntityRepository
 {
     public function findAllOrderedByName()
     {
