@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Hello</title>
-</head>
-<body>
-<h1>Index {{ test }}</h1>
-</body>
-</html>
+{% extends 'base.html.twig' %}
+
+{% block title %}Language Detection Form{% endblock %}
+
+{% block body %}
+    <h1>{{ prompt }}</h1>
+
+    <form action="{{ path('get_language') }}" method="get">
+        <label for="languageInput">Text:</label>
+        <input type="text" id="languageInput" name="language" required>
+        <button type="submit">Submit</button>
+    </form>
+{% endblock %}

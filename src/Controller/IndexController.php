@@ -8,13 +8,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IndexController extends AbstractController
 {
+    const TEXT_PROMPT = 'Enter text to detect language';
     #[Route('/')]
     public function index(): Response
     {
-        $number = random_int(0, 100);
-
         return $this->render('index.html.twig', [
-            'test' => $number,
+            'prompt' => self::TEXT_PROMPT,
         ]);
     }
 
