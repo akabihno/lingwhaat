@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\EsuLanguageEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 
 class EsuLanguageController extends AbstractController
