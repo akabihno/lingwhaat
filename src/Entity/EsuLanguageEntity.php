@@ -6,6 +6,7 @@ use App\Repository\EsuLanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EsuLanguageRepository::class)]
+#[ORM\Table(name: "pronunciation_esu_language")]
 class EsuLanguageEntity
 {
     #[ORM\Id]
