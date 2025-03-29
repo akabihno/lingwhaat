@@ -10,14 +10,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class EsuLanguageController extends AbstractController
 {
-    #[Route('/language', name: 'get_language', methods: ['GET', 'POST'])]
+    #[Route('/language')]
     public function getLanguageData(EntityManagerInterface $entityManager): Response
     {
 
-        //$esuLanguageRepository = $entityManager->getRepository(EsuLanguageEntity::class);
-        //$result = $esuLanguageRepository->findAllOrderedByName();
+        $esuLanguageRepository = $entityManager->getRepository(EsuLanguageEntity::class);
+        $result = $esuLanguageRepository->findAllOrderedByName();
 
-        return new Response($_SERVER['DATABASE_URL']);
+        return new Response($result);
     }
 
 }
