@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\Dotenv\Dotenv;
 
-require dirname(__DIR__).'/vendor/autoload.php';
+require dirname(__DIR__, 2).'/vendor/autoload.php';
 
 abstract class AbstractController
 {
