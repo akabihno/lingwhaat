@@ -6,11 +6,11 @@ use Doctrine\ORM\EntityRepository;
 
 class EsuLanguageRepository extends EntityRepository
 {
-    public function findAllOrderedByName()
+    public function findByName($name)
     {
         $qb = $this->createQueryBuilder('e')
-            ->where('e.id = :id')
-            ->setParameter('id', 1);
+            ->where('e.name = :name')
+            ->setParameter('name', $name);
 
         $query = $qb->getQuery();
 
