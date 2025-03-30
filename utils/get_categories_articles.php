@@ -1,14 +1,14 @@
 <?php
 
+use App\Query\PronunciationQueryItalianLanguage;
 use App\Query\PronunciationQueryLatvianLanguage;
-use App\Query\PronunciationQueryRomanianLanguage;
-use App\Service\WiktionaryArticlesCategoriesRomanianService;
+use App\Service\WiktionaryArticlesCategoriesItalianService;
 
 require 'vendor/autoload.php';
 
 $queryLatvian = new PronunciationQueryLatvianLanguage();
-$queryRomanian = new PronunciationQueryRomanianLanguage();
+$queryItalian = new PronunciationQueryItalianLanguage();
 
-$categoriesService = new WiktionaryArticlesCategoriesRomanianService($queryLatvian, $queryRomanian);
+$categoriesService = new WiktionaryArticlesCategoriesItalianService($queryLatvian, $queryItalian);
 
 $categoriesService->getArticlesByCategory();

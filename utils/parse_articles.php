@@ -2,10 +2,10 @@
 
 require 'vendor/autoload.php';
 
-use App\Query\PronunciationQueryRomanianLanguage;
+use App\Query\PronunciationQueryItalianLanguage;
 use App\Service\WiktionaryArticlesIpaParserService;
 
-$query = new PronunciationQueryRomanianLanguage();
+$query = new PronunciationQueryItalianLanguage();
 
 $wiktionaryArticlesService = new WiktionaryArticlesIpaParserService($query);
 
