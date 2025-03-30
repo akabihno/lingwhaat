@@ -12,24 +12,20 @@ use Symfony\Component\Dotenv\Dotenv;
 
 require dirname(__DIR__, 2).'/vendor/autoload.php';
 
-class LanguageDetectionController extends AbstractController
+class EsuLanguageController extends AbstractController
 {
-    public function __construct(
-        protected EntityManagerInterface $entityManager,
-        protected EsuLanguageEntity $esuLanguageEntity,
-        protected $esuLanguageRepository,
-    )
+    public function __construct()
     {
         $dotenv = new Dotenv();
         $dotenv->loadEnv(dirname(__DIR__, 2).'/.env');
-
-        $this->esuLanguageRepository = $entityManager->getRepository(EsuLanguageEntity::class);
     }
 
     #[Route('/language', name: 'get_language', methods: ['GET'])]
-    public function getLanguageData(): Response
+    public function getLanguageData(EntityManagerInterface $entityManager): Response
     {
-        $result = $this->esuLanguageRepository->findByName('uluaq');
+        /* @var EsuLanguageRepository  $esuLanguageRepository*/
+        $esuLanguageRepository = $entityManager->getRepository(EsuLanguageEntity::class);
+        $result = $esuLanguageRepository->findByName('uluaq');
 
         /* @var EsuLanguageEntity  $language*/
         foreach ($result as $language) {
