@@ -265,6 +265,35 @@ List of all articles IPA data has been taken from:
 [đ](docs/SerboCroatian/en_wiktionary_serbocroatian_đ.md),
 [š](docs/SerboCroatian/en_wiktionary_serbocroatian_š.md),
 [ž](docs/SerboCroatian/en_wiktionary_serbocroatian_ž.md)
+* Tagalog
+[a](docs/Tagalog/en_wiktionary_tagalog_a.md),
+[b](docs/Tagalog/en_wiktionary_tagalog_b.md),
+[c](docs/Tagalog/en_wiktionary_tagalog_c.md),
+[d](docs/Tagalog/en_wiktionary_tagalog_d.md),
+[e](docs/Tagalog/en_wiktionary_tagalog_e.md),
+[f](docs/Tagalog/en_wiktionary_tagalog_f.md),
+[g](docs/Tagalog/en_wiktionary_tagalog_g.md),
+[h](docs/Tagalog/en_wiktionary_tagalog_h.md),
+[i](docs/Tagalog/en_wiktionary_tagalog_i.md),
+[j](docs/Tagalog/en_wiktionary_tagalog_j.md),
+[k](docs/Tagalog/en_wiktionary_tagalog_k.md),
+[l](docs/Tagalog/en_wiktionary_tagalog_l.md),
+[m](docs/Tagalog/en_wiktionary_tagalog_m.md),
+[n](docs/Tagalog/en_wiktionary_tagalog_n.md),
+[ñ](docs/Tagalog/en_wiktionary_tagalog_ñ.md),
+[ng](docs/Tagalog/en_wiktionary_tagalog_ng.md),
+[o](docs/Tagalog/en_wiktionary_tagalog_o.md),
+[p](docs/Tagalog/en_wiktionary_tagalog_p.md),
+[q](docs/Tagalog/en_wiktionary_tagalog_q.md),
+[r](docs/Tagalog/en_wiktionary_tagalog_r.md),
+[s](docs/Tagalog/en_wiktionary_tagalog_s.md),
+[t](docs/Tagalog/en_wiktionary_tagalog_t.md),
+[u](docs/Tagalog/en_wiktionary_tagalog_u.md),
+[v](docs/Tagalog/en_wiktionary_tagalog_v.md),
+[w](docs/Tagalog/en_wiktionary_tagalog_w.md),
+[x](docs/Tagalog/en_wiktionary_tagalog_x.md),
+[y](docs/Tagalog/en_wiktionary_tagalog_y.md),
+[z](docs/Tagalog/en_wiktionary_tagalog_z.md)
 
 ## Requirements
 * docker
