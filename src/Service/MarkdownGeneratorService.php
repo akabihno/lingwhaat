@@ -85,7 +85,7 @@ class MarkdownGeneratorService
 
     protected function echoLetterLineForMarkdown(string $language, string $letter): void
     {
-        echo sprintf("[%s](docs/%s/%s%s_a.md),", $letter, ucfirst($language), self::WIKTIONARY_PREFIX, $language)."\n";
+        echo sprintf("[%s](docs/%s/%s%s_%s.md),", $letter, ucfirst($language), self::WIKTIONARY_PREFIX, $language, $letter)."\n";
     }
 
 
