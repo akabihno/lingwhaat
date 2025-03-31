@@ -27,6 +27,8 @@ class LanguageDetectionService
     const SERBOCROATIAN_LANGUAGE_CODE = 'sh';
     const TAGALOG_LANGUAGE_NAME = 'Tagalog';
     const TAGALOG_LANGUAGE_CODE = 'tl';
+    const UKRAINIAN_LANGUAGE_NAME = 'Ukrainian';
+    const UKRAINIAN_LANGUAGE_CODE = 'uk';
     const ESU_LANGUAGE_NAME = 'Esu';
     const ESU_LANGUAGE_CODE = 'isu';
     const LANGUAGE_NOT_FOUND = 'Language not found';
@@ -80,6 +82,10 @@ class LanguageDetectionService
                 if ($this->checkTagalogLanguage($word)) {
                     $language = self::TAGALOG_LANGUAGE_NAME;
                     $code = self::TAGALOG_LANGUAGE_CODE;
+                }
+                if ($this->checkUkrainianLanguage($word)) {
+                    $language = self::UKRAINIAN_LANGUAGE_NAME;
+                    $code = self::UKRAINIAN_LANGUAGE_CODE;
                 }
                 if ($this->checkEsuLanguage($word)) {
                     $language = self::ESU_LANGUAGE_NAME;
@@ -140,6 +146,11 @@ class LanguageDetectionService
     protected function checkTagalogLanguage(string $word): bool
     {
         return $this->checkLanguage('get_tagalog_word', $word);
+    }
+
+    protected function checkUkrainianLanguage(string $word): bool
+    {
+        return $this->checkLanguage('get_ukrainian_word', $word);
     }
 
     protected function checkEsuLanguage(string $word): bool
