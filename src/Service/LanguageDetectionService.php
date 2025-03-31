@@ -20,9 +20,13 @@ class LanguageDetectionService
     const PORTUGUESE_LANGUAGE_NAME = 'Portuguese';
     const PORTUGUESE_LANGUAGE_CODE = 'pt';
     const ROMANIAN_LANGUAGE_NAME = 'Romanian';
+    const ROMANIAN_LANGUAGE_CODE = 'ro';
     const RUSSIAN_LANGUAGE_NAME = 'Russian';
     const RUSSIAN_LANGUAGE_CODE = 'ru';
-    const ROMANIAN_LANGUAGE_CODE = 'ro';
+    const SERBOCROATIAN_LANGUAGE_NAME = 'Serbo-Croatian';
+    const SERBOCROATIAN_LANGUAGE_CODE = 'sh';
+    const TAGALOG_LANGUAGE_NAME = 'Tagalog';
+    const TAGALOG_LANGUAGE_CODE = 'tl';
     const ESU_LANGUAGE_NAME = 'Esu';
     const ESU_LANGUAGE_CODE = 'isu';
     const LANGUAGE_NOT_FOUND = 'Language not found';
@@ -68,6 +72,14 @@ class LanguageDetectionService
                 if ($this->checkRussianLanguage($word)) {
                     $language = self::RUSSIAN_LANGUAGE_NAME;
                     $code = self::RUSSIAN_LANGUAGE_CODE;
+                }
+                if ($this->checkSerboCroatianLanguage($word)) {
+                    $language = self::SERBOCROATIAN_LANGUAGE_NAME;
+                    $code = self::SERBOCROATIAN_LANGUAGE_CODE;
+                }
+                if ($this->checkTagalogLanguage($word)) {
+                    $language = self::TAGALOG_LANGUAGE_NAME;
+                    $code = self::TAGALOG_LANGUAGE_CODE;
                 }
                 if ($this->checkEsuLanguage($word)) {
                     $language = self::ESU_LANGUAGE_NAME;
@@ -118,6 +130,16 @@ class LanguageDetectionService
     protected function checkRussianLanguage(string $word): bool
     {
         return $this->checkLanguage('get_russian_word', $word);
+    }
+
+    protected function checkSerboCroatianLanguage(string $word): bool
+    {
+        return $this->checkLanguage('get_serbocroatian_word', $word);
+    }
+
+    protected function checkTagalogLanguage(string $word): bool
+    {
+        return $this->checkLanguage('get_tagalog_word', $word);
     }
 
     protected function checkEsuLanguage(string $word): bool
