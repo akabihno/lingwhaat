@@ -25,7 +25,7 @@ class EsuLanguageEntity
         return $this->id;
     }
 
-    public function setId(int $id): self
+    public function setId(int $id): EsuLanguageEntity
     {
         $this->id = $id;
         return $this;
@@ -36,7 +36,7 @@ class EsuLanguageEntity
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): EsuLanguageEntity
     {
         $this->name = $name;
         return $this;
@@ -47,7 +47,7 @@ class EsuLanguageEntity
         return $this->ipa;
     }
 
-    public function setIpa(string $ipa): self
+    public function setIpa(string $ipa): EsuLanguageEntity
     {
         $this->ipa = $ipa;
         return $this;
