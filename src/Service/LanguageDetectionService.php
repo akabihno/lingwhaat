@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -19,7 +18,7 @@ class LanguageDetectionService
     {
     }
 
-    public function process($languageInput): Response
+    public function process($languageInput): array
     {
         $language = self::LANGUAGE_NOT_FOUND;
         $code = null;
@@ -42,10 +41,7 @@ class LanguageDetectionService
             }
         }
 
-        return $this->render('response.html.twig', [
-            'language' => $language,
-            'code' => $code
-        ]);
+        return ['language' => $language, 'code' => $code];
     }
 
     protected function checkFrenchLanguage(string $word): bool

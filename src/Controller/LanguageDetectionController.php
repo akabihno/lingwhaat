@@ -15,7 +15,12 @@ class LanguageDetectionController extends AbstractController
     #[Route('/language', name: 'get_language', methods: ['GET'])]
     public function run(): Response
     {
-        return $this->languageDetectionService->process($_GET['get_language']);
+        $languageAndCode = $this->languageDetectionService->process($_GET['get_language']);
+
+        return $this->render('response.html.twig', [
+            'language' => $languageAndCode['language'],
+            'code' => $languageAndCode['code']
+        ]);
     }
 
 
