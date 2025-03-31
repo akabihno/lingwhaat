@@ -17,7 +17,7 @@ class LanguageDetectionController extends AbstractController
     #[Route('/language', name: 'get_language', methods: ['GET'])]
     public function process(): Response
     {
-        $response = self::LANGUAGE_NOT_FOUND;
+        $responseContent = self::LANGUAGE_NOT_FOUND;
 
         $languageInput = $_GET['get_language'];
 
@@ -26,11 +26,12 @@ class LanguageDetectionController extends AbstractController
                 $url = $this->urlGenerator->generate('get_esu_word', ['get_esu_word' => $word], UrlGeneratorInterface::ABSOLUTE_URL);
 
                 $response = $this->httpClient->request('GET', $url);
+                $responseContent = $response->getContent();
             }
         }
 
         return $this->render('response.html.twig', [
-            'response' => $response,
+            'response' => $responseContent,
         ]);
 
     }
