@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use App\Repository\RomanianLanguageRepository;
+use App\Repository\RussianLanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: RomanianLanguageRepository::class)]
+#[ORM\Entity(repositoryClass: RussianLanguageRepository::class)]
 #[ORM\Table(name: "pronunciation_russian_language")]
 class RussianLanguageEntity
 {
