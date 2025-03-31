@@ -4,7 +4,7 @@ namespace App\Repository;
 
 use App\Repository\LanguageRepository;
 
-class EsuLanguageRepository extends LanguageRepository
+class GermanLanguageRepository extends LanguageRepository
 {
 
 }
