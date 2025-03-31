@@ -11,6 +11,18 @@ class LanguageDetectionService
     const FRENCH_LANGUAGE_CODE = 'fr';
     const GERMAN_LANGUAGE_NAME = 'German';
     const GERMAN_LANGUAGE_CODE = 'de';
+    const ITALIAN_LANGUAGE_NAME = 'Italian';
+    const ITALIAN_LANGUAGE_CODE = 'it';
+    const LATVIAN_LANGUAGE_NAME = 'Latvian';
+    const LATVIAN_LANGUAGE_CODE = 'lv';
+    const POLISH_LANGUAGE_NAME = 'Polish';
+    const POLISH_LANGUAGE_CODE = 'pl';
+    const PORTUGUESE_LANGUAGE_NAME = 'Portuguese';
+    const PORTUGUESE_LANGUAGE_CODE = 'pt';
+    const ROMANIAN_LANGUAGE_NAME = 'Romanian';
+    const RUSSIAN_LANGUAGE_NAME = 'Russian';
+    const RUSSIAN_LANGUAGE_CODE = 'ru';
+    const ROMANIAN_LANGUAGE_CODE = 'ro';
     const ESU_LANGUAGE_NAME = 'Esu';
     const ESU_LANGUAGE_CODE = 'isu';
     const LANGUAGE_NOT_FOUND = 'Language not found';
@@ -33,6 +45,30 @@ class LanguageDetectionService
                     $language = self::GERMAN_LANGUAGE_NAME;
                     $code = self::GERMAN_LANGUAGE_CODE;
                 }
+                if ($this->checkItalianLanguage($word)) {
+                    $language = self::ITALIAN_LANGUAGE_NAME;
+                    $code = self::ITALIAN_LANGUAGE_CODE;
+                }
+                if ($this->checkLatvianLanguage($word)) {
+                    $language = self::LATVIAN_LANGUAGE_NAME;
+                    $code = self::LATVIAN_LANGUAGE_CODE;
+                }
+                if ($this->checkPolishLanguage($word)) {
+                    $language = self::POLISH_LANGUAGE_NAME;
+                    $code = self::POLISH_LANGUAGE_CODE;
+                }
+                if ($this->checkPortugueseLanguage($word)) {
+                    $language = self::PORTUGUESE_LANGUAGE_NAME;
+                    $code = self::PORTUGUESE_LANGUAGE_CODE;
+                }
+                if ($this->checkRomanianLanguage($word)) {
+                    $language = self::ROMANIAN_LANGUAGE_NAME;
+                    $code = self::ROMANIAN_LANGUAGE_CODE;
+                }
+                if ($this->checkRussianLanguage($word)) {
+                    $language = self::RUSSIAN_LANGUAGE_NAME;
+                    $code = self::RUSSIAN_LANGUAGE_CODE;
+                }
                 if ($this->checkEsuLanguage($word)) {
                     $language = self::ESU_LANGUAGE_NAME;
                     $code = self::ESU_LANGUAGE_CODE;
@@ -52,6 +88,36 @@ class LanguageDetectionService
     protected function checkGermanLanguage(string $word): bool
     {
         return $this->checkLanguage('get_german_word', $word);
+    }
+
+    protected function checkItalianLanguage(string $word): bool
+    {
+        return $this->checkLanguage('get_italian_word', $word);
+    }
+
+    protected function checkLatvianLanguage(string $word): bool
+    {
+        return $this->checkLanguage('get_latvian_word', $word);
+    }
+
+    protected function checkPolishLanguage(string $word): bool
+    {
+        return $this->checkLanguage('get_polish_word', $word);
+    }
+
+    protected function checkPortugueseLanguage(string $word): bool
+    {
+        return $this->checkLanguage('get_portuguese_word', $word);
+    }
+
+    protected function checkRomanianLanguage(string $word): bool
+    {
+        return $this->checkLanguage('get_romanian_word', $word);
+    }
+
+    protected function checkRussianLanguage(string $word): bool
+    {
+        return $this->checkLanguage('get_russian_word', $word);
     }
 
     protected function checkEsuLanguage(string $word): bool

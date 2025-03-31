@@ -8,6 +8,7 @@
     <h3>Language: {{ language }}</h3>
     <h3>Code: {{ code }}</h3>
     <form action="{{ path('index') }}" method="get">
+        <input type="hidden" value="Back">
         <button type="button">Back</button>
     </form>
 {% endblock %}
