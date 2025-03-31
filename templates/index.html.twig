@@ -5,9 +5,9 @@
 {% block body %}
     <h1>{{ prompt }}</h1>
 
-    <form action="{{ path('get_esu_word') }}" method="get">
+    <form action="{{ path('get_language') }}" method="get">
         <label for="languageInput">Text:</label>
-        <input type="text" id="languageInput" name="get_esu_word" required>
+        <input type="text" id="languageInput" name="get_language" required>
         <button type="submit">Submit</button>
     </form>
 {% endblock %}
