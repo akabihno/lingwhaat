@@ -51,6 +51,7 @@ class MarkdownGeneratorService
 
             if (!empty($links)) {
                 $this->writeFileHeader($language, $letter);
+                $this->echoLetterLineForMarkdown($language, $letter);
 
                 foreach ($links as $linkArr) {
                     foreach ($linkArr as $link) {
@@ -80,6 +81,11 @@ class MarkdownGeneratorService
     protected function getFileName(string $language, string $letter): string
     {
         return '/var/www/html/docs/Unsorted/'.self::WIKTIONARY_PREFIX.$language.'_'.$letter.'.md';
+    }
+
+    protected function echoLetterLineForMarkdown(string $language, string $letter): void
+    {
+        echo sprintf("[%s](docs/%s/%s%s_a.md),", $letter, ucfirst($language), self::WIKTIONARY_PREFIX, $language)."\n";
     }
 
 
