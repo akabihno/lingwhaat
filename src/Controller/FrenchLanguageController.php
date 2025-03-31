@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\FrenchLanguageEntity;
 use App\Repository\FrenchLanguageRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 class FrenchLanguageController extends LanguageController
 {

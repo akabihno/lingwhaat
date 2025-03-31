@@ -4,6 +4,9 @@ namespace App\Controller;
 
 use App\Entity\GermanLanguageEntity;
 use App\Repository\GermanLanguageRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 class GermanLanguageController extends LanguageController
 {
