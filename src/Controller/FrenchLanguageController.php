@@ -13,9 +13,9 @@ class FrenchLanguageController extends LanguageController
     #[Route('/french_word', name: 'get_french_word', methods: ['GET'])]
     public function getWord(EntityManagerInterface $entityManager): ?Response
     {
-        /* @var FrenchLanguageRepository  $frenchLanguageRepository */
-        $frenchLanguageRepository = $entityManager->getRepository(FrenchLanguageEntity::class);
-        $result = $frenchLanguageRepository->findByName($_GET['get_french_word']);
+        /* @var FrenchLanguageRepository  $repository */
+        $repository = $entityManager->getRepository(FrenchLanguageEntity::class);
+        $result = $repository->findByName($_GET['get_french_word']);
 
         if ($result) {
             /* @var FrenchLanguageEntity  $language*/

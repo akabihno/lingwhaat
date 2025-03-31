@@ -13,9 +13,9 @@ class EsuLanguageController extends LanguageController
     #[Route('/esu_word', name: 'get_esu_word', methods: ['GET'])]
     public function getWord(EntityManagerInterface $entityManager): ?Response
     {
-        /* @var EsuLanguageRepository  $esuLanguageRepository*/
-        $esuLanguageRepository = $entityManager->getRepository(EsuLanguageEntity::class);
-        $result = $esuLanguageRepository->findByName($_GET['get_esu_word']);
+        /* @var EsuLanguageRepository  $repository*/
+        $repository = $entityManager->getRepository(EsuLanguageEntity::class);
+        $result = $repository->findByName($_GET['get_esu_word']);
 
         if ($result) {
             /* @var EsuLanguageEntity  $language*/

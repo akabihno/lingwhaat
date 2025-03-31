@@ -2,23 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\GermanLanguageEntity;
-use App\Repository\GermanLanguageRepository;
+use App\Entity\ItalianLanguageEntity;
+use App\Repository\ItalianLanguageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-class GermanLanguageController extends LanguageController
+class ItalianLanguageController extends LanguageController
 {
-    #[Route('/german_word', name: 'get_german_word', methods: ['GET'])]
+    #[Route('/italian_word', name: 'get_italian_word', methods: ['GET'])]
     public function getWord(EntityManagerInterface $entityManager): ?Response
     {
-        /* @var GermanLanguageRepository  $repository */
-        $repository = $entityManager->getRepository(GermanLanguageEntity::class);
-        $result = $repository->findByName($_GET['get_german_word']);
+        /* @var ItalianLanguageRepository  $repository */
+        $repository = $entityManager->getRepository(ItalianLanguageEntity::class);
+        $result = $repository->findByName($_GET['get_italian_word']);
 
         if ($result) {
-            /* @var GermanLanguageEntity  $language*/
+            /* @var ItalianLanguageEntity  $language*/
             foreach ($result as $language) {
                 return new Response('id: ' . $language->getId() . ', name: ' . $language->getName() . 'ipa: ' . $language->getIpa());
             }
