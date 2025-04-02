@@ -1,16 +1,16 @@
 <?php
 
+use App\Query\PronunciationQueryGreekLanguage;
 use App\Query\PronunciationQueryLatvianLanguage;
-use App\Query\PronunciationQueryLithuanianLanguage;
-use App\Service\WiktionaryArticlesCategoriesLithuanianService;
+use App\Service\WiktionaryArticlesCategoriesGreekService;
 
 require 'vendor/autoload.php';
 
 // docker exec -it php-app php utils/get_categories_articles.php
 
 $queryLatvian = new PronunciationQueryLatvianLanguage();
-$queryLithuanian = new PronunciationQueryLithuanianLanguage();
+$queryGreek = new PronunciationQueryGreekLanguage();
 
-$categoriesService = new WiktionaryArticlesCategoriesLithuanianService($queryLatvian, $queryLithuanian);
+$categoriesService = new WiktionaryArticlesCategoriesGreekService($queryLatvian, $queryGreek);
 
 $categoriesService->getArticlesByCategory();
