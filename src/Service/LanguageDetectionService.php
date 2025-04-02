@@ -11,10 +11,14 @@ class LanguageDetectionService
     const FRENCH_LANGUAGE_CODE = 'fr';
     const GERMAN_LANGUAGE_NAME = 'German';
     const GERMAN_LANGUAGE_CODE = 'de';
+    const GREEK_LANGUAGE_NAME = 'Greek';
+    const GREEK_LANGUAGE_CODE = 'el';
     const ITALIAN_LANGUAGE_NAME = 'Italian';
     const ITALIAN_LANGUAGE_CODE = 'it';
     const LATVIAN_LANGUAGE_NAME = 'Latvian';
     const LATVIAN_LANGUAGE_CODE = 'lv';
+    const LITHUANIAN_LANGUAGE_NAME = 'Lithuanian';
+    const LITHUANIAN_LANGUAGE_CODE = 'lt';
     const POLISH_LANGUAGE_NAME = 'Polish';
     const POLISH_LANGUAGE_CODE = 'pl';
     const PORTUGUESE_LANGUAGE_NAME = 'Portuguese';
@@ -51,6 +55,10 @@ class LanguageDetectionService
                     $language = self::GERMAN_LANGUAGE_NAME;
                     $code = self::GERMAN_LANGUAGE_CODE;
                 }
+                if ($this->checkGreekLanguage($word)) {
+                    $language = self::GREEK_LANGUAGE_NAME;
+                    $code = self::GREEK_LANGUAGE_CODE;
+                }
                 if ($this->checkItalianLanguage($word)) {
                     $language = self::ITALIAN_LANGUAGE_NAME;
                     $code = self::ITALIAN_LANGUAGE_CODE;
@@ -58,6 +66,10 @@ class LanguageDetectionService
                 if ($this->checkLatvianLanguage($word)) {
                     $language = self::LATVIAN_LANGUAGE_NAME;
                     $code = self::LATVIAN_LANGUAGE_CODE;
+                }
+                if ($this->checkLithuanianLanguage($word)) {
+                    $language = self::LITHUANIAN_LANGUAGE_NAME;
+                    $code = self::LITHUANIAN_LANGUAGE_CODE;
                 }
                 if ($this->checkPolishLanguage($word)) {
                     $language = self::POLISH_LANGUAGE_NAME;
@@ -108,6 +120,11 @@ class LanguageDetectionService
         return $this->checkLanguage('get_german_word', $word);
     }
 
+    protected function checkGreekLanguage(string $word): bool
+    {
+        return $this->checkLanguage('get_greek_word', $word);
+    }
+
     protected function checkItalianLanguage(string $word): bool
     {
         return $this->checkLanguage('get_italian_word', $word);
@@ -116,6 +133,11 @@ class LanguageDetectionService
     protected function checkLatvianLanguage(string $word): bool
     {
         return $this->checkLanguage('get_latvian_word', $word);
+    }
+
+    protected function checkLithuanianLanguage(string $word): bool
+    {
+        return $this->checkLanguage('get_lithuanian_word', $word);
     }
 
     protected function checkPolishLanguage(string $word): bool
