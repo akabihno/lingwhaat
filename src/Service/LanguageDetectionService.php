@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
