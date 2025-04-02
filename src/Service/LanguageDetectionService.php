@@ -44,9 +44,15 @@ class LanguageDetectionService
     {
         $language = self::LANGUAGE_NOT_FOUND;
         $code = null;
+        $requests = [];
 
         if ($languageInput) {
             foreach (explode(' ', $languageInput) as $word) {
+                $requests[$word]['french'] = $this->sendAsyncRequest('get_french_word', $word);
+                $requests[$word]['german'] = $this->sendAsyncRequest('get_german_word', $word);
+
+
+                /*
                 if ($this->checkFrenchLanguage($word)) {
                     $language = self::FRENCH_LANGUAGE_NAME;
                     $code = self::FRENCH_LANGUAGE_CODE;
@@ -103,11 +109,45 @@ class LanguageDetectionService
                     $language = self::ESU_LANGUAGE_NAME;
                     $code = self::ESU_LANGUAGE_CODE;
                 }
+                */
 
+            }
+
+            foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
+                if ($chunk->isLast()) {
+                    [$word, $lang] = $this->findRequestKey($requests, $response);
+
+                    if ($lang === 'french') {
+                        $language = self::FRENCH_LANGUAGE_NAME;
+                        $code = self::FRENCH_LANGUAGE_CODE;
+                    } elseif ($lang === 'german') {
+                        $language = self::GERMAN_LANGUAGE_NAME;
+                        $code = self::GERMAN_LANGUAGE_CODE;
+                    }
+                }
             }
         }
 
         return ['language' => $language, 'code' => $code];
+    }
+
+    protected function sendAsyncRequest(string $route, string $word): ResponseInterface
+    {
+        $url = $this->urlGenerator->generate($route, [$route => $word], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        return $this->httpClient->request('GET', $url, ['timeout' => 5]);
+    }
+
+    private function findRequestKey(array $requests, ResponseInterface $response): array
+    {
+        foreach ($requests as $word => $languages) {
+            foreach ($languages as $lang => $req) {
+                if ($req === $response) {
+                    return [$word, $lang];
+                }
+            }
+        }
+        return [null, null];
     }
 
     protected function checkFrenchLanguage(string $word): bool
