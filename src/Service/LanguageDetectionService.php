@@ -116,8 +116,8 @@ class LanguageDetectionService
             }
 
             foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
+                dump($response);
                 if ($chunk->isLast()) {
-                    $response = $chunk->getResponse();
                     [$word, $lang] = $this->findRequestKey($requests, $response);
 
                     if ($lang === 'french') {
@@ -139,6 +139,20 @@ class LanguageDetectionService
         $url = $this->urlGenerator->generate($route, [$route => $word], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $this->httpClient->request('GET', $url, ['timeout' => 5]);
+    }
+
+    protected function checkLanguage(string $route, string $word): bool
+    {
+        $url = $this->urlGenerator->generate($route, [$route => $word], UrlGeneratorInterface::ABSOLUTE_URL);
+
+        try {
+            $response = $this->httpClient->request('GET', $url);
+            $responseContent = $response->getContent();
+
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
     }
 
     private function findRequestKey(array $requests, ResponseInterface $response): array
@@ -221,20 +235,6 @@ class LanguageDetectionService
     protected function checkEsuLanguage(string $word): bool
     {
         return $this->checkLanguage('get_esu_word', $word);
-    }
-
-    protected function checkLanguage(string $route, string $word): bool
-    {
-        $url = $this->urlGenerator->generate($route, [$route => $word], UrlGeneratorInterface::ABSOLUTE_URL);
-
-        try {
-            $response = $this->httpClient->request('GET', $url);
-            $responseContent = $response->getContent();
-
-            return true;
-        } catch (\Exception $exception) {
-            return false;
-        }
     }
 
 }
