@@ -4,7 +4,7 @@ namespace App\Service;
 
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Component\HttpClient\Response\CurlResponse;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class LanguageDetectionService
 {
@@ -132,14 +132,14 @@ class LanguageDetectionService
         return ['language' => $language, 'code' => $code];
     }
 
-    protected function sendAsyncRequest(string $route, string $word): CurlResponse
+    protected function sendAsyncRequest(string $route, string $word): ResponseInterface
     {
         $url = $this->urlGenerator->generate($route, [$route => $word], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return $this->httpClient->request('GET', $url, ['timeout' => 5]);
     }
 
-    private function findRequestKey(array $requests, CurlResponse $response): array
+    private function findRequestKey(array $requests, ResponseInterface $response): array
     {
         foreach ($requests as $word => $languages) {
             foreach ($languages as $lang => $req) {
