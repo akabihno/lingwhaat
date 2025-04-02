@@ -1,0 +1,16 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ypatingai|
+|https://en.wiktionary.org/wiki/ypatumas|
+|https://en.wiktionary.org/wiki/ypatybė|
+|https://en.wiktionary.org/wiki/ydingas|
+|https://en.wiktionary.org/wiki/yda|
+|https://en.wiktionary.org/wiki/ypač|
+|https://en.wiktionary.org/wiki/ynis|
+|https://en.wiktionary.org/wiki/ypatus|
+|https://en.wiktionary.org/wiki/ypatingumas|
+|https://en.wiktionary.org/wiki/ylius|
+|https://en.wiktionary.org/wiki/ypatingas|
+|https://en.wiktionary.org/wiki/yla|
+|https://en.wiktionary.org/wiki/yra|
+|https://en.wiktionary.org/wiki/y|
