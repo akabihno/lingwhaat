@@ -50,75 +50,34 @@ class LanguageDetectionService
 
         if ($languageInput) {
             foreach (explode(' ', $languageInput) as $word) {
-                $requests[$word]['french'] = $this->sendAsyncRequest('get_french_word', $word);
-                $requests[$word]['german'] = $this->sendAsyncRequest('get_german_word', $word);
-                $requests[$word]['greek'] = $this->sendAsyncRequest('get_greek_word', $word);
-                $requests[$word]['italian'] = $this->sendAsyncRequest('get_italian_word', $word);
-                $requests[$word]['latvian'] = $this->sendAsyncRequest('get_latvian_word', $word);
-                $requests[$word]['lithuanian'] = $this->sendAsyncRequest('get_lithuanian_word', $word);
-                $requests[$word]['polish'] = $this->sendAsyncRequest('get_polish_word', $word);
-                $requests[$word]['portuguese'] = $this->sendAsyncRequest('get_portuguese_word', $word);
-                $requests[$word]['romanian'] = $this->sendAsyncRequest('get_romanian_word', $word);
-                $requests[$word]['russian'] = $this->sendAsyncRequest('get_russian_word', $word);
-                $requests[$word]['serbocroatian'] = $this->sendAsyncRequest('get_serbocroatian_word', $word);
-                $requests[$word]['tagalog'] = $this->sendAsyncRequest('get_tagalog_word', $word);
-                $requests[$word]['ukrainian'] = $this->sendAsyncRequest('get_ukrainian_word', $word);
-                $requests[$word]['esu'] = $this->sendAsyncRequest('get_esu_word', $word);
-
+                $requests[$word] = [
+                    'french' => $this->sendAsyncRequest('get_french_word', $word),
+                    'german' => $this->sendAsyncRequest('get_german_word', $word),
+                    'greek' => $this->sendAsyncRequest('get_greek_word', $word),
+                    'italian' => $this->sendAsyncRequest('get_italian_word', $word),
+                    'latvian' => $this->sendAsyncRequest('get_latvian_word', $word),
+                    'lithuanian' => $this->sendAsyncRequest('get_lithuanian_word', $word),
+                    'polish' => $this->sendAsyncRequest('get_polish_word', $word),
+                    'portuguese' => $this->sendAsyncRequest('get_portuguese_word', $word),
+                    'romanian' => $this->sendAsyncRequest('get_romanian_word', $word),
+                    'russian' => $this->sendAsyncRequest('get_russian_word', $word),
+                    'serbocroatian' => $this->sendAsyncRequest('get_serbocroatian_word', $word),
+                    'tagalog' => $this->sendAsyncRequest('get_tagalog_word', $word),
+                    'ukrainian' => $this->sendAsyncRequest('get_ukrainian_word', $word),
+                    'esu' => $this->sendAsyncRequest('get_esu_word', $word),
+                ];
             }
 
-            foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response) {
-                $statusCode = $response->getStatusCode();
-                if ($statusCode < 300) {
+            foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
+                if ($chunk->isLast() && $response->getStatusCode() === 200) {
                     [$word, $lang] = $this->findRequestKey($requests, $response);
 
-                    if ($lang === 'french') {
-                        $language = self::FRENCH_LANGUAGE_NAME;
-                        $code = self::FRENCH_LANGUAGE_CODE;
-                    } elseif ($lang === 'german') {
-                        $language = self::GERMAN_LANGUAGE_NAME;
-                        $code = self::GERMAN_LANGUAGE_CODE;
-                    } elseif ($lang === 'greek') {
-                        $language = self::GREEK_LANGUAGE_NAME;
-                        $code = self::GREEK_LANGUAGE_CODE;
-                    } elseif ($lang === 'italian') {
-                        $language = self::ITALIAN_LANGUAGE_NAME;
-                        $code = self::ITALIAN_LANGUAGE_CODE;
-                    } elseif ($lang === 'latvian') {
-                        $language = self::LATVIAN_LANGUAGE_NAME;
-                        $code = self::LATVIAN_LANGUAGE_CODE;
-                    } elseif ($lang === 'lithuanian') {
-                        $language = self::LITHUANIAN_LANGUAGE_NAME;
-                        $code = self::LITHUANIAN_LANGUAGE_CODE;
-                    } elseif ($lang === 'polish') {
-                        $language = self::POLISH_LANGUAGE_NAME;
-                        $code = self::POLISH_LANGUAGE_CODE;
-                    } elseif ($lang === 'portuguese') {
-                        $language = self::PORTUGUESE_LANGUAGE_NAME;
-                        $code = self::PORTUGUESE_LANGUAGE_CODE;
-                    } elseif ($lang === 'romanian') {
-                        $language = self::ROMANIAN_LANGUAGE_NAME;
-                        $code = self::ROMANIAN_LANGUAGE_CODE;
-                    } elseif ($lang === 'russian') {
-                        $language = self::RUSSIAN_LANGUAGE_NAME;
-                        $code = self::RUSSIAN_LANGUAGE_CODE;
-                    } elseif ($lang === 'serbocroatian') {
-                        $language = self::SERBOCROATIAN_LANGUAGE_NAME;
-                        $code = self::SERBOCROATIAN_LANGUAGE_CODE;
-                    } elseif ($lang === 'tagalog') {
-                        $language = self::TAGALOG_LANGUAGE_NAME;
-                        $code = self::TAGALOG_LANGUAGE_CODE;
-                    } elseif ($lang === 'ukrainian') {
-                        $language = self::UKRAINIAN_LANGUAGE_NAME;
-                        $code = self::UKRAINIAN_LANGUAGE_CODE;
-                    } elseif ($lang === 'esu') {
-                        $language = self::ESU_LANGUAGE_NAME;
-                        $code = self::ESU_LANGUAGE_CODE;
-                    }
+                    return [
+                        'language' => constant('self::' . strtoupper($lang) . '_LANGUAGE_NAME'),
+                        'code' => constant('self::' . strtoupper($lang) . '_LANGUAGE_CODE'),
+                    ];
                 }
-
             }
-
         }
 
         return ['language' => $language, 'code' => $code];
