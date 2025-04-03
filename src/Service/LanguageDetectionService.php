@@ -44,7 +44,12 @@ class LanguageDetectionService
         $this->urlGenerator = $urlGenerator;
 
         $this->httpClient = HttpClient::create([
-            'max_host_connections' => 150,
+            'extra' => [
+                'curl' => [
+                    CURLOPT_MAXCONNECTS => 150,
+                    CURLOPT_TCP_KEEPALIVE => 1,
+                ],
+            ],
         ]);
     }
 
