@@ -134,11 +134,17 @@ class LanguageDetectionService
         return ['language' => $language, 'code' => $code];
     }
 
-    protected function sendAsyncRequest(string $route, string $word): ResponseInterface
+    protected function sendAsyncRequest(string $route, string $word): bool
     {
         $url = $this->urlGenerator->generate($route, [$route => $word], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        return $this->httpClient->request('GET', $url, ['timeout' => 5]);
+        try {
+            $this->httpClient->request('GET', $url, ['timeout' => 5]);
+
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
     }
 
     protected function checkLanguage(string $route, string $word): bool
