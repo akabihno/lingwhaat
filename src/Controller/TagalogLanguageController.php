@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TagalogLanguageController extends LanguageController
 {
     #[Route('/tagalog_word', name: 'get_tagalog_word', methods: ['GET'])]
-    public function getWord(EntityManagerInterface $entityManager): ?Response
+    public function getWord(EntityManagerInterface $entityManager): Response
     {
         /* @var TagalogLanguageRepository  $repository */
         $repository = $entityManager->getRepository(TagalogLanguageEntity::class);
@@ -24,7 +24,7 @@ class TagalogLanguageController extends LanguageController
             }
         }
 
-        return null;
+        return new Response('No matching word found.', Response::HTTP_NOT_FOUND);
 
     }
 

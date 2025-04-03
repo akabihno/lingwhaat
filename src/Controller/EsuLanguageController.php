@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class EsuLanguageController extends LanguageController
 {
     #[Route('/esu_word', name: 'get_esu_word', methods: ['GET'])]
-    public function getWord(EntityManagerInterface $entityManager): ?Response
+    public function getWord(EntityManagerInterface $entityManager): Response
     {
         /* @var EsuLanguageRepository  $repository*/
         $repository = $entityManager->getRepository(EsuLanguageEntity::class);
@@ -24,7 +24,7 @@ class EsuLanguageController extends LanguageController
             }
         }
 
-        return null;
+        return new Response('No matching word found.', Response::HTTP_NOT_FOUND);
 
     }
 
