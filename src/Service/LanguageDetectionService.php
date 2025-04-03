@@ -67,64 +67,60 @@ class LanguageDetectionService
 
             }
 
-            try {
-                foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
-                    if ($chunk->isFirst()) {
-                        $statusCode = $response->getStatusCode();
-                        if ($statusCode >= 500) {
-                            break;
-                        }
-                    }
-                    if ($chunk->isLast()) {
-                        [$word, $lang] = $this->findRequestKey($requests, $response);
-
-                        if ($lang === 'french') {
-                            $language = self::FRENCH_LANGUAGE_NAME;
-                            $code = self::FRENCH_LANGUAGE_CODE;
-                        } elseif ($lang === 'german') {
-                            $language = self::GERMAN_LANGUAGE_NAME;
-                            $code = self::GERMAN_LANGUAGE_CODE;
-                        } elseif ($lang === 'greek') {
-                            $language = self::GREEK_LANGUAGE_NAME;
-                            $code = self::GREEK_LANGUAGE_CODE;
-                        } elseif ($lang === 'italian') {
-                            $language = self::ITALIAN_LANGUAGE_NAME;
-                            $code = self::ITALIAN_LANGUAGE_CODE;
-                        } elseif ($lang === 'latvian') {
-                            $language = self::LATVIAN_LANGUAGE_NAME;
-                            $code = self::LATVIAN_LANGUAGE_CODE;
-                        } elseif ($lang === 'lithuanian') {
-                            $language = self::LITHUANIAN_LANGUAGE_NAME;
-                            $code = self::LITHUANIAN_LANGUAGE_CODE;
-                        } elseif ($lang === 'polish') {
-                            $language = self::POLISH_LANGUAGE_NAME;
-                            $code = self::POLISH_LANGUAGE_CODE;
-                        } elseif ($lang === 'portuguese') {
-                            $language = self::PORTUGUESE_LANGUAGE_NAME;
-                            $code = self::PORTUGUESE_LANGUAGE_CODE;
-                        } elseif ($lang === 'romanian') {
-                            $language = self::ROMANIAN_LANGUAGE_NAME;
-                            $code = self::ROMANIAN_LANGUAGE_CODE;
-                        } elseif ($lang === 'russian') {
-                            $language = self::RUSSIAN_LANGUAGE_NAME;
-                            $code = self::RUSSIAN_LANGUAGE_CODE;
-                        } elseif ($lang === 'serbocroatian') {
-                            $language = self::SERBOCROATIAN_LANGUAGE_NAME;
-                            $code = self::SERBOCROATIAN_LANGUAGE_CODE;
-                        } elseif ($lang === 'tagalog') {
-                            $language = self::TAGALOG_LANGUAGE_NAME;
-                            $code = self::TAGALOG_LANGUAGE_CODE;
-                        } elseif ($lang === 'ukrainian') {
-                            $language = self::UKRAINIAN_LANGUAGE_NAME;
-                            $code = self::UKRAINIAN_LANGUAGE_CODE;
-                        } elseif ($lang === 'esu') {
-                            $language = self::ESU_LANGUAGE_NAME;
-                            $code = self::ESU_LANGUAGE_CODE;
-                        }
+            foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
+                if ($chunk->isFirst()) {
+                    $statusCode = $response->getStatusCode();
+                    if ($statusCode >= 500) {
+                        break;
                     }
                 }
-            } catch (\Exception $e) {
+                if ($chunk->isLast()) {
+                    [$word, $lang] = $this->findRequestKey($requests, $response);
 
+                    if ($lang === 'french') {
+                        $language = self::FRENCH_LANGUAGE_NAME;
+                        $code = self::FRENCH_LANGUAGE_CODE;
+                    } elseif ($lang === 'german') {
+                        $language = self::GERMAN_LANGUAGE_NAME;
+                        $code = self::GERMAN_LANGUAGE_CODE;
+                    } elseif ($lang === 'greek') {
+                        $language = self::GREEK_LANGUAGE_NAME;
+                        $code = self::GREEK_LANGUAGE_CODE;
+                    } elseif ($lang === 'italian') {
+                        $language = self::ITALIAN_LANGUAGE_NAME;
+                        $code = self::ITALIAN_LANGUAGE_CODE;
+                    } elseif ($lang === 'latvian') {
+                        $language = self::LATVIAN_LANGUAGE_NAME;
+                        $code = self::LATVIAN_LANGUAGE_CODE;
+                    } elseif ($lang === 'lithuanian') {
+                        $language = self::LITHUANIAN_LANGUAGE_NAME;
+                        $code = self::LITHUANIAN_LANGUAGE_CODE;
+                    } elseif ($lang === 'polish') {
+                        $language = self::POLISH_LANGUAGE_NAME;
+                        $code = self::POLISH_LANGUAGE_CODE;
+                    } elseif ($lang === 'portuguese') {
+                        $language = self::PORTUGUESE_LANGUAGE_NAME;
+                        $code = self::PORTUGUESE_LANGUAGE_CODE;
+                    } elseif ($lang === 'romanian') {
+                        $language = self::ROMANIAN_LANGUAGE_NAME;
+                        $code = self::ROMANIAN_LANGUAGE_CODE;
+                    } elseif ($lang === 'russian') {
+                        $language = self::RUSSIAN_LANGUAGE_NAME;
+                        $code = self::RUSSIAN_LANGUAGE_CODE;
+                    } elseif ($lang === 'serbocroatian') {
+                        $language = self::SERBOCROATIAN_LANGUAGE_NAME;
+                        $code = self::SERBOCROATIAN_LANGUAGE_CODE;
+                    } elseif ($lang === 'tagalog') {
+                        $language = self::TAGALOG_LANGUAGE_NAME;
+                        $code = self::TAGALOG_LANGUAGE_CODE;
+                    } elseif ($lang === 'ukrainian') {
+                        $language = self::UKRAINIAN_LANGUAGE_NAME;
+                        $code = self::UKRAINIAN_LANGUAGE_CODE;
+                    } elseif ($lang === 'esu') {
+                        $language = self::ESU_LANGUAGE_NAME;
+                        $code = self::ESU_LANGUAGE_CODE;
+                    }
+                }
             }
 
         }
