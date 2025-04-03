@@ -39,18 +39,8 @@ class LanguageDetectionService
     const ESU_LANGUAGE_NAME = 'Esu';
     const ESU_LANGUAGE_CODE = 'isu';
     const LANGUAGE_NOT_FOUND = 'Language not found';
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(protected HttpClient $httpClient, protected UrlGeneratorInterface $urlGenerator)
     {
-        $this->urlGenerator = $urlGenerator;
-
-        $this->httpClient = HttpClient::create([
-            'extra' => [
-                'curl' => [
-                    CURLOPT_MAXCONNECTS => 150,
-                    CURLOPT_TCP_KEEPALIVE => 1,
-                ],
-            ],
-        ]);
     }
 
     public function process(string $languageInput): array

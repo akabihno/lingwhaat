@@ -5,6 +5,9 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
+    http_client:
+        max_host_connections: 150
+
     #esi: true
     #fragments: true
 
