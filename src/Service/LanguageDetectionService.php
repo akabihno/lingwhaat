@@ -83,11 +83,16 @@ class LanguageDetectionService
         return ['language' => $language, 'code' => $code];
     }
 
-    protected function sendAsyncRequest(string $route, string $word): ResponseInterface
+    protected function sendAsyncRequest(string $route, string $word): ?ResponseInterface
     {
         $url = $this->urlGenerator->generate($route, [$route => $word], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        return $this->httpClient->request('GET', $url, ['timeout' => 5]);
+        try {
+            return $this->httpClient->request('GET', $url, ['timeout' => 5]);
+        } catch (\Exception $e) {
+            error_log("Error fetching URL: $url - " . $e->getMessage());
+            return null;
+        }
     }
 
     private function findRequestKey(array $requests, ResponseInterface $response): array
