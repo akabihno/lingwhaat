@@ -116,26 +116,20 @@ class LanguageDetectionService
             }
 
             foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
-                try {
-                    if ($chunk->isFirst()) {
-                        if ($response->getStatusCode() >= 500) {
-                            throw new \Exception("Server error: " . $response->getStatusCode());
+                if ($chunk->isFirst()) {
+                    if (!$response->getStatusCode() >= 500) {
+                        if ($chunk->isLast()) {
+                            [$word, $lang] = $this->findRequestKey($requests, $response);
+
+                            if ($lang === 'french') {
+                                $language = self::FRENCH_LANGUAGE_NAME;
+                                $code = self::FRENCH_LANGUAGE_CODE;
+                            } elseif ($lang === 'german') {
+                                $language = self::GERMAN_LANGUAGE_NAME;
+                                $code = self::GERMAN_LANGUAGE_CODE;
+                            }
                         }
                     }
-
-                    if ($chunk->isLast()) {
-                        [$word, $lang] = $this->findRequestKey($requests, $response);
-
-                        if ($lang === 'french') {
-                            $language = self::FRENCH_LANGUAGE_NAME;
-                            $code = self::FRENCH_LANGUAGE_CODE;
-                        } elseif ($lang === 'german') {
-                            $language = self::GERMAN_LANGUAGE_NAME;
-                            $code = self::GERMAN_LANGUAGE_CODE;
-                        }
-                    }
-                } catch (\Throwable $e) {
-                    dump("Error: " . $e->getMessage());
                 }
             }
         }
