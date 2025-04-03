@@ -7,7 +7,9 @@ GRANT SELECT ON lingwhaat.pronunciation_french_language TO '${MYSQL_WEB_USER}'@'
 GRANT SELECT ON lingwhaat.pronunciation_german_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_greek_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_hebrew_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT ON lingwhaat.pronunciation_italian_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_latvian_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT ON lingwhaat.pronunciation_lithuanian_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_polish_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_portuguese_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_romanian_language TO '${MYSQL_WEB_USER}'@'%';
