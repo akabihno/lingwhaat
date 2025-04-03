@@ -82,7 +82,6 @@ class LanguageDetectionService
                 if ($chunk->isFirst()) {
                     if ($response->getStatusCode() == 404 || $response->getStatusCode() >= 500) {
                         error_log("Request failed with status " . $response->getStatusCode() . " for URL: " . $response->getInfo('url'));
-                        break;
                     }
                 }
 
