@@ -75,23 +75,26 @@ class LanguageDetectionService
                         if ($response->getStatusCode() === 200) {
                             [$word, $lang] = $this->findRequestKey($requests, $response);
 
-                            $language = constant('self::' . strtoupper($lang) . '_LANGUAGE_NAME');
-                            $code = constant('self::' . strtoupper($lang) . '_LANGUAGE_CODE');
-                            $found = true;
-                            break;
+                            if ($word !== null && $lang !== null) {
+                                $language = constant('self::' . strtoupper($lang) . '_LANGUAGE_NAME');
+                                $code = constant('self::' . strtoupper($lang) . '_LANGUAGE_CODE');
+                                $found = true;
+                                break;
+                            }
                         }
                     } catch (\Symfony\Component\HttpClient\Exception\ClientException $e) {
-                        error_log("Request failed for URL: " . $response->getInfo('url') . " - " . $e->getMessage());
+                        error_log("Request failed with status " . $response->getStatusCode() . " for URL: " . $response->getInfo('url'));
+                    } catch (\Exception $e) {
+                        error_log("Unexpected error for URL: " . $response->getInfo('url') . " - " . $e->getMessage());
                     }
                 }
             }
         }
 
-        if ($found) {
-            return ['language' => $language, 'code' => $code];
-        }
-
-        return ['language' => self::LANGUAGE_NOT_FOUND, 'code' => null];
+        return [
+            'language' => $found ? $language : self::LANGUAGE_NOT_FOUND,
+            'code' => $found ? $code : null
+        ];
     }
 
     protected function sendAsyncRequest(string $route, string $word): ?ResponseInterface
