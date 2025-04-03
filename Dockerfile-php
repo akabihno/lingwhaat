@@ -4,7 +4,6 @@ RUN docker-php-ext-install pdo pdo_mysql
 
 RUN a2enmod rewrite
 RUN a2enmod ssl
-RUN a2enmod mpm_prefork
 
 RUN echo "PassEnv DOMAIN" >> /etc/apache2/apache2.conf
 COPY 000-default.conf /etc/apache2/sites-available/
