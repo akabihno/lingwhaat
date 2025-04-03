@@ -102,7 +102,11 @@ class LanguageDetectionService
         $url = $this->urlGenerator->generate($route, [$route => $word], UrlGeneratorInterface::ABSOLUTE_URL);
 
         try {
-            return $this->httpClient->request('GET', $url, ['timeout' => 5]);
+            return $this->httpClient->request('GET', $url, [
+                'timeout' => 5,
+                'headers' => ['accept' => 'application/json'],
+                'extra' => ['allow_redirects' => false, 'http_errors' => false]
+            ]);
         } catch (\Exception $e) {
             error_log("Error fetching URL: $url - " . $e->getMessage());
             return null;
