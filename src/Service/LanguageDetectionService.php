@@ -43,59 +43,67 @@ class LanguageDetectionService
     {
     }
 
-    public function process($languageInput): array
+    public function process(string $languageInput): array
+    {
+        if ($languageInput) {
+            foreach (explode(' ', $languageInput) as $word) {
+                return $this->processWord($word);
+            }
+        }
+
+        return [
+            'language' => self::LANGUAGE_NOT_FOUND,
+            'code' => null
+        ];
+    }
+
+    protected function processWord(string $word): array
     {
         $language = self::LANGUAGE_NOT_FOUND;
         $code = null;
         $requests = [];
         $found = false;
 
-        if ($languageInput) {
-            foreach (explode(' ', $languageInput) as $word) {
-                error_log('Test word: ' . $word);
-                try {
-                    $requests[$word] = [
-                        'french' => $this->sendAsyncRequest('get_french_word', $word),
-                        //'german' => $this->sendAsyncRequest('get_german_word', $word),
-                        //'greek' => $this->sendAsyncRequest('get_greek_word', $word),
-                        //'italian' => $this->sendAsyncRequest('get_italian_word', $word),
-                        //'latvian' => $this->sendAsyncRequest('get_latvian_word', $word),
-                        //'lithuanian' => $this->sendAsyncRequest('get_lithuanian_word', $word),
-                        //'polish' => $this->sendAsyncRequest('get_polish_word', $word),
-                        //'portuguese' => $this->sendAsyncRequest('get_portuguese_word', $word),
-                        //'romanian' => $this->sendAsyncRequest('get_romanian_word', $word),
-                        //'russian' => $this->sendAsyncRequest('get_russian_word', $word),
-                        //'serbocroatian' => $this->sendAsyncRequest('get_serbocroatian_word', $word),
-                        //'tagalog' => $this->sendAsyncRequest('get_tagalog_word', $word),
-                        //'ukrainian' => $this->sendAsyncRequest('get_ukrainian_word', $word),
-                        //'esu' => $this->sendAsyncRequest('get_esu_word', $word),
-                    ];
-                } catch (ClientException $e) {
-                    error_log('Error creating request for word: ' . $word . ' - ' . $e->getMessage());
-                    continue;
-                }
+        error_log('Processing word: ' . $word);
+        try {
+            $requests[$word] = [
+                'french' => $this->sendAsyncRequest('get_french_word', $word),
+                'german' => $this->sendAsyncRequest('get_german_word', $word),
+                'greek' => $this->sendAsyncRequest('get_greek_word', $word),
+                'italian' => $this->sendAsyncRequest('get_italian_word', $word),
+                'latvian' => $this->sendAsyncRequest('get_latvian_word', $word),
+                'lithuanian' => $this->sendAsyncRequest('get_lithuanian_word', $word),
+                'polish' => $this->sendAsyncRequest('get_polish_word', $word),
+                'portuguese' => $this->sendAsyncRequest('get_portuguese_word', $word),
+                'romanian' => $this->sendAsyncRequest('get_romanian_word', $word),
+                'russian' => $this->sendAsyncRequest('get_russian_word', $word),
+                'serbocroatian' => $this->sendAsyncRequest('get_serbocroatian_word', $word),
+                'tagalog' => $this->sendAsyncRequest('get_tagalog_word', $word),
+                'ukrainian' => $this->sendAsyncRequest('get_ukrainian_word', $word),
+                'esu' => $this->sendAsyncRequest('get_esu_word', $word),
+            ];
+        } catch (ClientException $e) {
+            error_log('Error creating request for word: ' . $word . ' - ' . $e->getMessage());
+        }
 
+        foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
+            dump($requests);
+
+            if ($chunk->isFirst()) {
+                if ($response->getStatusCode() == 404 || $response->getStatusCode() >= 500) {
+                    error_log("Request failed with status " . $response->getStatusCode() . " for URL: " . $response->getInfo('url'));
+                    break;
+                }
             }
 
-            foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
-                dump($requests);
+            if ($chunk->isLast()) {
+                [$word, $lang] = $this->findRequestKey($requests, $response);
 
-                if ($chunk->isFirst()) {
-                    if ($response->getStatusCode() == 404 || $response->getStatusCode() >= 500) {
-                        error_log("Request failed with status " . $response->getStatusCode() . " for URL: " . $response->getInfo('url'));
-                        break;
-                    }
-                }
-
-                if ($chunk->isLast()) {
-                    [$word, $lang] = $this->findRequestKey($requests, $response);
-
-                    if ($word !== null && $lang !== null) {
-                        $language = constant('self::' . strtoupper($lang) . '_LANGUAGE_NAME');
-                        $code = constant('self::' . strtoupper($lang) . '_LANGUAGE_CODE');
-                        $found = true;
-                        break;
-                    }
+                if ($word !== null && $lang !== null) {
+                    $language = constant('self::' . strtoupper($lang) . '_LANGUAGE_NAME');
+                    $code = constant('self::' . strtoupper($lang) . '_LANGUAGE_CODE');
+                    $found = true;
+                    break;
                 }
             }
         }
