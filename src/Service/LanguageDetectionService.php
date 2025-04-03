@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -51,22 +52,28 @@ class LanguageDetectionService
 
         if ($languageInput) {
             foreach (explode(' ', $languageInput) as $word) {
-                $requests[$word] = [
-                    'french' => $this->sendAsyncRequest('get_french_word', $word),
-                    'german' => $this->sendAsyncRequest('get_german_word', $word),
-                    'greek' => $this->sendAsyncRequest('get_greek_word', $word),
-                    'italian' => $this->sendAsyncRequest('get_italian_word', $word),
-                    'latvian' => $this->sendAsyncRequest('get_latvian_word', $word),
-                    'lithuanian' => $this->sendAsyncRequest('get_lithuanian_word', $word),
-                    'polish' => $this->sendAsyncRequest('get_polish_word', $word),
-                    'portuguese' => $this->sendAsyncRequest('get_portuguese_word', $word),
-                    'romanian' => $this->sendAsyncRequest('get_romanian_word', $word),
-                    'russian' => $this->sendAsyncRequest('get_russian_word', $word),
-                    'serbocroatian' => $this->sendAsyncRequest('get_serbocroatian_word', $word),
-                    'tagalog' => $this->sendAsyncRequest('get_tagalog_word', $word),
-                    'ukrainian' => $this->sendAsyncRequest('get_ukrainian_word', $word),
-                    'esu' => $this->sendAsyncRequest('get_esu_word', $word),
-                ];
+                try {
+                    $requests[$word] = [
+                        'french' => $this->sendAsyncRequest('get_french_word', $word),
+                        'german' => $this->sendAsyncRequest('get_german_word', $word),
+                        'greek' => $this->sendAsyncRequest('get_greek_word', $word),
+                        'italian' => $this->sendAsyncRequest('get_italian_word', $word),
+                        'latvian' => $this->sendAsyncRequest('get_latvian_word', $word),
+                        'lithuanian' => $this->sendAsyncRequest('get_lithuanian_word', $word),
+                        'polish' => $this->sendAsyncRequest('get_polish_word', $word),
+                        'portuguese' => $this->sendAsyncRequest('get_portuguese_word', $word),
+                        'romanian' => $this->sendAsyncRequest('get_romanian_word', $word),
+                        'russian' => $this->sendAsyncRequest('get_russian_word', $word),
+                        'serbocroatian' => $this->sendAsyncRequest('get_serbocroatian_word', $word),
+                        'tagalog' => $this->sendAsyncRequest('get_tagalog_word', $word),
+                        'ukrainian' => $this->sendAsyncRequest('get_ukrainian_word', $word),
+                        'esu' => $this->sendAsyncRequest('get_esu_word', $word),
+                    ];
+                } catch (ClientException $e) {
+                    error_log('Error creating request for word: ' . $word . ' - ' . $e->getMessage());
+                    continue;
+                }
+
             }
 
             foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
@@ -82,7 +89,7 @@ class LanguageDetectionService
                                 break;
                             }
                         }
-                    } catch (\Symfony\Component\HttpClient\Exception\ClientException $e) {
+                    } catch (ClientException $e) {
                         error_log("Request failed with status " . $response->getStatusCode() . " for URL: " . $response->getInfo('url'));
                     } catch (\Exception $e) {
                         error_log("Unexpected error for URL: " . $response->getInfo('url') . " - " . $e->getMessage());
@@ -113,7 +120,7 @@ class LanguageDetectionService
         }
     }
 
-    private function findRequestKey(array $requests, ResponseInterface $response): array
+    protected function findRequestKey(array $requests, ResponseInterface $response): array
     {
         foreach ($requests as $word => $languages) {
             foreach ($languages as $lang => $req) {
