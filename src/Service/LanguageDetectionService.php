@@ -116,17 +116,26 @@ class LanguageDetectionService
             }
 
             foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
-                dump($response);
-                if ($chunk->isLast()) {
-                    [$word, $lang] = $this->findRequestKey($requests, $response);
-
-                    if ($lang === 'french') {
-                        $language = self::FRENCH_LANGUAGE_NAME;
-                        $code = self::FRENCH_LANGUAGE_CODE;
-                    } elseif ($lang === 'german') {
-                        $language = self::GERMAN_LANGUAGE_NAME;
-                        $code = self::GERMAN_LANGUAGE_CODE;
+                try {
+                    if ($chunk->isFirst()) {
+                        if ($response->getStatusCode() >= 500) {
+                            throw new \Exception("Server error: " . $response->getStatusCode());
+                        }
                     }
+
+                    if ($chunk->isLast()) {
+                        [$word, $lang] = $this->findRequestKey($requests, $response);
+
+                        if ($lang === 'french') {
+                            $language = self::FRENCH_LANGUAGE_NAME;
+                            $code = self::FRENCH_LANGUAGE_CODE;
+                        } elseif ($lang === 'german') {
+                            $language = self::GERMAN_LANGUAGE_NAME;
+                            $code = self::GERMAN_LANGUAGE_CODE;
+                        }
+                    }
+                } catch (\Throwable $e) {
+                    dump("Error: " . $e->getMessage());
                 }
             }
         }
@@ -134,17 +143,11 @@ class LanguageDetectionService
         return ['language' => $language, 'code' => $code];
     }
 
-    protected function sendAsyncRequest(string $route, string $word): bool
+    protected function sendAsyncRequest(string $route, string $word): ResponseInterface
     {
         $url = $this->urlGenerator->generate($route, [$route => $word], UrlGeneratorInterface::ABSOLUTE_URL);
 
-        try {
-            $this->httpClient->request('GET', $url, ['timeout' => 5]);
-
-            return true;
-        } catch (\Exception $exception) {
-            return false;
-        }
+        return $this->httpClient->request('GET', $url, ['timeout' => 5]);
     }
 
     protected function checkLanguage(string $route, string $word): bool
