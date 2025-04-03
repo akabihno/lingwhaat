@@ -67,12 +67,9 @@ class LanguageDetectionService
 
             }
 
-            foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
-                if ($chunk->isLast()) {
-                    $statusCode = $response->getStatusCode();
-                    if ($statusCode >= 500) {
-                        break;
-                    }
+            foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response) {
+                $statusCode = $response->getStatusCode();
+                if ($statusCode < 300) {
                     [$word, $lang] = $this->findRequestKey($requests, $response);
 
                     if ($lang === 'french') {
@@ -119,6 +116,7 @@ class LanguageDetectionService
                         $code = self::ESU_LANGUAGE_CODE;
                     }
                 }
+
             }
 
         }
