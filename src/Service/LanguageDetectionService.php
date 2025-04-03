@@ -52,6 +52,7 @@ class LanguageDetectionService
 
         if ($languageInput) {
             foreach (explode(' ', $languageInput) as $word) {
+                error_log('Test word: ' . $word);
                 try {
                     $requests[$word] = [
                         'french' => $this->sendAsyncRequest('get_french_word', $word),

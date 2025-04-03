@@ -8,6 +8,8 @@ RUN a2enmod ssl
 RUN echo "PassEnv DOMAIN" >> /etc/apache2/apache2.conf
 COPY 000-default.conf /etc/apache2/sites-available/
 
+RUN mv "$PHP_INI_DIR/php.ini-development" "$PHP_INI_DIR/php.ini"
+
 RUN mkdir -p /etc/ssl/certs
 COPY ssl-certs/* /etc/ssl/certs
 
