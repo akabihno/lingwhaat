@@ -47,6 +47,7 @@ class LanguageDetectionService
         $language = self::LANGUAGE_NOT_FOUND;
         $code = null;
         $requests = [];
+        $found = false;
 
         if ($languageInput) {
             foreach (explode(' ', $languageInput) as $word) {
@@ -69,18 +70,28 @@ class LanguageDetectionService
             }
 
             foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
-                if ($chunk->isLast() && $response->getStatusCode() === 200) {
-                    [$word, $lang] = $this->findRequestKey($requests, $response);
+                if ($chunk->isLast()) {
+                    try {
+                        if ($response->getStatusCode() === 200) {
+                            [$word, $lang] = $this->findRequestKey($requests, $response);
 
-                    return [
-                        'language' => constant('self::' . strtoupper($lang) . '_LANGUAGE_NAME'),
-                        'code' => constant('self::' . strtoupper($lang) . '_LANGUAGE_CODE'),
-                    ];
+                            $language = constant('self::' . strtoupper($lang) . '_LANGUAGE_NAME');
+                            $code = constant('self::' . strtoupper($lang) . '_LANGUAGE_CODE');
+                            $found = true;
+                            break;
+                        }
+                    } catch (\Symfony\Component\HttpClient\Exception\ClientException $e) {
+                        error_log("Request failed for URL: " . $response->getInfo('url') . " - " . $e->getMessage());
+                    }
                 }
             }
         }
 
-        return ['language' => $language, 'code' => $code];
+        if ($found) {
+            return ['language' => $language, 'code' => $code];
+        }
+
+        return ['language' => self::LANGUAGE_NOT_FOUND, 'code' => null];
     }
 
     protected function sendAsyncRequest(string $route, string $word): ?ResponseInterface
