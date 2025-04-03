@@ -17,7 +17,7 @@ class FrenchLanguageController extends LanguageController
         $repository = $entityManager->getRepository(FrenchLanguageEntity::class);
         $result = $repository->findByName($_GET['get_french_word']);
 
-        error_log('Result: ' . $result);
+        error_log('Result: ' . json_encode($result));
 
         if ($result) {
             /* @var FrenchLanguageEntity  $language*/
