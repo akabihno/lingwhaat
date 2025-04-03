@@ -117,6 +117,7 @@ class LanguageDetectionService
 
             foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
                 if ($chunk->isLast()) {
+                    dump($response);
                     if (!$response->getStatusCode() >= 500) {
                         [$word, $lang] = $this->findRequestKey($requests, $response);
 
