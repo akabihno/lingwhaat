@@ -24,7 +24,7 @@ class UkrainianLanguageController extends LanguageController
             }
         }
 
-        return new Response('No matching word found.', Response::HTTP_NOT_FOUND);
+        return $this->returnNotFound();
 
     }
 

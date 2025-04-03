@@ -20,4 +20,9 @@ class LanguageController extends AbstractController
         return new Response('id: ' . $language->getId() . ', name: ' . $language->getName() . ', ipa: ' . $language->getIpa());
     }
 
+    protected function returnNotFound(): Response
+    {
+        return new Response('No matching word found.', Response::HTTP_NOT_FOUND);
+    }
+
 }

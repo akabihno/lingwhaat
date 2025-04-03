@@ -79,22 +79,21 @@ class LanguageDetectionService
 
             foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
                 dump($requests);
-                if ($chunk->isLast()) {
-                    try {
-                        if ($response->getStatusCode() === 200) {
-                            [$word, $lang] = $this->findRequestKey($requests, $response);
 
-                            if ($word !== null && $lang !== null) {
-                                $language = constant('self::' . strtoupper($lang) . '_LANGUAGE_NAME');
-                                $code = constant('self::' . strtoupper($lang) . '_LANGUAGE_CODE');
-                                $found = true;
-                                break;
-                            }
-                        }
-                    } catch (ClientException $e) {
+                if ($chunk->isFirst()) {
+                    if ($response->getStatusCode() == 404 || $response->getStatusCode() >= 500) {
                         error_log("Request failed with status " . $response->getStatusCode() . " for URL: " . $response->getInfo('url'));
-                    } catch (\Exception $e) {
-                        error_log("Unexpected error for URL: " . $response->getInfo('url') . " - " . $e->getMessage());
+                    }
+                }
+
+                if ($chunk->isLast()) {
+                    [$word, $lang] = $this->findRequestKey($requests, $response);
+
+                    if ($word !== null && $lang !== null) {
+                        $language = constant('self::' . strtoupper($lang) . '_LANGUAGE_NAME');
+                        $code = constant('self::' . strtoupper($lang) . '_LANGUAGE_CODE');
+                        $found = true;
+                        break;
                     }
                 }
             }
