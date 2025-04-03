@@ -20,7 +20,7 @@ class EsuLanguageController extends LanguageController
         if ($result) {
             /* @var EsuLanguageEntity  $language*/
             foreach ($result as $language) {
-                return new Response('id: ' . $language->getId() . ', name: ' . $language->getName() . 'ipa: ' . $language->getIpa());
+                return $this->returnResponse($language);
             }
         }
 

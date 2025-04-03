@@ -55,19 +55,19 @@ class LanguageDetectionService
                 try {
                     $requests[$word] = [
                         'french' => $this->sendAsyncRequest('get_french_word', $word),
-                        'german' => $this->sendAsyncRequest('get_german_word', $word),
-                        'greek' => $this->sendAsyncRequest('get_greek_word', $word),
-                        'italian' => $this->sendAsyncRequest('get_italian_word', $word),
-                        'latvian' => $this->sendAsyncRequest('get_latvian_word', $word),
-                        'lithuanian' => $this->sendAsyncRequest('get_lithuanian_word', $word),
-                        'polish' => $this->sendAsyncRequest('get_polish_word', $word),
-                        'portuguese' => $this->sendAsyncRequest('get_portuguese_word', $word),
-                        'romanian' => $this->sendAsyncRequest('get_romanian_word', $word),
-                        'russian' => $this->sendAsyncRequest('get_russian_word', $word),
-                        'serbocroatian' => $this->sendAsyncRequest('get_serbocroatian_word', $word),
-                        'tagalog' => $this->sendAsyncRequest('get_tagalog_word', $word),
-                        'ukrainian' => $this->sendAsyncRequest('get_ukrainian_word', $word),
-                        'esu' => $this->sendAsyncRequest('get_esu_word', $word),
+                        //'german' => $this->sendAsyncRequest('get_german_word', $word),
+                        //'greek' => $this->sendAsyncRequest('get_greek_word', $word),
+                        //'italian' => $this->sendAsyncRequest('get_italian_word', $word),
+                        //'latvian' => $this->sendAsyncRequest('get_latvian_word', $word),
+                        //'lithuanian' => $this->sendAsyncRequest('get_lithuanian_word', $word),
+                        //'polish' => $this->sendAsyncRequest('get_polish_word', $word),
+                        //'portuguese' => $this->sendAsyncRequest('get_portuguese_word', $word),
+                        //'romanian' => $this->sendAsyncRequest('get_romanian_word', $word),
+                        //'russian' => $this->sendAsyncRequest('get_russian_word', $word),
+                        //'serbocroatian' => $this->sendAsyncRequest('get_serbocroatian_word', $word),
+                        //'tagalog' => $this->sendAsyncRequest('get_tagalog_word', $word),
+                        //'ukrainian' => $this->sendAsyncRequest('get_ukrainian_word', $word),
+                        //'esu' => $this->sendAsyncRequest('get_esu_word', $word),
                     ];
                 } catch (ClientException $e) {
                     error_log('Error creating request for word: ' . $word . ' - ' . $e->getMessage());
@@ -77,6 +77,7 @@ class LanguageDetectionService
             }
 
             foreach ($this->httpClient->stream(array_merge(...array_values($requests))) as $response => $chunk) {
+                dump($requests);
                 if ($chunk->isLast()) {
                     try {
                         if ($response->getStatusCode() === 200) {
