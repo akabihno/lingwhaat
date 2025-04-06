@@ -62,6 +62,7 @@
     "twig/twig": "^v3.20.0",
     "vlucas/phpdotenv": ">=v5.6.1",
     "enqueue/amqp-bunny": "*",
+    "enqueue/enqueue-bundle": "*",
     "predis/predis": "^v2.3.0"
   },
   "require-dev": {
