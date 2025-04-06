@@ -37,6 +37,17 @@ services:
           memory: 512m
     restart: on-failure
 
+  redis:
+    image: redis:7.4.2
+    container_name: redis
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+    network_mode: host
+
   composer:
     image: composer:latest
     container_name: composer-installer
