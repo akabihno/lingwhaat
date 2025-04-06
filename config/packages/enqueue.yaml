@@ -1,4 +1,8 @@
 enqueue:
   default:
     transport:
-      dsn: 'amqp+bunny://guest:guest@localhost:5672/%2f'
+      dsn: 'amqp+bunny://message:message@localhost:5672/%2f'
+    client:
+      prefix: 'app'
+      app_name: 'my_app'
+      router_topic: 'router'

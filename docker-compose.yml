@@ -48,6 +48,17 @@ services:
       - REDIS_DATABASES=16
     network_mode: host
 
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: message
+      RABBITMQ_DEFAULT_PASS: message
+
   composer:
     image: composer:latest
     container_name: composer-installer
