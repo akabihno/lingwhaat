@@ -62,9 +62,6 @@ services:
     configs:
       - source: rabbitmq-plugins
       - target: /etc/rabbitmq/enabled_plugins
-    volumes:
-      - rabbitmq-lib:/var/lib/rabbitmq/
-      - rabbitmq-log:/var/log/rabbitmq
 
   composer:
     image: composer:latest
@@ -96,10 +93,6 @@ volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
-  rabbitmq-lib:
-    driver: local
-  rabbitmq-log:
-    driver: local
 
 configs:
   rabbitmq-plugins:
