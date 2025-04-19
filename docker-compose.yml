@@ -90,7 +90,3 @@ volumes:
 ###> doctrine/doctrine-bundle ###
   database_data:
 ###< doctrine/doctrine-bundle ###
-
-configs:
-  rabbitmq-plugins:
-    content: "[rabbitmq_management]."
