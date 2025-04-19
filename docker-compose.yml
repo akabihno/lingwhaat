@@ -49,7 +49,7 @@ services:
     network_mode: host
 
   rabbitmq:
-    image: rabbitmq:latest
+    image: rabbitmq:3-management
     container_name: rabbitmq
     restart: always
     ports:
@@ -59,9 +59,6 @@ services:
       RABBITMQ_DEFAULT_USER: message
       RABBITMQ_DEFAULT_PASS: message
     network_mode: host
-    configs:
-      - source: rabbitmq-plugins
-      - target: /etc/rabbitmq/enabled_plugins
 
   composer:
     image: composer:latest
