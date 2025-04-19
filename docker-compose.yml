@@ -58,6 +58,7 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: message
       RABBITMQ_DEFAULT_PASS: message
+    network_mode: host
 
   composer:
     image: composer:latest
