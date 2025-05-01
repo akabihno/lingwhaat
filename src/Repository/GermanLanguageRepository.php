@@ -5,11 +5,15 @@ namespace App\Repository;
 use App\Entity\GermanLanguageEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Dotenv\Dotenv;
 
 class GermanLanguageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
+        $dotenv = new Dotenv();
+        $dotenv->loadEnv(dirname(__DIR__, 2).'/.env');
+
         parent::__construct($registry, GermanLanguageEntity::class);
     }
     public function findByName($name)
