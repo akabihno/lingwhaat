@@ -4,11 +4,11 @@ namespace App\Repository;
 
 use App\Entity\GermanLanguageEntity;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
 class GermanLanguageRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(Registry $registry)
     {
         parent::__construct($registry, GermanLanguageEntity::class);
     }
