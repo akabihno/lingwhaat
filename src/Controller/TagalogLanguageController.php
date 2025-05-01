@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TagalogLanguageController extends LanguageController
 {
     #[Route('/tagalog_word', name: 'get_tagalog_word', methods: ['GET'])]
-    public function getWord(EntityManagerInterface $entityManager): ?Response
+    public function getWord(EntityManagerInterface $entityManager): Response
     {
         /* @var TagalogLanguageRepository  $repository */
         $repository = $entityManager->getRepository(TagalogLanguageEntity::class);
@@ -20,11 +20,11 @@ class TagalogLanguageController extends LanguageController
         if ($result) {
             /* @var TagalogLanguageEntity  $language*/
             foreach ($result as $language) {
-                return new Response('id: ' . $language->getId() . ', name: ' . $language->getName() . 'ipa: ' . $language->getIpa());
+                return $this->returnResponse($language);
             }
         }
 
-        return null;
+        return $this->returnNotFound();
 
     }
 
