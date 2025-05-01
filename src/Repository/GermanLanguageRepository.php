@@ -6,7 +6,7 @@ use App\Entity\GermanLanguageEntity;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class GermanLanguageRepository extends EntityRepository
+class GermanLanguageRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
