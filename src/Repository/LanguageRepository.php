@@ -6,16 +6,6 @@ use Doctrine\ORM\EntityRepository;
 
 class LanguageRepository extends EntityRepository
 {
-    public function checkLanguage($word): bool
-    {
-        $result = $this->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
-    }
     public function findByName($name)
     {
         $qb = $this->createQueryBuilder('e')
