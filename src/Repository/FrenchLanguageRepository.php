@@ -2,10 +2,16 @@
 
 namespace App\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use App\Entity\FrenchLanguageEntity;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
-class FrenchLanguageRepository extends EntityRepository
+class FrenchLanguageRepository extends ServiceEntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, FrenchLanguageEntity::class);
+    }
     public function findByName($name)
     {
         $qb = $this->createQueryBuilder('e')

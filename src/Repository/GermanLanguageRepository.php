@@ -2,10 +2,16 @@
 
 namespace App\Repository;
 
+use App\Entity\GermanLanguageEntity;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 class GermanLanguageRepository extends EntityRepository
 {
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, GermanLanguageEntity::class);
+    }
     public function findByName($name)
     {
         $qb = $this->createQueryBuilder('e')
