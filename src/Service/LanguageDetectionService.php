@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use App\Repository\FrenchLanguageRepository;
+use App\Repository\GermanLanguageRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -36,7 +38,12 @@ class LanguageDetectionService
     const ESU_LANGUAGE_NAME = 'Esu';
     const ESU_LANGUAGE_CODE = 'isu';
     const LANGUAGE_NOT_FOUND = 'Language not found';
-    public function __construct(protected HttpClientInterface $httpClient, protected UrlGeneratorInterface $urlGenerator)
+    public function __construct(
+        protected HttpClientInterface $httpClient,
+        protected UrlGeneratorInterface $urlGenerator,
+        protected FrenchLanguageRepository $frenchLanguageRepository,
+        protected GermanLanguageRepository $germanLanguageRepository
+    )
     {
     }
 
@@ -115,12 +122,12 @@ class LanguageDetectionService
 
     protected function checkFrenchLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_french_word', $word);
+        return $this->frenchLanguageRepository->checkLanguage($word);
     }
 
     protected function checkGermanLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_german_word', $word);
+        return $this->germanLanguageRepository->checkLanguage($word);
     }
 
     protected function checkGreekLanguage(string $word): bool
