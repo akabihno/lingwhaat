@@ -11,7 +11,7 @@ COPY 000-default.conf /etc/apache2/sites-available/
 RUN mkdir -p /etc/ssl/certs
 COPY ssl-certs/* /etc/ssl/certs
 
-RUN a2ensite 000-default
+#RUN a2ensite 000-default
 
 EXPOSE 80 443
 
