@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\GermanLanguageEntity;
-use Doctrine\ORM\EntityRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class GermanLanguageRepository extends ServiceEntityRepository
