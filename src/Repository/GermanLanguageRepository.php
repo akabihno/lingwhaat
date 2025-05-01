@@ -2,9 +2,19 @@
 
 namespace App\Repository;
 
-use App\Repository\LanguageRepository;
+use Doctrine\ORM\EntityRepository;
 
-class GermanLanguageRepository extends LanguageRepository
+class GermanLanguageRepository extends EntityRepository
 {
+    public function findByName($name)
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->where('e.name = :name')
+            ->setParameter('name', $name);
+
+        $query = $qb->getQuery();
+
+        return $query->execute();
+    }
 
 }
