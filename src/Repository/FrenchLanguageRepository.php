@@ -3,10 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\FrenchLanguageEntity;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class FrenchLanguageRepository extends ServiceEntityRepository
+class FrenchLanguageRepository extends EntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
