@@ -44,6 +44,7 @@ class LanguageDetectionService
     {
         $language = self::LANGUAGE_NOT_FOUND;
         $code = null;
+        $start = microtime(true);
 
         if ($languageInput) {
             foreach (explode(' ', $languageInput) as $word) {
@@ -107,7 +108,9 @@ class LanguageDetectionService
             }
         }
 
-        return ['language' => $language, 'code' => $code];
+        $finish = microtime(true);
+
+        return ['language' => $language, 'code' => $code, 'time' => $finish - $start];
     }
 
     protected function checkFrenchLanguage(string $word): bool

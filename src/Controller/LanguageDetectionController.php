@@ -19,7 +19,8 @@ class LanguageDetectionController extends AbstractController
 
         return $this->render('response.html.twig', [
             'language' => $languageAndCode['language'],
-            'code' => $languageAndCode['code']
+            'code' => $languageAndCode['code'],
+            'time' => $languageAndCode['time'],
         ]);
     }
 
