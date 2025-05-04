@@ -3,6 +3,8 @@
 namespace App\Service\LanguageDetection;
 
 use App\Service\LanguageNormalizationService;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\Uid\Uuid;
 
 class LanguageDetectionService
 {
@@ -36,6 +38,7 @@ class LanguageDetectionService
     const ESU_LANGUAGE_CODE = 'isu';
     const LANGUAGE_NOT_FOUND = 'Language not found';
     public function __construct(
+        protected LoggerInterface $logger,
         protected LanguageNormalizationService $languageNormalizationService,
         protected FrenchLanguageService $frenchLanguageService,
         protected GermanLanguageService $germanLanguageService,
@@ -57,6 +60,9 @@ class LanguageDetectionService
 
     public function process($languageInput): array
     {
+        $uuid = Uuid::v4();
+        $uuidStr = $uuid->toRfc4122();
+
         $language = self::LANGUAGE_NOT_FOUND;
         $code = null;
         $count = 0;
@@ -66,6 +72,8 @@ class LanguageDetectionService
         $languageCounts = [];
 
         if ($languageInput) {
+            $this->logger->info(sprintf('[LanguageDetectionService][%s] Processing: %s', $uuidStr, $languageInput));
+
             $languageInput = $this->languageNormalizationService->normalizeText($languageInput);
             $words = explode(' ', $languageInput);
             $count = count($words);
@@ -73,45 +81,59 @@ class LanguageDetectionService
             foreach ($words as $word) {
                 if ($this->checkFrenchLanguage($word)) {
                     $result[$word] = ['language' => self::FRENCH_LANGUAGE_NAME, 'code' => self::FRENCH_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkGermanLanguage($word)) {
                     $result[$word] = ['language' => self::GERMAN_LANGUAGE_NAME, 'code' => self::GERMAN_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkGreekLanguage($word)) {
                     $result[$word] = ['language' => self::GREEK_LANGUAGE_NAME, 'code' => self::GREEK_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkItalianLanguage($word)) {
                     $result[$word] = ['language' => self::ITALIAN_LANGUAGE_NAME, 'code' => self::ITALIAN_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkLatvianLanguage($word)) {
                     $result[$word] = ['language' => self::LATVIAN_LANGUAGE_NAME, 'code' => self::LATVIAN_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkLithuanianLanguage($word)) {
                     $result[$word] = ['language' => self::LITHUANIAN_LANGUAGE_NAME, 'code' => self::LITHUANIAN_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkPolishLanguage($word)) {
                     $result[$word] = ['language' => self::POLISH_LANGUAGE_NAME, 'code' => self::POLISH_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkPortugueseLanguage($word)) {
                     $result[$word] = ['language' => self::PORTUGUESE_LANGUAGE_NAME, 'code' => self::PORTUGUESE_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkRomanianLanguage($word)) {
                     $result[$word] = ['language' => self::ROMANIAN_LANGUAGE_NAME, 'code' => self::ROMANIAN_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkRussianLanguage($word)) {
                     $result[$word] = ['language' => self::RUSSIAN_LANGUAGE_NAME, 'code' => self::RUSSIAN_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkSerboCroatianLanguage($word)) {
                     $result[$word] = ['language' => self::SERBOCROATIAN_LANGUAGE_NAME, 'code' => self::SERBOCROATIAN_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkTagalogLanguage($word)) {
                     $result[$word] = ['language' => self::TAGALOG_LANGUAGE_NAME, 'code' => self::TAGALOG_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkUkrainianLanguage($word)) {
                     $result[$word] = ['language' => self::UKRAINIAN_LANGUAGE_NAME, 'code' => self::UKRAINIAN_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkEsuLanguage($word)) {
                     $result[$word] = ['language' => self::ESU_LANGUAGE_NAME, 'code' => self::ESU_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
 
                 if (isset($result[$word])) {
@@ -143,6 +165,11 @@ class LanguageDetectionService
             'matches' => $matchCount,
             'time' => $finish - $start
         ];
+    }
+
+    protected function logLanguageDetectionResult(string $uuidStr, array $result): void
+    {
+        $this->logger->info(sprintf('[LanguageDetectionService][%s] %s', $uuidStr, json_encode($result)));
     }
 
     protected function checkFrenchLanguage(string $word): bool
