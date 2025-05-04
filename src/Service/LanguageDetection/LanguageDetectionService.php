@@ -72,13 +72,15 @@ class LanguageDetectionService
         $languageCounts = [];
 
         if ($languageInput) {
-            $this->logger->info(sprintf('[LanguageDetectionService][%s] Processing: %s', $uuidStr, $languageInput));
+            $this->logger->info(sprintf('[LanguageDetectionService][%s] Processing language input: %s', $uuidStr, $languageInput));
 
             $languageInput = $this->languageNormalizationService->normalizeText($languageInput);
             $words = explode(' ', $languageInput);
             $count = count($words);
 
             foreach ($words as $word) {
+                $this->logger->info(sprintf('[LanguageDetectionService][%s] Processing word: %s', $uuidStr, $word));
+
                 if ($this->checkFrenchLanguage($word)) {
                     $result[$word] = ['language' => self::FRENCH_LANGUAGE_NAME, 'code' => self::FRENCH_LANGUAGE_CODE];
                     $this->logLanguageDetectionResult($uuidStr, $result[$word]);
