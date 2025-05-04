@@ -1,6 +1,20 @@
 # LingWhaat?
 
 This project aims to detect the language of written text with high speed and accuracy.
+Supported languages:
+* French
+* German
+* Greek
+* Italian
+* Latvian
+* Lithuanian
+* Polish
+* Portuguese
+* Romanian
+* Russian
+* Serbo-Croatian (Bosnian-Croatian-Montenegrin-Serbian):
+* Tagalog (Filipino)
+* Ukrainian
 
 IPA data for universal transliteration was parsed from [Wiktionary](https://en.wiktionary.org/wiki/Wiktionary:Main_Page) using Wikimedia REST API route [/page/html/{title}](https://en.wiktionary.org/api/rest_v1/#/Page%20content/get_page_html__title_)\
 Class example: [WiktionaryArticlesIpaParserService](src/Service/WiktionaryArticlesIpaParserService.php)\
@@ -293,7 +307,7 @@ List of all articles IPA data has been taken from:
 [э](docs/Russian/en_wiktionary_russian_э.md),
 [ю](docs/Russian/en_wiktionary_russian_ю.md),
 [я](docs/Russian/en_wiktionary_russian_я.md)
-* Serbo-croatian:
+* Serbo-Croatian:
 [а](docs/SerboCroatian/en_wiktionary_serbocroatian_a.md),
 [b](docs/SerboCroatian/en_wiktionary_serbocroatian_b.md),
 [c](docs/SerboCroatian/en_wiktionary_serbocroatian_c.md),
