@@ -4,9 +4,20 @@ namespace App\Service;
 
 class LanguageNormalizationService
 {
-    public function normalizeText($text): string
+    const ARTICLE_LENGTH = 3;
+    public function normalizeText(string $text): string
     {
         return trim(strtolower($text));
+    }
+
+    public function removeArticles(array $words): array
+    {
+        return array_filter($words, fn($word) => !$this->isShorterThan($word));
+    }
+
+    protected function isShorterThan($word): bool
+    {
+        return count($word) < self::ARTICLE_LENGTH;
     }
 
 }

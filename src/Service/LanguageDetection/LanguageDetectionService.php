@@ -76,6 +76,9 @@ class LanguageDetectionService
 
             $languageInput = $this->languageNormalizationService->normalizeText($languageInput);
             $words = explode(' ', $languageInput);
+            $words = $this->languageNormalizationService->removeArticles($words);
+            $this->logger->info(sprintf('[LanguageDetectionService][%s] Processing normalized: %s', $uuidStr, json_encode($words)));
+
             $count = count($words);
 
             foreach ($words as $word) {
