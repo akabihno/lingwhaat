@@ -2,6 +2,8 @@
 
 namespace App\Service\LanguageDetection;
 
+use App\Service\LanguageNormalizationService;
+
 class LanguageDetectionService
 {
     const FRENCH_LANGUAGE_NAME = 'French';
@@ -34,6 +36,7 @@ class LanguageDetectionService
     const ESU_LANGUAGE_CODE = 'isu';
     const LANGUAGE_NOT_FOUND = 'Language not found';
     public function __construct(
+        protected LanguageNormalizationService $languageNormalizationService,
         protected FrenchLanguageService $frenchLanguageService,
         protected GermanLanguageService $germanLanguageService,
         protected GreekLanguageService $greekLanguageService,
@@ -56,73 +59,90 @@ class LanguageDetectionService
     {
         $language = self::LANGUAGE_NOT_FOUND;
         $code = null;
+        $count = 0;
         $start = microtime(true);
 
+        $result = [];
+        $languageCounts = [];
+
         if ($languageInput) {
-            foreach (explode(' ', $languageInput) as $word) {
+            $languageInput = $this->languageNormalizationService->normalizeText($languageInput);
+            $words = explode(' ', $languageInput);
+            $count = count($words);
+
+            foreach ($words as $word) {
                 if ($this->checkFrenchLanguage($word)) {
-                    $language = self::FRENCH_LANGUAGE_NAME;
-                    $code = self::FRENCH_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::FRENCH_LANGUAGE_NAME, 'code' => self::FRENCH_LANGUAGE_CODE];
                 }
                 if ($this->checkGermanLanguage($word)) {
-                    $language = self::GERMAN_LANGUAGE_NAME;
-                    $code = self::GERMAN_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::GERMAN_LANGUAGE_NAME, 'code' => self::GERMAN_LANGUAGE_CODE];
                 }
                 if ($this->checkGreekLanguage($word)) {
-                    $language = self::GREEK_LANGUAGE_NAME;
-                    $code = self::GREEK_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::GREEK_LANGUAGE_NAME, 'code' => self::GREEK_LANGUAGE_CODE];
                 }
                 if ($this->checkItalianLanguage($word)) {
-                    $language = self::ITALIAN_LANGUAGE_NAME;
-                    $code = self::ITALIAN_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::ITALIAN_LANGUAGE_NAME, 'code' => self::ITALIAN_LANGUAGE_CODE];
                 }
                 if ($this->checkLatvianLanguage($word)) {
-                    $language = self::LATVIAN_LANGUAGE_NAME;
-                    $code = self::LATVIAN_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::LATVIAN_LANGUAGE_NAME, 'code' => self::LATVIAN_LANGUAGE_CODE];
                 }
                 if ($this->checkLithuanianLanguage($word)) {
-                    $language = self::LITHUANIAN_LANGUAGE_NAME;
-                    $code = self::LITHUANIAN_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::LITHUANIAN_LANGUAGE_NAME, 'code' => self::LITHUANIAN_LANGUAGE_CODE];
                 }
                 if ($this->checkPolishLanguage($word)) {
-                    $language = self::POLISH_LANGUAGE_NAME;
-                    $code = self::POLISH_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::POLISH_LANGUAGE_NAME, 'code' => self::POLISH_LANGUAGE_CODE];
                 }
                 if ($this->checkPortugueseLanguage($word)) {
-                    $language = self::PORTUGUESE_LANGUAGE_NAME;
-                    $code = self::PORTUGUESE_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::PORTUGUESE_LANGUAGE_NAME, 'code' => self::PORTUGUESE_LANGUAGE_CODE];
                 }
                 if ($this->checkRomanianLanguage($word)) {
-                    $language = self::ROMANIAN_LANGUAGE_NAME;
-                    $code = self::ROMANIAN_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::ROMANIAN_LANGUAGE_NAME, 'code' => self::ROMANIAN_LANGUAGE_CODE];
                 }
                 if ($this->checkRussianLanguage($word)) {
-                    $language = self::RUSSIAN_LANGUAGE_NAME;
-                    $code = self::RUSSIAN_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::RUSSIAN_LANGUAGE_NAME, 'code' => self::RUSSIAN_LANGUAGE_CODE];
                 }
                 if ($this->checkSerboCroatianLanguage($word)) {
-                    $language = self::SERBOCROATIAN_LANGUAGE_NAME;
-                    $code = self::SERBOCROATIAN_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::SERBOCROATIAN_LANGUAGE_NAME, 'code' => self::SERBOCROATIAN_LANGUAGE_CODE];
                 }
                 if ($this->checkTagalogLanguage($word)) {
-                    $language = self::TAGALOG_LANGUAGE_NAME;
-                    $code = self::TAGALOG_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::TAGALOG_LANGUAGE_NAME, 'code' => self::TAGALOG_LANGUAGE_CODE];
                 }
                 if ($this->checkUkrainianLanguage($word)) {
-                    $language = self::UKRAINIAN_LANGUAGE_NAME;
-                    $code = self::UKRAINIAN_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::UKRAINIAN_LANGUAGE_NAME, 'code' => self::UKRAINIAN_LANGUAGE_CODE];
                 }
                 if ($this->checkEsuLanguage($word)) {
-                    $language = self::ESU_LANGUAGE_NAME;
-                    $code = self::ESU_LANGUAGE_CODE;
+                    $result[$word] = ['language' => self::ESU_LANGUAGE_NAME, 'code' => self::ESU_LANGUAGE_CODE];
+                }
+
+                if (isset($result[$word])) {
+                    $langKey = $result[$word]['language'] . '|' . $result[$word]['code'];
+                    if (!isset($languageCounts[$langKey])) {
+                        $languageCounts[$langKey] = 0;
+                    }
+                    $languageCounts[$langKey]++;
                 }
 
             }
         }
 
+        if (!empty($languageCounts)) {
+            arsort($languageCounts);
+            $topEntry = array_key_first($languageCounts);
+            [$language, $code] = explode('|', $topEntry);
+            $matchCount = $languageCounts[$topEntry];
+        } else {
+            $matchCount = 0;
+        }
+
         $finish = microtime(true);
 
-        return ['language' => $language, 'code' => $code, 'time' => $finish - $start];
+        return [
+            'language' => $language,
+            'code' => $code,
+            'count' => $count,
+            'matches' => $matchCount,
+            'time' => $finish - $start
+        ];
     }
 
     protected function checkFrenchLanguage(string $word): bool
