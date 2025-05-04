@@ -15,9 +15,9 @@ class LanguageNormalizationService
         return array_filter($words, fn($word) => !$this->isShorterThan($word));
     }
 
-    protected function isShorterThan($word): bool
+    protected function isShorterThan(string $word): bool
     {
-        return count($word) < self::ARTICLE_LENGTH;
+        return strlen($word) < self::ARTICLE_LENGTH;
     }
 
 }
