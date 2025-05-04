@@ -3,25 +3,25 @@
 namespace App\Service;
 
 use App\Query\PronunciationQueryLatvianLanguage;
-use App\Query\PronunciationQueryTagalogLanguage;
+use App\Query\PronunciationQuerySpanishLanguage;
 
-class WiktionaryArticlesCategoriesTagalogService extends WiktionaryArticlesCategoriesLatvianService
+class WiktionaryArticlesCategoriesSpanishService extends WiktionaryArticlesCategoriesLatvianService
 {
     public function __construct(
         protected PronunciationQueryLatvianLanguage $queryLatvianLanguage,
-        protected PronunciationQueryTagalogLanguage $queryTagalogLanguage
+        protected PronunciationQuerySpanishLanguage $querySpanishLanguage
     )
     {
         parent::__construct($queryLatvianLanguage);
     }
     protected function getCmtitle(): string
     {
-        return "Category:Tagalog_lemmas";
+        return "Category:Spanish_lemmas";
     }
 
     protected function add($name): void
     {
-        $this->queryTagalogLanguage->add($name);
+        $this->querySpanishLanguage->add($name);
     }
 
 }
