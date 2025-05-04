@@ -21,6 +21,8 @@ class LanguageDetectionController extends AbstractController
             'language' => $languageAndCode['language'],
             'code' => $languageAndCode['code'],
             'time' => $languageAndCode['time'],
+            'count' => $languageAndCode['count'],
+            'matches' => $languageAndCode['matches']
         ]);
     }
 
