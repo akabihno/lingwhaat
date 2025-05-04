@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\LanguageDetection;
 
 use App\Repository\FrenchLanguageRepository;
 

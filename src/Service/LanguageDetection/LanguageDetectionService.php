@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Service;
-
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
+namespace App\Service\LanguageDetection;
 
 class LanguageDetectionService
 {
@@ -37,10 +34,20 @@ class LanguageDetectionService
     const ESU_LANGUAGE_CODE = 'isu';
     const LANGUAGE_NOT_FOUND = 'Language not found';
     public function __construct(
-        protected HttpClientInterface $httpClient,
-        protected UrlGeneratorInterface $urlGenerator,
         protected FrenchLanguageService $frenchLanguageService,
-        protected GermanLanguageService $germanLanguageService
+        protected GermanLanguageService $germanLanguageService,
+        protected GreekLanguageService $greekLanguageService,
+        protected ItalianLanguageService $italianLanguageService,
+        protected LatvianLanguageService $latvianLanguageService,
+        protected LithuanianLanguageService $lithuanianLanguageService,
+        protected PolishLanguageService $polishLanguageService,
+        protected PortugueseLanguageService $portugueseLanguageService,
+        protected RomanianLanguageService $romanianLanguageService,
+        protected RussianLanguageService $russianLanguageService,
+        protected SerboCroatianLanguageService $serboCroatianLanguageService,
+        protected TagalogLanguageService $tagalogLanguageService,
+        protected UkrainianLanguageService $ukrainianLanguageService,
+        protected EsuLanguageService $esuLanguageService
     )
     {
     }
@@ -130,76 +137,62 @@ class LanguageDetectionService
 
     protected function checkGreekLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_greek_word', $word);
+        return $this->greekLanguageService->checkLanguage($word);
     }
 
     protected function checkItalianLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_italian_word', $word);
+        return $this->italianLanguageService->checkLanguage($word);
     }
 
     protected function checkLatvianLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_latvian_word', $word);
+        return $this->latvianLanguageService->checkLanguage($word);
     }
 
     protected function checkLithuanianLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_lithuanian_word', $word);
+        return $this->lithuanianLanguageService->checkLanguage($word);
     }
 
     protected function checkPolishLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_polish_word', $word);
+        return $this->polishLanguageService->checkLanguage($word);
     }
 
     protected function checkPortugueseLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_portuguese_word', $word);
+        return $this->portugueseLanguageService->checkLanguage($word);
     }
 
     protected function checkRomanianLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_romanian_word', $word);
+        return $this->romanianLanguageService->checkLanguage($word);
     }
 
     protected function checkRussianLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_russian_word', $word);
+        return $this->russianLanguageService->checkLanguage($word);
     }
 
     protected function checkSerboCroatianLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_serbocroatian_word', $word);
+        return $this->serboCroatianLanguageService->checkLanguage($word);
     }
 
     protected function checkTagalogLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_tagalog_word', $word);
+        return $this->tagalogLanguageService->checkLanguage($word);
     }
 
     protected function checkUkrainianLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_ukrainian_word', $word);
+        return $this->ukrainianLanguageService->checkLanguage($word);
     }
 
     protected function checkEsuLanguage(string $word): bool
     {
-        return $this->checkLanguage('get_esu_word', $word);
-    }
-
-    protected function checkLanguage(string $route, string $word): bool
-    {
-        $url = $this->urlGenerator->generate($route, [$route => $word], UrlGeneratorInterface::ABSOLUTE_URL);
-
-        try {
-            $response = $this->httpClient->request('GET', $url);
-            $responseContent = $response->getContent();
-
-            return true;
-        } catch (\Exception $exception) {
-            return false;
-        }
+        return $this->esuLanguageService->checkLanguage($word);
     }
 
 }
