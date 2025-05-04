@@ -17,7 +17,7 @@ class LanguageNormalizationService
 
     protected function isShorterThan(string $word): bool
     {
-        return strlen($word) < self::ARTICLE_LENGTH;
+        return mb_strlen($word, 'utf8') <= self::ARTICLE_LENGTH;
     }
 
 }
