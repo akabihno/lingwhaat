@@ -11,7 +11,6 @@
     <h3>Matches: {{ matches }} of {{ count }}</h3>
     <h3>Execution time: {{ time }}</h3>
     <form action="{{ path('index') }}" method="get">
-        <input type="hidden" value="Back">
-        <button type="button">Back</button>
+        <button type="submit">Back</button>
     </form>
 {% endblock %}
