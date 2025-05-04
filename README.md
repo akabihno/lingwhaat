@@ -1,6 +1,6 @@
 # LingWhaat?
 
-This project aims to detect the language of written text with high speed and accuracy.
+This project aims to detect the language of written text with high speed and accuracy.\
 Supported languages:
 * French
 * German
