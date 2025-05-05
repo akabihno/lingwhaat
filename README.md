@@ -7,6 +7,7 @@ Supported languages:
 * Greek
 * Italian
 * Latvian
+* Latin
 * Lithuanian
 * Polish
 * Portuguese
@@ -136,6 +137,31 @@ List of all articles IPA data has been taken from:
 [ú](docs/Italian/en_wiktionary_italian_ú.md),
 [v](docs/Italian/en_wiktionary_italian_v.md),
 [z](docs/Italian/en_wiktionary_italian_z.md)
+* Latin:
+[a](docs/Latin/en_wiktionary_latin_a.md),
+[b](docs/Latin/en_wiktionary_latin_b.md),
+[c](docs/Latin/en_wiktionary_latin_c.md),
+[d](docs/Latin/en_wiktionary_latin_d.md),
+[e](docs/Latin/en_wiktionary_latin_e.md),
+[f](docs/Latin/en_wiktionary_latin_f.md),
+[g](docs/Latin/en_wiktionary_latin_g.md),
+[h](docs/Latin/en_wiktionary_latin_h.md),
+[i](docs/Latin/en_wiktionary_latin_i.md),
+[k](docs/Latin/en_wiktionary_latin_k.md),
+[l](docs/Latin/en_wiktionary_latin_l.md),
+[m](docs/Latin/en_wiktionary_latin_m.md),
+[n](docs/Latin/en_wiktionary_latin_n.md),
+[o](docs/Latin/en_wiktionary_latin_o.md),
+[p](docs/Latin/en_wiktionary_latin_p.md),
+[q](docs/Latin/en_wiktionary_latin_q.md),
+[r](docs/Latin/en_wiktionary_latin_r.md),
+[s](docs/Latin/en_wiktionary_latin_s.md),
+[t](docs/Latin/en_wiktionary_latin_t.md),
+[u](docs/Latin/en_wiktionary_latin_u.md),
+[v](docs/Latin/en_wiktionary_latin_v.md),
+[x](docs/Latin/en_wiktionary_latin_x.md),
+[y](docs/Latin/en_wiktionary_latin_y.md),
+[z](docs/Latin/en_wiktionary_latin_z.md)
 * Latvian:
 [а/ā](docs/Latvian/en_wiktionary_latvian_a.md),
 [b](docs/Latvian/en_wiktionary_latvian_b.md),

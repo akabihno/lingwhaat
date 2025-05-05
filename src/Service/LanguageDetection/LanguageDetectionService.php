@@ -36,6 +36,10 @@ class LanguageDetectionService
     const UKRAINIAN_LANGUAGE_CODE = 'uk';
     const ESU_LANGUAGE_NAME = 'Esu';
     const ESU_LANGUAGE_CODE = 'isu';
+    const SPANISH_LANGUAGE_NAME = 'Spanish';
+    const SPANISH_LANGUAGE_CODE = 'es';
+    const LATIN_LANGUAGE_NAME = 'Latin';
+    const LATIN_LANGUAGE_CODE = 'la';
     const LANGUAGE_NOT_FOUND = 'Language not found';
     public function __construct(
         protected LoggerInterface $logger,
@@ -53,7 +57,9 @@ class LanguageDetectionService
         protected SerboCroatianLanguageService $serboCroatianLanguageService,
         protected TagalogLanguageService $tagalogLanguageService,
         protected UkrainianLanguageService $ukrainianLanguageService,
-        protected EsuLanguageService $esuLanguageService
+        protected EsuLanguageService $esuLanguageService,
+        protected SpanishLanguageService $spanishLanguageService,
+        protected LatinLanguageService $latinLanguageService
     )
     {
     }
@@ -138,6 +144,14 @@ class LanguageDetectionService
                 }
                 if ($this->checkEsuLanguage($word)) {
                     $result[$word] = ['language' => self::ESU_LANGUAGE_NAME, 'code' => self::ESU_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
+                }
+                if ($this->checkSpanishLanguage($word)) {
+                    $result[$word] = ['language' => self::SPANISH_LANGUAGE_NAME, 'code' => self::SPANISH_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
+                }
+                if ($this->checkLatinLanguage($word)) {
+                    $result[$word] = ['language' => self::LATIN_LANGUAGE_NAME, 'code' => self::LATIN_LANGUAGE_CODE];
                     $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
 
@@ -245,6 +259,16 @@ class LanguageDetectionService
     protected function checkEsuLanguage(string $word): bool
     {
         return $this->esuLanguageService->checkLanguage($word);
+    }
+
+    protected function checkSpanishLanguage(string $word): bool
+    {
+        return $this->spanishLanguageService->checkLanguage($word);
+    }
+
+    protected function checkLatinLanguage(string $word): bool
+    {
+        return $this->latinLanguageService->checkLanguage($word);
     }
 
 }
