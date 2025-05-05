@@ -13,6 +13,7 @@ Supported languages:
 * Romanian
 * Russian
 * Serbo-Croatian (Bosnian-Croatian-Montenegrin-Serbian):
+* Spanish
 * Tagalog (Filipino)
 * Ukrainian
 
@@ -337,6 +338,34 @@ List of all articles IPA data has been taken from:
 [đ](docs/SerboCroatian/en_wiktionary_serbocroatian_đ.md),
 [š](docs/SerboCroatian/en_wiktionary_serbocroatian_š.md),
 [ž](docs/SerboCroatian/en_wiktionary_serbocroatian_ž.md)
+* Spanish
+[a](docs/Spanish/en_wiktionary_spanish_a.md),
+[b](docs/Spanish/en_wiktionary_spanish_b.md),
+[c](docs/Spanish/en_wiktionary_spanish_c.md),
+[d](docs/Spanish/en_wiktionary_spanish_d.md),
+[e](docs/Spanish/en_wiktionary_spanish_e.md),
+[f](docs/Spanish/en_wiktionary_spanish_f.md),
+[g](docs/Spanish/en_wiktionary_spanish_g.md),
+[h](docs/Spanish/en_wiktionary_spanish_h.md),
+[i](docs/Spanish/en_wiktionary_spanish_i.md),
+[j](docs/Spanish/en_wiktionary_spanish_j.md),
+[k](docs/Spanish/en_wiktionary_spanish_k.md),
+[l](docs/Spanish/en_wiktionary_spanish_l.md),
+[m](docs/Spanish/en_wiktionary_spanish_m.md),
+[n](docs/Spanish/en_wiktionary_spanish_n.md),
+[ñ](docs/Spanish/en_wiktionary_spanish_ñ.md),
+[o](docs/Spanish/en_wiktionary_spanish_o.md),
+[p](docs/Spanish/en_wiktionary_spanish_p.md),
+[q](docs/Spanish/en_wiktionary_spanish_q.md),
+[r](docs/Spanish/en_wiktionary_spanish_r.md),
+[s](docs/Spanish/en_wiktionary_spanish_s.md),
+[t](docs/Spanish/en_wiktionary_spanish_t.md),
+[u](docs/Spanish/en_wiktionary_spanish_u.md),
+[v](docs/Spanish/en_wiktionary_spanish_v.md),
+[w](docs/Spanish/en_wiktionary_spanish_w.md),
+[x](docs/Spanish/en_wiktionary_spanish_x.md),
+[y](docs/Spanish/en_wiktionary_spanish_y.md),
+[z](docs/Spanish/en_wiktionary_spanish_z.md)
 * Tagalog
 [a](docs/Tagalog/en_wiktionary_tagalog_a.md),
 [b](docs/Tagalog/en_wiktionary_tagalog_b.md),
