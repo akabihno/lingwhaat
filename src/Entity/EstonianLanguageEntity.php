@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\EstonianLanguageRepository;
+use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EstonianLanguageRepository::class)]
 #[ORM\Table(name: "pronunciation_estonian_language")]
