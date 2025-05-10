@@ -2,6 +2,7 @@ CREATE USER '${MYSQL_WEB_USER}'@'%' IDENTIFIED BY '${MYSQL_WEB_PASSWORD}';
 
 GRANT SELECT ON lingwhaat.pronunciation_dutch_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_english_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT ON lingwhaat.pronunciation_estonian_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_esu_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_french_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_german_language TO '${MYSQL_WEB_USER}'@'%';
