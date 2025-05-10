@@ -2,6 +2,7 @@
 
 This project aims to detect the language of written text with high speed and accuracy.\
 Supported languages:
+* Estonian
 * French
 * German
 * Greek
@@ -23,6 +24,39 @@ Class example: [WiktionaryArticlesIpaParserService](src/Service/WiktionaryArticl
 Titles (words) retrieved using MediaWiki API [categorymembers](https://www.mediawiki.org/wiki/API:Categorymembers)\
 Class example: [WiktionaryArticlesCategoriesLatvianService](src/Service/WiktionaryArticlesCategoriesLatvianService.php)\
 List of all articles IPA data has been taken from:
+* Estonian:
+[a](docs/Estonian/en_wiktionary_estonian_a.md),
+[b](docs/Estonian/en_wiktionary_estonian_b.md),
+[c](docs/Estonian/en_wiktionary_estonian_c.md),
+[d](docs/Estonian/en_wiktionary_estonian_d.md),
+[e](docs/Estonian/en_wiktionary_estonian_e.md),
+[f](docs/Estonian/en_wiktionary_estonian_f.md),
+[g](docs/Estonian/en_wiktionary_estonian_g.md),
+[h](docs/Estonian/en_wiktionary_estonian_h.md),
+[i](docs/Estonian/en_wiktionary_estonian_i.md),
+[j](docs/Estonian/en_wiktionary_estonian_j.md),
+[k](docs/Estonian/en_wiktionary_estonian_k.md),
+[l](docs/Estonian/en_wiktionary_estonian_l.md),
+[m](docs/Estonian/en_wiktionary_estonian_m.md),
+[n](docs/Estonian/en_wiktionary_estonian_n.md),
+[o](docs/Estonian/en_wiktionary_estonian_o.md),
+[p](docs/Estonian/en_wiktionary_estonian_p.md),
+[q](docs/Estonian/en_wiktionary_estonian_q.md),
+[r](docs/Estonian/en_wiktionary_estonian_r.md),
+[s](docs/Estonian/en_wiktionary_estonian_s.md),
+[š](docs/Estonian/en_wiktionary_estonian_š.md),
+[z](docs/Estonian/en_wiktionary_estonian_z.md),
+[ž](docs/Estonian/en_wiktionary_estonian_ž.md),
+[t](docs/Estonian/en_wiktionary_estonian_t.md),
+[u](docs/Estonian/en_wiktionary_estonian_u.md),
+[v](docs/Estonian/en_wiktionary_estonian_v.md),
+[w](docs/Estonian/en_wiktionary_estonian_w.md),
+[õ](docs/Estonian/en_wiktionary_estonian_õ.md),
+[ä](docs/Estonian/en_wiktionary_estonian_ä.md),
+[ö](docs/Estonian/en_wiktionary_estonian_ö.md),
+[ü](docs/Estonian/en_wiktionary_estonian_ü.md),
+[x](docs/Estonian/en_wiktionary_estonian_x.md),
+[y](docs/Estonian/en_wiktionary_estonian_y.md)
 * French:
 [a](docs/French/en_wiktionary_french_a.md),
 [b](docs/French/en_wiktionary_french_b.md),
@@ -81,7 +115,7 @@ List of all articles IPA data has been taken from:
 [ö](docs/German/en_wiktionary_german_ö.md),
 [ü](docs/German/en_wiktionary_german_ü.md),
 [ß](docs/German/en_wiktionary_german_ß.md)
-* Greek
+* Greek:
 [α](docs/Greek/en_wiktionary_greek_α.md),
 [β](docs/Greek/en_wiktionary_greek_β.md),
 [γ](docs/Greek/en_wiktionary_greek_γ.md),
@@ -106,7 +140,7 @@ List of all articles IPA data has been taken from:
 [χ](docs/Greek/en_wiktionary_greek_χ.md),
 [ψ](docs/Greek/en_wiktionary_greek_ψ.md),
 [ω](docs/Greek/en_wiktionary_greek_ω.md)
-* Italian
+* Italian:
 [a](docs/Italian/en_wiktionary_italian_a.md),
 [à](docs/Italian/en_wiktionary_italian_à.md),
 [b](docs/Italian/en_wiktionary_italian_b.md),
@@ -185,7 +219,7 @@ List of all articles IPA data has been taken from:
 [u/ū](docs/Latvian/en_wiktionary_latvian_u.md),
 [v](docs/Latvian/en_wiktionary_latvian_v.md),
 [z/ž](docs/Latvian/en_wiktionary_latvian_z.md)
-* Lithuanian
+* Lithuanian:
 [a](docs/Lithuanian/en_wiktionary_lithuanian_a.md),
 [ą](docs/Lithuanian/en_wiktionary_lithuanian_ą.md),
 [b](docs/Lithuanian/en_wiktionary_lithuanian_b.md),
@@ -364,7 +398,7 @@ List of all articles IPA data has been taken from:
 [đ](docs/SerboCroatian/en_wiktionary_serbocroatian_đ.md),
 [š](docs/SerboCroatian/en_wiktionary_serbocroatian_š.md),
 [ž](docs/SerboCroatian/en_wiktionary_serbocroatian_ž.md)
-* Spanish
+* Spanish:
 [a](docs/Spanish/en_wiktionary_spanish_a.md),
 [b](docs/Spanish/en_wiktionary_spanish_b.md),
 [c](docs/Spanish/en_wiktionary_spanish_c.md),
@@ -392,7 +426,37 @@ List of all articles IPA data has been taken from:
 [x](docs/Spanish/en_wiktionary_spanish_x.md),
 [y](docs/Spanish/en_wiktionary_spanish_y.md),
 [z](docs/Spanish/en_wiktionary_spanish_z.md)
-* Tagalog
+* Swedish:
+[a](docs/Swedish/en_wiktionary_swedish_a.md),
+[b](docs/Swedish/en_wiktionary_swedish_b.md),
+[c](docs/Swedish/en_wiktionary_swedish_c.md),
+[d](docs/Swedish/en_wiktionary_swedish_d.md),
+[e](docs/Swedish/en_wiktionary_swedish_e.md),
+[f](docs/Swedish/en_wiktionary_swedish_f.md),
+[g](docs/Swedish/en_wiktionary_swedish_g.md),
+[h](docs/Swedish/en_wiktionary_swedish_h.md),
+[i](docs/Swedish/en_wiktionary_swedish_i.md),
+[j](docs/Swedish/en_wiktionary_swedish_j.md),
+[k](docs/Swedish/en_wiktionary_swedish_k.md),
+[l](docs/Swedish/en_wiktionary_swedish_l.md),
+[m](docs/Swedish/en_wiktionary_swedish_m.md),
+[n](docs/Swedish/en_wiktionary_swedish_n.md),
+[o](docs/Swedish/en_wiktionary_swedish_o.md),
+[p](docs/Swedish/en_wiktionary_swedish_p.md),
+[q](docs/Swedish/en_wiktionary_swedish_q.md),
+[r](docs/Swedish/en_wiktionary_swedish_r.md),
+[s](docs/Swedish/en_wiktionary_swedish_s.md),
+[t](docs/Swedish/en_wiktionary_swedish_t.md),
+[u](docs/Swedish/en_wiktionary_swedish_u.md),
+[v](docs/Swedish/en_wiktionary_swedish_v.md),
+[w](docs/Swedish/en_wiktionary_swedish_w.md),
+[x](docs/Swedish/en_wiktionary_swedish_x.md),
+[y](docs/Swedish/en_wiktionary_swedish_y.md),
+[z](docs/Swedish/en_wiktionary_swedish_z.md),
+[å](docs/Swedish/en_wiktionary_swedish_å.md),
+[ä](docs/Swedish/en_wiktionary_swedish_ä.md),
+[ö](docs/Swedish/en_wiktionary_swedish_ö.md)
+* Tagalog:
 [a](docs/Tagalog/en_wiktionary_tagalog_a.md),
 [b](docs/Tagalog/en_wiktionary_tagalog_b.md),
 [c](docs/Tagalog/en_wiktionary_tagalog_c.md),
@@ -421,7 +485,7 @@ List of all articles IPA data has been taken from:
 [x](docs/Tagalog/en_wiktionary_tagalog_x.md),
 [y](docs/Tagalog/en_wiktionary_tagalog_y.md),
 [z](docs/Tagalog/en_wiktionary_tagalog_z.md)
-* Ukrainian
+* Ukrainian:
 [а](docs/Ukrainian/en_wiktionary_ukrainian_а.md),
 [б](docs/Ukrainian/en_wiktionary_ukrainian_б.md),
 [в](docs/Ukrainian/en_wiktionary_ukrainian_в.md),

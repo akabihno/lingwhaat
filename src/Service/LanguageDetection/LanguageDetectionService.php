@@ -40,6 +40,10 @@ class LanguageDetectionService
     const SPANISH_LANGUAGE_CODE = 'es';
     const LATIN_LANGUAGE_NAME = 'Latin';
     const LATIN_LANGUAGE_CODE = 'la';
+    const SWEDISH_LANGUAGE_NAME = 'Swedish';
+    const SWEDISH_LANGUAGE_CODE = 'sv';
+    const ESTONIAN_LANGUAGE_NAME = 'Estonian';
+    const ESTONIAN_LANGUAGE_CODE = 'et';
     const LANGUAGE_NOT_FOUND = 'Language not found';
     public function __construct(
         protected LoggerInterface $logger,
@@ -59,7 +63,9 @@ class LanguageDetectionService
         protected UkrainianLanguageService $ukrainianLanguageService,
         protected EsuLanguageService $esuLanguageService,
         protected SpanishLanguageService $spanishLanguageService,
-        protected LatinLanguageService $latinLanguageService
+        protected LatinLanguageService $latinLanguageService,
+        protected SwedishLanguageService $swedishLanguageService,
+        protected EstonianLanguageService $estonianLanguageService
     )
     {
     }
@@ -152,6 +158,14 @@ class LanguageDetectionService
                 }
                 if ($this->checkLatinLanguage($word)) {
                     $result[$word] = ['language' => self::LATIN_LANGUAGE_NAME, 'code' => self::LATIN_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
+                }
+                if ($this->checkSwedishLanguage($word)) {
+                    $result[$word] = ['language' => self::SWEDISH_LANGUAGE_NAME, 'code' => self::SWEDISH_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
+                }
+                if ($this->checkEstonianLanguage($word)) {
+                    $result[$word] = ['language' => self::ESTONIAN_LANGUAGE_NAME, 'code' => self::ESTONIAN_LANGUAGE_CODE];
                     $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
 
@@ -269,6 +283,16 @@ class LanguageDetectionService
     protected function checkLatinLanguage(string $word): bool
     {
         return $this->latinLanguageService->checkLanguage($word);
+    }
+
+    protected function checkSwedishLanguage(string $word): bool
+    {
+        return $this->swedishLanguageService->checkLanguage($word);
+    }
+
+    protected function checkEstonianLanguage(string $word): bool
+    {
+        return $this->estonianLanguageService->checkLanguage($word);
     }
 
 }
