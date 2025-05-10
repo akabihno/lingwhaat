@@ -43,7 +43,7 @@
     "ext-pdo": "*",
     "doctrine/dbal": "^3.9.4",
     "doctrine/doctrine-bundle": "^2.14",
-    "doctrine/doctrine-migrations-bundle": "^3.4.1",
+    "doctrine/doctrine-migrations-bundle": "^3.4.2",
     "doctrine/orm": "^3.3.3",
     "ivopetkov/html5-dom-document-php": "^2.8",
     "symfony/config": "^7.2.6",

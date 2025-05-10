@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Xantippa|
+|https://en.wiktionary.org/wiki/xenonlampa|
+|https://en.wiktionary.org/wiki/xenofobisk|
+|https://en.wiktionary.org/wiki/xylofonist|
+|https://en.wiktionary.org/wiki/xerofyt|
+|https://en.wiktionary.org/wiki/x-axel|
+|https://en.wiktionary.org/wiki/xenofob|
+|https://en.wiktionary.org/wiki/X-kromosom|
+|https://en.wiktionary.org/wiki/xenofobi|
+|https://en.wiktionary.org/wiki/xylofon|
+|https://en.wiktionary.org/wiki/xhosa|
+|https://en.wiktionary.org/wiki/xenon|
