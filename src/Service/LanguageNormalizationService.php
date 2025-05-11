@@ -15,7 +15,12 @@ class LanguageNormalizationService
         return array_filter($words, fn($word) => !$this->isShorterThan($word));
     }
 
-    public function removePunctuation(string $word): string
+    public function normalizeWord(string $word): string
+    {
+        return $this->removePunctuation(trim(strtolower($word)));
+    }
+
+    protected function removePunctuation(string $word): string
     {
         $punctuation = "!\|@#$%^&*()-=_+,./{}'`[]?<>~:;–—“”‘…•\"";
 

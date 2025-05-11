@@ -94,7 +94,7 @@ class LanguageDetectionService
             $count = count($words);
 
             foreach ($words as $word) {
-                $word = $this->languageNormalizationService->removePunctuation($word);
+                $word = $this->languageNormalizationService->normalizeWord($word);
                 $this->logger->info(sprintf('[LanguageDetectionService][%s] Processing word: %s', $uuidStr, $word));
 
                 if ($this->checkFrenchLanguage($word)) {
