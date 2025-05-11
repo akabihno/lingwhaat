@@ -1,16 +1,16 @@
 <?php
 
-use App\Query\PronunciationQueryEstonianLanguage;
+use App\Query\PronunciationQueryEnglishLanguage;
 use App\Query\PronunciationQueryLatvianLanguage;
-use App\Service\WiktionaryArticlesCategoriesEstonianService;
+use App\Service\WiktionaryArticlesCategoriesEnglishService;
 
 require 'vendor/autoload.php';
 
 // docker exec -it php-app php utils/get_categories_articles.php
 
 $queryLatvian = new PronunciationQueryLatvianLanguage();
-$queryEstonian = new PronunciationQueryEstonianLanguage();
+$queryEnglish = new PronunciationQueryEnglishLanguage();
 
-$categoriesService = new WiktionaryArticlesCategoriesEstonianService($queryLatvian, $queryEstonian);
+$categoriesService = new WiktionaryArticlesCategoriesEnglishService($queryLatvian, $queryEnglish);
 
 $categoriesService->getArticlesByCategory();
