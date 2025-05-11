@@ -17,7 +17,8 @@ class LanguageNormalizationService
 
     public function normalizeWord(string $word): string
     {
-        return $this->removePunctuation(trim(strtolower($word)));
+        $word = strtolower($word);
+        return $this->removePunctuation($word);
     }
 
     protected function removePunctuation(string $word): string
