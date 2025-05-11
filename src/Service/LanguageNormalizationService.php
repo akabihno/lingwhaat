@@ -7,7 +7,7 @@ class LanguageNormalizationService
     const ARTICLE_LENGTH = 3;
     public function normalizeText(string $text): string
     {
-        return trim(strtolower($text));
+        return trim(mb_strtolower($text));
     }
 
     public function removeArticles(array $words): array
@@ -17,7 +17,6 @@ class LanguageNormalizationService
 
     public function normalizeWord(string $word): string
     {
-        $word = strtolower($word);
         return $this->removePunctuation($word);
     }
 
