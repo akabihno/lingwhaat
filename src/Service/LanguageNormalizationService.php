@@ -15,6 +15,13 @@ class LanguageNormalizationService
         return array_filter($words, fn($word) => !$this->isShorterThan($word));
     }
 
+    public function removePunctuation(string $word): string
+    {
+        $punctuation = "!\|@#$%^&*()-=_+,./{}'`[]?<>~:;–—“”‘…•\"";
+
+        return trim($word, $punctuation);
+    }
+
     protected function isShorterThan(string $word): bool
     {
         return mb_strlen($word, 'utf8') <= self::ARTICLE_LENGTH;
