@@ -7,7 +7,7 @@ class LanguageNormalizationService
     const ARTICLE_LENGTH = 3;
     public function normalizeText(string $text): string
     {
-        return trim(mb_strtolower($text));
+        return mb_trim(mb_strtolower($text));
     }
 
     public function removeArticles(array $words): array
@@ -24,7 +24,7 @@ class LanguageNormalizationService
     {
         $punctuation = "!\|@#$%^&*()-=_+,./{}'`[]?<>~:;–—“”‘…•\"";
 
-        return trim($word, $punctuation);
+        return mb_trim($word, $punctuation);
     }
 
     protected function isShorterThan(string $word): bool
