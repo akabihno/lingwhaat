@@ -2,6 +2,7 @@
 
 This project aims to detect the language of written text with high speed and accuracy.\
 Supported languages:
+* English
 * Estonian
 * French
 * German
@@ -24,6 +25,33 @@ Class example: [WiktionaryArticlesIpaParserService](src/Service/WiktionaryArticl
 Titles (words) retrieved using MediaWiki API [categorymembers](https://www.mediawiki.org/wiki/API:Categorymembers)\
 Class example: [WiktionaryArticlesCategoriesLatvianService](src/Service/WiktionaryArticlesCategoriesLatvianService.php)\
 List of all articles IPA data has been taken from:
+* English:
+[a](docs/English/en_wiktionary_english_a.md),
+[b](docs/English/en_wiktionary_english_b.md),
+[c](docs/English/en_wiktionary_english_c.md),
+[d](docs/English/en_wiktionary_english_d.md),
+[e](docs/English/en_wiktionary_english_e.md),
+[f](docs/English/en_wiktionary_english_f.md),
+[g](docs/English/en_wiktionary_english_g.md),
+[h](docs/English/en_wiktionary_english_h.md),
+[i](docs/English/en_wiktionary_english_i.md),
+[j](docs/English/en_wiktionary_english_j.md),
+[k](docs/English/en_wiktionary_english_k.md),
+[l](docs/English/en_wiktionary_english_l.md),
+[m](docs/English/en_wiktionary_english_m.md),
+[n](docs/English/en_wiktionary_english_n.md),
+[o](docs/English/en_wiktionary_english_o.md),
+[p](docs/English/en_wiktionary_english_p.md),
+[q](docs/English/en_wiktionary_english_q.md),
+[r](docs/English/en_wiktionary_english_r.md),
+[s](docs/English/en_wiktionary_english_s.md),
+[t](docs/English/en_wiktionary_english_t.md),
+[u](docs/English/en_wiktionary_english_u.md),
+[v](docs/English/en_wiktionary_english_v.md),
+[w](docs/English/en_wiktionary_english_w.md),
+[x](docs/English/en_wiktionary_english_x.md),
+[y](docs/English/en_wiktionary_english_y.md),
+[z](docs/English/en_wiktionary_english_z.md),
 * Estonian:
 [a](docs/Estonian/en_wiktionary_estonian_a.md),
 [b](docs/Estonian/en_wiktionary_estonian_b.md),

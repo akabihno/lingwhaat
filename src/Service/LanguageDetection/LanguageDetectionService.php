@@ -44,6 +44,8 @@ class LanguageDetectionService
     const SWEDISH_LANGUAGE_CODE = 'sv';
     const ESTONIAN_LANGUAGE_NAME = 'Estonian';
     const ESTONIAN_LANGUAGE_CODE = 'et';
+    const ENGLISH_LANGUAGE_NAME = 'English';
+    const ENGLISH_LANGUAGE_CODE = 'en';
     const LANGUAGE_NOT_FOUND = 'Language not found';
     public function __construct(
         protected LoggerInterface $logger,
@@ -65,7 +67,8 @@ class LanguageDetectionService
         protected SpanishLanguageService $spanishLanguageService,
         protected LatinLanguageService $latinLanguageService,
         protected SwedishLanguageService $swedishLanguageService,
-        protected EstonianLanguageService $estonianLanguageService
+        protected EstonianLanguageService $estonianLanguageService,
+        protected EnglishLanguageService $englishLanguageService,
     )
     {
     }
@@ -167,6 +170,10 @@ class LanguageDetectionService
                 }
                 if ($this->checkEstonianLanguage($word)) {
                     $result[$word] = ['language' => self::ESTONIAN_LANGUAGE_NAME, 'code' => self::ESTONIAN_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
+                }
+                if ($this->checkEnglishLanguage($word)) {
+                    $result[$word] = ['language' => self::ENGLISH_LANGUAGE_NAME, 'code' => self::ENGLISH_LANGUAGE_CODE];
                     $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
 
@@ -294,6 +301,11 @@ class LanguageDetectionService
     protected function checkEstonianLanguage(string $word): bool
     {
         return $this->estonianLanguageService->checkLanguage($word);
+    }
+
+    protected function checkEnglishLanguage(string $word): bool
+    {
+        return $this->englishLanguageService->checkLanguage($word);
     }
 
 }
