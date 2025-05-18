@@ -2,11 +2,13 @@
 
 This project aims to detect the language of written text with high speed and accuracy.\
 Supported languages:
+* Dutch
 * English
 * Estonian
 * French
 * German
 * Greek
+* Hindi
 * Italian
 * Latvian
 * Latin
