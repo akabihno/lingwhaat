@@ -2,6 +2,27 @@
 
 namespace App\Service\LanguageDetection;
 
+use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
+use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
+use App\Service\LanguageDetection\LanguageServices\EstonianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\EsuLanguageService;
+use App\Service\LanguageDetection\LanguageServices\FrenchLanguageService;
+use App\Service\LanguageDetection\LanguageServices\GermanLanguageService;
+use App\Service\LanguageDetection\LanguageServices\GreekLanguageService;
+use App\Service\LanguageDetection\LanguageServices\HindiLanguageService;
+use App\Service\LanguageDetection\LanguageServices\ItalianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\LatinLanguageService;
+use App\Service\LanguageDetection\LanguageServices\LatvianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\LithuanianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\PolishLanguageService;
+use App\Service\LanguageDetection\LanguageServices\PortugueseLanguageService;
+use App\Service\LanguageDetection\LanguageServices\RomanianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\RussianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\SerboCroatianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\SpanishLanguageService;
+use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
+use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
+use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use App\Service\LanguageNormalizationService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
@@ -46,6 +67,10 @@ class LanguageDetectionService
     const ESTONIAN_LANGUAGE_CODE = 'et';
     const ENGLISH_LANGUAGE_NAME = 'English';
     const ENGLISH_LANGUAGE_CODE = 'en';
+    const DUTCH_LANGUAGE_NAME = 'Dutch';
+    const DUTCH_LANGUAGE_CODE = 'nl';
+    const HINDI_LANGUAGE_NAME = 'Hindi';
+    const HINDI_LANGUAGE_CODE = 'hi';
     const LANGUAGE_NOT_FOUND = 'Language not found';
     public function __construct(
         protected LoggerInterface $logger,
@@ -69,6 +94,8 @@ class LanguageDetectionService
         protected SwedishLanguageService $swedishLanguageService,
         protected EstonianLanguageService $estonianLanguageService,
         protected EnglishLanguageService $englishLanguageService,
+        protected DutchLanguageService $dutchLanguageService,
+        protected HindiLanguageService $hindiLanguageService
     )
     {
     }
@@ -174,6 +201,14 @@ class LanguageDetectionService
                 }
                 if ($this->checkEnglishLanguage($word)) {
                     $result[$word] = ['language' => self::ENGLISH_LANGUAGE_NAME, 'code' => self::ENGLISH_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
+                }
+                if ($this->checkDutchLanguage($word)) {
+                    $result[$word] = ['language' => self::DUTCH_LANGUAGE_NAME, 'code' => self::DUTCH_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
+                }
+                if ($this->checkHindiLanguage($word)) {
+                    $result[$word] = ['language' => self::HINDI_LANGUAGE_NAME, 'code' => self::HINDI_LANGUAGE_NAME];
                     $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
 
@@ -306,6 +341,16 @@ class LanguageDetectionService
     protected function checkEnglishLanguage(string $word): bool
     {
         return $this->englishLanguageService->checkLanguage($word);
+    }
+
+    protected function checkDutchLanguage(string $word): bool
+    {
+        return $this->dutchLanguageService->checkLanguage($word);
+    }
+
+    protected function checkHindiLanguage(string $word): bool
+    {
+        return $this->hindiLanguageService->checkLanguage($word);
     }
 
 }
