@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\LanguageDetection;
+namespace App\Service\LanguageDetection\LanguageServices;
 
 use App\Repository\SpanishLanguageRepository;
 
