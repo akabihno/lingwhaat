@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/तूसदान|
+|https://en.wiktionary.org/wiki/तूफ़ान%20के%20पहले%20की%20शांति|
+|https://en.wiktionary.org/wiki/तूफ़ान%20के%20पहले%20की%20शान्ति|
+|https://en.wiktionary.org/wiki/तूफ़ान|
+|https://en.wiktionary.org/wiki/तू|
+|https://en.wiktionary.org/wiki/तूलिका|
+|https://en.wiktionary.org/wiki/तूल|
+|https://en.wiktionary.org/wiki/तू%20कहाँ%20रहती%20है|
+|https://en.wiktionary.org/wiki/तू%20कहाँ%20रहता%20है|

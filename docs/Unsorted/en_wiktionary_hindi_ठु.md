@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ठुसकना|
+|https://en.wiktionary.org/wiki/ठुकराना|
+|https://en.wiktionary.org/wiki/ठुमक|
+|https://en.wiktionary.org/wiki/ठुमकना|
+|https://en.wiktionary.org/wiki/ठुल्ला|
+|https://en.wiktionary.org/wiki/ठुड्डी|
+|https://en.wiktionary.org/wiki/ठुमरी|

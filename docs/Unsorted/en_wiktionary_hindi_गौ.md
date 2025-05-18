@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/गौमाता|
+|https://en.wiktionary.org/wiki/गौण|
+|https://en.wiktionary.org/wiki/गौरैया|
+|https://en.wiktionary.org/wiki/गौ|
+|https://en.wiktionary.org/wiki/गौशाला|
+|https://en.wiktionary.org/wiki/गौरवान्वित|
+|https://en.wiktionary.org/wiki/गौरवशाली|
+|https://en.wiktionary.org/wiki/गौरव|

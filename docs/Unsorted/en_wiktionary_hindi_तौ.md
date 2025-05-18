@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/तौरात|
+|https://en.wiktionary.org/wiki/तौहीन|
+|https://en.wiktionary.org/wiki/तौर|
+|https://en.wiktionary.org/wiki/तौलिया|
+|https://en.wiktionary.org/wiki/तौलना|
+|https://en.wiktionary.org/wiki/तौल|
+|https://en.wiktionary.org/wiki/तौबा|
+|https://en.wiktionary.org/wiki/तौबा%20करना|

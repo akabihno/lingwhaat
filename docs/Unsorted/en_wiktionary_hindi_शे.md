@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/शेख|
+|https://en.wiktionary.org/wiki/शेखावाटी|
+|https://en.wiktionary.org/wiki/शेयर%20बाज़ार|
+|https://en.wiktionary.org/wiki/शेयरधारक|
+|https://en.wiktionary.org/wiki/शेख़ी|
+|https://en.wiktionary.org/wiki/शेख़ूपुरा|
+|https://en.wiktionary.org/wiki/शेरनी|
+|https://en.wiktionary.org/wiki/शेष|
+|https://en.wiktionary.org/wiki/शेर|

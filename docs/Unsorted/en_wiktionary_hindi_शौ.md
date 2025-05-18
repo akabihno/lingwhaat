@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/शौकत|
+|https://en.wiktionary.org/wiki/शौच|
+|https://en.wiktionary.org/wiki/शौहर|
+|https://en.wiktionary.org/wiki/शौक़ीन|
+|https://en.wiktionary.org/wiki/शौचालय|
+|https://en.wiktionary.org/wiki/शौक़|
+|https://en.wiktionary.org/wiki/शौरसेनी|
+|https://en.wiktionary.org/wiki/शौर्य|

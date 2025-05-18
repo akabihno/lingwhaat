@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/खेवा|
+|https://en.wiktionary.org/wiki/खेला|
+|https://en.wiktionary.org/wiki/खेतिहर|
+|https://en.wiktionary.org/wiki/खेल-कूद|
+|https://en.wiktionary.org/wiki/खेती-बाड़ी|
+|https://en.wiktionary.org/wiki/खेना|
+|https://en.wiktionary.org/wiki/खेती|
+|https://en.wiktionary.org/wiki/खेत|
+|https://en.wiktionary.org/wiki/खेलकूद|
+|https://en.wiktionary.org/wiki/खेद|
+|https://en.wiktionary.org/wiki/खेलना|
+|https://en.wiktionary.org/wiki/खेल|

@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/झोलाछाप|
+|https://en.wiktionary.org/wiki/झोल|
+|https://en.wiktionary.org/wiki/झोपड़ी|
+|https://en.wiktionary.org/wiki/झोली|
+|https://en.wiktionary.org/wiki/झोंकना|
+|https://en.wiktionary.org/wiki/झोंपड़ा|
+|https://en.wiktionary.org/wiki/झोंका|
+|https://en.wiktionary.org/wiki/झोला|

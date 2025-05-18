@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/झूमर|
+|https://en.wiktionary.org/wiki/झूलना|
+|https://en.wiktionary.org/wiki/झूला|
+|https://en.wiktionary.org/wiki/झूठ%20बोलना|
+|https://en.wiktionary.org/wiki/झूम|
+|https://en.wiktionary.org/wiki/झूमना|
+|https://en.wiktionary.org/wiki/झूठा|
+|https://en.wiktionary.org/wiki/झूठमूठ|
+|https://en.wiktionary.org/wiki/झूठ|

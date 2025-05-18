@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/झुँझलाना|
+|https://en.wiktionary.org/wiki/झुकाना|
+|https://en.wiktionary.org/wiki/झुकवाना|
+|https://en.wiktionary.org/wiki/झुरझुरी|
+|https://en.wiktionary.org/wiki/झुनझुना|
+|https://en.wiktionary.org/wiki/झुंझलाहट|
+|https://en.wiktionary.org/wiki/झुगिया|
+|https://en.wiktionary.org/wiki/झुकाव|
+|https://en.wiktionary.org/wiki/झुक%20जाना|
+|https://en.wiktionary.org/wiki/झुरमुट|
+|https://en.wiktionary.org/wiki/झुठलाना|
+|https://en.wiktionary.org/wiki/झुमका|
+|https://en.wiktionary.org/wiki/झुर्री|
+|https://en.wiktionary.org/wiki/झुलसना|
+|https://en.wiktionary.org/wiki/झुकना|

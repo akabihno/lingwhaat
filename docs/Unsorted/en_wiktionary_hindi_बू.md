@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/बूझ|
+|https://en.wiktionary.org/wiki/बूज़ा|
+|https://en.wiktionary.org/wiki/बूथ|
+|https://en.wiktionary.org/wiki/बूझना|
+|https://en.wiktionary.org/wiki/बूंद|
+|https://en.wiktionary.org/wiki/बूढ़ी|
+|https://en.wiktionary.org/wiki/बूचड़खाना|
+|https://en.wiktionary.org/wiki/बू|
+|https://en.wiktionary.org/wiki/बूआ|
+|https://en.wiktionary.org/wiki/बूट|
+|https://en.wiktionary.org/wiki/बूचड़|
+|https://en.wiktionary.org/wiki/बूढ़ा|
+|https://en.wiktionary.org/wiki/बूड़ना|

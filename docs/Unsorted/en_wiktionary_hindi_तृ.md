@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/तृषा|
+|https://en.wiktionary.org/wiki/तृणमूल|
+|https://en.wiktionary.org/wiki/तृप्त|
+|https://en.wiktionary.org/wiki/तृप्ति|
+|https://en.wiktionary.org/wiki/तृतीया%20विभक्ति|
+|https://en.wiktionary.org/wiki/तृतीय|
+|https://en.wiktionary.org/wiki/तृष्णा|
+|https://en.wiktionary.org/wiki/तृण|

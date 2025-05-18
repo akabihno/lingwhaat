@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/टूक|
+|https://en.wiktionary.org/wiki/टूटता%20तारा|
+|https://en.wiktionary.org/wiki/टूर्नामेंट|
+|https://en.wiktionary.org/wiki/टूथपेस्ट|
+|https://en.wiktionary.org/wiki/टूट|
+|https://en.wiktionary.org/wiki/टूटी%20फूटी|
+|https://en.wiktionary.org/wiki/टूटना|
+|https://en.wiktionary.org/wiki/टूट%20जाना|

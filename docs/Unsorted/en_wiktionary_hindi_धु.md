@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/धुनना|
+|https://en.wiktionary.org/wiki/धुरी|
+|https://en.wiktionary.org/wiki/धुंद|
+|https://en.wiktionary.org/wiki/धुन|
+|https://en.wiktionary.org/wiki/धुन्नी|
+|https://en.wiktionary.org/wiki/धुंधला|
+|https://en.wiktionary.org/wiki/धुलना|
+|https://en.wiktionary.org/wiki/धुआँ|
+|https://en.wiktionary.org/wiki/धुंध|
+|https://en.wiktionary.org/wiki/धुरी%20की%20मोडा|

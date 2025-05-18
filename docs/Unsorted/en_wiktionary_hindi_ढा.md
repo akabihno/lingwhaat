@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ढाहना|
+|https://en.wiktionary.org/wiki/ढाना|
+|https://en.wiktionary.org/wiki/ढाढ़स|
+|https://en.wiktionary.org/wiki/ढालना|
+|https://en.wiktionary.org/wiki/ढांचा|
+|https://en.wiktionary.org/wiki/ढाका|
+|https://en.wiktionary.org/wiki/ढाबा|
+|https://en.wiktionary.org/wiki/ढाई|
+|https://en.wiktionary.org/wiki/ढाल|
+|https://en.wiktionary.org/wiki/ढा%20देना|

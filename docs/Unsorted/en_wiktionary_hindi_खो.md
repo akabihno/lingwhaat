@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/खोंड़ा|
+|https://en.wiktionary.org/wiki/खोर|
+|https://en.wiktionary.org/wiki/खोका|
+|https://en.wiktionary.org/wiki/खोआ|
+|https://en.wiktionary.org/wiki/खोया|
+|https://en.wiktionary.org/wiki/खोंसना|
+|https://en.wiktionary.org/wiki/खोज|
+|https://en.wiktionary.org/wiki/खोटा|
+|https://en.wiktionary.org/wiki/खोपड़ी|
+|https://en.wiktionary.org/wiki/खोदना|
+|https://en.wiktionary.org/wiki/खोलना|
+|https://en.wiktionary.org/wiki/खोप|
+|https://en.wiktionary.org/wiki/खोना|
+|https://en.wiktionary.org/wiki/खोजना|
+|https://en.wiktionary.org/wiki/खोल|

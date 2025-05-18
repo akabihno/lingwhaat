@@ -1,0 +1,16 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/छुईमुई|
+|https://en.wiktionary.org/wiki/छुपवाना|
+|https://en.wiktionary.org/wiki/छुट्टा|
+|https://en.wiktionary.org/wiki/छुआछूत|
+|https://en.wiktionary.org/wiki/छुट|
+|https://en.wiktionary.org/wiki/छुपना|
+|https://en.wiktionary.org/wiki/छुड़ाना|
+|https://en.wiktionary.org/wiki/छुरा|
+|https://en.wiktionary.org/wiki/छुटना|
+|https://en.wiktionary.org/wiki/छुटपन|
+|https://en.wiktionary.org/wiki/छुट्टी|
+|https://en.wiktionary.org/wiki/छुपाना|
+|https://en.wiktionary.org/wiki/छुरी|
+|https://en.wiktionary.org/wiki/छुपा|

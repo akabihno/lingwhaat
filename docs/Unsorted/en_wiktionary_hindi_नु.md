@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/नुकीला|
+|https://en.wiktionary.org/wiki/नुमायाँ|
+|https://en.wiktionary.org/wiki/नुमायान|
+|https://en.wiktionary.org/wiki/नुशूर|
+|https://en.wiktionary.org/wiki/नुक्कड़%20नाटक|
+|https://en.wiktionary.org/wiki/नुमाइंदा|
+|https://en.wiktionary.org/wiki/नुमाइंदगी|
+|https://en.wiktionary.org/wiki/नुमाइश|
+|https://en.wiktionary.org/wiki/नुस्ख़ा|
+|https://en.wiktionary.org/wiki/नुक़सान%20पहुँचाना|
+|https://en.wiktionary.org/wiki/नुकसान|
+|https://en.wiktionary.org/wiki/नुसख़ा|
+|https://en.wiktionary.org/wiki/नुक्कड़|
+|https://en.wiktionary.org/wiki/नुक़्ता|
+|https://en.wiktionary.org/wiki/नुचना|

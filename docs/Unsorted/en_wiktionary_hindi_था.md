@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/थाथी|
+|https://en.wiktionary.org/wiki/थाती|
+|https://en.wiktionary.org/wiki/थान|
+|https://en.wiktionary.org/wiki/थाट|
+|https://en.wiktionary.org/wiki/थानेदार|
+|https://en.wiktionary.org/wiki/थापना|
+|https://en.wiktionary.org/wiki/थामना|
+|https://en.wiktionary.org/wiki/थापी|
+|https://en.wiktionary.org/wiki/थापा|
+|https://en.wiktionary.org/wiki/थाली|
+|https://en.wiktionary.org/wiki/थाइलैंड|
+|https://en.wiktionary.org/wiki/थाईलैंड|
+|https://en.wiktionary.org/wiki/थाना|
+|https://en.wiktionary.org/wiki/थाई|
+|https://en.wiktionary.org/wiki/थाइ|

@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/वंगदेश|
+|https://en.wiktionary.org/wiki/वंगन|
+|https://en.wiktionary.org/wiki/वंशावली|
+|https://en.wiktionary.org/wiki/वंटन|
+|https://en.wiktionary.org/wiki/वंदना|
+|https://en.wiktionary.org/wiki/वंचित|
+|https://en.wiktionary.org/wiki/वंशवाद|
+|https://en.wiktionary.org/wiki/वंशज|
+|https://en.wiktionary.org/wiki/वंशाणु|
+|https://en.wiktionary.org/wiki/वंश|

@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/टी%20शर्ट|
+|https://en.wiktionary.org/wiki/टीशर्ट|
+|https://en.wiktionary.org/wiki/टीचर|
+|https://en.wiktionary.org/wiki/टीकाकृत|
+|https://en.wiktionary.org/wiki/टीस|
+|https://en.wiktionary.org/wiki/टी-शर्ट|
+|https://en.wiktionary.org/wiki/टीम|
+|https://en.wiktionary.org/wiki/टीकाकरण|
+|https://en.wiktionary.org/wiki/टीला|
+|https://en.wiktionary.org/wiki/टीवी|
+|https://en.wiktionary.org/wiki/टीका|

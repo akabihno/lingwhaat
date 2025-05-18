@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/छेदन|
+|https://en.wiktionary.org/wiki/छेक|
+|https://en.wiktionary.org/wiki/छेरी|
+|https://en.wiktionary.org/wiki/छेना|
+|https://en.wiktionary.org/wiki/छेड़छाड़|
+|https://en.wiktionary.org/wiki/छेड़|
+|https://en.wiktionary.org/wiki/छेदना|
+|https://en.wiktionary.org/wiki/छेड़ना|
+|https://en.wiktionary.org/wiki/छेनी|
+|https://en.wiktionary.org/wiki/छेद|

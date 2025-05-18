@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/षड्ज|
+|https://en.wiktionary.org/wiki/षाण्मासिक|
+|https://en.wiktionary.org/wiki/षट्कोण|
+|https://en.wiktionary.org/wiki/षष्ठी|
+|https://en.wiktionary.org/wiki/षष्ठी%20विभक्ति|
+|https://en.wiktionary.org/wiki/षड्यन्त्र|
+|https://en.wiktionary.org/wiki/षड्यंत्र|
+|https://en.wiktionary.org/wiki/ष|

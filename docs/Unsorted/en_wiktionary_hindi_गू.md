@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/गूँजना|
+|https://en.wiktionary.org/wiki/गूढ़ा|
+|https://en.wiktionary.org/wiki/गूँधना|
+|https://en.wiktionary.org/wiki/गूँथना|
+|https://en.wiktionary.org/wiki/गूँगे%20का%20गुड़%20खाना|
+|https://en.wiktionary.org/wiki/गूंगा|
+|https://en.wiktionary.org/wiki/गूंज|
+|https://en.wiktionary.org/wiki/गूगल|

@@ -1,0 +1,16 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/भीजना|
+|https://en.wiktionary.org/wiki/भीमनाद|
+|https://en.wiktionary.org/wiki/भीत|
+|https://en.wiktionary.org/wiki/भीक|
+|https://en.wiktionary.org/wiki/भीड़भाड़|
+|https://en.wiktionary.org/wiki/भीतरी|
+|https://en.wiktionary.org/wiki/भीगना|
+|https://en.wiktionary.org/wiki/भीषण|
+|https://en.wiktionary.org/wiki/भीख|
+|https://en.wiktionary.org/wiki/भीगा|
+|https://en.wiktionary.org/wiki/भीतर|
+|https://en.wiktionary.org/wiki/भीमसरट|
+|https://en.wiktionary.org/wiki/भीड़|
+|https://en.wiktionary.org/wiki/भी|

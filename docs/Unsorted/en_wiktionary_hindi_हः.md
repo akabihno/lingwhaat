@@ -1,0 +1,16 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/हँसाई|
+|https://en.wiktionary.org/wiki/हंसी|
+|https://en.wiktionary.org/wiki/हँसी-मज़ाक़|
+|https://en.wiktionary.org/wiki/हँस%20पड़ना|
+|https://en.wiktionary.org/wiki/हँस%20देना|
+|https://en.wiktionary.org/wiki/हंटर|
+|https://en.wiktionary.org/wiki/हंसाना|
+|https://en.wiktionary.org/wiki/हंगामा|
+|https://en.wiktionary.org/wiki/हँसली|
+|https://en.wiktionary.org/wiki/हँसिया|
+|https://en.wiktionary.org/wiki/हंगुल|
+|https://en.wiktionary.org/wiki/हँसना|
+|https://en.wiktionary.org/wiki/हंगरी|
+|https://en.wiktionary.org/wiki/हँस|

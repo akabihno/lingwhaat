@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/फोटोग्राफर|
+|https://en.wiktionary.org/wiki/फोड़िया|
+|https://en.wiktionary.org/wiki/फोकट|
+|https://en.wiktionary.org/wiki/फोड़|
+|https://en.wiktionary.org/wiki/फोन|
+|https://en.wiktionary.org/wiki/फोड़ा|
+|https://en.wiktionary.org/wiki/फोड़ना|

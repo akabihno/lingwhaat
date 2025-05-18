@@ -1,0 +1,16 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ऋणमुक्ति|
+|https://en.wiktionary.org/wiki/ऋणी|
+|https://en.wiktionary.org/wiki/ऋणमुक्त|
+|https://en.wiktionary.org/wiki/ऋणदाता|
+|https://en.wiktionary.org/wiki/ऋणाग्र|
+|https://en.wiktionary.org/wiki/ऋणायन|
+|https://en.wiktionary.org/wiki/ऋषभ|
+|https://en.wiktionary.org/wiki/ऋषिकेश|
+|https://en.wiktionary.org/wiki/ऋण|
+|https://en.wiktionary.org/wiki/ऋषि|
+|https://en.wiktionary.org/wiki/ऋद्धि|
+|https://en.wiktionary.org/wiki/ऋग्वेद|
+|https://en.wiktionary.org/wiki/ऋतु|
+|https://en.wiktionary.org/wiki/ऋ|

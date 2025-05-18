@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/खूँटा|
+|https://en.wiktionary.org/wiki/खूँदना|
+|https://en.wiktionary.org/wiki/खूद|
+|https://en.wiktionary.org/wiki/खून-आशाम|
+|https://en.wiktionary.org/wiki/खूच|
+|https://en.wiktionary.org/wiki/खूब|
+|https://en.wiktionary.org/wiki/खूँटी|
+|https://en.wiktionary.org/wiki/खून|

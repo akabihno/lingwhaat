@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/भुर्जी|
+|https://en.wiktionary.org/wiki/भुजिया|
+|https://en.wiktionary.org/wiki/भुरता|
+|https://en.wiktionary.org/wiki/भुतहा|
+|https://en.wiktionary.org/wiki/भुगताना|
+|https://en.wiktionary.org/wiki/भुवन|
+|https://en.wiktionary.org/wiki/भुगतान|
+|https://en.wiktionary.org/wiki/भुजा|
+|https://en.wiktionary.org/wiki/भुजंग|
+|https://en.wiktionary.org/wiki/भुलक्कड़|
+|https://en.wiktionary.org/wiki/भुनना|
+|https://en.wiktionary.org/wiki/भुगतना|
+|https://en.wiktionary.org/wiki/भुट्टा|
+|https://en.wiktionary.org/wiki/भुवनेश्वर|
+|https://en.wiktionary.org/wiki/भुज|

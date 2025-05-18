@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/लैट्रिंग|
+|https://en.wiktionary.org/wiki/लैट्रिन|
+|https://en.wiktionary.org/wiki/लैंडर|
+|https://en.wiktionary.org/wiki/लैला%20और%20मजनू|
+|https://en.wiktionary.org/wiki/लैब|
+|https://en.wiktionary.org/wiki/लैंगिक|
+|https://en.wiktionary.org/wiki/लैंगिकता|
+|https://en.wiktionary.org/wiki/लैटियम|
+|https://en.wiktionary.org/wiki/लैया|

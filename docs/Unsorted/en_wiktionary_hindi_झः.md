@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/झ़ियाँ|
+|https://en.wiktionary.org/wiki/झंडी|
+|https://en.wiktionary.org/wiki/झंडाबरदार|
+|https://en.wiktionary.org/wiki/झंडेदार|
+|https://en.wiktionary.org/wiki/झंडादार|
+|https://en.wiktionary.org/wiki/झंझट|
+|https://en.wiktionary.org/wiki/झ़|
+|https://en.wiktionary.org/wiki/झंडा|

@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/जैसी%20करनी%20वैसी%20भरनी|
+|https://en.wiktionary.org/wiki/जैसे%20को%20तैसा|
+|https://en.wiktionary.org/wiki/जैविकी|
+|https://en.wiktionary.org/wiki/जैसा%20बाप,%20वैसा%20बेटा|
+|https://en.wiktionary.org/wiki/जैकेट|
+|https://en.wiktionary.org/wiki/जैसा%20कि%20मैं%20कह%20रहा%20था|
+|https://en.wiktionary.org/wiki/जैकबाबाद|
+|https://en.wiktionary.org/wiki/जैसे|
+|https://en.wiktionary.org/wiki/जैन|
+|https://en.wiktionary.org/wiki/जैगुआर|
+|https://en.wiktionary.org/wiki/जैव|
+|https://en.wiktionary.org/wiki/जैसा|
+|https://en.wiktionary.org/wiki/जैतून|

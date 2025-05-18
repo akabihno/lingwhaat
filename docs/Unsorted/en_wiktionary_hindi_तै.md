@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/तैश|
+|https://en.wiktionary.org/wiki/तैराक|
+|https://en.wiktionary.org/wiki/तैनाती|
+|https://en.wiktionary.org/wiki/तैनात|
+|https://en.wiktionary.org/wiki/तैल|
+|https://en.wiktionary.org/wiki/तैराना|
+|https://en.wiktionary.org/wiki/तैयारी|
+|https://en.wiktionary.org/wiki/तैयार|
+|https://en.wiktionary.org/wiki/तैंतालीस|
+|https://en.wiktionary.org/wiki/तैंतीस|
+|https://en.wiktionary.org/wiki/तैयार%20करना|
+|https://en.wiktionary.org/wiki/तैरना|
+|https://en.wiktionary.org/wiki/तैराकी|

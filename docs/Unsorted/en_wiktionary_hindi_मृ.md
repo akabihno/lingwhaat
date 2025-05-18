@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/मृद्भांड|
+|https://en.wiktionary.org/wiki/मृतोत्थान|
+|https://en.wiktionary.org/wiki/मृत्युदर|
+|https://en.wiktionary.org/wiki/मृदुता|
+|https://en.wiktionary.org/wiki/मृतप्राय|
+|https://en.wiktionary.org/wiki/मृतक|
+|https://en.wiktionary.org/wiki/मृत्युदंड|
+|https://en.wiktionary.org/wiki/मृगतृष्णा|
+|https://en.wiktionary.org/wiki/मृदु|
+|https://en.wiktionary.org/wiki/मृत्यु|
+|https://en.wiktionary.org/wiki/मृत|
+|https://en.wiktionary.org/wiki/मृग|
+|https://en.wiktionary.org/wiki/मृग%20निहारिका|
+|https://en.wiktionary.org/wiki/मृग%20तारामंडल|
+|https://en.wiktionary.org/wiki/मृगत्रयी|

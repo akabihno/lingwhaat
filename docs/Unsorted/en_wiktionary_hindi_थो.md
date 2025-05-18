@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/थोबड़ा|
+|https://en.wiktionary.org/wiki/थोड़ा-बहुत|
+|https://en.wiktionary.org/wiki/थोपना|
+|https://en.wiktionary.org/wiki/थोक|
+|https://en.wiktionary.org/wiki/थोक%20भाव|
+|https://en.wiktionary.org/wiki/थोड़ा-थोड़ा|
+|https://en.wiktionary.org/wiki/थोड़ा%20थोड़ा|
+|https://en.wiktionary.org/wiki/थोड़ा|

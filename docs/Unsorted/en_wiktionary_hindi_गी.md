@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/गीशा|
+|https://en.wiktionary.org/wiki/गींजना|
+|https://en.wiktionary.org/wiki/गीतिनाटक|
+|https://en.wiktionary.org/wiki/गीतिनाट्य|
+|https://en.wiktionary.org/wiki/गीति|
+|https://en.wiktionary.org/wiki/गीज़र|
+|https://en.wiktionary.org/wiki/गीत%20माला|
+|https://en.wiktionary.org/wiki/गीदड़|
+|https://en.wiktionary.org/wiki/गीलापन|
+|https://en.wiktionary.org/wiki/गीला|
+|https://en.wiktionary.org/wiki/गीत|
+|https://en.wiktionary.org/wiki/गीता|
+|https://en.wiktionary.org/wiki/गीतकार|

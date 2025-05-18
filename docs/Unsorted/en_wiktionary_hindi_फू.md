@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/फूल%20चढ़ाना|
+|https://en.wiktionary.org/wiki/फूलदान|
+|https://en.wiktionary.org/wiki/फूलना|
+|https://en.wiktionary.org/wiki/फूंक|
+|https://en.wiktionary.org/wiki/फूफी|
+|https://en.wiktionary.org/wiki/फूँकना|
+|https://en.wiktionary.org/wiki/फूफा|
+|https://en.wiktionary.org/wiki/फूटना|
+|https://en.wiktionary.org/wiki/फूल%20गोभी|
+|https://en.wiktionary.org/wiki/फूल|

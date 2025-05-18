@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/शंक्वाकार|
+|https://en.wiktionary.org/wiki/शंकु%20परिच्छेद|
+|https://en.wiktionary.org/wiki/श़|
+|https://en.wiktionary.org/wiki/शंतनु|
+|https://en.wiktionary.org/wiki/शंघाई|
+|https://en.wiktionary.org/wiki/शंख|
+|https://en.wiktionary.org/wiki/शंकर|
+|https://en.wiktionary.org/wiki/शंका|

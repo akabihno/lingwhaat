@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/लौकिक|
+|https://en.wiktionary.org/wiki/लौआ|
+|https://en.wiktionary.org/wiki/लौल्य|
+|https://en.wiktionary.org/wiki/लौक्य|
+|https://en.wiktionary.org/wiki/लौड़ा|
+|https://en.wiktionary.org/wiki/लौहपथगामिनी|
+|https://en.wiktionary.org/wiki/लौकी|
+|https://en.wiktionary.org/wiki/लौह|
+|https://en.wiktionary.org/wiki/लौह%20युग|
+|https://en.wiktionary.org/wiki/लौंग|
+|https://en.wiktionary.org/wiki/लौ|
+|https://en.wiktionary.org/wiki/लौटाना|
+|https://en.wiktionary.org/wiki/लौटना|

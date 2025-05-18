@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/टाँकना|
+|https://en.wiktionary.org/wiki/टालमटोल|
+|https://en.wiktionary.org/wiki/टालमटोल%20करना|
+|https://en.wiktionary.org/wiki/टालना|
+|https://en.wiktionary.org/wiki/टाइपराइटर|
+|https://en.wiktionary.org/wiki/टापना|
+|https://en.wiktionary.org/wiki/टापू|
+|https://en.wiktionary.org/wiki/टाँग|
+|https://en.wiktionary.org/wiki/टाँगना|
+|https://en.wiktionary.org/wiki/टाइम|
+|https://en.wiktionary.org/wiki/टाइम%20क्या%20है|
+|https://en.wiktionary.org/wiki/टांकण|

@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/डुब्बा|
+|https://en.wiktionary.org/wiki/डुबसी|
+|https://en.wiktionary.org/wiki/डुलना|
+|https://en.wiktionary.org/wiki/डुबाना|
+|https://en.wiktionary.org/wiki/डुबवाना|
+|https://en.wiktionary.org/wiki/डुबोना|
+|https://en.wiktionary.org/wiki/डुबकी|

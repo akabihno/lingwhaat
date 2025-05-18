@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ठेकुआ|
+|https://en.wiktionary.org/wiki/ठेकेदार|
+|https://en.wiktionary.org/wiki/ठेंगा|
+|https://en.wiktionary.org/wiki/ठेका|
+|https://en.wiktionary.org/wiki/ठेलना|
+|https://en.wiktionary.org/wiki/ठेठ|
+|https://en.wiktionary.org/wiki/ठेला|
+|https://en.wiktionary.org/wiki/ठेस|

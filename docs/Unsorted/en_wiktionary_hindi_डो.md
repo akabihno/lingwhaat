@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/डोलर|
+|https://en.wiktionary.org/wiki/डोंगा|
+|https://en.wiktionary.org/wiki/डोंड़हा|
+|https://en.wiktionary.org/wiki/डोमेन|
+|https://en.wiktionary.org/wiki/डोनट|
+|https://en.wiktionary.org/wiki/डोला|
+|https://en.wiktionary.org/wiki/डोली|
+|https://en.wiktionary.org/wiki/डोर|
+|https://en.wiktionary.org/wiki/डोलना|
+|https://en.wiktionary.org/wiki/डोई|
+|https://en.wiktionary.org/wiki/डोरी|

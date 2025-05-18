@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/पृथ्वीपुत्र|
+|https://en.wiktionary.org/wiki/पृथ्वीनाथ|
+|https://en.wiktionary.org/wiki/पृथ्वीतल|
+|https://en.wiktionary.org/wiki/पृष्ट|
+|https://en.wiktionary.org/wiki/पृच्छा|
+|https://en.wiktionary.org/wiki/पृथक्करण|
+|https://en.wiktionary.org/wiki/पृष्ठभूमि|
+|https://en.wiktionary.org/wiki/पृथक|
+|https://en.wiktionary.org/wiki/पृथुकृमि|
+|https://en.wiktionary.org/wiki/पृष्ठ|
+|https://en.wiktionary.org/wiki/पृथु|
+|https://en.wiktionary.org/wiki/पृथ्वी|

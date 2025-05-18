@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/भंगुर|
+|https://en.wiktionary.org/wiki/भंगुरता|
+|https://en.wiktionary.org/wiki/भँव|
+|https://en.wiktionary.org/wiki/भँवर|
+|https://en.wiktionary.org/wiki/भंग|
+|https://en.wiktionary.org/wiki/भंजक|
+|https://en.wiktionary.org/wiki/भंडा|
+|https://en.wiktionary.org/wiki/भंडाफोड़|
+|https://en.wiktionary.org/wiki/भँवरा|
+|https://en.wiktionary.org/wiki/भंडार|
+|https://en.wiktionary.org/wiki/भंकस|
+|https://en.wiktionary.org/wiki/भंड|
+|https://en.wiktionary.org/wiki/भंडारण|

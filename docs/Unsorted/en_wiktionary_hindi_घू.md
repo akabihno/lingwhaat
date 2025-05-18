@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/घूँसा|
+|https://en.wiktionary.org/wiki/घूर्णवायु|
+|https://en.wiktionary.org/wiki/घूर्णन|
+|https://en.wiktionary.org/wiki/घूसख़ोर|
+|https://en.wiktionary.org/wiki/घूसख़ोरी|
+|https://en.wiktionary.org/wiki/घूम|
+|https://en.wiktionary.org/wiki/घूंट|
+|https://en.wiktionary.org/wiki/घूमना-फिरना|
+|https://en.wiktionary.org/wiki/घूर|
+|https://en.wiktionary.org/wiki/घूरना|
+|https://en.wiktionary.org/wiki/घूमना|
+|https://en.wiktionary.org/wiki/घूँघट|
+|https://en.wiktionary.org/wiki/घूस|

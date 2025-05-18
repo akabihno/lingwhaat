@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/हृदयस्पर्शी|
+|https://en.wiktionary.org/wiki/हृत्पिण्ड|
+|https://en.wiktionary.org/wiki/हृत्पिंड|
+|https://en.wiktionary.org/wiki/हृदयहीन|
+|https://en.wiktionary.org/wiki/हृदयाघात|
+|https://en.wiktionary.org/wiki/हृदयरोग|
+|https://en.wiktionary.org/wiki/हृदय|
+|https://en.wiktionary.org/wiki/हृदयवाहिनी|

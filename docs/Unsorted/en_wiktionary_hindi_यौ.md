@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/यौन%20अंग|
+|https://en.wiktionary.org/wiki/यौनांग|
+|https://en.wiktionary.org/wiki/यौनाकर्षण|
+|https://en.wiktionary.org/wiki/यौन|
+|https://en.wiktionary.org/wiki/यौ॰|
+|https://en.wiktionary.org/wiki/यौम|
+|https://en.wiktionary.org/wiki/यौवनकाल|
+|https://en.wiktionary.org/wiki/यौवन|
+|https://en.wiktionary.org/wiki/यौगिक|
+|https://en.wiktionary.org/wiki/यौन%20क्रिया|

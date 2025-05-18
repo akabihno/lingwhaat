@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/शीघ्रपतन|
+|https://en.wiktionary.org/wiki/शीघ्रता|
+|https://en.wiktionary.org/wiki/शीर्षासन|
+|https://en.wiktionary.org/wiki/शीत|
+|https://en.wiktionary.org/wiki/शीर्षक|
+|https://en.wiktionary.org/wiki/शीरी|
+|https://en.wiktionary.org/wiki/शीर्ष|
+|https://en.wiktionary.org/wiki/शीर्षस्थ|
+|https://en.wiktionary.org/wiki/शीतल|
+|https://en.wiktionary.org/wiki/शीला|
+|https://en.wiktionary.org/wiki/शील|
+|https://en.wiktionary.org/wiki/शीर|
+|https://en.wiktionary.org/wiki/शीशी|
+|https://en.wiktionary.org/wiki/शीघ्र|
+|https://en.wiktionary.org/wiki/शीशा|

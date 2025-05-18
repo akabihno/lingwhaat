@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/नौसैनिक|
+|https://en.wiktionary.org/wiki/नौनिहाल|
+|https://en.wiktionary.org/wiki/नौ%20दो%20ग्यारह%20होना|
+|https://en.wiktionary.org/wiki/नौवाँ|
+|https://en.wiktionary.org/wiki/नौकरशाही|
+|https://en.wiktionary.org/wiki/नौबत|
+|https://en.wiktionary.org/wiki/नौटंकी|
+|https://en.wiktionary.org/wiki/नौका|
+|https://en.wiktionary.org/wiki/नौसिखिया|
+|https://en.wiktionary.org/wiki/नौजवान|
+|https://en.wiktionary.org/wiki/नौसेना|
+|https://en.wiktionary.org/wiki/नौकर|
+|https://en.wiktionary.org/wiki/नौकरी|
+|https://en.wiktionary.org/wiki/नौकरानी|
+|https://en.wiktionary.org/wiki/नौ|

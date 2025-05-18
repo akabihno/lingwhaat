@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/रीझना|
+|https://en.wiktionary.org/wiki/रीति|
+|https://en.wiktionary.org/wiki/रीता|
+|https://en.wiktionary.org/wiki/रीट्वीट|
+|https://en.wiktionary.org/wiki/रीढ़|
+|https://en.wiktionary.org/wiki/रीछ|
+|https://en.wiktionary.org/wiki/रीस|
+|https://en.wiktionary.org/wiki/रीत|

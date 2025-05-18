@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/खीजना|
+|https://en.wiktionary.org/wiki/खील|
+|https://en.wiktionary.org/wiki/खींचतान|
+|https://en.wiktionary.org/wiki/खींच|
+|https://en.wiktionary.org/wiki/खीसा|
+|https://en.wiktionary.org/wiki/खीर|
+|https://en.wiktionary.org/wiki/खींचना|
+|https://en.wiktionary.org/wiki/खीरा|

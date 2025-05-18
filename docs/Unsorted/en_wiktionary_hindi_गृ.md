@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/गृहकार्य|
+|https://en.wiktionary.org/wiki/गृध्र|
+|https://en.wiktionary.org/wiki/गृहमंत्री|
+|https://en.wiktionary.org/wiki/गृहयुद्ध|
+|https://en.wiktionary.org/wiki/गृहस्थ|
+|https://en.wiktionary.org/wiki/गृह|
+|https://en.wiktionary.org/wiki/गृह%20मंत्री|
+|https://en.wiktionary.org/wiki/गृह%20मंत्रालय|

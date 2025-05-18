@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/दैवयोग|
+|https://en.wiktionary.org/wiki/दैन्य|
+|https://en.wiktionary.org/wiki/दैर|
+|https://en.wiktionary.org/wiki/दैत|
+|https://en.wiktionary.org/wiki/दैत्य|
+|https://en.wiktionary.org/wiki/दैनिक|
+|https://en.wiktionary.org/wiki/दैव्य|
+|https://en.wiktionary.org/wiki/दैन|
+|https://en.wiktionary.org/wiki/दैव|
+|https://en.wiktionary.org/wiki/दैवता|

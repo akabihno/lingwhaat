@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/दंतकार|
+|https://en.wiktionary.org/wiki/दँतावली|
+|https://en.wiktionary.org/wiki/दंपती|
+|https://en.wiktionary.org/wiki/दंपति|
+|https://en.wiktionary.org/wiki/दंभ|
+|https://en.wiktionary.org/wiki/दंत्य|
+|https://en.wiktionary.org/wiki/दंतमंजन|
+|https://en.wiktionary.org/wiki/दंतकथा|
+|https://en.wiktionary.org/wiki/दंत|
+|https://en.wiktionary.org/wiki/दंग|
+|https://en.wiktionary.org/wiki/दंगल|
+|https://en.wiktionary.org/wiki/दंश|
+|https://en.wiktionary.org/wiki/दंभी|
+|https://en.wiktionary.org/wiki/दंदान|
+|https://en.wiktionary.org/wiki/दंड|

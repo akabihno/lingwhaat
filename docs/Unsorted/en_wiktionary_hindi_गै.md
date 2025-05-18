@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/गैस%20दानव|
+|https://en.wiktionary.org/wiki/गैन|
+|https://en.wiktionary.org/wiki/गैर|
+|https://en.wiktionary.org/wiki/गैर-आवश्यक|
+|https://en.wiktionary.org/wiki/गैलन|
+|https://en.wiktionary.org/wiki/गैस|
+|https://en.wiktionary.org/wiki/गैलियम|
+|https://en.wiktionary.org/wiki/गैंडा|
+|https://en.wiktionary.org/wiki/गैंती|

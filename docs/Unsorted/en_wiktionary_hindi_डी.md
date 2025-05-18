@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/डीसिल्वा|
+|https://en.wiktionary.org/wiki/डीन|
+|https://en.wiktionary.org/wiki/डील-डौल|
+|https://en.wiktionary.org/wiki/डीज़ल|
+|https://en.wiktionary.org/wiki/डीयू|
+|https://en.wiktionary.org/wiki/डी|
+|https://en.wiktionary.org/wiki/डील|

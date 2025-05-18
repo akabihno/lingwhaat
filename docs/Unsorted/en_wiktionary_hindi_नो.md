@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/नोनचा|
+|https://en.wiktionary.org/wiki/नोटा|
+|https://en.wiktionary.org/wiki/नोटबन्दी|
+|https://en.wiktionary.org/wiki/नोक|
+|https://en.wiktionary.org/wiki/नोटिस|
+|https://en.wiktionary.org/wiki/नोएडा|
+|https://en.wiktionary.org/wiki/नोटबंदी|
+|https://en.wiktionary.org/wiki/नोट|
+|https://en.wiktionary.org/wiki/नोटबुक|
+|https://en.wiktionary.org/wiki/नोचना|
+|https://en.wiktionary.org/wiki/नोनी|
+|https://en.wiktionary.org/wiki/नोदन|

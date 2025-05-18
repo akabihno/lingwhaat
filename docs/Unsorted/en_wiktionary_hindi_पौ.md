@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/पौरुषेय|
+|https://en.wiktionary.org/wiki/पौ|
+|https://en.wiktionary.org/wiki/पौदा|
+|https://en.wiktionary.org/wiki/पौष|
+|https://en.wiktionary.org/wiki/पौष्टिक|
+|https://en.wiktionary.org/wiki/पौध|
+|https://en.wiktionary.org/wiki/पौराणिक|
+|https://en.wiktionary.org/wiki/पौरुष|
+|https://en.wiktionary.org/wiki/पौर|
+|https://en.wiktionary.org/wiki/पौंड|
+|https://en.wiktionary.org/wiki/पौरोहित्य|
+|https://en.wiktionary.org/wiki/पौन|
+|https://en.wiktionary.org/wiki/पौने|
+|https://en.wiktionary.org/wiki/पौना|
+|https://en.wiktionary.org/wiki/पौधा|

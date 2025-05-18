@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/टोरी|
+|https://en.wiktionary.org/wiki/टोकरी|
+|https://en.wiktionary.org/wiki/टोफ़ू|
+|https://en.wiktionary.org/wiki/टोकरा|
+|https://en.wiktionary.org/wiki/टोकना|
+|https://en.wiktionary.org/wiki/टोक्यो|
+|https://en.wiktionary.org/wiki/टोरंटो|
+|https://en.wiktionary.org/wiki/टोस्ट|
+|https://en.wiktionary.org/wiki/टोप|
+|https://en.wiktionary.org/wiki/टोली|
+|https://en.wiktionary.org/wiki/टोना|
+|https://en.wiktionary.org/wiki/टोपी|

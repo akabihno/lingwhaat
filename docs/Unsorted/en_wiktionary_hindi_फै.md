@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/फैलाव|
+|https://en.wiktionary.org/wiki/फैलाना|
+|https://en.wiktionary.org/wiki/फैसला|
+|https://en.wiktionary.org/wiki/फैलना|
+|link|
+|----|
+|https://en.wiktionary.org/wiki/फैलाव|
+|https://en.wiktionary.org/wiki/फैलाना|
+|https://en.wiktionary.org/wiki/फैसला|
+|https://en.wiktionary.org/wiki/फैलना|

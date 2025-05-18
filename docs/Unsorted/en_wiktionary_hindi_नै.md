@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/नैराश्य|
+|https://en.wiktionary.org/wiki/नैसर्गिक|
+|https://en.wiktionary.org/wiki/नैहर|
+|https://en.wiktionary.org/wiki/नैया|
+|https://en.wiktionary.org/wiki/नैचाबंद|
+|https://en.wiktionary.org/wiki/नैचाबंदी|
+|https://en.wiktionary.org/wiki/नैचा|
+|https://en.wiktionary.org/wiki/नैना|
+|https://en.wiktionary.org/wiki/नैपाली|
+|https://en.wiktionary.org/wiki/नैन|
+|https://en.wiktionary.org/wiki/नैदानिक%20मनोविज्ञान|
+|https://en.wiktionary.org/wiki/नैतिक|

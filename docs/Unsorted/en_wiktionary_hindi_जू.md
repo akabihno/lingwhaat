@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/जूडियो|
+|https://en.wiktionary.org/wiki/जूही|
+|https://en.wiktionary.org/wiki/जूआट|
+|https://en.wiktionary.org/wiki/जूआठ|
+|https://en.wiktionary.org/wiki/जूस|
+|https://en.wiktionary.org/wiki/जूड़ा|
+|https://en.wiktionary.org/wiki/जूझ|
+|https://en.wiktionary.org/wiki/जूझना|
+|https://en.wiktionary.org/wiki/जूआ|
+|https://en.wiktionary.org/wiki/जूता|
+|https://en.wiktionary.org/wiki/जूँ|
+|https://en.wiktionary.org/wiki/जूलाई|
+|https://en.wiktionary.org/wiki/जून|

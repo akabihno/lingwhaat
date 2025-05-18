@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/कौड़ा|
+|https://en.wiktionary.org/wiki/कौणप|
+|https://en.wiktionary.org/wiki/कौरव|
+|https://en.wiktionary.org/wiki/कौवा|
+|https://en.wiktionary.org/wiki/कौड़ी%20को%20तंग|
+|https://en.wiktionary.org/wiki/कौंसिल|
+|https://en.wiktionary.org/wiki/कौतुकी|
+|https://en.wiktionary.org/wiki/कौमुदी|
+|https://en.wiktionary.org/wiki/कौमार्य|
+|https://en.wiktionary.org/wiki/कौड़ी|
+|https://en.wiktionary.org/wiki/कौशल्या|
+|https://en.wiktionary.org/wiki/कौआ|
+|https://en.wiktionary.org/wiki/कौनसा|
+|https://en.wiktionary.org/wiki/कौन|
+|https://en.wiktionary.org/wiki/कौन%20सा%20दिन%20है%20आज|

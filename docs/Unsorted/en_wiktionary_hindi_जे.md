@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/जेवड़ी|
+|https://en.wiktionary.org/wiki/जेवड़ा|
+|https://en.wiktionary.org/wiki/जेंटू|
+|https://en.wiktionary.org/wiki/जेर|
+|https://en.wiktionary.org/wiki/जेट%20प्लेन|
+|https://en.wiktionary.org/wiki/जेट%20विमान|
+|https://en.wiktionary.org/wiki/जेबघड़ी|
+|https://en.wiktionary.org/wiki/जेद्दा|
+|https://en.wiktionary.org/wiki/जेठानी|
+|https://en.wiktionary.org/wiki/जेठ|
+|https://en.wiktionary.org/wiki/जेलख़ाना|
+|https://en.wiktionary.org/wiki/जेब|
+|https://en.wiktionary.org/wiki/जेल|
