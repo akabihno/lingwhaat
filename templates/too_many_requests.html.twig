@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Too Many Requests{% endblock %}
+
+{% block body %}
+    <h1>Response</h1>
+
+    <h3>Too many requests, please try again later</h3>
+    <form action="{{ path('index') }}" method="get">
+        <button type="submit">Back</button>
+    </form>
+{% endblock %}
