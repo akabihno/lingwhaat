@@ -5,6 +5,7 @@ GRANT SELECT ON lingwhaat.pronunciation_english_language TO '${MYSQL_WEB_USER}'@
 GRANT SELECT ON lingwhaat.pronunciation_estonian_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_esu_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_french_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT ON lingwhaat.pronunciation_georgian_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_german_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_greek_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_hebrew_language TO '${MYSQL_WEB_USER}'@'%';
@@ -21,6 +22,7 @@ GRANT SELECT ON lingwhaat.pronunciation_serbocroatian_language TO '${MYSQL_WEB_U
 GRANT SELECT ON lingwhaat.pronunciation_spanish_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_swedish_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_tagalog_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT ON lingwhaat.pronunciation_turkish_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_ukrainian_language TO '${MYSQL_WEB_USER}'@'%';
 
 FLUSH PRIVILEGES;
