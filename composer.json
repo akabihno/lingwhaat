@@ -63,6 +63,7 @@
     "symfony/asset": ">=v7.2.0",
     "symfony/monolog-bundle": "^v3.10.0",
     "symfony/uid": "^v7.2.0",
+    "symfony/rate-limiter": "v7.2.0",
     "twig/twig": "^3.21.1",
     "vlucas/phpdotenv": ">=5.6.2",
     "ext-mbstring": "*"
