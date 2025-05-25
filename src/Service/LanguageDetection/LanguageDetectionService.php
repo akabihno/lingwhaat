@@ -7,6 +7,7 @@ use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EstonianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EsuLanguageService;
 use App\Service\LanguageDetection\LanguageServices\FrenchLanguageService;
+use App\Service\LanguageDetection\LanguageServices\GeorgianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GermanLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GreekLanguageService;
 use App\Service\LanguageDetection\LanguageServices\HindiLanguageService;
@@ -22,6 +23,7 @@ use App\Service\LanguageDetection\LanguageServices\SerboCroatianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\SpanishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
+use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use App\Service\LanguageNormalizationService;
 use Psr\Log\LoggerInterface;
@@ -71,6 +73,10 @@ class LanguageDetectionService
     const DUTCH_LANGUAGE_CODE = 'nl';
     const HINDI_LANGUAGE_NAME = 'Hindi';
     const HINDI_LANGUAGE_CODE = 'hi';
+    const GEORGIAN_LANGUAGE_NAME = 'Georgian';
+    const GEORGIAN_LANGUAGE_CODE = 'ka';
+    const TURKISH_LANGUAGE_NAME = 'Turkish';
+    const TURKISH_LANGUAGE_CODE = 'tr';
     const LANGUAGE_NOT_FOUND = 'Language not found';
     public function __construct(
         protected LoggerInterface $logger,
@@ -95,7 +101,9 @@ class LanguageDetectionService
         protected EstonianLanguageService $estonianLanguageService,
         protected EnglishLanguageService $englishLanguageService,
         protected DutchLanguageService $dutchLanguageService,
-        protected HindiLanguageService $hindiLanguageService
+        protected HindiLanguageService $hindiLanguageService,
+        protected GeorgianLanguageService $georgianLanguageService,
+        protected TurkishLanguageService $turkishLanguageService,
     )
     {
     }
@@ -208,7 +216,15 @@ class LanguageDetectionService
                     $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
                 if ($this->checkHindiLanguage($word)) {
-                    $result[$word] = ['language' => self::HINDI_LANGUAGE_NAME, 'code' => self::HINDI_LANGUAGE_NAME];
+                    $result[$word] = ['language' => self::HINDI_LANGUAGE_NAME, 'code' => self::HINDI_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
+                }
+                if ($this->checkGeorgianLanguage($word)) {
+                    $result[$word] = ['language' => self::GEORGIAN_LANGUAGE_NAME, 'code' => self::GEORGIAN_LANGUAGE_CODE];
+                    $this->logLanguageDetectionResult($uuidStr, $result[$word]);
+                }
+                if ($this->checkTurkishLanguage($word)) {
+                    $result[$word] = ['language' => self::TURKISH_LANGUAGE_NAME, 'code' => self::TURKISH_LANGUAGE_CODE];
                     $this->logLanguageDetectionResult($uuidStr, $result[$word]);
                 }
 
@@ -351,6 +367,16 @@ class LanguageDetectionService
     protected function checkHindiLanguage(string $word): bool
     {
         return $this->hindiLanguageService->checkLanguage($word);
+    }
+
+    protected function checkGeorgianLanguage(string $word): bool
+    {
+        return $this->georgianLanguageService->checkLanguage($word);
+    }
+
+    protected function checkTurkishLanguage(string $word): bool
+    {
+        return $this->turkishLanguageService->checkLanguage($word);
     }
 
 }

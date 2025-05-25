@@ -6,6 +6,7 @@ Supported languages:
 * English
 * Estonian
 * French
+* Georgian
 * German
 * Greek
 * Hindi
@@ -20,6 +21,7 @@ Supported languages:
 * Serbo-Croatian (Bosnian-Croatian-Montenegrin-Serbian):
 * Spanish
 * Tagalog (Filipino)
+* Turkish
 * Ukrainian
 
 IPA data for universal transliteration was parsed from [Wiktionary](https://en.wiktionary.org/wiki/Wiktionary:Main_Page) using Wikimedia REST API route [/page/html/{title}](https://en.wiktionary.org/api/rest_v1/#/Page%20content/get_page_html__title_)\
@@ -142,6 +144,40 @@ List of all articles IPA data has been taken from:
 [x](docs/French/en_wiktionary_french_x.md),
 [y](docs/French/en_wiktionary_french_y.md),
 [z](docs/French/en_wiktionary_french_z.md)
+* Georgian:
+[ა](docs/Georgian/en_wiktionary_georgian_ა.md),
+[ბ](docs/Georgian/en_wiktionary_georgian_ბ.md),
+[გ](docs/Georgian/en_wiktionary_georgian_გ.md),
+[დ](docs/Georgian/en_wiktionary_georgian_დ.md),
+[ე](docs/Georgian/en_wiktionary_georgian_ე.md),
+[ვ](docs/Georgian/en_wiktionary_georgian_ვ.md),
+[ზ](docs/Georgian/en_wiktionary_georgian_ზ.md),
+[თ](docs/Georgian/en_wiktionary_georgian_თ.md),
+[ი](docs/Georgian/en_wiktionary_georgian_ი.md),
+[კ](docs/Georgian/en_wiktionary_georgian_კ.md),
+[ლ](docs/Georgian/en_wiktionary_georgian_ლ.md),
+[მ](docs/Georgian/en_wiktionary_georgian_მ.md),
+[ნ](docs/Georgian/en_wiktionary_georgian_ნ.md),
+[ო](docs/Georgian/en_wiktionary_georgian_ო.md),
+[პ](docs/Georgian/en_wiktionary_georgian_პ.md),
+[ჟ](docs/Georgian/en_wiktionary_georgian_ჟ.md),
+[რ](docs/Georgian/en_wiktionary_georgian_რ.md),
+[ს](docs/Georgian/en_wiktionary_georgian_ს.md),
+[ტ](docs/Georgian/en_wiktionary_georgian_ტ.md),
+[უ](docs/Georgian/en_wiktionary_georgian_უ.md),
+[ფ](docs/Georgian/en_wiktionary_georgian_ფ.md),
+[ქ](docs/Georgian/en_wiktionary_georgian_ქ.md),
+[ღ](docs/Georgian/en_wiktionary_georgian_ღ.md),
+[ყ](docs/Georgian/en_wiktionary_georgian_ყ.md),
+[შ](docs/Georgian/en_wiktionary_georgian_შ.md),
+[ჩ](docs/Georgian/en_wiktionary_georgian_ჩ.md),
+[ც](docs/Georgian/en_wiktionary_georgian_ც.md),
+[ძ](docs/Georgian/en_wiktionary_georgian_ძ.md),
+[წ](docs/Georgian/en_wiktionary_georgian_წ.md),
+[ჭ](docs/Georgian/en_wiktionary_georgian_ჭ.md),
+[ხ](docs/Georgian/en_wiktionary_georgian_ხ.md),
+[ჯ](docs/Georgian/en_wiktionary_georgian_ჯ.md),
+[ჰ](docs/Georgian/en_wiktionary_georgian_ჰ.md)
 * German:
 [a](docs/German/en_wiktionary_german_a.md),
 [b](docs/German/en_wiktionary_german_b.md),
@@ -906,6 +942,36 @@ List of all articles IPA data has been taken from:
 [x](docs/Tagalog/en_wiktionary_tagalog_x.md),
 [y](docs/Tagalog/en_wiktionary_tagalog_y.md),
 [z](docs/Tagalog/en_wiktionary_tagalog_z.md)
+* Turkish
+[a](docs/Turkish/en_wiktionary_turkish_a.md),
+[b](docs/Turkish/en_wiktionary_turkish_b.md),
+[c](docs/Turkish/en_wiktionary_turkish_c.md),
+[ç](docs/Turkish/en_wiktionary_turkish_ç.md),
+[d](docs/Turkish/en_wiktionary_turkish_d.md),
+[e](docs/Turkish/en_wiktionary_turkish_e.md),
+[f](docs/Turkish/en_wiktionary_turkish_f.md),
+[g](docs/Turkish/en_wiktionary_turkish_g.md),
+[ğ](docs/Turkish/en_wiktionary_turkish_ğ.md),
+[h](docs/Turkish/en_wiktionary_turkish_h.md),
+[ı](docs/Turkish/en_wiktionary_turkish_ı.md),
+[i](docs/Turkish/en_wiktionary_turkish_i.md),
+[j](docs/Turkish/en_wiktionary_turkish_j.md),
+[k](docs/Turkish/en_wiktionary_turkish_k.md),
+[l](docs/Turkish/en_wiktionary_turkish_l.md),
+[m](docs/Turkish/en_wiktionary_turkish_m.md),
+[n](docs/Turkish/en_wiktionary_turkish_n.md),
+[o](docs/Turkish/en_wiktionary_turkish_o.md),
+[ö](docs/Turkish/en_wiktionary_turkish_ö.md),
+[p](docs/Turkish/en_wiktionary_turkish_p.md),
+[r](docs/Turkish/en_wiktionary_turkish_r.md),
+[s](docs/Turkish/en_wiktionary_turkish_s.md),
+[ş](docs/Turkish/en_wiktionary_turkish_ş.md),
+[t](docs/Turkish/en_wiktionary_turkish_t.md),
+[u](docs/Turkish/en_wiktionary_turkish_u.md),
+[ü](docs/Turkish/en_wiktionary_turkish_ü.md),
+[v](docs/Turkish/en_wiktionary_turkish_v.md),
+[y](docs/Turkish/en_wiktionary_turkish_y.md),
+[z](docs/Turkish/en_wiktionary_turkish_z.md)
 * Ukrainian:
 [а](docs/Ukrainian/en_wiktionary_ukrainian_а.md),
 [б](docs/Ukrainian/en_wiktionary_ukrainian_б.md),
