@@ -7,7 +7,6 @@
 
     <form action="{{ path('get_language') }}" method="get">
         <label for="languageInput">Text:</label>
-        <input type="text" id="languageInput" name="get_language" required>
         <textarea id="languageInput" name="get_language" maxlength="1000" rows="5" cols="60" oninput="updateCharCount()" required></textarea>
         <p id="charCount">1000</p>
         <button type="submit">Submit</button>
