@@ -6,10 +6,19 @@
     <h1>{{ prompt }}</h1>
 
     <form action="{{ path('get_language') }}" method="get">
-        <label for="languageInput">Text:</label>
-        <textarea id="languageInput" name="get_language" maxlength="1000" rows="5" cols="60" oninput="updateCharCount()" required></textarea>
-        <p id="charCount">1000</p>
-        <button type="submit">Submit</button>
+        <label for="languageInput">Text:</label><br>
+
+        <div style="position: relative; display: inline-block;">
+            <textarea id="languageInput" name="get_language" maxlength="1000" rows="5" cols="60"
+                      oninput="updateCharCount()" required
+                      style="padding-bottom: 24px;"></textarea>
+            <div id="charCount"
+                 style="position: absolute; bottom: 4px; right: 8px; font-size: 12px; color: gray;">
+                1000
+            </div>
+        </div>
+
+        <br><button type="submit">Submit</button>
     </form>
 
     <script>
