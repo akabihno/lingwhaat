@@ -8,6 +8,19 @@
     <form action="{{ path('get_language') }}" method="get">
         <label for="languageInput">Text:</label>
         <input type="text" id="languageInput" name="get_language" required>
+        <textarea id="languageInput" name="get_language" maxlength="2000" rows="5" cols="60" oninput="updateCharCount()" required></textarea>
+        <p id="charCount">1000</p>
         <button type="submit">Submit</button>
     </form>
+
+    <script>
+        function updateCharCount() {
+            const textarea = document.getElementById('languageInput');
+            const countDisplay = document.getElementById('charCount');
+            const maxLength = 1000;
+            const currentLength = textarea.value.length;
+            const remaining = maxLength - currentLength;
+            countDisplay.textContent = remaining;
+        }
+    </script>
 {% endblock %}
