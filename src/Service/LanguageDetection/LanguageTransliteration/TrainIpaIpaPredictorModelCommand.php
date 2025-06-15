@@ -195,13 +195,13 @@ class TrainIpaIpaPredictorModelCommand extends Command
         return str_replace(['[', ']', '/'], '', $ipa);
     }
 
-    protected function buildCharMap(array $words): array
+    protected function buildCharMap(array $wordsArray): array
     {
         $map = [];
         $index = 1;
 
-        foreach ($words as $word) {
-            foreach (mb_str_split($word->getName()) as $char) {
+        foreach ($wordsArray as $key => $wordArray) {
+            foreach (mb_str_split($wordArray['name']) as $char) {
                 if (!isset($map[$char])) {
                     $map[$char] = $index++;
                 }
