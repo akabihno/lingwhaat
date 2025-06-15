@@ -27,7 +27,7 @@ use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use Doctrine\ORM\EntityManagerInterface;
-use Phpml\Classification\KNearestNeighbors;
+use Phpml\SupportVectorMachine\SupportVectorMachine;
 use Phpml\ModelManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -181,11 +181,15 @@ class TrainIpaPredictorModelCommand extends Command
             $labels[] = $this->cleanIpa($wordArray['ipa']);
         }
 
-        $classifier = new KNearestNeighbors();
-        $classifier->train($samples, $labels);
+        $model = new SupportVectorMachine(
+            SupportVectorMachine::C_SVC, // for classification
+            SupportVectorMachine::KERNEL_LINEAR
+        );
+
+        $model->train($samples, $labels);
 
         $manager = new ModelManager();
-        $manager->saveToFile($classifier, $this->modelPath);
+        $manager->saveToFile($model, $this->modelPath);
         file_put_contents($this->charMapPath, json_encode($charMap));
 
         $output->writeln("<info>Model trained and saved to: {$this->modelPath}</info>");

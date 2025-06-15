@@ -6,7 +6,7 @@ use App\Service\LanguageDetection\LanguageDetectionService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Doctrine\ORM\EntityManagerInterface;
-use Phpml\Classification\KNearestNeighbors;
+use Phpml\SupportVectorMachine\SupportVectorMachine;
 use Phpml\ModelManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -40,15 +40,25 @@ class UseIpaPredictorModelCommand extends Command
         $this->modelPath = "src/Models/IpaPredictor/ipa_predictor_{$lang}.model";
         $this->charMapPath = "src/CharMap/{$lang}.json";
 
-        $model = (new ModelManager())->restoreFromFile($this->modelPath);
+        $modelManager = new ModelManager();
+        /** @var SupportVectorMachine $model */
+        $model = $modelManager->restoreFromFile($this->modelPath);
         $charMap = json_decode(file_get_contents($this->charMapPath), true);
 
         $vector = $this->trainIpaPredictorModelCommand->encodeCharacters(mb_str_split($word), $charMap);
+
+        $vector = $this->padVector($vector, 10);
+
         $ipa = $model->predict([$vector])[0];
 
-        var_dump($ipa);
+        $output->writeln("Predicted IPA: $ipa");
 
         return Command::SUCCESS;
+    }
+
+    protected function padVector(array $vector, int $length): array
+    {
+        return array_pad(array_slice($vector, 0, $length), $length, 0);
     }
 
 }
