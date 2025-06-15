@@ -165,8 +165,6 @@ class TrainIpaIpaPredictorModelCommand extends Command
                 return Command::FAILURE;
         }
 
-        var_dump($wordsArray);
-
         if (!$wordsArray) {
             $output->writeln('<error>No valid data found for training.</error>');
             return Command::FAILURE;
