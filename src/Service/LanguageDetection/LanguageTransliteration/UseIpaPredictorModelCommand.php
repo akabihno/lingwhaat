@@ -16,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class UseIpaPredictorModelCommand extends Command
 {
     protected string $modelPath;
+    protected string $charMapPath;
     public function __construct()
     {
         parent::__construct();
@@ -36,14 +37,16 @@ class UseIpaPredictorModelCommand extends Command
         $lang = $input->getOption('lang');
         $word = $input->getOption('word');
 
-        $this->modelPath = "src/Models/ipa_predictor_{$lang}.model";
+        $this->modelPath = "src/Models/IpaPredictor/ipa_predictor_{$lang}.model";
+        $this->charMapPath = "src/CharMap/{$lang}.json";
 
         $model = (new ModelManager())->restoreFromFile($this->modelPath);
+        $charMap = json_decode(file_get_contents($this->charMapPath), true);
 
-        $input = $this->encodeCharacters(mb_str_split($word), $charMap);
-        $prediction = $model->predict([$input]);
+        $vector = $this->encodeCharacters(mb_str_split($word), $charMap);
+        $ipa = $model->predict([$vector])[0];
 
-        echo $prediction[0];
+        var_dump($ipa);
 
         return Command::SUCCESS;
     }

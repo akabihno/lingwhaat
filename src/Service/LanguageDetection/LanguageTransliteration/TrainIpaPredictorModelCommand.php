@@ -86,7 +86,7 @@ class TrainIpaPredictorModelCommand extends Command
         $lang = $input->getOption('lang');
 
         $wordsArray = [];
-        $this->modelPath = "src/Models/ipa_predictor_{$lang}.model";
+        $this->modelPath = "src/Models/IpaPredictor/ipa_predictor_{$lang}.model";
         $this->charMapPath = "src/CharMap/{$lang}.json";
 
         switch ($lang) {
