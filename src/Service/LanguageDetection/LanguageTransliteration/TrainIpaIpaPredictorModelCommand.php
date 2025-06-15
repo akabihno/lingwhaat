@@ -156,6 +156,11 @@ class TrainIpaIpaPredictorModelCommand extends Command
             case LanguageDetectionService::UKRAINIAN_LANGUAGE_CODE:
                 $this->ukrainianLanguageService->fetchAllNamesAndIpa();
                 break;
+            default:
+                $acceptedLangCodes = implode(', ', LanguageDetectionService::getLanguageCodes());
+                $output->writeln('<error>No language provided in --lang parameter or language is not accepted. 
+                Accepted language params are: '.$acceptedLangCodes.' </error>');
+                return Command::FAILURE;
         }
 
         if (!$words) {
