@@ -81,6 +81,8 @@ class TrainIpaIpaPredictorModelCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // example: php bin/console ml:train:ipa-predictor --lang en
+
         $lang = $input->getOption('lang');
 
         $words = [];
