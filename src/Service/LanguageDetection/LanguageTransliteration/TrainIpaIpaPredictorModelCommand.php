@@ -85,78 +85,78 @@ class TrainIpaIpaPredictorModelCommand extends Command
 
         $lang = $input->getOption('lang');
 
-        $words = [];
+        $wordsArray = [];
         $this->modelPath = "/app/Models/ipa_predictor_{$lang}.model";
 
         switch ($lang) {
             case LanguageDetectionService::DUTCH_LANGUAGE_CODE:
-                $words = $this->dutchLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->dutchLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::ENGLISH_LANGUAGE_CODE:
-                $words = $this->englishLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->englishLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::ESTONIAN_LANGUAGE_CODE:
-                $words = $this->estonianLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->estonianLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::ESU_LANGUAGE_CODE:
-                $words = $this->esuLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->esuLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::FRENCH_LANGUAGE_CODE:
-                $words = $this->frenchLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->frenchLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::GEORGIAN_LANGUAGE_CODE:
-                $words = $this->georgianLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->georgianLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::GERMAN_LANGUAGE_CODE:
-                $words = $this->germanLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->germanLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::GREEK_LANGUAGE_CODE:
-                $words = $this->greekLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->greekLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::HINDI_LANGUAGE_CODE:
-                $words = $this->hindiLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->hindiLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::ITALIAN_LANGUAGE_CODE:
-                $words = $this->italianLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->italianLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::LATIN_LANGUAGE_CODE:
-                $words = $this->latinLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->latinLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::LATVIAN_LANGUAGE_CODE:
-                $words = $this->latvianLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->latvianLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::LITHUANIAN_LANGUAGE_CODE:
-                $words = $this->lithuanianLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->lithuanianLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::POLISH_LANGUAGE_CODE:
-                $words = $this->polishLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->polishLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::PORTUGUESE_LANGUAGE_CODE:
-                $words = $this->portugueseLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->portugueseLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::ROMANIAN_LANGUAGE_CODE:
-                $words = $this->romanianLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->romanianLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::RUSSIAN_LANGUAGE_CODE:
-                $words = $this->russianLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->russianLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::SERBOCROATIAN_LANGUAGE_CODE:
-                $words = $this->serboCroatianLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->serboCroatianLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::SPANISH_LANGUAGE_CODE:
-                $words = $this->spanishLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->spanishLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::SWEDISH_LANGUAGE_CODE:
-                $words = $this->swedishLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->swedishLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::TAGALOG_LANGUAGE_CODE:
-                $words = $this->tagalogLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->tagalogLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::TURKISH_LANGUAGE_CODE:
-                $words = $this->turkishLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->turkishLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::UKRAINIAN_LANGUAGE_CODE:
-                $words = $this->ukrainianLanguageService->fetchAllNamesAndIpa();
+                $wordsArray = $this->ukrainianLanguageService->fetchAllNamesAndIpa();
                 break;
             default:
                 $acceptedLangCodes = implode(', ', LanguageDetectionService::getLanguageCodes());
@@ -165,21 +165,21 @@ class TrainIpaIpaPredictorModelCommand extends Command
                 return Command::FAILURE;
         }
 
-        var_dump($words);
+        var_dump($wordsArray);
 
-        if (!$words) {
+        if (!$wordsArray) {
             $output->writeln('<error>No valid data found for training.</error>');
             return Command::FAILURE;
         }
 
-        $charMap = $this->buildCharMap($words);
+        $charMap = $this->buildCharMap($wordsArray);
         $samples = [];
         $labels = [];
 
-        foreach ($words as $word) {
-            $charVec = $this->encodeCharacters(mb_str_split($word->getName()), $charMap);
+        foreach ($wordsArray as $key => $wordArray) {
+            $charVec = $this->encodeCharacters(mb_str_split($wordArray['name']), $charMap);
             $samples[] = $charVec;
-            $labels[] = $this->cleanIpa($word->getIpa());
+            $labels[] = $this->cleanIpa($wordArray['ipa']);
         }
 
         $classifier = new KNearestNeighbors();
