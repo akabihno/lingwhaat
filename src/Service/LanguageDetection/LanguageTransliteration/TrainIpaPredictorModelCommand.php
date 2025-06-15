@@ -36,10 +36,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'ml:train:ipa-predictor')]
-class TrainIpaIpaPredictorModelCommand extends Command
+class TrainIpaPredictorModelCommand extends Command
 {
-    protected EntityManagerInterface $entityManager;
     protected string $modelPath;
+    protected string $charMapPath;
 
     public function __construct(
         protected DutchLanguageService $dutchLanguageService,
@@ -87,6 +87,7 @@ class TrainIpaIpaPredictorModelCommand extends Command
 
         $wordsArray = [];
         $this->modelPath = "src/Models/ipa_predictor_{$lang}.model";
+        $this->charMapPath = "src/CharMap/{$lang}.json";
 
         switch ($lang) {
             case LanguageDetectionService::DUTCH_LANGUAGE_CODE:
@@ -185,6 +186,7 @@ class TrainIpaIpaPredictorModelCommand extends Command
 
         $manager = new ModelManager();
         $manager->saveToFile($classifier, $this->modelPath);
+        file_put_contents($this->charMapPath, json_encode($charMap));
 
         $output->writeln("<info>Model trained and saved to: {$this->modelPath}</info>");
         return Command::SUCCESS;
