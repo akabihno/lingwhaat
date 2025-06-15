@@ -27,13 +27,16 @@ use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use Doctrine\ORM\EntityManagerInterface;
-use Phpml\SupportVectorMachine\SupportVectorMachine;
-use Phpml\ModelManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Rubix\ML\Classifiers\SVC;
+use Rubix\ML\Kernels\SVM\RBF;
+use Rubix\ML\Persisters\Filesystem;
+use Rubix\ML\Datasets\Labeled;
+use Rubix\ML\CrossValidation\Reports\Accuracy;
 
 #[AsCommand(name: 'ml:train:ipa-predictor')]
 class TrainIpaPredictorModelCommand extends Command
@@ -181,15 +184,13 @@ class TrainIpaPredictorModelCommand extends Command
             $labels[] = $this->cleanIpa($wordArray['ipa']);
         }
 
-        $model = new SupportVectorMachine(
-            SupportVectorMachine::C_SVC, // for classification
-            SupportVectorMachine::KERNEL_LINEAR
-        );
+        $dataset = new Labeled($samples, $labels);
 
-        $model->train($samples, $labels);
+        $model = new SVC(100.0, new RBF(), 1e-3);
+        $model->train($dataset);
 
-        $manager = new ModelManager();
-        $manager->saveToFile($model, $this->modelPath);
+        $persister = new Filesystem($this->modelPath, true);
+        $persister->save($model);
         file_put_contents($this->charMapPath, json_encode($charMap));
 
         $output->writeln("<info>Model trained and saved to: {$this->modelPath}</info>");

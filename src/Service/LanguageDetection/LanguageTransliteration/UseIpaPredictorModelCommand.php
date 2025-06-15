@@ -6,11 +6,10 @@ use App\Service\LanguageDetection\LanguageDetectionService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Doctrine\ORM\EntityManagerInterface;
-use Phpml\SupportVectorMachine\SupportVectorMachine;
-use Phpml\ModelManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Rubix\ML\Persisters\Filesystem;
 
 #[AsCommand(name: 'ml:use:ipa-predictor')]
 class UseIpaPredictorModelCommand extends Command
@@ -40,14 +39,12 @@ class UseIpaPredictorModelCommand extends Command
         $this->modelPath = "src/Models/IpaPredictor/ipa_predictor_{$lang}.model";
         $this->charMapPath = "src/CharMap/{$lang}.json";
 
-        $modelManager = new ModelManager();
-        /** @var SupportVectorMachine $model */
-        $model = $modelManager->restoreFromFile($this->modelPath);
         $charMap = json_decode(file_get_contents($this->charMapPath), true);
 
         $vector = $this->trainIpaPredictorModelCommand->encodeCharacters(mb_str_split($word), $charMap);
 
-        $vector = $this->padVector($vector, 10);
+        $persister = new Filesystem($this->modelPath);
+        $model = $persister->load();
 
         $ipa = $model->predict([$vector])[0];
 
