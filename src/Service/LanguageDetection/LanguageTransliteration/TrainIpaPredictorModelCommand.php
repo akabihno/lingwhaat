@@ -37,6 +37,9 @@ use Rubix\ML\NeuralNet\Layers\Dense;
 use Rubix\ML\NeuralNet\ActivationFunctions\ReLU;
 use Rubix\ML\NeuralNet\ActivationFunctions\Softmax;
 use Rubix\ML\NeuralNet\CostFunctions\CrossEntropy;
+use Rubix\ML\Persisters\Filesystem;
+use Rubix\ML\Datasets\Labeled;
+use Rubix\ML\CrossValidation\Reports\Accuracy;
 
 #[AsCommand(name: 'ml:train:ipa-predictor')]
 class TrainIpaPredictorModelCommand extends Command
