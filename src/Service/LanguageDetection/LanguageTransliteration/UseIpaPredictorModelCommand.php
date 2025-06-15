@@ -17,7 +17,7 @@ class UseIpaPredictorModelCommand extends Command
 {
     protected string $modelPath;
     protected string $charMapPath;
-    public function __construct()
+    public function __construct(protected TrainIpaPredictorModelCommand $trainIpaPredictorModelCommand)
     {
         parent::__construct();
     }
@@ -43,31 +43,12 @@ class UseIpaPredictorModelCommand extends Command
         $model = (new ModelManager())->restoreFromFile($this->modelPath);
         $charMap = json_decode(file_get_contents($this->charMapPath), true);
 
-        $vector = $this->encodeCharacters(mb_str_split($word), $charMap);
+        $vector = $this->trainIpaPredictorModelCommand->encodeCharacters(mb_str_split($word), $charMap);
         $ipa = $model->predict([$vector])[0];
 
         var_dump($ipa);
 
         return Command::SUCCESS;
-    }
-
-    protected function encodeCharacters(array $chars, array $map, int $maxLength = 10): array
-    {
-        $encoded = [];
-
-        foreach ($chars as $ch) {
-            $encoded[] = $map[$ch] ?? 0;
-        }
-
-        while (count($encoded) < $maxLength) {
-            $encoded[] = 0;
-        }
-
-        if (count($encoded) > $maxLength) {
-            $encoded = array_slice($encoded, 0, $maxLength);
-        }
-
-        return $encoded;
     }
 
 }
