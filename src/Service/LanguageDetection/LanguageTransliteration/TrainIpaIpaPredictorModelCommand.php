@@ -86,7 +86,7 @@ class TrainIpaIpaPredictorModelCommand extends Command
         $lang = $input->getOption('lang');
 
         $wordsArray = [];
-        $this->modelPath = "/src/Models/ipa_predictor_{$lang}.model";
+        $this->modelPath = "src/Models/ipa_predictor_{$lang}.model";
 
         switch ($lang) {
             case LanguageDetectionService::DUTCH_LANGUAGE_CODE:
