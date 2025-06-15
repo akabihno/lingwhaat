@@ -21,4 +21,9 @@ class FrenchLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->frenchLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

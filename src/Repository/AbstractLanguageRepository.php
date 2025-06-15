@@ -25,4 +25,14 @@ abstract class AbstractLanguageRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
+    public function findAllNamesAndIpa(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.name', 'e.ipa')
+            ->where('e.ipa != :na')
+            ->setParameter('na', 'Not available')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
 }

@@ -21,4 +21,9 @@ class EsuLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->esuLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

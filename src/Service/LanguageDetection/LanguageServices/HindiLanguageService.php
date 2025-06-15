@@ -21,4 +21,9 @@ class HindiLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->hindiLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

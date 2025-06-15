@@ -21,4 +21,9 @@ class EstonianLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->estonianLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

@@ -21,4 +21,9 @@ class TagalogLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->tagalogLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

@@ -21,4 +21,9 @@ class UkrainianLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->ukrainianLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

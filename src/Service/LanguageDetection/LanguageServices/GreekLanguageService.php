@@ -21,4 +21,9 @@ class GreekLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->greekLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

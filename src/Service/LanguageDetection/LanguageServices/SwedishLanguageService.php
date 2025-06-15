@@ -21,4 +21,9 @@ class SwedishLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->swedishLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

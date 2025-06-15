@@ -21,4 +21,9 @@ class LatvianLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->latvianLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

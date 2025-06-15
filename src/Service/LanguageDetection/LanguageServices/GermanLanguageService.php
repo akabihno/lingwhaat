@@ -21,5 +21,10 @@ class GermanLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->germanLanguageRepository->findAllNamesAndIpa();
+    }
+
 
 }

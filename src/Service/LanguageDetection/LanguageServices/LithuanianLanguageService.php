@@ -21,4 +21,9 @@ class LithuanianLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->lithuanianLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

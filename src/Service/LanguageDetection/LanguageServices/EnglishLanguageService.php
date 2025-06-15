@@ -21,4 +21,9 @@ class EnglishLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->englishLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

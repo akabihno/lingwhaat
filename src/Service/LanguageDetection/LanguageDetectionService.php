@@ -365,4 +365,33 @@ class LanguageDetectionService
         return $this->turkishLanguageService->checkLanguage($word);
     }
 
+    public static function getLanguageCodes(): array
+    {
+        return [
+            self::FRENCH_LANGUAGE_CODE,
+            self::GERMAN_LANGUAGE_CODE,
+            self::GREEK_LANGUAGE_CODE,
+            self::ITALIAN_LANGUAGE_CODE,
+            self::LATVIAN_LANGUAGE_CODE,
+            self::LITHUANIAN_LANGUAGE_CODE,
+            self::POLISH_LANGUAGE_CODE,
+            self::PORTUGUESE_LANGUAGE_CODE,
+            self::ROMANIAN_LANGUAGE_CODE,
+            self::RUSSIAN_LANGUAGE_CODE,
+            self::SERBOCROATIAN_LANGUAGE_CODE,
+            self::TAGALOG_LANGUAGE_CODE,
+            self::UKRAINIAN_LANGUAGE_CODE,
+            self::ESU_LANGUAGE_CODE,
+            self::SPANISH_LANGUAGE_CODE,
+            self::LATIN_LANGUAGE_CODE,
+            self::SWEDISH_LANGUAGE_CODE,
+            self::ESTONIAN_LANGUAGE_CODE,
+            self::ENGLISH_LANGUAGE_CODE,
+            self::DUTCH_LANGUAGE_CODE,
+            self::HINDI_LANGUAGE_CODE,
+            self::GEORGIAN_LANGUAGE_CODE,
+            self::TURKISH_LANGUAGE_CODE,
+        ];
+    }
+
 }

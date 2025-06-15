@@ -21,4 +21,9 @@ class PortugueseLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->portugueseLanguageRepository->findAllNamesAndIpa();
+    }
+
 }
