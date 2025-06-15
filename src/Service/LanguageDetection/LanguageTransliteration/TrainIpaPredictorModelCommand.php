@@ -32,11 +32,11 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Rubix\ML\Classifiers\SVC;
-use Rubix\ML\Kernels\SVM\RBF;
-use Rubix\ML\Persisters\Filesystem;
-use Rubix\ML\Datasets\Labeled;
-use Rubix\ML\CrossValidation\Reports\Accuracy;
+use Rubix\ML\Classifiers\MultilayerPerceptron;
+use Rubix\ML\NeuralNet\Layers\Dense;
+use Rubix\ML\NeuralNet\ActivationFunctions\ReLU;
+use Rubix\ML\NeuralNet\ActivationFunctions\Softmax;
+use Rubix\ML\NeuralNet\CostFunctions\CrossEntropy;
 
 #[AsCommand(name: 'ml:train:ipa-predictor')]
 class TrainIpaPredictorModelCommand extends Command
@@ -186,7 +186,12 @@ class TrainIpaPredictorModelCommand extends Command
 
         $dataset = new Labeled($samples, $labels);
 
-        $model = new SVC(100.0, new RBF(), 1e-3);
+        $model = new MultilayerPerceptron([
+            new Dense(64, new ReLU()),
+            new Dense(32, new ReLU()),
+            new Dense(10, new Softmax()),
+        ], 100, new CrossEntropy());
+
         $model->train($dataset);
 
         $persister = new Filesystem($this->modelPath, true);
