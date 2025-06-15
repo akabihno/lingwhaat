@@ -189,11 +189,16 @@ class TrainIpaPredictorModelCommand extends Command
 
         $dataset = new Labeled($samples, $labels);
 
-        $model = new MultilayerPerceptron([
-            new Dense(64, new ReLU()),
-            new Dense(32, new ReLU()),
-            new Dense(10, new Softmax()),
-        ], 100, new CrossEntropy());
+        $uniqueIpa = array_unique($labels);
+        $numClasses = count($uniqueIpa);
+
+        $layers = [
+            new Dense(64, 0.0, new ReLU()),
+            new Dense(32, 0.0, new ReLU()),
+            new Dense($numClasses, 0.0, new Softmax()),  // Replace $numClasses with number of IPA outputs
+        ];
+
+        $model = new MultilayerPerceptron($layers, 100, new CrossEntropy());
 
         $model->train($dataset);
 
