@@ -213,11 +213,20 @@ class TrainIpaPredictorModelCommand extends Command
         return $map;
     }
 
-    protected function encodeCharacters(array $chars, array $map): array
+    protected function encodeCharacters(array $chars, array $map, int $maxLength = 10): array
     {
         $encoded = [];
+
         foreach ($chars as $ch) {
             $encoded[] = $map[$ch] ?? 0;
+        }
+
+        while (count($encoded) < $maxLength) {
+            $encoded[] = 0;
+        }
+
+        if (count($encoded) > $maxLength) {
+            $encoded = array_slice($encoded, 0, $maxLength);
         }
 
         return $encoded;
