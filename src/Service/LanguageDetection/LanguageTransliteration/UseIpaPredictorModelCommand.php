@@ -3,6 +3,8 @@
 namespace App\Service\LanguageDetection\LanguageTransliteration;
 
 use App\Service\LanguageDetection\LanguageDetectionService;
+use Rubix\ML\Datasets\Unlabeled;
+use Rubix\ML\PersistentModel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,10 +45,10 @@ class UseIpaPredictorModelCommand extends Command
 
         $vector = $this->trainIpaPredictorModelCommand->encodeCharacters(mb_str_split($word), $charMap);
 
-        $persister = new Filesystem($this->modelPath);
-        $model = $persister->load();
+        $estimator = PersistentModel::load(new Filesystem($this->modelPath));
+        $dataset = new Unlabeled([$vector]);
 
-        $ipa = $model->predict([$vector])[0];
+        $ipa = json_encode($estimator->predict($dataset));
 
         $output->writeln("Predicted IPA: $ipa");
 
