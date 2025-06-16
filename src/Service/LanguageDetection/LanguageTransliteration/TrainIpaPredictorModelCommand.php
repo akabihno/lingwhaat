@@ -28,7 +28,6 @@ use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use Doctrine\ORM\EntityManagerInterface;
 use Rubix\ML\NeuralNet\ActivationFunctions\LeakyReLU;
-use Rubix\ML\NeuralNet\CostFunctions\CrossEntropy;
 use Rubix\ML\NeuralNet\Layers\Activation;
 use Rubix\ML\NeuralNet\Layers\Dropout;
 use Rubix\ML\NeuralNet\Optimizers\Adam;
