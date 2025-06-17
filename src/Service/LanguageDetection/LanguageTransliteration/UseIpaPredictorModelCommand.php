@@ -58,7 +58,11 @@ class UseIpaPredictorModelCommand extends Command
         for ($i = 0; $i < $this->trainIpaPredictorModelCommand::IPA_LENGTH; $i++) {
             $model = PersistentModel::load(new Filesystem("{$this->modelPath}_pos_{$i}.model"));
             $index = $model->predict($dataset)[0];
+            dump('index:');
+            dump($index);
             $ipaChar = $ipaCharMapReverse[$index] ?? '';
+            dump('ipaChar:');
+            dump($ipaChar);
             $ipa .= ($ipaChar !== '_') ? $ipaChar : '';
         }
 
