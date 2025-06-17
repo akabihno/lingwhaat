@@ -63,7 +63,7 @@ class UseIpaPredictorModelCommand extends Command
         }
 
         dump('positionLabels:');
-        dump($positionLabels);
+        dump(json_encode($positionLabels));
 
         $ipa = '';
         for ($i = 0; $i < $maxLen; $i++) {
