@@ -58,6 +58,7 @@ class UseIpaPredictorModelCommand extends Command
         $positionLabels = [];
         $maxLen = $this->trainIpaPredictorModelCommand::MAX_WORD_AND_IPA_LENGTH;
 
+        dump($ipaCharMapReverse);
         for ($i = 0; $i < $maxLen; $i++) {
             $positionLabels[$i] = array_column($ipaCharMapReverse, $i);
         }
