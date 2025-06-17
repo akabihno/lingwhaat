@@ -3,6 +3,7 @@
 namespace App\Service\LanguageDetection\LanguageTransliteration;
 
 use App\Service\LanguageDetection\LanguageDetectionService;
+use Rubix\ML\Datasets\Labeled;
 use Rubix\ML\Datasets\Unlabeled;
 use Rubix\ML\PersistentModel;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -52,7 +53,7 @@ class UseIpaPredictorModelCommand extends Command
 
         $charMap = json_decode(file_get_contents($this->charMapPath), true);
         $vector = $this->trainIpaPredictorModelCommand->encodeWord(mb_str_split($word), $charMap);
-        $dataset = new Unlabeled([$vector]);
+        $dataset = new Labeled([$vector]);
         $ipa = '';
 
         for ($i = 0; $i < $this->trainIpaPredictorModelCommand::IPA_LENGTH; $i++) {
@@ -66,7 +67,7 @@ class UseIpaPredictorModelCommand extends Command
             $ipa .= ($ipaChar !== '_') ? $ipaChar : '';
         }
 
-        dump($dataset);
+        dump(json_encode($dataset));
 
         $output->writeln("Predicted IPA: $ipa");
 
