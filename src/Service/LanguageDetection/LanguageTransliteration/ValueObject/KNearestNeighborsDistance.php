@@ -9,6 +9,8 @@ class KNearestNeighborsDistance
         switch($langCode) {
             case 'fr':
                 return 5;
+            case 'lv':
+                return 2;
             default:
                 return 3;
         }
