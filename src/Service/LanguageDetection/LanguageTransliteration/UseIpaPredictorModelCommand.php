@@ -56,6 +56,7 @@ class UseIpaPredictorModelCommand extends Command
         $dataset = new Unlabeled($vector);
         $ipa = '';
 
+        dump('dataset:');
         dump(json_encode($dataset));
 
         for ($i = 0; $i < $this->trainIpaPredictorModelCommand::IPA_LENGTH; $i++) {
