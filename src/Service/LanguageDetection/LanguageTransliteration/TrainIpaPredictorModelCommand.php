@@ -191,6 +191,9 @@ class TrainIpaPredictorModelCommand extends Command
             $labels[] = $this->encodeIpa($wordArray['ipa']);
         }
 
+        dump('labels:');
+        dump($labels);
+
         $ipaCharMap = $this->buildIpaCharMap($labels);
         file_put_contents($this->ipaCharMapPath, json_encode($ipaCharMap));
         $reverseIpaCharMap = array_flip($ipaCharMap);
