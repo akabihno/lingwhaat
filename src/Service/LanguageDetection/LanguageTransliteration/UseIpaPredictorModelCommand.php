@@ -38,17 +38,23 @@ class UseIpaPredictorModelCommand extends Command
         $lang = $input->getOption('lang');
         $word = $input->getOption('word');
 
-        $this->modelPath = "src/Models/IpaPredictor/ipa_predictor_{$lang}.model";
+        if (!$lang || !$word) {
+            $output->writeln('<error>No --lang and/or --word parameters provided.</error>');
+            return Command::FAILURE;
+        }
+
         $this->charMapPath = "src/CharMap/{$lang}.json";
 
         $charMap = json_decode(file_get_contents($this->charMapPath), true);
-
-        $vector = $this->trainIpaPredictorModelCommand->encodeCharacters(mb_str_split($word), $charMap);
-
-        $estimator = PersistentModel::load(new Filesystem($this->modelPath));
+        $vector = $this->trainIpaPredictorModelCommand->encodeWord(mb_str_split($word), $charMap);
         $dataset = new Unlabeled([$vector]);
+        $ipa = '';
 
-        $ipa = json_encode($estimator->predict($dataset));
+        for ($i = 0; $i < 10; $i++) {
+            $model = PersistentModel::load(new Filesystem("{$this->modelPath}_pos_{$i}.model"));
+            $ipaChar = $model->predict($dataset)[0];
+            $ipa .= ($ipaChar !== '_') ? $ipaChar : '';
+        }
 
         $output->writeln("Predicted IPA: $ipa");
 

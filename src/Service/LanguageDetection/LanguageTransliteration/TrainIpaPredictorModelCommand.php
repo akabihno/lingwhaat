@@ -27,20 +27,16 @@ use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use Doctrine\ORM\EntityManagerInterface;
-use Rubix\ML\NeuralNet\ActivationFunctions\LeakyReLU;
-use Rubix\ML\NeuralNet\Layers\Activation;
-use Rubix\ML\NeuralNet\Layers\Dropout;
-use Rubix\ML\NeuralNet\Optimizers\Adam;
+use Rubix\ML\Kernels\Distance\Manhattan;
 use Rubix\ML\PersistentModel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Rubix\ML\Classifiers\MultilayerPerceptron;
-use Rubix\ML\NeuralNet\Layers\Dense;
 use Rubix\ML\Persisters\Filesystem;
 use Rubix\ML\Datasets\Labeled;
+use Rubix\ML\Classifiers\KNearestNeighbors;
 
 #[AsCommand(name: 'ml:train:ipa-predictor')]
 class TrainIpaPredictorModelCommand extends Command
@@ -93,7 +89,7 @@ class TrainIpaPredictorModelCommand extends Command
         $lang = $input->getOption('lang');
 
         $wordsArray = [];
-        $this->modelPath = "src/Models/IpaPredictor/ipa_predictor_{$lang}.model";
+        $this->modelPath = "src/Models/IpaPredictor/ipa_predictor_{$lang}";
         $this->charMapPath = "src/CharMap/{$lang}.json";
 
         switch ($lang) {
@@ -182,46 +178,33 @@ class TrainIpaPredictorModelCommand extends Command
         $samples = [];
         $labels = [];
 
-        foreach ($wordsArray as $key => $wordArray) {
-            $charVec = $this->encodeCharacters(mb_str_split($wordArray['name']), $charMap);
-            $samples[] = $charVec;
-            $labels[] = $this->cleanIpa($wordArray['ipa']);
-        }
-
-        $layers = [
-            new Dense(100),
-            new Activation(new LeakyReLU()),
-            new Dropout(0.2),
-            new Dense(50),
-            new Activation(new LeakyReLU())
-        ];
-
-        $optimizer = new Adam(0.001);
-
-        $multilayerPerceptron = new MultilayerPerceptron(
-            $layers,
-            128,
-            $optimizer,
-            1e-4,
-            1000,
-            1e-4,
-            5,
-            0.1
-        );
-
-        $estimator = new PersistentModel(
-            $multilayerPerceptron,
-            new Filesystem($this->modelPath, true)
-        );
-
-        $dataset = new Labeled($samples, $labels);
-
-        $estimator->train($dataset);
-
-        $estimator->save();
         file_put_contents($this->charMapPath, json_encode($charMap));
 
-        $output->writeln("<info>Model trained and saved to: {$this->modelPath}</info>");
+        foreach ($wordsArray as $key => $wordArray) {
+            $samples[] = $this->encodeWord(mb_str_split($wordArray['name']), $charMap);
+            $labels[] = $this->encodeIpa($wordArray['ipa']);
+        }
+
+        $positionLabels = [];
+        $maxLen = 20;
+
+        for ($i = 0; $i < $maxLen; $i++) {
+            $positionLabels[$i] = array_column($labels, $i);
+        }
+
+        for ($i = 0; $i < $maxLen; $i++) {
+            $dataset = new Labeled($samples, $positionLabels[$i]);
+
+            $model = new PersistentModel(
+                new KNearestNeighbors(5, true, new Manhattan()),
+                new Filesystem("{$this->modelPath}_pos_{$i}.model", true)
+            );
+
+            $model->train($dataset);
+            $model->save();
+            $output->writeln("<info>Model trained and saved to: {$this->modelPath} at position {$i}</info>");
+        }
+
         return Command::SUCCESS;
     }
 
@@ -246,7 +229,7 @@ class TrainIpaPredictorModelCommand extends Command
         return $map;
     }
 
-    public function encodeCharacters(array $chars, array $map, int $maxLength = 10): array
+    public function encodeWord(array $chars, array $map, int $maxLength = 15): array
     {
         $encoded = [];
 
@@ -263,6 +246,22 @@ class TrainIpaPredictorModelCommand extends Command
         }
 
         return $encoded;
+    }
+
+    public function encodeIpa(string $ipa, int $maxLength = 20): array
+    {
+        $ipaChars = mb_str_split($this->cleanIpa($ipa));
+        $encoded = [];
+
+        foreach ($ipaChars as $char) {
+            $encoded[] = $char;
+        }
+
+        while (count($encoded) < $maxLength) {
+            $encoded[] = '_';
+        }
+
+        return array_slice($encoded, 0, $maxLength);
     }
 
 }
