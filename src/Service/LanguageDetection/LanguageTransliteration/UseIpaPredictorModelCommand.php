@@ -61,7 +61,7 @@ class UseIpaPredictorModelCommand extends Command
         for ($i = 0; $i < $maxLen; $i++) {
             $positionLabels[$i] = [];
             foreach ($ipaCharMapReverse as $char) {
-                $positionLabels[$i][] = $char[$i] ?? null;
+                $positionLabels[$i][] = $char[$i] ?? '_';
             }
         }
 
