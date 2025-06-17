@@ -191,9 +191,6 @@ class TrainIpaPredictorModelCommand extends Command
             $labels[] = $this->encodeIpa($wordArray['ipa']);
         }
 
-        dump('labels:');
-        dump($labels);
-
         $ipaCharMap = $this->buildIpaCharMap($labels);
         file_put_contents($this->ipaCharMapPath, json_encode($ipaCharMap));
         $reverseIpaCharMap = array_flip($ipaCharMap);
@@ -205,6 +202,9 @@ class TrainIpaPredictorModelCommand extends Command
         for ($i = 0; $i < $maxLen; $i++) {
             $positionLabels[$i] = array_column($labels, $i);
         }
+
+        dump('positionLabels train:');
+        dump($positionLabels);
 
         for ($i = 0; $i < $maxLen; $i++) {
             $dataset = new Labeled($samples, $positionLabels[$i]);
@@ -275,9 +275,6 @@ class TrainIpaPredictorModelCommand extends Command
         if (count($encoded) > $maxLength) {
             $encoded = array_slice($encoded, 0, $maxLength);
         }
-
-        dump('encoded:');
-        dump($encoded);
 
         return $encoded;
     }
