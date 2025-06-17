@@ -26,6 +26,7 @@ use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
+use App\Service\LanguageDetection\LanguageTransliteration\ValueObject\KNearestNeighborsDistance;
 use Doctrine\ORM\EntityManagerInterface;
 use Rubix\ML\Kernels\Distance\Manhattan;
 use Rubix\ML\PersistentModel;
@@ -41,6 +42,8 @@ use Rubix\ML\Classifiers\KNearestNeighbors;
 #[AsCommand(name: 'ml:train:ipa-predictor')]
 class TrainIpaPredictorModelCommand extends Command
 {
+    const int WORD_LENGTH = 15;
+    const int IPA_LENGTH = 20;
     protected string $modelPath;
     protected string $charMapPath;
 
@@ -186,7 +189,7 @@ class TrainIpaPredictorModelCommand extends Command
         }
 
         $positionLabels = [];
-        $maxLen = 20;
+        $maxLen = self::IPA_LENGTH;
 
         for ($i = 0; $i < $maxLen; $i++) {
             $positionLabels[$i] = array_column($labels, $i);
@@ -196,7 +199,7 @@ class TrainIpaPredictorModelCommand extends Command
             $dataset = new Labeled($samples, $positionLabels[$i]);
 
             $model = new PersistentModel(
-                new KNearestNeighbors(5, true, new Manhattan()),
+                new KNearestNeighbors(KNearestNeighborsDistance::distanceBasedOnLangCode($lang), true, new Manhattan()),
                 new Filesystem("{$this->modelPath}_pos_{$i}.model", true)
             );
 
@@ -229,7 +232,7 @@ class TrainIpaPredictorModelCommand extends Command
         return $map;
     }
 
-    public function encodeWord(array $chars, array $map, int $maxLength = 15): array
+    public function encodeWord(array $chars, array $map, int $maxLength = self::WORD_LENGTH): array
     {
         $encoded = [];
 
@@ -248,8 +251,9 @@ class TrainIpaPredictorModelCommand extends Command
         return $encoded;
     }
 
-    public function encodeIpa(string $ipa, int $maxLength = 20): array
+    public function encodeIpa(string $ipa): array
     {
+        $maxLength = self::IPA_LENGTH;
         $ipaChars = mb_str_split($this->cleanIpa($ipa));
         $encoded = [];
 
