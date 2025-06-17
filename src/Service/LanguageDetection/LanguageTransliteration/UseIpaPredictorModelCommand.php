@@ -16,6 +16,7 @@ use Rubix\ML\Persisters\Filesystem;
 #[AsCommand(name: 'ml:use:ipa-predictor')]
 class UseIpaPredictorModelCommand extends Command
 {
+    protected string $reverseIpaCharMapPath;
     protected string $modelPath;
     protected string $charMapPath;
     public function __construct(protected TrainIpaPredictorModelCommand $trainIpaPredictorModelCommand)
@@ -46,6 +47,9 @@ class UseIpaPredictorModelCommand extends Command
         $this->modelPath = "src/Models/IpaPredictor/ipa_predictor_{$lang}";
         $this->charMapPath = "src/CharMap/{$lang}.json";
 
+        $this->reverseIpaCharMapPath = "src/CharMap/reverse_ipa_{$lang}.json";
+        $ipaCharMapReverse = json_decode(file_get_contents($this->reverseIpaCharMapPath), true);
+
         $charMap = json_decode(file_get_contents($this->charMapPath), true);
         $vector = $this->trainIpaPredictorModelCommand->encodeWord(mb_str_split($word), $charMap);
         $dataset = new Unlabeled([$vector]);
@@ -53,9 +57,8 @@ class UseIpaPredictorModelCommand extends Command
 
         for ($i = 0; $i < $this->trainIpaPredictorModelCommand::IPA_LENGTH; $i++) {
             $model = PersistentModel::load(new Filesystem("{$this->modelPath}_pos_{$i}.model"));
-            dump($model);
-            $ipaChar = $model->predict($dataset)[0];
-            dump($ipaChar);
+            $index = $model->predict($dataset)[0];
+            $ipaChar = $ipaCharMapReverse[$index] ?? '';
             $ipa .= ($ipaChar !== '_') ? $ipaChar : '';
         }
 

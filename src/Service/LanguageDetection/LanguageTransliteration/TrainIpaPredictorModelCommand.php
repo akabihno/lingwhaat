@@ -45,7 +45,9 @@ class TrainIpaPredictorModelCommand extends Command
     const int WORD_LENGTH = 15;
     const int IPA_LENGTH = 20;
     protected string $modelPath;
-    protected string $charMapPath;
+    protected string $wordCharMapPath;
+    protected string $ipaCharMapPath;
+    protected string $reverseIpaCharMapPath;
 
     public function __construct(
         protected DutchLanguageService $dutchLanguageService,
@@ -93,7 +95,9 @@ class TrainIpaPredictorModelCommand extends Command
 
         $wordsArray = [];
         $this->modelPath = "src/Models/IpaPredictor/ipa_predictor_{$lang}";
-        $this->charMapPath = "src/CharMap/{$lang}.json";
+        $this->wordCharMapPath = "src/CharMap/{$lang}.json";
+        $this->ipaCharMapPath = "src/CharMap/ipa_{$lang}.json";
+        $this->reverseIpaCharMapPath = "src/CharMap/reverse_ipa_{$lang}.json";
 
         switch ($lang) {
             case LanguageDetectionService::DUTCH_LANGUAGE_CODE:
@@ -177,16 +181,21 @@ class TrainIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $charMap = $this->buildCharMap($wordsArray);
+        $charMap = $this->buildWordCharMap($wordsArray);
         $samples = [];
         $labels = [];
 
-        file_put_contents($this->charMapPath, json_encode($charMap));
+        file_put_contents($this->wordCharMapPath, json_encode($charMap));
 
         foreach ($wordsArray as $key => $wordArray) {
             $samples[] = $this->encodeWord(mb_str_split($wordArray['name']), $charMap);
             $labels[] = $this->encodeIpa($wordArray['ipa']);
         }
+
+        $ipaCharMap = $this->buildIpaCharMap($labels);
+        file_put_contents($this->ipaCharMapPath, json_encode($ipaCharMap));
+        $reverseIpaCharMap = array_flip($ipaCharMap);
+        file_put_contents($this->reverseIpaCharMapPath, json_encode($reverseIpaCharMap));
 
         $positionLabels = [];
         $maxLen = self::IPA_LENGTH;
@@ -216,7 +225,7 @@ class TrainIpaPredictorModelCommand extends Command
         return str_replace(['[', ']', '/'], '', $ipa);
     }
 
-    protected function buildCharMap(array $wordsArray): array
+    protected function buildWordCharMap(array $wordsArray): array
     {
         $map = [];
         $index = 1;
@@ -229,6 +238,23 @@ class TrainIpaPredictorModelCommand extends Command
             }
         }
 
+        return $map;
+    }
+
+    protected function buildIpaCharMap(array $ipaArray): array
+    {
+        $map = [];
+        $index = 1;
+
+        foreach ($ipaArray as $key => $ipa) {
+            foreach (mb_str_split($ipa['ipa']) as $char) {
+                if (!isset($map[$char])) {
+                    $map[$char] = $index++;
+                }
+            }
+        }
+
+        $map['_'] = 0;
         return $map;
     }
 
