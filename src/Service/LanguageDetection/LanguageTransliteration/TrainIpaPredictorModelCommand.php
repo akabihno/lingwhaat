@@ -275,6 +275,9 @@ class TrainIpaPredictorModelCommand extends Command
             $encoded = array_slice($encoded, 0, $maxLength);
         }
 
+        dump('encoded:');
+        dump($encoded);
+
         return $encoded;
     }
 
