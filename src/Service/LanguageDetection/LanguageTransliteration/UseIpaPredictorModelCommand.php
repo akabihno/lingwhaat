@@ -66,6 +66,8 @@ class UseIpaPredictorModelCommand extends Command
             $ipa .= ($ipaChar !== '_') ? $ipaChar : '';
         }
 
+        dump($dataset);
+
         $output->writeln("Predicted IPA: $ipa");
 
         return Command::SUCCESS;
