@@ -53,15 +53,18 @@ class UseIpaPredictorModelCommand extends Command
 
         $charMap = json_decode(file_get_contents($this->charMapPath), true);
         $vector = $this->trainIpaPredictorModelCommand->encodeWord(mb_str_split($word), $charMap);
-        dump('vector:');
-        dump($vector);
-        $dataset = new Unlabeled($vector);
+
+
+        $positionLabels = [];
+        $maxLen = $this->trainIpaPredictorModelCommand::MAX_WORD_AND_IPA_LENGTH;
+
+        for ($i = 0; $i < $maxLen; $i++) {
+            $positionLabels[$i] = array_column($ipaCharMapReverse, $i);
+        }
+
         $ipa = '';
-
-        dump('dataset:');
-        dump(json_encode($dataset));
-
-        for ($i = 0; $i < $this->trainIpaPredictorModelCommand::IPA_LENGTH; $i++) {
+        for ($i = 0; $i < $this->trainIpaPredictorModelCommand::MAX_WORD_AND_IPA_LENGTH; $i++) {
+            $dataset = new Labeled($vector, $positionLabels[$i]);
             $model = PersistentModel::load(new Filesystem("{$this->modelPath}_pos_{$i}.model"));
             $index = $model->predict($dataset)[0];
             dump('index:');

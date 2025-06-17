@@ -42,8 +42,7 @@ use Rubix\ML\Classifiers\KNearestNeighbors;
 #[AsCommand(name: 'ml:train:ipa-predictor')]
 class TrainIpaPredictorModelCommand extends Command
 {
-    const int WORD_LENGTH = 15;
-    const int IPA_LENGTH = 20;
+    const int MAX_WORD_AND_IPA_LENGTH = 20;
     protected string $modelPath;
     protected string $wordCharMapPath;
     protected string $ipaCharMapPath;
@@ -193,13 +192,12 @@ class TrainIpaPredictorModelCommand extends Command
         }
 
         $ipaCharMap = $this->buildIpaCharMap($labels);
-        dump($ipaCharMap);
         file_put_contents($this->ipaCharMapPath, json_encode($ipaCharMap));
         $reverseIpaCharMap = array_flip($ipaCharMap);
         file_put_contents($this->reverseIpaCharMapPath, json_encode($reverseIpaCharMap));
 
         $positionLabels = [];
-        $maxLen = self::IPA_LENGTH;
+        $maxLen = self::MAX_WORD_AND_IPA_LENGTH;
 
         for ($i = 0; $i < $maxLen; $i++) {
             $positionLabels[$i] = array_column($labels, $i);
@@ -259,7 +257,7 @@ class TrainIpaPredictorModelCommand extends Command
         return $map;
     }
 
-    public function encodeWord(array $chars, array $map, int $maxLength = self::WORD_LENGTH): array
+    public function encodeWord(array $chars, array $map, int $maxLength = self::MAX_WORD_AND_IPA_LENGTH): array
     {
         $encoded = [];
 
@@ -283,7 +281,7 @@ class TrainIpaPredictorModelCommand extends Command
 
     public function encodeIpa(string $ipa): array
     {
-        $maxLength = self::IPA_LENGTH;
+        $maxLength = self::MAX_WORD_AND_IPA_LENGTH;
         $ipaChars = mb_str_split($this->cleanIpa($ipa));
         $encoded = [];
 
