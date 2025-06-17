@@ -65,12 +65,12 @@ class UseIpaPredictorModelCommand extends Command
             }
         }
 
-        dump('positionLabels:');
-        dump($positionLabels);
+        //dump('positionLabels:');
+        //dump($positionLabels);
 
         $ipa = '';
         for ($i = 0; $i < $maxLen; $i++) {
-            $dataset = new Labeled($vector, $positionLabels[$i]);
+            $dataset = new Labeled($vector, $positionLabels);
             $model = PersistentModel::load(new Filesystem("{$this->modelPath}_pos_{$i}.model"));
             $index = $model->predict($dataset)[0];
             dump('index:');
