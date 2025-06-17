@@ -246,6 +246,8 @@ class TrainIpaPredictorModelCommand extends Command
         $map = [];
         $index = 1;
 
+        dump($ipaArray);
+
         foreach ($ipaArray as $key => $ipa) {
             foreach (mb_str_split($ipa['ipa']) as $char) {
                 if (!isset($map[$char])) {
