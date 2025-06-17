@@ -53,7 +53,7 @@ class UseIpaPredictorModelCommand extends Command
 
         $charMap = json_decode(file_get_contents($this->charMapPath), true);
         $vector = $this->trainIpaPredictorModelCommand->encodeWord(mb_str_split($word), $charMap);
-        $dataset = new Unlabeled([$vector]);
+        $dataset = new Unlabeled($vector);
         $ipa = '';
 
         for ($i = 0; $i < $this->trainIpaPredictorModelCommand::IPA_LENGTH; $i++) {
