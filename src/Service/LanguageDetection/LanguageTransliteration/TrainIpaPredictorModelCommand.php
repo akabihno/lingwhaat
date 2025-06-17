@@ -199,7 +199,7 @@ class TrainIpaPredictorModelCommand extends Command
             $dataset = new Labeled($samples, $positionLabels[$i]);
 
             $model = new PersistentModel(
-                new KNearestNeighbors(KNearestNeighborsDistance::distanceBasedOnLangCode($lang), true, new Manhattan()),
+                new KNearestNeighbors(KNearestNeighborsDistance::distanceBasedOnLangCode($lang), false, new Manhattan()),
                 new Filesystem("{$this->modelPath}_pos_{$i}.model", true)
             );
 
