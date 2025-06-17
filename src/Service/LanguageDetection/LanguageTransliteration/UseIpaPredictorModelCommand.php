@@ -43,6 +43,7 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
+        $this->modelPath = "src/Models/IpaPredictor/ipa_predictor_{$lang}";
         $this->charMapPath = "src/CharMap/{$lang}.json";
 
         $charMap = json_decode(file_get_contents($this->charMapPath), true);
@@ -59,11 +60,6 @@ class UseIpaPredictorModelCommand extends Command
         $output->writeln("Predicted IPA: $ipa");
 
         return Command::SUCCESS;
-    }
-
-    protected function padVector(array $vector, int $length): array
-    {
-        return array_pad(array_slice($vector, 0, $length), $length, 0);
     }
 
 }
