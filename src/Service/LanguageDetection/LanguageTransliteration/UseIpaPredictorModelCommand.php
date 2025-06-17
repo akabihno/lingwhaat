@@ -62,9 +62,12 @@ class UseIpaPredictorModelCommand extends Command
             $positionLabels[$i] = array_column($ipaCharMapReverse, $i);
         }
 
+        dump('positionLabels:');
+        dump($positionLabels);
+
         $ipa = '';
-        for ($i = 0; $i < $this->trainIpaPredictorModelCommand::MAX_WORD_AND_IPA_LENGTH; $i++) {
-            $dataset = new Unlabeled($vector, $positionLabels[$i]);
+        for ($i = 0; $i < $maxLen; $i++) {
+            $dataset = new Labeled($vector, $positionLabels[$i]);
             $model = PersistentModel::load(new Filesystem("{$this->modelPath}_pos_{$i}.model"));
             $index = $model->predict($dataset)[0];
             dump('index:');
