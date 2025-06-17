@@ -56,9 +56,11 @@ class UseIpaPredictorModelCommand extends Command
         $dataset = new Unlabeled($vector);
         $ipa = '';
 
+        dump(json_encode($dataset));
+
         for ($i = 0; $i < $this->trainIpaPredictorModelCommand::IPA_LENGTH; $i++) {
             $model = PersistentModel::load(new Filesystem("{$this->modelPath}_pos_{$i}.model"));
-            $index = $model->predict($dataset)[0];
+            $index = $model->predict($dataset);
             dump('index:');
             dump($index);
             $ipaChar = $ipaCharMapReverse[$index] ?? '';
@@ -66,8 +68,6 @@ class UseIpaPredictorModelCommand extends Command
             dump($ipaChar);
             $ipa .= ($ipaChar !== '_') ? $ipaChar : '';
         }
-
-        dump(json_encode($dataset));
 
         $output->writeln("Predicted IPA: $ipa");
 
