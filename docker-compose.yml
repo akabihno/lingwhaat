@@ -1,4 +1,15 @@
 services:
+  ml:
+    build:
+      context: .
+      dockerfile: Dockerfile-python
+    container_name: ml-service
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./python_service:/app
+    restart: unless-stopped
+
   web:
     build:
       context: .
