@@ -91,7 +91,7 @@ class Seq2Seq(nn.Module):
 # --- Training script ---
 def train_model(csv_path, model_save_path='model.pt', n_epochs=20):
     df = pd.read_csv(csv_path)
-    words = df['name'].astype(str).tolist()
+    words = df['word'].astype(str).tolist()
     ipas = df['ipa'].astype(str).tolist()
 
     input_stoi, input_itos = build_vocab(words)
