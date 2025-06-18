@@ -35,6 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'ml:train:ipa-predictor')]
 class TrainIpaPredictorModelCommand extends Command
 {
+    protected string $trainingDataPath;
     public function __construct(
         protected DutchLanguageService $dutchLanguageService,
         protected EnglishLanguageService $englishLanguageService,
@@ -77,6 +78,8 @@ class TrainIpaPredictorModelCommand extends Command
         // example: php bin/console ml:train:ipa-predictor --lang en
 
         $lang = $input->getOption('lang');
+
+        $this->trainingDataPath = "src/Models/TrainingData/ipa_predictor_dataset_{$lang}";
 
         $trainingDatasetArray = [];
 
@@ -162,11 +165,23 @@ class TrainIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        dump($trainingDatasetArray);
+        $csvHandle = fopen($this->trainingDataPath, 'w');
 
+        fputcsv($csvHandle, ['word', 'ipa']);
 
+        foreach ($trainingDatasetArray as $datasetRow) {
+            fputcsv($csvHandle, [$datasetRow['name'], $this->cleanIpaString($datasetRow['ipa'])]);
+        }
+
+        fclose($csvHandle);
+        $output->writeln("Training dataset for {$lang} saved to {$this->trainingDataPath}");
 
         return Command::SUCCESS;
+    }
+
+    protected function cleanIpaString(string $ipa): string
+    {
+        return trim($ipa, " [/]");
     }
 
 }
