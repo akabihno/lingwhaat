@@ -69,6 +69,7 @@ class UseIpaPredictorModelCommand extends Command
             ]
         );
 
+        dump($response);
         $data = $response->toArray();
         $ipa = $data['ipa'];
 
