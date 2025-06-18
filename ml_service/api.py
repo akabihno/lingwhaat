@@ -4,9 +4,7 @@ import shutil
 import os
 import tempfile
 import sys
-path_to_src = Path(__file__).parent / "ml_service"
-sys.path.insert(0, str(path_to_src))
-from model import *
+from ml_service import model
 
 app = FastAPI()
 
