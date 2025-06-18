@@ -20,7 +20,11 @@ async def train_model_api(file: UploadFile = File(...)):
         tmp_path = tmp.name
 
     try:
-        model.train_model(tmp_path)
+        csv_filename = os.path.basename(tmp_path)
+        model_filename = csv_filename.replace('.csv', '_model.pt')
+        model_save_path = os.path.join('models', model_filename)
+
+        model.train_model(tmp_path, model_save_path)
         return {"status": "Training completed successfully"}
     except Exception as e:
         logging.error("Training failed", exc_info=True)
