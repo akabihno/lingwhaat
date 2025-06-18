@@ -54,7 +54,7 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $this->modelName = "ipa_predictor_dataset_{$lang}.pt";
+        $this->modelName = "ipa_predictor_dataset_{$lang}_model.pt";
 
         $response = $this->httpClient->request(
             'POST', 'http://'.IpaPredictorConstants::getMlServiceHost().
