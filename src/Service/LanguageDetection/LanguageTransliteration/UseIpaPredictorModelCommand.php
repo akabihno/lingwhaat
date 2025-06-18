@@ -3,6 +3,7 @@
 namespace App\Service\LanguageDetection\LanguageTransliteration;
 
 use App\Service\LanguageDetection\LanguageDetectionService;
+use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,8 +20,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[AsCommand(name: 'ml:use:ipa-predictor')]
 class UseIpaPredictorModelCommand extends Command
 {
-    const string ML_SERVICE_HOST = '127.0.0.1';
-    const string ML_SERVICE_PORT = '8000';
     public function __construct(protected HttpClientInterface $httpClient)
     {
         parent::__construct();
@@ -53,9 +52,13 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $response = $this->httpClient->request('POST', 'http://'.self::ML_SERVICE_HOST.':'.self::ML_SERVICE_PORT.'/predict', [
-            'json' => ['word' => $word]
-        ]);
+        $response = $this->httpClient->request(
+            'POST', 'http://'.IpaPredictorConstants::getMlServiceHost().
+            ':'.
+            IpaPredictorConstants::getMlServicePort().
+            '/'.IpaPredictorConstants::getMlServicePredictRoute(),
+            ['json' => ['word' => $word]]
+        );
 
         $data = $response->toArray();
         $ipa = $data['ipa'];
