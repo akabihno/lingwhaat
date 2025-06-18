@@ -4,7 +4,7 @@ import shutil
 import os
 import tempfile
 import sys
-from ml_service import model
+import model
 
 app = FastAPI()
 
