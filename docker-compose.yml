@@ -8,7 +8,8 @@ services:
       - "8000:8000"
     volumes:
       - ./ml_service:/app
-    restart: unless-stopped
+    restart: on-failure
+    network_mode: host
 
   web:
     build:

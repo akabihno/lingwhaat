@@ -9,11 +9,18 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsCommand(name: 'ml:use:ipa-predictor')]
 class UseIpaPredictorModelCommand extends Command
 {
+    const string ML_SERVICE_HOST = '127.0.0.1';
+    const string ML_SERVICE_PORT = '8000';
     public function __construct(protected HttpClientInterface $httpClient)
     {
         parent::__construct();
@@ -29,6 +36,13 @@ class UseIpaPredictorModelCommand extends Command
             ->addOption('word', null, InputOption::VALUE_REQUIRED, 'Word to use for IPA prediction.');
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $lang = $input->getOption('lang');
@@ -39,7 +53,7 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $response = $this->httpClient->request('POST', 'http://ml-service:8000/predict', [
+        $response = $this->httpClient->request('POST', 'http://'.self::ML_SERVICE_HOST.':'.self::ML_SERVICE_PORT.'/predict', [
             'json' => ['word' => $word]
         ]);
 
