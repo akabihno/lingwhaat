@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./python_service:/app
+      - ./ml_service:/app
     restart: unless-stopped
 
   web:
