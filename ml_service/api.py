@@ -4,7 +4,8 @@ import shutil
 import os
 import tempfile
 import sys
-from ml_service import model
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+from model import *
 
 app = FastAPI()
 
