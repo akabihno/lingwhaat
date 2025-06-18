@@ -95,7 +95,7 @@ class TrainIpaPredictorModelCommand extends Command
         $lang = $input->getOption('lang');
         $prepare = $input->getOption('prepare');
 
-        $this->trainingDataPath = "src/Models/TrainingData/ipa_predictor_dataset_{$lang}";
+        $this->trainingDataPath = "src/Models/TrainingData/ipa_predictor_dataset_{$lang}.csv";
 
         $trainingDatasetArray = [];
 
