@@ -10,6 +10,10 @@ services:
       - ./ml_service:/app
     restart: on-failure
     network_mode: host
+    deploy:
+      resources:
+        limits:
+          memory: 16g
 
   web:
     build:
