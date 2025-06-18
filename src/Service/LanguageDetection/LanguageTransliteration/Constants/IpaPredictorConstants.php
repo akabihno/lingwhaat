@@ -6,6 +6,7 @@ class IpaPredictorConstants
 {
     private const string ML_SERVICE_HOST = '127.0.0.1';
     private const string ML_SERVICE_PORT = '8000';
+    private const string ML_SERVICE_TRAIN_ROUTE = 'train';
     private const string ML_SERVICE_PREDICT_ROUTE = 'predict';
 
     public  static function getMlServiceHost(): string
@@ -16,6 +17,11 @@ class IpaPredictorConstants
     public  static function getMlServicePort(): string
     {
         return self::ML_SERVICE_PORT;
+    }
+
+    public  static function getMlServiceTrainRoute(): string
+    {
+        return self::ML_SERVICE_TRAIN_ROUTE;
     }
 
     public  static function getMlServicePredictRoute(): string

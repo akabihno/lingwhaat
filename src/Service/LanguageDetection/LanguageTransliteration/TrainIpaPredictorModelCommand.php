@@ -26,11 +26,18 @@ use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
+use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsCommand(name: 'ml:train:ipa-predictor')]
 class TrainIpaPredictorModelCommand extends Command
@@ -60,6 +67,7 @@ class TrainIpaPredictorModelCommand extends Command
         protected TagalogLanguageService $tagalogLanguageService,
         protected TurkishLanguageService $turkishLanguageService,
         protected UkrainianLanguageService $ukrainianLanguageService,
+        protected HttpClientInterface $httpClient
     ) {
         parent::__construct();
     }
@@ -70,14 +78,22 @@ class TrainIpaPredictorModelCommand extends Command
             ->setDescription('Train IPA prediction model for a specific language.')
             ->addOption('lang', null, InputOption::VALUE_REQUIRED,
                 'Language code in: ' . implode(', ', LanguageDetectionService::getLanguageCodes())
-            );
+            )->addOption('prepare', null, InputOption::VALUE_OPTIONAL,
+            'Optional argument to update existing dataset in CSV file (can be used if data in DB was populated)');
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ClientExceptionInterface
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // example: php bin/console ml:train:ipa-predictor --lang en
 
         $lang = $input->getOption('lang');
+        $prepare = $input->getOption('prepare');
 
         $this->trainingDataPath = "src/Models/TrainingData/ipa_predictor_dataset_{$lang}";
 
@@ -165,16 +181,36 @@ class TrainIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $csvHandle = fopen($this->trainingDataPath, 'w');
 
-        fputcsv($csvHandle, ['word', 'ipa']);
+        if (!file_exists($this->trainingDataPath) || $prepare) {
+            $csvHandle = fopen($this->trainingDataPath, 'w');
 
-        foreach ($trainingDatasetArray as $datasetRow) {
-            fputcsv($csvHandle, [$datasetRow['name'], $this->cleanIpaString($datasetRow['ipa'])]);
+            fputcsv($csvHandle, ['word', 'ipa']);
+
+            foreach ($trainingDatasetArray as $datasetRow) {
+                fputcsv($csvHandle, [$datasetRow['name'], $this->cleanIpaString($datasetRow['ipa'])]);
+            }
+
+            fclose($csvHandle);
+            $output->writeln("Training dataset for {$lang} saved to {$this->trainingDataPath}");
         }
 
-        fclose($csvHandle);
-        $output->writeln("Training dataset for {$lang} saved to {$this->trainingDataPath}");
+        $file = new File($this->trainingDataPath);
+
+        $response = $this->httpClient->request('POST', 'http://'.IpaPredictorConstants::getMlServiceHost().':'.IpaPredictorConstants::getMlServicePort().'/'.IpaPredictorConstants::getMlServiceTrainRoute(), [
+            'headers' => [
+                'Content-Type' => 'multipart/form-data',
+            ],
+            'body' => [
+                'file' => fopen($file->getRealPath(), 'r'),
+            ],
+        ]);
+
+        $statusCode = $response->getStatusCode();
+        $content = $response->getContent();
+
+        $output->writeln("Training complete on dataset {$this->trainingDataPath} with status {$statusCode}");
+
 
         return Command::SUCCESS;
     }
