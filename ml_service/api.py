@@ -1,5 +1,6 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
+from fastapi import Query
 import traceback
 import logging
 import shutil
@@ -20,11 +21,7 @@ async def train_model_api(file: UploadFile = File(...)):
         tmp_path = tmp.name
 
     try:
-        csv_filename = os.path.basename(tmp_path)
-        model_filename = csv_filename.replace('.csv', '_model.pt')
-        model_save_path = os.path.join('models', model_filename)
-
-        model.train_model(tmp_path, model_save_path)
+        model.train_model(tmp_path)
         return {"status": "Training completed successfully"}
     except Exception as e:
         logging.error("Training failed", exc_info=True)
@@ -36,9 +33,9 @@ async def train_model_api(file: UploadFile = File(...)):
         os.remove(tmp_path)
 
 @app.get("/predict/")
-async def predict(word: str):
+def predict(word: str = Query(...), model_name: str = Query(...)):
     try:
-        ipa = model.predict_ipa(word)
-        return {"word": word, "ipa": ipa}
+        ipa = model.predict_ipa(word, model_name)
+        return {"ipa": ipa}
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)

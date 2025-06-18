@@ -20,6 +20,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[AsCommand(name: 'ml:use:ipa-predictor')]
 class UseIpaPredictorModelCommand extends Command
 {
+    protected string $modelName;
     public function __construct(protected HttpClientInterface $httpClient)
     {
         parent::__construct();
@@ -32,7 +33,8 @@ class UseIpaPredictorModelCommand extends Command
             ->addOption('lang', null, InputOption::VALUE_REQUIRED,
                 'Language code in: ' . implode(', ', LanguageDetectionService::getLanguageCodes())
             )
-            ->addOption('word', null, InputOption::VALUE_REQUIRED, 'Word to use for IPA prediction.');
+            ->addOption('word', null, InputOption::VALUE_REQUIRED, 'Word to use for IPA prediction.')
+            ->addOption('model_name', null, InputOption::VALUE_REQUIRED, 'Model name for IPA prediction.');
     }
 
     /**
@@ -52,12 +54,14 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
+        $this->modelName = "ipa_predictor_dataset_{$lang}.pt";
+
         $response = $this->httpClient->request(
             'POST', 'http://'.IpaPredictorConstants::getMlServiceHost().
             ':'.
             IpaPredictorConstants::getMlServicePort().
             '/'.IpaPredictorConstants::getMlServicePredictRoute().'/',
-            ['json' => ['word' => $word]],
+            ['json' => ['word' => $word, 'model_name' => $this->modelName]],
         );
 
         $data = $response->toArray();

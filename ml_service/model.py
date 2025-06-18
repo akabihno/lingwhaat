@@ -88,8 +88,12 @@ class Seq2Seq(nn.Module):
 
         return outputs
 
-# --- Training script ---
-def train_model(csv_path, model_save_path='model.pt', n_epochs=20):
+def train_model(csv_path, model_save_dir='models', model_save_path=None, n_epochs=20):
+    if model_save_path is None:
+            base = os.path.basename(csv_path)
+            model_name = base.replace('.csv', '_model.pt')
+            model_save_path = os.path.join(model_save_dir, model_name)
+
     df = pd.read_csv(csv_path)
     words = df['word'].astype(str).tolist()
     ipas = df['ipa'].astype(str).tolist()
@@ -141,8 +145,12 @@ def train_model(csv_path, model_save_path='model.pt', n_epochs=20):
         'output_itos': output_itos
     }, model_save_path)
 
-# --- Inference helper ---
-def predict_ipa(word: str, model_path='model.pt'):
+def predict_ipa(word: str, model_name: str, model_dir: str = 'models'):
+    model_path = os.path.join(model_dir, model_name)
+
+    if not os.path.exists(model_path):
+        raise FileNotFoundError(f"Model file not found: {model_path}")
+
     checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
 
     input_stoi = checkpoint['input_stoi']
