@@ -6,6 +6,9 @@ ssl-certs/*.pem
 vendor
 composer.lock
 
+#Python
+ml_service/__pycache__/
+
 #MySQL
 mysql_data
 
