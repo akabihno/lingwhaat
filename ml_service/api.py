@@ -17,8 +17,8 @@ async def train_model_api(file: UploadFile = File(...)):
         return JSONResponse(content={"error": "Only CSV files are supported."}, status_code=400)
 
     base_name = os.path.splitext(os.path.basename(file.filename))[0]
-        model_name = f"{base_name}_model.pt"
-        model_path = os.path.join("models", model_name)
+    model_name = f"{base_name}_model.pt"
+    model_path = os.path.join("models", model_name)
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".csv") as tmp:
         shutil.copyfileobj(file.file, tmp)
