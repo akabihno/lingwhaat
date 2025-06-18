@@ -204,6 +204,7 @@ class TrainIpaPredictorModelCommand extends Command
             'body' => [
                 'file' => fopen($file->getRealPath(), 'r'),
             ],
+            'timeout' => 0,
         ]);
 
         $statusCode = $response->getStatusCode();

@@ -56,8 +56,8 @@ class UseIpaPredictorModelCommand extends Command
             'POST', 'http://'.IpaPredictorConstants::getMlServiceHost().
             ':'.
             IpaPredictorConstants::getMlServicePort().
-            '/'.IpaPredictorConstants::getMlServicePredictRoute(),
-            ['json' => ['word' => $word]]
+            '/'.IpaPredictorConstants::getMlServicePredictRoute().'/',
+            ['json' => ['word' => $word]],
         );
 
         $data = $response->toArray();
