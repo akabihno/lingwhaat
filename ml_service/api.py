@@ -1,5 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
+import traceback
+import logging
 import shutil
 import os
 import tempfile
@@ -21,7 +23,11 @@ async def train_model_api(file: UploadFile = File(...)):
         model.train_model(tmp_path)
         return {"status": "Training completed successfully"}
     except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=500)
+        logging.error("Training failed", exc_info=True)
+        return JSONResponse(content={
+            "error": str(e),
+            "trace": traceback.format_exc()
+        }, status_code=500)
     finally:
         os.remove(tmp_path)
 
