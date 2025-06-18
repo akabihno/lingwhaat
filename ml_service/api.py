@@ -1,9 +1,10 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
-from ml_service import model
 import shutil
 import os
 import tempfile
+import sys
+from ml_service import model
 
 app = FastAPI()
 
