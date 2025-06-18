@@ -57,11 +57,16 @@ class UseIpaPredictorModelCommand extends Command
         $this->modelName = "ipa_predictor_dataset_{$lang}_model.pt";
 
         $response = $this->httpClient->request(
-            'GET', 'http://'.IpaPredictorConstants::getMlServiceHost().
-            ':'.
-            IpaPredictorConstants::getMlServicePort().
-            '/'.IpaPredictorConstants::getMlServicePredictRoute().'/',
-            ['json' => ['word' => $word, 'model_name' => $this->modelName]],
+            'GET',
+            'http://' . IpaPredictorConstants::getMlServiceHost() .
+            ':' . IpaPredictorConstants::getMlServicePort() .
+            '/' . IpaPredictorConstants::getMlServicePredictRoute() . '/',
+            [
+                'query' => [
+                    'word' => $word,
+                    'model_name' => $this->modelName,
+                ],
+            ]
         );
 
         $data = $response->toArray();
