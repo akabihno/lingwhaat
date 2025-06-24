@@ -21,4 +21,9 @@ class TurkishLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->turkishLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

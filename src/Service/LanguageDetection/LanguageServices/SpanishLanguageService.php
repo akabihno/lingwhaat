@@ -21,4 +21,9 @@ class SpanishLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->spanishLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

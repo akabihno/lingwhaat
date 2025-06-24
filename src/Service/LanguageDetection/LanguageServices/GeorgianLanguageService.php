@@ -21,4 +21,9 @@ class GeorgianLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->georgianLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

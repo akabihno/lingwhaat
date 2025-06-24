@@ -21,4 +21,9 @@ class LatinLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->latinLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

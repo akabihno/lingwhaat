@@ -21,4 +21,9 @@ class RussianLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->russianLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

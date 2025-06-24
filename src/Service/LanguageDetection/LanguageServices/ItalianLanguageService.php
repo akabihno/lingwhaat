@@ -21,4 +21,9 @@ class ItalianLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->italianLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

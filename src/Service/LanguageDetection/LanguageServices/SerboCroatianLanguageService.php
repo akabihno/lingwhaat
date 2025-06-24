@@ -21,4 +21,9 @@ class SerboCroatianLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->serboCroatianLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

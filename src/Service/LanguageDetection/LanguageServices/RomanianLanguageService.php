@@ -21,4 +21,9 @@ class RomanianLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->romanianLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

@@ -21,4 +21,9 @@ class PolishLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->polishLanguageRepository->findAllNamesAndIpa();
+    }
+
 }

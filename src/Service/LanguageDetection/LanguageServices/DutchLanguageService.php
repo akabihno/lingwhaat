@@ -21,4 +21,9 @@ class DutchLanguageService
         return false;
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        return $this->dutchLanguageRepository->findAllNamesAndIpa();
+    }
+
 }
