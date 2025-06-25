@@ -27,6 +27,7 @@ use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
+use App\Service\LanguageDetection\LanguageTransliteration\ValueObject\IpaCharMapping;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -43,6 +44,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class TrainIpaPredictorModelCommand extends Command
 {
     protected string $trainingDataPath;
+    protected string $wordMappingPath;
     public function __construct(
         protected DutchLanguageService $dutchLanguageService,
         protected EnglishLanguageService $englishLanguageService,
@@ -67,7 +69,8 @@ class TrainIpaPredictorModelCommand extends Command
         protected TagalogLanguageService $tagalogLanguageService,
         protected TurkishLanguageService $turkishLanguageService,
         protected UkrainianLanguageService $ukrainianLanguageService,
-        protected HttpClientInterface $httpClient
+        protected HttpClientInterface $httpClient,
+        protected IpaCharMapping $ipaCharMapping
     ) {
         parent::__construct();
     }
@@ -96,6 +99,7 @@ class TrainIpaPredictorModelCommand extends Command
         $prepare = $input->getOption('prepare');
 
         $this->trainingDataPath = "src/Models/TrainingData/ipa_predictor_dataset_{$lang}.csv";
+        $this->wordMappingPath = "src/Models/CharMap/{$lang}.json";
 
         $trainingDatasetArray = [];
 
@@ -183,12 +187,20 @@ class TrainIpaPredictorModelCommand extends Command
 
 
         if (!file_exists($this->trainingDataPath) || $prepare) {
+
+            $doubleCharIpaMapping = $this->ipaCharMapping->getDoubleSymbolIpaMapping();
+            $singleCharIpaMapping = $this->ipaCharMapping->getSingleSymbolIpaMapping();
+
             $csvHandle = fopen($this->trainingDataPath, 'w');
 
             fputcsv($csvHandle, ['word', 'ipa']);
 
             foreach ($trainingDatasetArray as $datasetRow) {
-                fputcsv($csvHandle, [$datasetRow['name'], $this->cleanIpaString($datasetRow['ipa'])]);
+                $ipa = $this->encodeIpa($doubleCharIpaMapping, $singleCharIpaMapping, $datasetRow['ipa']);
+                $word = $this->encodeWord($datasetRow['name']);
+                if ($ipa && $word) {
+                    fputcsv($csvHandle, [$datasetRow['name'], $ipa]);
+                }
             }
 
             fclose($csvHandle);
@@ -214,6 +226,48 @@ class TrainIpaPredictorModelCommand extends Command
 
 
         return Command::SUCCESS;
+    }
+
+    protected function encodeWord(string $word): string
+    {
+        $letterMap = file_exists($this->wordMappingPath)
+            ? json_decode(file_get_contents($this->wordMappingPath), true)
+            : [];
+
+        $counter = empty($letterMap) ? 1 : max($letterMap) + 1;
+
+        $letters = preg_split('//u', $word, -1, PREG_SPLIT_NO_EMPTY);
+
+        $encoded = [];
+
+        foreach ($letters as $letter) {
+            if (!isset($letterMap[$letter])) {
+                $letterMap[$letter] = $counter++;
+            }
+            $encoded[] = $letterMap[$letter];
+        }
+
+        file_put_contents($this->wordMappingPath, json_encode($letterMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+        $result = implode('0', $encoded);
+
+        return is_numeric($result) ? $result : '';
+
+    }
+
+    protected function encodeIpa(array $doubleCharIpaMapping, array $singleCharIpaMapping, string $ipa): string
+    {
+        $ipa = $this->cleanIpaString($ipa);
+        foreach ($doubleCharIpaMapping as $key => $value) {
+            $ipa = str_replace($key, $value . '0', $ipa);
+        }
+
+        foreach ($singleCharIpaMapping as $key => $value) {
+            $ipa = str_replace($key, $value . '0', $ipa);
+        }
+
+        return is_numeric($ipa) ? $ipa : '';
+
     }
 
     protected function cleanIpaString(string $ipa): string

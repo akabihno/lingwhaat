@@ -7,6 +7,7 @@ use Symfony\Component\Dotenv\Dotenv;
 
 abstract class AbstractLanguageRepository extends ServiceEntityRepository
 {
+    const int PRONUNCIATION_MAX_RESULTS = 20000;
     public function __construct(ManagerRegistry $registry, $entityClass)
     {
         $dotenv = new Dotenv();
@@ -25,12 +26,13 @@ abstract class AbstractLanguageRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
-    public function findAllNamesAndIpa(): array
+    public function findAllNamesAndIpa(int $limit = self::PRONUNCIATION_MAX_RESULTS): array
     {
         return $this->createQueryBuilder('e')
             ->select('e.name', 'e.ipa')
             ->where('e.ipa != :na')
             ->setParameter('na', 'Not available')
+            ->setMaxResults($limit)
             ->getQuery()
             ->getArrayResult();
     }
