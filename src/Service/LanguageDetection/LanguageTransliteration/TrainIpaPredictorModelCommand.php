@@ -78,7 +78,7 @@ class TrainIpaPredictorModelCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Train IPA prediction model for a specific language.')
+            ->setDescription('Train IPA prediction model for a specific language')
             ->addOption('lang', null, InputOption::VALUE_REQUIRED,
                 'Language code in: ' . implode(', ', LanguageDetectionService::getLanguageCodes())
             )->addOption('prepare', null, InputOption::VALUE_OPTIONAL,
@@ -199,7 +199,7 @@ class TrainIpaPredictorModelCommand extends Command
                 $ipa = $this->encodeIpa($doubleCharIpaMapping, $singleCharIpaMapping, $datasetRow['ipa']);
                 $word = $this->encodeWord($datasetRow['name']);
                 if ($ipa && $word) {
-                    fputcsv($csvHandle, [$datasetRow['name'], $ipa]);
+                    fputcsv($csvHandle, [$word, $ipa]);
                 }
             }
 
@@ -249,7 +249,7 @@ class TrainIpaPredictorModelCommand extends Command
 
         file_put_contents($this->wordMappingPath, json_encode($letterMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
-        $result = implode('0', $encoded);
+        $result = implode(' ', $encoded);
 
         return is_numeric($result) ? $result : '';
 
@@ -265,7 +265,7 @@ class TrainIpaPredictorModelCommand extends Command
 
         $numberToLetter = array_flip($letterMap);
 
-        $numbers = explode('0', $encodedWord);
+        $numbers = explode(' ', $encodedWord);
         $decodedLetters = [];
 
         foreach ($numbers as $num) {
@@ -282,11 +282,11 @@ class TrainIpaPredictorModelCommand extends Command
     {
         $ipa = $this->cleanIpaString($ipa);
         foreach ($doubleCharIpaMapping as $key => $value) {
-            $ipa = str_replace($key, $value . '0', $ipa);
+            $ipa = str_replace($key, $value . ' ', $ipa);
         }
 
         foreach ($singleCharIpaMapping as $key => $value) {
-            $ipa = str_replace($key, $value . '0', $ipa);
+            $ipa = str_replace($key, $value . ' ', $ipa);
         }
 
         return is_numeric($ipa) ? $ipa : '';
@@ -310,7 +310,7 @@ class TrainIpaPredictorModelCommand extends Command
             $numberToCharMap[(string)$num] = $char;
         }
 
-        $parts = explode('0', $encodedIpa);
+        $parts = explode(' ', $encodedIpa);
 
         $decoded = '';
         foreach ($parts as $token) {
