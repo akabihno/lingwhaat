@@ -296,13 +296,15 @@ class TrainIpaPredictorModelCommand extends Command
             $ipa = str_replace($key, $value . ' ', $ipa);
         }
 
+        dump($ipa);
+
         return $this->checkString($ipa);
 
     }
 
     protected function cleanIpaString(string $ipa): string
     {
-        return trim($ipa, " [/]");
+        return trim($ipa, "[/]");
     }
 
     public function decodeIpa(string $encodedIpa): string
