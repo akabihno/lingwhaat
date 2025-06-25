@@ -256,7 +256,7 @@ class TrainIpaPredictorModelCommand extends Command
 
         $result = implode(' ', $encoded);
 
-        return is_numeric($result) ? $result : '';
+        return $this->checkString($result);
 
     }
 
@@ -294,7 +294,7 @@ class TrainIpaPredictorModelCommand extends Command
             $ipa = str_replace($key, $value . ' ', $ipa);
         }
 
-        return is_numeric($ipa) ? $ipa : '';
+        return $this->checkString($ipa);
 
     }
 
@@ -329,6 +329,11 @@ class TrainIpaPredictorModelCommand extends Command
         }
 
         return $decoded;
+    }
+
+    protected function checkString(string $input): string
+    {
+        return preg_match('/^[\d\s]+$/', $input) ? $input : '';
     }
 
 }
