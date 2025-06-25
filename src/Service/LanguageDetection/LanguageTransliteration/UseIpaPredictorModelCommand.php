@@ -65,7 +65,7 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $this->wordMappingPath = "src/Models/CharMap/{$lang}.json";
+        $this->wordMappingPath = "src/CharMap/{$lang}.json";
 
         if (!file_exists($this->wordMappingPath)) {
             $output->writeln("<error>Word char map for {$lang} not found! Train model first.</error>");
