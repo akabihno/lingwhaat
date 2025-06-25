@@ -198,9 +198,9 @@ class TrainIpaPredictorModelCommand extends Command
 
             foreach ($trainingDatasetArray as $datasetRow) {
                 $ipa = $this->encodeIpa($doubleCharIpaMapping, $singleCharIpaMapping, $datasetRow['ipa']);
-                $output->writeln("IPA: $ipa");
+                $output->writeln("IPA: {$datasetRow['ipa']} IPA encoded: $ipa");
                 $word = $this->encodeWord($datasetRow['name']);
-                $output->writeln("Word: $word");
+                $output->writeln("Word: {$datasetRow['name']} Word encoded: $word");
                 if ($ipa && $word) {
                     fputcsv($csvHandle, [$word, $ipa]);
                 }
