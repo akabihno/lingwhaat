@@ -256,6 +256,8 @@ class TrainIpaPredictorModelCommand extends Command
 
         $result = implode(' ', $encoded);
 
+        dump($result);
+
         return $this->checkString($result);
 
     }
