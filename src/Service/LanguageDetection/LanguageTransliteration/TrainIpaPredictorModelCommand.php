@@ -228,7 +228,7 @@ class TrainIpaPredictorModelCommand extends Command
         return Command::SUCCESS;
     }
 
-    protected function encodeWord(string $word): string
+    public function encodeWord(string $word): string
     {
         $letterMap = file_exists($this->wordMappingPath)
             ? json_decode(file_get_contents($this->wordMappingPath), true)
@@ -255,7 +255,30 @@ class TrainIpaPredictorModelCommand extends Command
 
     }
 
-    protected function encodeIpa(array $doubleCharIpaMapping, array $singleCharIpaMapping, string $ipa): string
+    public function decodeWord(string $encodedWord): string
+    {
+        $letterMap = json_decode(file_get_contents($this->wordMappingPath), true);
+
+        if (!is_array($letterMap)) {
+            return Command::FAILURE;
+        }
+
+        $numberToLetter = array_flip($letterMap);
+
+        $numbers = explode('0', $encodedWord);
+        $decodedLetters = [];
+
+        foreach ($numbers as $num) {
+            if (!isset($numberToLetter[$num])) {
+                return Command::FAILURE;
+            }
+            $decodedLetters[] = $numberToLetter[$num];
+        }
+
+        return implode('', $decodedLetters);
+    }
+
+    public function encodeIpa(array $doubleCharIpaMapping, array $singleCharIpaMapping, string $ipa): string
     {
         $ipa = $this->cleanIpaString($ipa);
         foreach ($doubleCharIpaMapping as $key => $value) {
@@ -273,6 +296,34 @@ class TrainIpaPredictorModelCommand extends Command
     protected function cleanIpaString(string $ipa): string
     {
         return trim($ipa, " [/]");
+    }
+
+    public function decodeIpa(string $encodedIpa): string
+    {
+        $doubleCharIpaMapping = $this->ipaCharMapping->getDoubleSymbolIpaMapping();
+        $singleCharIpaMapping = $this->ipaCharMapping->getSingleSymbolIpaMapping();
+
+        $fullMap = array_merge($doubleCharIpaMapping, $singleCharIpaMapping);
+
+        $numberToCharMap = [];
+        foreach ($fullMap as $char => $num) {
+            $numberToCharMap[(string)$num] = $char;
+        }
+
+        $parts = explode('0', $encodedIpa);
+
+        $decoded = '';
+        foreach ($parts as $token) {
+            if ($token === '') continue;
+
+            if (!isset($numberToCharMap[$token])) {
+                throw new \RuntimeException("Unknown IPA code: $token");
+            }
+
+            $decoded .= $numberToCharMap[$token];
+        }
+
+        return $decoded;
     }
 
 }

@@ -21,7 +21,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class UseIpaPredictorModelCommand extends Command
 {
     protected string $modelName;
-    public function __construct(protected HttpClientInterface $httpClient)
+    protected string $wordMappingPath;
+    public function __construct(
+        protected HttpClientInterface $httpClient,
+        protected TrainIpaPredictorModelCommand $trainIpaPredictorModelCommand
+    )
     {
         parent::__construct();
     }
@@ -50,11 +54,30 @@ class UseIpaPredictorModelCommand extends Command
         $word = $input->getOption('word');
 
         if (!$lang || !$word) {
-            $output->writeln('<error>No --lang and/or --word parameters provided.</error>');
+            $output->writeln("<error>No --lang and/or --word parameters provided.</error>");
             return Command::FAILURE;
         }
 
         $this->modelName = "ipa_predictor_dataset_{$lang}_model.pt";
+
+        if (!file_exists($this->modelName)) {
+            $output->writeln("<error>Model for {$lang} not found! Train model first.</error>");
+            return Command::FAILURE;
+        }
+
+        $this->wordMappingPath = "src/Models/CharMap/{$lang}.json";
+
+        if (!file_exists($this->wordMappingPath)) {
+            $output->writeln("<error>Word char map for {$lang} not found! Train model first.</error>");
+            return Command::FAILURE;
+        }
+
+        $encodedWord = $this->trainIpaPredictorModelCommand->encodeWord($word);
+
+        if (!$encodedWord) {
+            $output->writeln("<error>Failed to encode word {$word}.</error>");
+            return Command::FAILURE;
+        }
 
         $response = $this->httpClient->request(
             'GET',
@@ -63,17 +86,18 @@ class UseIpaPredictorModelCommand extends Command
             '/' . IpaPredictorConstants::getMlServicePredictRoute() . '/',
             [
                 'query' => [
-                    'word' => $word,
+                    'word' => $encodedWord,
                     'model_name' => $this->modelName,
                 ],
             ]
         );
 
-        dump($response);
         $data = $response->toArray();
         $ipa = $data['ipa'];
 
-        $output->writeln("Predicted IPA: $ipa");
+        $output->writeln("Predicted IPA: {$ipa}");
+        $decodedIpa = $this->trainIpaPredictorModelCommand->decodeIpa($ipa);
+        $output->writeln("Predicted IPA decoded: {$decodedIpa}");
 
         return Command::SUCCESS;
     }
