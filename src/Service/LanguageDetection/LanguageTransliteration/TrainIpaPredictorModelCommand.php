@@ -99,7 +99,7 @@ class TrainIpaPredictorModelCommand extends Command
         $prepare = $input->getOption('prepare');
 
         $this->trainingDataPath = "src/Models/TrainingData/ipa_predictor_dataset_{$lang}.csv";
-        $this->wordMappingPath = "src/Models/CharMap/{$lang}.json";
+        $this->wordMappingPath = "src/CharMap/{$lang}.json";
 
         $trainingDatasetArray = [];
 
