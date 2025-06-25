@@ -79,9 +79,9 @@ class TrainIpaPredictorModelCommand extends Command
     {
         $this
             ->setDescription('Train IPA prediction model for a specific language')
-            ->addOption('lang', null, InputOption::VALUE_REQUIRED,
+            ->addOption('lang', 'l', InputOption::VALUE_REQUIRED,
                 'Language code in: ' . implode(', ', LanguageDetectionService::getLanguageCodes())
-            )->addOption('prepare', null, InputOption::VALUE_OPTIONAL,
+            )->addOption('prepare', 'p', InputOption::VALUE_OPTIONAL,
             'Optional argument to update existing dataset in CSV file (can be used if data in DB was populated)');
     }
 
@@ -191,6 +191,7 @@ class TrainIpaPredictorModelCommand extends Command
             $doubleCharIpaMapping = $this->ipaCharMapping->getDoubleSymbolIpaMapping();
             $singleCharIpaMapping = $this->ipaCharMapping->getSingleSymbolIpaMapping();
 
+
             $csvHandle = fopen($this->trainingDataPath, 'w');
 
             fputcsv($csvHandle, ['word', 'ipa']);
@@ -228,10 +229,14 @@ class TrainIpaPredictorModelCommand extends Command
         return Command::SUCCESS;
     }
 
-    public function encodeWord(string $word): string
+    public function encodeWord(string $word, string $wordMappingPath = ''): string
     {
-        $letterMap = file_exists($this->wordMappingPath)
-            ? json_decode(file_get_contents($this->wordMappingPath), true)
+        if (!$wordMappingPath) {
+            $wordMappingPath = $this->wordMappingPath;
+        }
+
+        $letterMap = file_exists($wordMappingPath)
+            ? json_decode(file_get_contents($wordMappingPath), true)
             : [];
 
         $counter = empty($letterMap) ? 1 : max($letterMap) + 1;
@@ -247,7 +252,7 @@ class TrainIpaPredictorModelCommand extends Command
             $encoded[] = $letterMap[$letter];
         }
 
-        file_put_contents($this->wordMappingPath, json_encode($letterMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+        file_put_contents($wordMappingPath, json_encode($letterMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
         $result = implode(' ', $encoded);
 

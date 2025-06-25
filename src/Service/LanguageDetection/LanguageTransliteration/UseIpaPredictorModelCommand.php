@@ -34,11 +34,10 @@ class UseIpaPredictorModelCommand extends Command
     {
         $this
             ->setDescription('Use IPA prediction model for a specific language and word')
-            ->addOption('lang', null, InputOption::VALUE_REQUIRED,
+            ->addOption('lang', 'l', InputOption::VALUE_REQUIRED,
                 'Language code in: ' . implode(', ', LanguageDetectionService::getLanguageCodes())
             )
-            ->addOption('word', null, InputOption::VALUE_REQUIRED, 'Word to use for IPA prediction.')
-            ->addOption('model_name', null, InputOption::VALUE_REQUIRED, 'Model name for IPA prediction.');
+            ->addOption('word', 'w', InputOption::VALUE_REQUIRED, 'Word to use for IPA prediction.');
     }
 
     /**
@@ -72,7 +71,7 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $encodedWord = $this->trainIpaPredictorModelCommand->encodeWord($word);
+        $encodedWord = $this->trainIpaPredictorModelCommand->encodeWord($word, $this->wordMappingPath);
 
         if (!$encodedWord) {
             $output->writeln("<error>Failed to encode word {$word}.</error>");
