@@ -33,7 +33,7 @@ class UseIpaPredictorModelCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Use IPA prediction model for a specific language.')
+            ->setDescription('Use IPA prediction model for a specific language and word.')
             ->addOption('lang', null, InputOption::VALUE_REQUIRED,
                 'Language code in: ' . implode(', ', LanguageDetectionService::getLanguageCodes())
             )
