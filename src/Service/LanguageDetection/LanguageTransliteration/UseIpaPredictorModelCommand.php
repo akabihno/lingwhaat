@@ -60,7 +60,7 @@ class UseIpaPredictorModelCommand extends Command
 
         $this->modelName = "ipa_predictor_dataset_{$lang}_model.pt";
 
-        if (!file_exists($this->modelName)) {
+        if (!file_exists(IpaPredictorConstants::getMlServiceModelsPath() . $this->modelName)) {
             $output->writeln("<error>Model for {$lang} not found! Train model first.</error>");
             return Command::FAILURE;
         }
