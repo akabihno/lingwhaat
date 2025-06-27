@@ -13,6 +13,7 @@ app = FastAPI()
 
 @app.post("/train/")
 async def train_model_api(file: UploadFile = File(...)):
+    logging.info(f"Received training file: {file.filename}")
     if not file.filename.endswith('.csv'):
         return JSONResponse(content={"error": "Only CSV files are supported."}, status_code=400)
 
