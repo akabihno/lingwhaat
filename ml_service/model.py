@@ -4,6 +4,8 @@ import torch.nn as nn
 from torch.nn.utils.rnn import pad_sequence
 from typing import List
 import pandas as pd
+import traceback
+import logging
 
 # --- Simple character-level vocab utils ---
 def build_vocab(sequences: List[str]):
@@ -148,7 +150,7 @@ def train_model(csv_path, model_save_dir='models', model_save_path=None, n_epoch
 
 def train_model_background(csv_path: str, model_path: str):
     try:
-        model.train_model(csv_path, model_save_path=model_path)
+        train_model(csv_path, model_save_path=model_path)
         print("Training finished successfully.")
     except Exception as e:
         import traceback
