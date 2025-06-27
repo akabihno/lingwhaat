@@ -953,7 +953,7 @@ List of all articles IPA data has been taken from:
 [g](docs/Turkish/en_wiktionary_turkish_g.md),
 [ğ](docs/Turkish/en_wiktionary_turkish_ğ.md),
 [h](docs/Turkish/en_wiktionary_turkish_h.md),
-[ı](docs/Turkish/en_wiktionary_turkish_ı.md),
+[ı](docs/Turkish/en_wiktionary_turkish_ıı.md),
 [i](docs/Turkish/en_wiktionary_turkish_i.md),
 [j](docs/Turkish/en_wiktionary_turkish_j.md),
 [k](docs/Turkish/en_wiktionary_turkish_k.md),

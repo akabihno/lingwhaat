@@ -198,9 +198,7 @@ class TrainIpaPredictorModelCommand extends Command
 
             foreach ($trainingDatasetArray as $datasetRow) {
                 $ipa = $this->encodeIpa($doubleCharIpaMapping, $singleCharIpaMapping, $datasetRow['ipa']);
-                $output->writeln("IPA: {$datasetRow['ipa']} IPA encoded: $ipa");
                 $word = $this->encodeWord($datasetRow['name']);
-                $output->writeln("Word: {$datasetRow['name']} Word encoded: $word");
                 if ($ipa && $word) {
                     fputcsv($csvHandle, [$word, $ipa]);
                 }
@@ -243,7 +241,7 @@ class TrainIpaPredictorModelCommand extends Command
 
         $counter = empty($letterMap) ? 1 : max($letterMap) + 1;
 
-        $letters = preg_split('//u', $word, -1, PREG_SPLIT_NO_EMPTY);
+        $letters = preg_split('//', $word, -1, PREG_SPLIT_NO_EMPTY);
 
         $encoded = [];
 
@@ -257,8 +255,6 @@ class TrainIpaPredictorModelCommand extends Command
         file_put_contents($wordMappingPath, json_encode($letterMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
 
         $result = implode(' ', $encoded);
-
-        dump($result);
 
         return $this->checkString($result);
 
@@ -297,8 +293,6 @@ class TrainIpaPredictorModelCommand extends Command
         foreach ($singleCharIpaMapping as $key => $value) {
             $ipa = str_replace($key, $value . ' ', $ipa);
         }
-
-        dump($ipa);
 
         return $this->checkString($ipa);
 
