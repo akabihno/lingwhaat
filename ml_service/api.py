@@ -37,7 +37,7 @@ async def train_model_api(file: UploadFile = File(...)):
         os.remove(tmp_path)
 
 @app.get("/predict/")
-def predict(word: str = Query(...), model_name: str = Query(...)):
+async def predict(word: str = Query(...), model_name: str = Query(...)):
     try:
         ipa = model.predict_ipa(word, model_name)
         return {"ipa": ipa}

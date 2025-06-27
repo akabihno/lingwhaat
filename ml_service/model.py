@@ -147,27 +147,41 @@ def train_model(csv_path, model_save_dir='models', model_save_path=None, n_epoch
     }, model_save_path)
 
 def predict_ipa(word: str, model_name: str, model_dir: str = 'models'):
-    model_path = os.path.join(model_dir, model_name)
+    if model_name not in _loaded_models:
+        print(f"Loading model: {model_name}")
+        model_path = os.path.join(model_dir, model_name)
+        if not os.path.exists(model_path):
+            raise FileNotFoundError(f"Model file not found: {model_path}")
 
-    if not os.path.exists(model_path):
-        raise FileNotFoundError(f"Model file not found: {model_path}")
+        checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
 
-    checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
+        input_stoi = checkpoint['input_stoi']
+        output_stoi = checkpoint['output_stoi']
+        output_itos = checkpoint['output_itos']
 
-    input_stoi = checkpoint['input_stoi']
-    output_stoi = checkpoint['output_stoi']
-    output_itos = checkpoint['output_itos']
+        input_dim = len(input_stoi) + 1
+        output_dim = max(output_stoi.values()) + 1
+        emb_dim = 64
+        hid_dim = 128
 
-    input_dim = len(input_stoi) + 1
-    output_dim = max(output_stoi.values()) + 1
-    emb_dim = 64
-    hid_dim = 128
+        enc = Encoder(input_dim, emb_dim, hid_dim)
+        dec = Decoder(output_dim, emb_dim, hid_dim)
+        model = Seq2Seq(enc, dec, torch.device('cpu'))
+        model.load_state_dict(checkpoint['model_state_dict'])
+        model.eval()
 
-    enc = Encoder(input_dim, emb_dim, hid_dim)
-    dec = Decoder(output_dim, emb_dim, hid_dim)
-    model = Seq2Seq(enc, dec, torch.device('cpu'))
-    model.load_state_dict(checkpoint['model_state_dict'])
-    model.eval()
+        _loaded_models[model_name] = {
+            "model": model,
+            "input_stoi": input_stoi,
+            "output_stoi": output_stoi,
+            "output_itos": output_itos
+        }
+
+    model_data = _loaded_models[model_name]
+    model = model_data["model"]
+    input_stoi = model_data["input_stoi"]
+    output_stoi = model_data["output_stoi"]
+    output_itos = model_data["output_itos"]
 
     seq = encode_sequence(word, input_stoi).unsqueeze(0)
     encoder_outputs, hidden, cell = model.encoder(seq)
