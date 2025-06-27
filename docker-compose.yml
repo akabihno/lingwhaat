@@ -9,7 +9,6 @@ services:
     volumes:
       - ./ml_service:/app
     restart: on-failure
-    network_mode: host
     deploy:
       resources:
         limits:
