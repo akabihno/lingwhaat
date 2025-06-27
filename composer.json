@@ -45,7 +45,7 @@
     "doctrine/dbal": "^3.9.5",
     "doctrine/doctrine-bundle": "^2.15.0",
     "doctrine/doctrine-migrations-bundle": "^3.4.2",
-    "doctrine/orm": "^3.4.1",
+    "doctrine/orm": "^3.4.2",
     "ivopetkov/html5-dom-document-php": "^2.8.1",
     "symfony/config": "^7.3.0",
     "symfony/console": "^7.3.0",
