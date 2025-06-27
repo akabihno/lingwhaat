@@ -146,6 +146,18 @@ def train_model(csv_path, model_save_dir='models', model_save_path=None, n_epoch
         'output_itos': output_itos
     }, model_save_path)
 
+def train_model_background(csv_path: str, model_path: str):
+    try:
+        model.train_model(csv_path, model_save_path=model_path)
+        print("Training finished successfully.")
+    except Exception as e:
+        import traceback
+        logging.error("Training failed", exc_info=True)
+        with open("training_error.log", "w") as f:
+            f.write(traceback.format_exc())
+    finally:
+        os.remove(csv_path)
+
 def predict_ipa(word: str, model_name: str, model_dir: str = 'models'):
     if model_name not in _loaded_models:
         print(f"Loading model: {model_name}")

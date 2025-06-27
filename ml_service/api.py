@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import JSONResponse
 from fastapi import Query
+from fastapi import BackgroundTasks
 import traceback
 import logging
 import shutil
@@ -12,8 +13,10 @@ import model
 app = FastAPI()
 
 @app.post("/train/")
-async def train_model_api(file: UploadFile = File(...)):
-    logging.info(f"Received training file: {file.filename}")
+async def train_model_api(
+    background_tasks: BackgroundTasks,
+    file: UploadFile = File(...)
+):
     if not file.filename.endswith('.csv'):
         return JSONResponse(content={"error": "Only CSV files are supported."}, status_code=400)
 
@@ -25,17 +28,17 @@ async def train_model_api(file: UploadFile = File(...)):
         shutil.copyfileobj(file.file, tmp)
         tmp_path = tmp.name
 
-    try:
-        model.train_model(tmp_path, model_save_path=model_path)
-        return {"status": "Training completed successfully"}
-    except Exception as e:
-        logging.error("Training failed", exc_info=True)
-        return JSONResponse(content={
-            "error": str(e),
-            "trace": traceback.format_exc()
-        }, status_code=500)
-    finally:
-        os.remove(tmp_path)
+    background_tasks.add_task(train_model_background, tmp_path, model_path)
+
+    return {"status": "Training started in background", "model_path": model_path}
+
+@app.get("/train/status/")
+def get_train_status(model_name: str):
+    status_path = f"models/{model_name}_status.txt"
+    if not os.path.exists(status_path):
+        return {"status": "unknown"}
+    with open(status_path) as f:
+        return {"status": f.read().strip()}
 
 @app.get("/predict/")
 async def predict(word: str = Query(...), model_name: str = Query(...)):
