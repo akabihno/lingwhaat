@@ -96,7 +96,7 @@ class TrainIpaPredictorModelCommand extends Command
         $lang = $input->getOption('lang');
         $prepare = $input->getOption('prepare');
 
-        $this->trainingDataPath = __DIR__."/ml_service/data/{$lang}.csv";
+        $this->trainingDataPath = realpath(".")."/ml_service/data/{$lang}.csv";
         $this->wordMappingPath = "src/CharMap/{$lang}.json";
 
         switch ($lang) {
