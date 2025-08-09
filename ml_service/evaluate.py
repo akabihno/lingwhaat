@@ -46,7 +46,7 @@ def predict_ipa(word: str, model_name: str, model_dir: str = 'models'):
     output_stoi = model_data["output_stoi"]
     output_itos = model_data["output_itos"]
 
-    seq = encode_sequence(word, input_stoi).unsqueeze(0)
+    seq = torch.tensor(encode_sequence(word, input_stoi), dtype=torch.long).unsqueeze(1)
     encoder_outputs, hidden, cell = model.encoder(seq)
 
     input_token = torch.tensor([output_stoi['<sos>']])

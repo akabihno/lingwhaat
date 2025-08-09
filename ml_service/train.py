@@ -112,5 +112,11 @@ def train_model(csv_path, model_save_path=None):
             epoch_loss += loss.item()
 
         print(f'Epoch {epoch + 1}: Loss = {epoch_loss / len(train_iterator):.4f}')
-    torch.save(model.state_dict(), model_save_path)
+
+    torch.save({
+        'model_state_dict': model.state_dict(),
+        'input_stoi': src_stoi,
+        'output_stoi': trg_stoi,
+        'output_itos': trg_itos
+    }, model_save_path)
 
