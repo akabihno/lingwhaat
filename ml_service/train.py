@@ -58,11 +58,11 @@ def train_model_background(csv_path: str, model_path: str):
         os.remove(csv_path)
 
 
-def train_model(csv_path, model_save_dir='models', model_save_path=None, n_epochs=2):
+def train_model(csv_path, model_save_path=None):
     if model_save_path is None:
         base = os.path.basename(csv_path)
         model_name = base.replace('.csv', '_model.pt')
-        model_save_path = os.path.join(model_save_dir, model_name)
+        model_save_path = os.path.join(models, model_name)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     pairs = pd.read_csv(csv_path)
