@@ -6,7 +6,6 @@ use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,10 +20,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class UseIpaPredictorModelCommand extends Command
 {
     protected string $modelName;
-    protected string $wordMappingPath;
     public function __construct(
         protected HttpClientInterface $httpClient,
-        protected TrainIpaPredictorModelCommand $trainIpaPredictorModelCommand
     )
     {
         parent::__construct();
@@ -64,20 +61,6 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $this->wordMappingPath = "src/CharMap/{$lang}.json";
-
-        if (!file_exists($this->wordMappingPath)) {
-            $output->writeln("<error>Word char map for {$lang} not found! Train model first.</error>");
-            return Command::FAILURE;
-        }
-
-        $encodedWord = $this->trainIpaPredictorModelCommand->encodeWord($word, $this->wordMappingPath);
-
-        if (!$encodedWord) {
-            $output->writeln("<error>Failed to encode word {$word}.</error>");
-            return Command::FAILURE;
-        }
-
         $response = $this->httpClient->request(
             'GET',
             'http://' . IpaPredictorConstants::getMlServiceHost() .
@@ -85,7 +68,7 @@ class UseIpaPredictorModelCommand extends Command
             '/' . IpaPredictorConstants::getMlServicePredictRoute() . '/',
             [
                 'query' => [
-                    'word' => $encodedWord,
+                    'word' => $word,
                     'model_name' => $this->modelName,
                 ],
             ]
@@ -95,8 +78,6 @@ class UseIpaPredictorModelCommand extends Command
         $ipa = $data['ipa'];
 
         $output->writeln("Predicted IPA: {$ipa}");
-        $decodedIpa = $this->trainIpaPredictorModelCommand->decodeIpa($ipa);
-        $output->writeln("Predicted IPA decoded: {$decodedIpa}");
 
         return Command::SUCCESS;
     }
