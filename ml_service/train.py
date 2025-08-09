@@ -65,7 +65,8 @@ def train_model(csv_path, model_save_path=None):
         model_save_path = os.path.join(models, model_name)
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    pairs = pd.read_csv(csv_path)
+    pairs_df = pd.read_csv(csv_path)
+    pairs = [(list(src), list(trg)) for src, trg in zip(pairs_df["src"], pairs_df["trg"])]
     src_seqs, trg_seqs = tokenize(pairs)
 
     src_stoi, src_itos = build_vocab(src_seqs)
