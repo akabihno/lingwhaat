@@ -39,5 +39,7 @@ async def predict(word: str = Query(...), model_name: str = Query(...)):
     try:
         ipa = evaluate.predict_ipa(word, model_name)
         return {"ipa": ipa}
+    except (FileNotFoundError, KeyError, ValueError) as e:
+        return JSONResponse(content={"error": str(e)}, status_code=400)
     except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=500)
+        return JSONResponse(content={"error": "Server error: " + str(e)}, status_code=500)
