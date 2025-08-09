@@ -43,7 +43,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class TrainIpaPredictorModelCommand extends Command
 {
     protected string $trainingDataPath;
-    protected string $wordMappingPath;
     public function __construct(
         protected DutchLanguageService $dutchLanguageService,
         protected EnglishLanguageService $englishLanguageService,
@@ -97,7 +96,6 @@ class TrainIpaPredictorModelCommand extends Command
         $prepare = $input->getOption('prepare');
 
         $this->trainingDataPath = realpath(".")."/ml_service/data/{$lang}.csv";
-        $this->wordMappingPath = "src/CharMap/{$lang}.json";
 
         switch ($lang) {
             case LanguageDetectionService::DUTCH_LANGUAGE_CODE:
