@@ -19,9 +19,9 @@ def predict_ipa(word: str, model_name: str, model_dir: str = 'models'):
 
         checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
         required_keys = ['model_state_dict', 'input_stoi', 'output_stoi', 'output_itos']
-            for key in required_keys:
-                if key not in checkpoint:
-                    raise KeyError(f"Checkpoint missing required key: '{key}'")
+        for key in required_keys:
+            if key not in checkpoint:
+                raise KeyError(f"Checkpoint missing required key: '{key}'")
 
         input_stoi = checkpoint['input_stoi']
         output_stoi = checkpoint['output_stoi']
