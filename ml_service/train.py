@@ -1,5 +1,6 @@
 import config
 import os
+import re
 import torch
 import torch.optim as optim
 import torch.nn as nn
@@ -66,7 +67,10 @@ def train_model(csv_path, model_save_path=None):
 
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     pairs_df = pd.read_csv(csv_path)
-    pairs = [(list(src), list(trg)) for src, trg in zip(pairs_df["src"], pairs_df["trg"])]
+    pairs = [
+        (list(word), list(re.sub(r'[\[\]/]', '', ipa)))
+        for word, ipa in zip(pairs_df["word"], pairs_df["ipa"])
+    ]
     src_seqs, trg_seqs = tokenize(pairs)
 
     src_stoi, src_itos = build_vocab(src_seqs)
