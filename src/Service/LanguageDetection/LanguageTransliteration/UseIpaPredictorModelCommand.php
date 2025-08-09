@@ -46,6 +46,8 @@ class UseIpaPredictorModelCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // example: php bin/console ml:use:ipa-predictor --lang lv --word zivis
+
         $lang = $input->getOption('lang');
         $word = $input->getOption('word');
 
@@ -54,7 +56,7 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $this->modelName = "ipa_predictor_dataset_{$lang}_model.pt";
+        $this->modelName = "{$lang}_model.pt";
 
         if (!file_exists(IpaPredictorConstants::getMlServiceModelsPath() . $this->modelName)) {
             $output->writeln("<error>Model for {$lang} not found! Train model first.</error>");

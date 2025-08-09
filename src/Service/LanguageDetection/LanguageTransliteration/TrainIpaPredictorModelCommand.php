@@ -90,7 +90,7 @@ class TrainIpaPredictorModelCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // example: php bin/console ml:train:ipa-predictor --lang en
+        // example: php bin/console ml:train:ipa-predictor --lang lv
 
         $lang = $input->getOption('lang');
         $prepare = $input->getOption('prepare');
