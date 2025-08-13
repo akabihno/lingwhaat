@@ -12,13 +12,7 @@ class HindiLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->hindiLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->hindiLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

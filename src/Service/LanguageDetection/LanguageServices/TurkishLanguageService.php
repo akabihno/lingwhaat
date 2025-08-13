@@ -12,13 +12,7 @@ class TurkishLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->turkishLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->turkishLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

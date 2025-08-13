@@ -12,13 +12,7 @@ class DutchLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->dutchLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->dutchLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

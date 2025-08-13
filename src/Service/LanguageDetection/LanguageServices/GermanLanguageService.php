@@ -12,13 +12,7 @@ class GermanLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->germanLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->germanLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

@@ -12,13 +12,7 @@ class SerboCroatianLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->serboCroatianLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->serboCroatianLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

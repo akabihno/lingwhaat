@@ -12,13 +12,7 @@ class UkrainianLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->ukrainianLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->ukrainianLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

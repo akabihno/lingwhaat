@@ -12,13 +12,7 @@ class RussianLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->russianLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->russianLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

@@ -12,13 +12,7 @@ class LatvianLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->latvianLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->latvianLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

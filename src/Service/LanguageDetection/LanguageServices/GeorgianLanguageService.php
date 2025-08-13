@@ -12,13 +12,7 @@ class GeorgianLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->georgianLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->georgianLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

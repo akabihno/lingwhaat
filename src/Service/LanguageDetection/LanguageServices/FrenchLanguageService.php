@@ -12,13 +12,7 @@ class FrenchLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->frenchLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->frenchLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

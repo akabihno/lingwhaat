@@ -12,13 +12,7 @@ class EsuLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->esuLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->esuLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

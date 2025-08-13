@@ -12,13 +12,7 @@ class LatinLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->latinLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->latinLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

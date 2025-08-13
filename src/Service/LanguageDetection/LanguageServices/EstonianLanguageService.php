@@ -12,13 +12,7 @@ class EstonianLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->estonianLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->estonianLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

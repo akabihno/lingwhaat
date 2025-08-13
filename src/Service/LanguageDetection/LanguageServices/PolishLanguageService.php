@@ -12,13 +12,7 @@ class PolishLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->polishLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->polishLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

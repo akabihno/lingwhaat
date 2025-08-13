@@ -12,13 +12,7 @@ class RomanianLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->romanianLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->romanianLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

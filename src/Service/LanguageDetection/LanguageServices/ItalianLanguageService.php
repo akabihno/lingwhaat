@@ -12,13 +12,7 @@ class ItalianLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->italianLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->italianLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

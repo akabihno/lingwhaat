@@ -12,13 +12,7 @@ class GreekLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->greekLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->greekLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

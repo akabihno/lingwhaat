@@ -12,13 +12,7 @@ class SwedishLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->swedishLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->swedishLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

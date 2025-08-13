@@ -12,13 +12,7 @@ class PortugueseLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->portugueseLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->portugueseLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

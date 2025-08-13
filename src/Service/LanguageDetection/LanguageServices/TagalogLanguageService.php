@@ -12,13 +12,7 @@ class TagalogLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->tagalogLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->tagalogLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array

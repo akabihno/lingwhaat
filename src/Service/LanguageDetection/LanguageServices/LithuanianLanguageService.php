@@ -12,13 +12,7 @@ class LithuanianLanguageService
 
     public function checkLanguage($word): bool
     {
-        $result = $this->lithuanianLanguageRepository->findByName($word);
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->lithuanianLanguageRepository->findByName($word);
     }
 
     public function fetchAllNamesAndIpa(): array
