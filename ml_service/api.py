@@ -34,7 +34,7 @@ async def train_model_api(
     return {"status": "Training started in background", "model_path": model_path}
 
 @app.get("/predict/")
-def predict(word: str = Query(...), model_name: str = Query(...), file: = Query(...)):
+def predict(word: str = Query(...), model_name: str = Query(...), file = Query(...)):
 
     try:
         ipa = evaluate.predict_ipa(file, word, model_name)
