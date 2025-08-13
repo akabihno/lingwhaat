@@ -43,7 +43,7 @@ def predict_ipa(word: str, model_name: str, model_dir: str = 'models'):
         print("Here 3")
         model = Seq2Seq(enc, dec, torch.device('cpu'))
         print("Here 4")
-        model.load_state_dict(checkpoint['model_state_dict'])
+        model.load_state_dict(checkpoint['model_state_dict'], strict=False)
         print("Here 5")
 
         model.eval()
