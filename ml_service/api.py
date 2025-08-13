@@ -8,7 +8,6 @@ import shutil
 import os
 import tempfile
 import sys
-import model
 import train
 import evaluate
 
