@@ -16,9 +16,11 @@ def encode_sequence(sequence, vocab):
 
 def predict_ipa(word: str, model_name: str, model_dir: str = 'models'):
     if model_name not in _loaded_models:
+        print(f"Model file not found: {model_path}")
         logger.info("Loading model: %s", model_name)
         model_path = os.path.join(model_dir, model_name)
         if not os.path.exists(model_path):
+            print(f"Model file not found")
             logger.error("Model file not found")
             raise FileNotFoundError(f"Model file not found: {model_path}")
 
@@ -26,6 +28,7 @@ def predict_ipa(word: str, model_name: str, model_dir: str = 'models'):
         required_keys = ['model_state_dict', 'input_stoi', 'output_stoi', 'output_itos']
         for key in required_keys:
             if key not in checkpoint:
+                print(f"Checkpoint missing required key")
                 logger.error("Checkpoint missing required key")
                 raise KeyError(f"Checkpoint missing required key: '{key}'")
 
