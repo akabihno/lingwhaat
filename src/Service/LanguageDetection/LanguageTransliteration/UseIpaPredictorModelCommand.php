@@ -20,6 +20,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class UseIpaPredictorModelCommand extends Command
 {
     protected string $modelName;
+    protected string $dataPath;
     public function __construct(
         protected HttpClientInterface $httpClient,
     )
@@ -63,6 +64,13 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
+        $this->dataPath = "{$lang}.csv";
+
+        if (!file_exists(IpaPredictorConstants::getMlServiceDataPath() . $this->dataPath)) {
+            $output->writeln("<error>Data for {$lang} not found! Train model first.</error>");
+            return Command::FAILURE;
+        }
+
         $response = $this->httpClient->request(
             'GET',
             'http://' . IpaPredictorConstants::getMlServiceHost() .
@@ -72,6 +80,7 @@ class UseIpaPredictorModelCommand extends Command
                 'query' => [
                     'word' => $word,
                     'model_name' => $this->modelName,
+                    'file' => $this->dataPath,
                 ],
             ]
         );

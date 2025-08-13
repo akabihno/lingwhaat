@@ -1,80 +1,80 @@
-import os
 import torch
-from helpers.encoder import Encoder
-from helpers.decoder import Decoder
-from helpers.seq2seq import Seq2Seq
+from models.encoder import Encoder
+from models.decoder import Decoder
+from models.seq2seq import Seq2Seq
 from utils import *
 import config
-import traceback
-import logging
 
-_loaded_models = {}
+
+def load_model(model_name: str, src_stoi, trg_stoi, model_dir: str = 'models'):
+    model_path = os.path.join(model_dir, model_name)
+    if not os.path.exists(model_path):
+        import traceback
+        logging.error("Model file not found: %s", model_path)
+        raise FileNotFoundError(f"Model file not found: {model_path}")
+
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    INPUT_DIM = len(src_stoi)
+    OUTPUT_DIM = len(trg_stoi)
+
+    encoder = Encoder(INPUT_DIM, config.ENC_EMB_DIM, config.HID_DIM)
+    decoder = Decoder(OUTPUT_DIM, config.DEC_EMB_DIM, config.HID_DIM)
+    model = Seq2Seq(encoder, decoder, device).to(device)
+
+    model.load_state_dict(torch.load(model_path, map_location=device))
+    model.eval()
+
+    return model, device
+
 
 def encode_sequence(sequence, vocab):
     return [vocab.get('<sos>')] + [vocab.get(char, vocab['<unk>']) for char in sequence] + [vocab.get('<eos>')]
 
-def predict_ipa(word: str, model_name: str, model_dir: str = 'models'):
-    if model_name not in _loaded_models:
-        model_path = os.path.join(model_dir, model_name)
-        if not os.path.exists(model_path):
-            import traceback
-            logging.error("Model file not found: %s", model_path)
-            raise FileNotFoundError(f"Model file not found: {model_path}")
 
-        checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
-        required_keys = ['model_state_dict', 'input_stoi', 'output_stoi', 'output_itos']
-        for key in required_keys:
-            if key not in checkpoint:
-                import traceback
-                logging.error("Checkpoint missing required key")
-                raise KeyError(f"Checkpoint missing required key: '{key}'")
+def greedy_decode(model, input_seq, src_stoi, trg_stoi, trg_itos):
+    device = next(model.parameters()).device
+    src_tensor = torch.tensor(encode_sequence(input_seq, src_stoi)).unsqueeze(1).to(device)
 
-        input_stoi = checkpoint['input_stoi']
-        output_stoi = checkpoint['output_stoi']
-        output_itos = checkpoint['output_itos']
+    with torch.no_grad():
+        hidden = model.encoder(src_tensor)
 
-        input_dim = len(input_stoi) + 1
-        output_dim = max(output_stoi.values()) + 1
-
-        print("Here 1")
-        enc = Encoder(input_dim, config.ENC_EMB_DIM, config.HID_DIM)
-        print("Here 2")
-        dec = Decoder(output_dim, config.ENC_EMB_DIM, config.HID_DIM)
-        print("Here 3")
-        model = Seq2Seq(enc, dec, torch.device('cpu'))
-        print("Here 4")
-        model.load_state_dict(checkpoint['model_state_dict'], strict=False)
-        print("Here 5")
-
-        model.eval()
-        print("Here 6")
-
-        _loaded_models[model_name] = {
-            "model": model,
-            "input_stoi": input_stoi,
-            "output_stoi": output_stoi,
-            "output_itos": output_itos
-        }
-
-    model_data = _loaded_models[model_name]
-    model = model_data["model"]
-    input_stoi = model_data["input_stoi"]
-    output_stoi = model_data["output_stoi"]
-    output_itos = model_data["output_itos"]
-
-    seq = torch.tensor(encode_sequence(word, input_stoi), dtype=torch.long).unsqueeze(1)
-    encoder_outputs, hidden, cell = model.encoder(seq)
-
-    input_token = torch.tensor([output_stoi['<sos>']])
-    output_seq = []
+    input_token = torch.tensor([trg_stoi['<sos>']]).to(device)
+    result = []
 
     for _ in range(config.N_EPOCHS):
         with torch.no_grad():
-            output, hidden, cell = model.decoder(input_token, hidden, cell, encoder_outputs)
+            output, hidden = model.decoder(input_token, hidden)
         top1 = output.argmax(1).item()
-        if top1 == output_stoi['<eos>']:
-            break
-        output_seq.append(top1)
-        input_token = torch.tensor([top1])
 
-    return decode_sequence(output_seq, output_itos)
+        if trg_itos[top1] == '<eos>':
+            break
+        result.append(trg_itos[top1])
+        input_token = torch.tensor([top1]).to(device)
+
+    return ''.join(result)
+
+
+def predict_ipa(csv_name: str, word: str, model_name: str, model_dir: str = 'models', csv_dir: str = 'data'):
+    csv_path = os.path.join(csv_dir, csv_name)
+    if not os.path.exists(model_path):
+        import traceback
+        logging.error("CSV file not found: %s", csv_path)
+        raise FileNotFoundError(f"CSV file not found: {csv_path}")
+
+    pairs_df = pd.read_csv(csv_path)
+    pairs = [
+        (list(word), list(re.sub(r'[\[\]/]', '', ipa)))
+        for word, ipa in zip(pairs_df["word"], pairs_df["ipa"])
+    ]
+    src_seqs, trg_seqs = tokenize(pairs)
+    src_stoi, src_itos = build_vocab(src_seqs)
+    trg_stoi, trg_itos = build_vocab(trg_seqs)
+
+
+    model, device = load_model(model_name, src_stoi, trg_stoi)
+
+    ipa = greedy_decode(model, list(word), src_stoi, trg_stoi, trg_itos)
+    print(f"Predicted IPA: {ipa}")
+
+    return ipa
+

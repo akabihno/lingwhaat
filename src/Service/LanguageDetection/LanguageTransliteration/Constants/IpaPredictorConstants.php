@@ -9,6 +9,7 @@ class IpaPredictorConstants
     private const string ML_SERVICE_TRAIN_ROUTE = 'train';
     private const string ML_SERVICE_PREDICT_ROUTE = 'predict';
     private const string ML_SERVICE_MODELS_PATH = 'ml_service/models/';
+    private const string ML_SERVICE_DATA_PATH = 'ml_service/data/';
 
     public  static function getMlServiceHost(): string
     {
@@ -33,6 +34,11 @@ class IpaPredictorConstants
     public  static function getMlServiceModelsPath(): string
     {
         return self::ML_SERVICE_MODELS_PATH;
+    }
+
+    public static function getMlServiceDataPath(): string
+    {
+        return self::ML_SERVICE_DATA_PATH;
     }
 
 
