@@ -1,7 +1,7 @@
 import torch
-from models.encoder import Encoder
-from models.decoder import Decoder
-from models.seq2seq import Seq2Seq
+from helpers.encoder import Encoder
+from helpers.decoder import Decoder
+from helpers.seq2seq import Seq2Seq
 from utils import *
 import config
 
