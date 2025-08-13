@@ -28,8 +28,3 @@ def tokenize(pairs):
     return src_sequences, trg_sequences
 
 
-def load_data(file_path):
-    df = pd.read_csv(file_path)
-    pairs = [(list(word.strip()), list(ipa.strip("/[]"))) for word, ipa in zip(df["name"], df["ipa"])]
-    return pairs
-

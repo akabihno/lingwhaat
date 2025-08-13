@@ -68,8 +68,9 @@ def train_model(csv_path, model_save_path=None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     pairs_df = pd.read_csv(csv_path)
     pairs = [
-        (list(word), list(re.sub(r'[\[\]/]', '', ipa)))
+        (list(str(word)), list(re.sub(r'[\[\]/]', '', str(ipa))))
         for word, ipa in zip(pairs_df["word"], pairs_df["ipa"])
+        if pd.notna(word) and pd.notna(ipa) and str(word).strip() and str(ipa).strip()
     ]
     src_seqs, trg_seqs = tokenize(pairs)
 
