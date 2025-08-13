@@ -6,7 +6,6 @@ use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -21,10 +20,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class UseIpaPredictorModelCommand extends Command
 {
     protected string $modelName;
-    protected string $wordMappingPath;
+    protected string $dataPath;
     public function __construct(
         protected HttpClientInterface $httpClient,
-        protected TrainIpaPredictorModelCommand $trainIpaPredictorModelCommand
     )
     {
         parent::__construct();
@@ -49,6 +47,8 @@ class UseIpaPredictorModelCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        // example: php bin/console ml:use:ipa-predictor --lang lv --word zivis
+
         $lang = $input->getOption('lang');
         $word = $input->getOption('word');
 
@@ -57,24 +57,17 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $this->modelName = "ipa_predictor_dataset_{$lang}_model.pt";
+        $this->modelName = "{$lang}_model.pt";
 
         if (!file_exists(IpaPredictorConstants::getMlServiceModelsPath() . $this->modelName)) {
             $output->writeln("<error>Model for {$lang} not found! Train model first.</error>");
             return Command::FAILURE;
         }
 
-        $this->wordMappingPath = "src/CharMap/{$lang}.json";
+        $this->dataPath = "{$lang}.csv";
 
-        if (!file_exists($this->wordMappingPath)) {
-            $output->writeln("<error>Word char map for {$lang} not found! Train model first.</error>");
-            return Command::FAILURE;
-        }
-
-        $encodedWord = $this->trainIpaPredictorModelCommand->encodeWord($word, $this->wordMappingPath);
-
-        if (!$encodedWord) {
-            $output->writeln("<error>Failed to encode word {$word}.</error>");
+        if (!file_exists(IpaPredictorConstants::getMlServiceDataPath() . $this->dataPath)) {
+            $output->writeln("<error>Data for {$lang} not found! Train model first.</error>");
             return Command::FAILURE;
         }
 
@@ -85,8 +78,9 @@ class UseIpaPredictorModelCommand extends Command
             '/' . IpaPredictorConstants::getMlServicePredictRoute() . '/',
             [
                 'query' => [
-                    'word' => $encodedWord,
+                    'word' => $word,
                     'model_name' => $this->modelName,
+                    'file' => $this->dataPath,
                 ],
             ]
         );
@@ -95,8 +89,6 @@ class UseIpaPredictorModelCommand extends Command
         $ipa = $data['ipa'];
 
         $output->writeln("Predicted IPA: {$ipa}");
-        $decodedIpa = $this->trainIpaPredictorModelCommand->decodeIpa($ipa);
-        $output->writeln("Predicted IPA decoded: {$decodedIpa}");
 
         return Command::SUCCESS;
     }

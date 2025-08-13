@@ -8,7 +8,8 @@ import shutil
 import os
 import tempfile
 import sys
-import model
+import train
+import evaluate
 
 app = FastAPI()
 
@@ -28,22 +29,17 @@ async def train_model_api(
         shutil.copyfileobj(file.file, tmp)
         tmp_path = tmp.name
 
-    background_tasks.add_task(model.train_model_background, tmp_path, model_path)
+    background_tasks.add_task(train.train_model_background, tmp_path, model_path)
 
     return {"status": "Training started in background", "model_path": model_path}
 
-@app.get("/train/status/")
-def get_train_status(model_name: str):
-    status_path = f"models/{model_name}_status.txt"
-    if not os.path.exists(status_path):
-        return {"status": "unknown"}
-    with open(status_path) as f:
-        return {"status": f.read().strip()}
-
 @app.get("/predict/")
-async def predict(word: str = Query(...), model_name: str = Query(...)):
+def predict(word: str = Query(...), model_name: str = Query(...), file = Query(...)):
+
     try:
-        ipa = model.predict_ipa(word, model_name)
+        ipa = evaluate.predict_ipa(file, word, model_name)
         return {"ipa": ipa}
+    except (FileNotFoundError, KeyError, ValueError) as e:
+        return JSONResponse(content={"error": str(e)}, status_code=400)
     except Exception as e:
-        return JSONResponse(content={"error": str(e)}, status_code=500)
+        return JSONResponse(content={"error": "Server error: " + str(e)}, status_code=500)

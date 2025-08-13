@@ -27,7 +27,6 @@ use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
-use App\Service\LanguageDetection\LanguageTransliteration\ValueObject\IpaCharMapping;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -44,7 +43,6 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class TrainIpaPredictorModelCommand extends Command
 {
     protected string $trainingDataPath;
-    protected string $wordMappingPath;
     public function __construct(
         protected DutchLanguageService $dutchLanguageService,
         protected EnglishLanguageService $englishLanguageService,
@@ -70,7 +68,6 @@ class TrainIpaPredictorModelCommand extends Command
         protected TurkishLanguageService $turkishLanguageService,
         protected UkrainianLanguageService $ukrainianLanguageService,
         protected HttpClientInterface $httpClient,
-        protected IpaCharMapping $ipaCharMapping
     ) {
         parent::__construct();
     }
@@ -93,15 +90,12 @@ class TrainIpaPredictorModelCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // example: php bin/console ml:train:ipa-predictor --lang en
+        // example: php bin/console ml:train:ipa-predictor --lang lv
 
         $lang = $input->getOption('lang');
         $prepare = $input->getOption('prepare');
 
-        $this->trainingDataPath = "src/Models/TrainingData/ipa_predictor_dataset_{$lang}.csv";
-        $this->wordMappingPath = "src/CharMap/{$lang}.json";
-
-        $trainingDatasetArray = [];
+        $this->trainingDataPath = realpath(".")."/ml_service/data/{$lang}.csv";
 
         switch ($lang) {
             case LanguageDetectionService::DUTCH_LANGUAGE_CODE:
@@ -188,17 +182,13 @@ class TrainIpaPredictorModelCommand extends Command
 
         if (!file_exists($this->trainingDataPath) || $prepare) {
 
-            $doubleCharIpaMapping = $this->ipaCharMapping->getDoubleSymbolIpaMapping();
-            $singleCharIpaMapping = $this->ipaCharMapping->getSingleSymbolIpaMapping();
-
-
             $csvHandle = fopen($this->trainingDataPath, 'w');
 
             fputcsv($csvHandle, ['word', 'ipa']);
 
             foreach ($trainingDatasetArray as $datasetRow) {
-                $ipa = $this->encodeIpa($doubleCharIpaMapping, $singleCharIpaMapping, $datasetRow['ipa']);
-                $word = $this->encodeWord($datasetRow['name']);
+                $word = $datasetRow['name'];
+                $ipa = $datasetRow['ipa'];
                 if ($ipa && $word) {
                     fputcsv($csvHandle, [$word, $ipa]);
                 }
@@ -227,113 +217,6 @@ class TrainIpaPredictorModelCommand extends Command
 
 
         return Command::SUCCESS;
-    }
-
-    public function encodeWord(string $word, string $wordMappingPath = ''): string
-    {
-        if (!$wordMappingPath) {
-            $wordMappingPath = $this->wordMappingPath;
-        }
-
-        $letterMap = file_exists($wordMappingPath)
-            ? json_decode(file_get_contents($wordMappingPath), true)
-            : [];
-
-        $counter = empty($letterMap) ? 1 : max($letterMap) + 1;
-
-        $letters = preg_split('//', $word, -1, PREG_SPLIT_NO_EMPTY);
-
-        $encoded = [];
-
-        foreach ($letters as $letter) {
-            if (!isset($letterMap[$letter])) {
-                $letterMap[$letter] = $counter++;
-            }
-            $encoded[] = $letterMap[$letter];
-        }
-
-        file_put_contents($wordMappingPath, json_encode($letterMap, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
-        $result = implode(' ', $encoded);
-
-        return $this->checkString($result);
-
-    }
-
-    public function decodeWord(string $encodedWord): string
-    {
-        $letterMap = json_decode(file_get_contents($this->wordMappingPath), true);
-
-        if (!is_array($letterMap)) {
-            return Command::FAILURE;
-        }
-
-        $numberToLetter = array_flip($letterMap);
-
-        $numbers = explode(' ', $encodedWord);
-        $decodedLetters = [];
-
-        foreach ($numbers as $num) {
-            if (!isset($numberToLetter[$num])) {
-                return Command::FAILURE;
-            }
-            $decodedLetters[] = $numberToLetter[$num];
-        }
-
-        return implode('', $decodedLetters);
-    }
-
-    public function encodeIpa(array $doubleCharIpaMapping, array $singleCharIpaMapping, string $ipa): string
-    {
-        $ipa = $this->cleanIpaString($ipa);
-        foreach ($doubleCharIpaMapping as $key => $value) {
-            $ipa = str_replace($key, $value . ' ', $ipa);
-        }
-
-        foreach ($singleCharIpaMapping as $key => $value) {
-            $ipa = str_replace($key, $value . ' ', $ipa);
-        }
-
-        return $this->checkString($ipa);
-
-    }
-
-    protected function cleanIpaString(string $ipa): string
-    {
-        return trim($ipa, "[/]");
-    }
-
-    public function decodeIpa(string $encodedIpa): string
-    {
-        $doubleCharIpaMapping = $this->ipaCharMapping->getDoubleSymbolIpaMapping();
-        $singleCharIpaMapping = $this->ipaCharMapping->getSingleSymbolIpaMapping();
-
-        $fullMap = array_merge($doubleCharIpaMapping, $singleCharIpaMapping);
-
-        $numberToCharMap = [];
-        foreach ($fullMap as $char => $num) {
-            $numberToCharMap[(string)$num] = $char;
-        }
-
-        $parts = explode(' ', $encodedIpa);
-
-        $decoded = '';
-        foreach ($parts as $token) {
-            if ($token === '') continue;
-
-            if (!isset($numberToCharMap[$token])) {
-                throw new \RuntimeException("Unknown IPA code: $token");
-            }
-
-            $decoded .= $numberToCharMap[$token];
-        }
-
-        return $decoded;
-    }
-
-    protected function checkString(string $input): string
-    {
-        return preg_match('/^[\d\s]+$/', $input) ? $input : '';
     }
 
 }

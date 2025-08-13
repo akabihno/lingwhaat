@@ -8,6 +8,7 @@ composer.lock
 
 #Python
 ml_service/__pycache__/
+ml_service/helpers/__pycache__/
 
 #MySQL
 mysql_data
