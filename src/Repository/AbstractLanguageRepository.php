@@ -7,7 +7,7 @@ use Symfony\Component\Dotenv\Dotenv;
 
 abstract class AbstractLanguageRepository extends ServiceEntityRepository
 {
-    const int PRONUNCIATION_MAX_RESULTS = 200000;
+    const int PRONUNCIATION_MAX_RESULTS = 50000;
     public function __construct(ManagerRegistry $registry, $entityClass)
     {
         $dotenv = new Dotenv();
