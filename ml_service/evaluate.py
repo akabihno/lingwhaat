@@ -4,6 +4,10 @@ from helpers.decoder import Decoder
 from helpers.seq2seq import Seq2Seq
 from utils import *
 import config
+import logging
+import sys
+import traceback
+logger = logging.getLogger(__name__)
 
 _loaded_models = {}
 
@@ -12,15 +16,17 @@ def encode_sequence(sequence, vocab):
 
 def predict_ipa(word: str, model_name: str, model_dir: str = 'models'):
     if model_name not in _loaded_models:
-        print(f"Loading model: {model_name}")
+        logger.info("Loading model: %s", model_name)
         model_path = os.path.join(model_dir, model_name)
         if not os.path.exists(model_path):
+            logger.error("Model file not found")
             raise FileNotFoundError(f"Model file not found: {model_path}")
 
         checkpoint = torch.load(model_path, map_location=torch.device('cpu'))
         required_keys = ['model_state_dict', 'input_stoi', 'output_stoi', 'output_itos']
         for key in required_keys:
             if key not in checkpoint:
+                logger.error("Checkpoint missing required key")
                 raise KeyError(f"Checkpoint missing required key: '{key}'")
 
         input_stoi = checkpoint['input_stoi']
