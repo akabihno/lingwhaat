@@ -75,7 +75,7 @@ class UseIpaPredictorModelCommand extends Command
             'GET',
             'http://' . IpaPredictorConstants::getMlServiceHost() .
             ':' . IpaPredictorConstants::getMlServicePort() .
-            '/' . IpaPredictorConstants::getMlServicePredictRoute() . '/',
+            '/' . IpaPredictorConstants::getMlServicePredictIpaRoute() . '/',
             [
                 'query' => [
                     'word' => $word,

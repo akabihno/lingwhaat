@@ -13,7 +13,7 @@ import evaluate
 
 app = FastAPI()
 
-@app.post("/train/")
+@app.post("/train-ipa/")
 async def train_model_api(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...)
@@ -33,7 +33,7 @@ async def train_model_api(
 
     return {"status": "Training started in background", "model_path": model_path}
 
-@app.get("/predict/")
+@app.get("/predict-ipa/")
 def predict(word: str = Query(...), model_name: str = Query(...), file = Query(...)):
 
     try:

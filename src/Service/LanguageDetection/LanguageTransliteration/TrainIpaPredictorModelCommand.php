@@ -200,7 +200,7 @@ class TrainIpaPredictorModelCommand extends Command
 
         $file = new File($this->trainingDataPath);
 
-        $response = $this->httpClient->request('POST', 'http://'.IpaPredictorConstants::getMlServiceHost().':'.IpaPredictorConstants::getMlServicePort().'/'.IpaPredictorConstants::getMlServiceTrainRoute().'/', [
+        $response = $this->httpClient->request('POST', 'http://'.IpaPredictorConstants::getMlServiceHost().':'.IpaPredictorConstants::getMlServicePort().'/'.IpaPredictorConstants::getMlServiceTrainIpaRoute().'/', [
             'headers' => [
                 'Content-Type' => 'multipart/form-data',
             ],
