@@ -135,6 +135,9 @@ class LanguageDetectionService
                 $word = $this->languageNormalizationService->normalizeWord($word);
                 $this->logger->info(sprintf('[LanguageDetectionService][%s] Processing word: %s', $uuidStr, $word));
 
+                if ($this->checkEnglishLanguage($word)) {
+                    $result[$word] = $this->getWordEntry($uuidStr, self::ENGLISH_LANGUAGE_NAME, self::ENGLISH_LANGUAGE_CODE);
+                }
                 if ($this->checkFrenchLanguage($word)) {
                     $result[$word] = $this->getWordEntry($uuidStr, self::FRENCH_LANGUAGE_NAME, self::FRENCH_LANGUAGE_CODE);
                 }
@@ -188,9 +191,6 @@ class LanguageDetectionService
                 }
                 if ($this->checkEstonianLanguage($word)) {
                     $result[$word] = $this->getWordEntry($uuidStr, self::ESTONIAN_LANGUAGE_NAME, self::ESTONIAN_LANGUAGE_CODE);
-                }
-                if ($this->checkEnglishLanguage($word)) {
-                    $result[$word] = $this->getWordEntry($uuidStr, self::ENGLISH_LANGUAGE_NAME, self::ENGLISH_LANGUAGE_CODE);
                 }
                 if ($this->checkDutchLanguage($word)) {
                     $result[$word] = $this->getWordEntry($uuidStr, self::DUTCH_LANGUAGE_NAME, self::DUTCH_LANGUAGE_CODE);
