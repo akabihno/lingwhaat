@@ -1,15 +1,18 @@
 <?php
 
-namespace App\Service\LanguageDetection;
+namespace App\Service\LanguageDetection\LanguageTransliteration;
 
+use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
-use App\Service\LanguageDetection\LanguageTransliteration\TrainIpaPredictorModelCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -69,7 +72,11 @@ class TrainWordPredictorModelCommand extends Command
         ]);
 
         $statusCode = $response->getStatusCode();
-        $content = $response->getContent();
+        try {
+            $content = $response->getContent();
+        } catch (ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $e) {
+            $output->writeln('<error>Exception: '.$e.'</error>');
+        }
 
         $output->writeln("Training complete on dataset {$this->trainingDataPath} with status {$statusCode}");
 

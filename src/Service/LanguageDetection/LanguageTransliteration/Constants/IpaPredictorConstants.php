@@ -10,7 +10,8 @@ class IpaPredictorConstants
     private const string ML_SERVICE_TRAIN_WORD_ROUTE = 'train-word';
     private const string ML_SERVICE_PREDICT_IPA_ROUTE = 'predict-ipa';
     private const string ML_SERVICE_PREDICT_WORD_ROUTE = 'predict-word';
-    private const string ML_SERVICE_MODELS_PATH = 'ml_service/models/';
+    private const string ML_SERVICE_IPA_MODELS_PATH = 'ml_service/models/';
+    private const string ML_SERVICE_WORD_MODELS_PATH = 'ml_service/word-models/';
     private const string ML_SERVICE_DATA_PATH = 'ml_service/data/';
 
     public  static function getMlServiceHost(): string
@@ -43,10 +44,16 @@ class IpaPredictorConstants
         return self::ML_SERVICE_PREDICT_WORD_ROUTE;
     }
 
-    public  static function getMlServiceModelsPath(): string
+    public  static function getMlServiceIpaModelsPath(): string
     {
-        return self::ML_SERVICE_MODELS_PATH;
+        return self::ML_SERVICE_IPA_MODELS_PATH;
     }
+
+    public  static function getMlServiceWordModelsPath(): string
+    {
+        return self::ML_SERVICE_WORD_MODELS_PATH;
+    }
+
 
     public static function getMlServiceDataPath(): string
     {
