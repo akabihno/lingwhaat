@@ -16,8 +16,8 @@ use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-#[AsCommand(name: 'ml:use:ipa-predictor')]
-class UseIpaPredictorModelCommand extends Command
+#[AsCommand(name: 'ml:use:word-predictor')]
+class UseWordPredictorModelCommand extends Command
 {
     protected string $modelName;
     protected string $dataPath;
@@ -31,11 +31,11 @@ class UseIpaPredictorModelCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('Use IPA prediction model for a specific language and word')
+            ->setDescription('Use word prediction model for a specific language and IPA')
             ->addOption('lang', 'l', InputOption::VALUE_REQUIRED,
                 'Language code in: ' . implode(', ', LanguageDetectionService::getLanguageCodes())
             )
-            ->addOption('word', 'w', InputOption::VALUE_REQUIRED, 'Word to use for IPA prediction.');
+            ->addOption('ipa', 'i', InputOption::VALUE_REQUIRED, 'IPA to use for word prediction.');
     }
 
     /**
@@ -47,19 +47,19 @@ class UseIpaPredictorModelCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // example: php bin/console ml:use:ipa-predictor --lang lv --word zivis
+        // example: php bin/console ml:use:word-predictor --lang ru --ipa [ˈpot͡ɕvə]
 
         $lang = $input->getOption('lang');
-        $word = $input->getOption('word');
+        $ipa = $input->getOption('ipa');
 
-        if (!$lang || !$word) {
-            $output->writeln("<error>No --lang and/or --word parameters provided.</error>");
+        if (!$lang || !$ipa) {
+            $output->writeln("<error>No --lang and/or --ipa parameters provided.</error>");
             return Command::FAILURE;
         }
 
         $this->modelName = "{$lang}_model.pt";
 
-        if (!file_exists(IpaPredictorConstants::getMlServiceIpaModelsPath() . $this->modelName)) {
+        if (!file_exists(IpaPredictorConstants::getMlServiceWordModelsPath() . $this->modelName)) {
             $output->writeln("<error>Model for {$lang} not found! Train model first.</error>");
             return Command::FAILURE;
         }
@@ -75,10 +75,10 @@ class UseIpaPredictorModelCommand extends Command
             'GET',
             'http://' . IpaPredictorConstants::getMlServiceHost() .
             ':' . IpaPredictorConstants::getMlServicePort() .
-            '/' . IpaPredictorConstants::getMlServicePredictIpaRoute() . '/',
+            '/' . IpaPredictorConstants::getMlServicePredictWordRoute() . '/',
             [
                 'query' => [
-                    'word' => $word,
+                    'ipa' => $ipa,
                     'model_name' => $this->modelName,
                     'file' => $this->dataPath,
                 ],
@@ -86,9 +86,9 @@ class UseIpaPredictorModelCommand extends Command
         );
 
         $data = $response->toArray();
-        $ipa = $data['ipa'];
+        $word = $data['word'];
 
-        $output->writeln("Predicted IPA: {$ipa}");
+        $output->writeln("Predicted word: {$word}");
 
         return Command::SUCCESS;
     }

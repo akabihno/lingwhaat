@@ -82,3 +82,18 @@ def predict_ipa(csv_name: str, word: str, model_name: str, model_dir: str = 'mod
     print(f"Predicted IPA: {ipa}")
 
     return ipa
+
+def predict_word(csv_name: str, ipa: str, model_name: str, model_dir: str = 'word-models', csv_dir: str = 'data'):
+    csv_path = os.path.join(csv_dir, csv_name)
+    if not os.path.exists(csv_path):
+        logging.error("CSV file not found: %s", csv_path)
+        raise FileNotFoundError(f"CSV file not found: {csv_path}")
+
+    model, device, src_stoi, trg_stoi, trg_itos = load_model(model_name, model_dir)
+
+    ipa_clean = re.sub(r'[\[\]/]', '', ipa)
+
+    word = greedy_decode(model, list(ipa_clean), src_stoi, trg_stoi, trg_itos)
+    print(f"Predicted word: {word}")
+
+    return word
