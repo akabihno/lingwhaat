@@ -54,8 +54,7 @@ async def train_word_model_api(
     return {"status": "Training started in background", "model_path": model_path}
 
 @app.get("/predict-ipa/")
-def predict(word: str = Query(...), model_name: str = Query(...), file = Query(...)):
-
+def predict_ipa(word: str = Query(...), model_name: str = Query(...), file = Query(...)):
     try:
         ipa = evaluate.predict_ipa(file, word, model_name)
         return {"ipa": ipa}
@@ -65,10 +64,9 @@ def predict(word: str = Query(...), model_name: str = Query(...), file = Query(.
         return JSONResponse(content={"error": "Server error: " + str(e)}, status_code=500)
 
 @app.get("/predict-word/")
-def predict(ipa: str = Query(...), model_name: str = Query(...), file = Query(...)):
-
+def predict_word(ipa: str = Query(...), model_name: str = Query(...), file = Query(...)):
     try:
-        ipa = evaluate.predict_word(file, ipa, model_name)
+        word = evaluate.predict_word(file, ipa, model_name)
         return {"word": word}
     except (FileNotFoundError, KeyError, ValueError) as e:
         return JSONResponse(content={"error": str(e)}, status_code=400)
