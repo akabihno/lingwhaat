@@ -33,7 +33,7 @@ async def train_ipa_model_api(
 
     return {"status": "Training started in background", "model_path": model_path}
 
-@app.post("/train-words/")
+@app.post("/train-word/")
 async def train_word_model_api(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...)
