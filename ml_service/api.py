@@ -68,7 +68,7 @@ def predict(word: str = Query(...), model_name: str = Query(...), file = Query(.
 def predict(ipa: str = Query(...), model_name: str = Query(...), file = Query(...)):
 
     try:
-        ipa = evaluate.predict_ipa(file, ipa, model_name)
+        ipa = evaluate.predict_word(file, ipa, model_name)
         return {"word": word}
     except (FileNotFoundError, KeyError, ValueError) as e:
         return JSONResponse(content={"error": str(e)}, status_code=400)
