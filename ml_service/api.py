@@ -49,7 +49,7 @@ async def train_word_model_api(
         shutil.copyfileobj(file.file, tmp)
         tmp_path = tmp.name
 
-    background_tasks.add_task(train.train_model_background, tmp_path, model_path)
+    background_tasks.add_task(train.train_word_model_background, tmp_path, model_path)
 
     return {"status": "Training started in background", "model_path": model_path}
 

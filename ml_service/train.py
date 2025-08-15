@@ -121,9 +121,9 @@ def train_ipa_model(csv_path, model_save_path=None):
         'output_itos': trg_itos
     }, model_save_path)
 
-def train_words_model_background(csv_path: str, model_path: str):
+def train_word_model_background(csv_path: str, model_path: str):
     try:
-        train_words_model(csv_path, model_save_path=model_path)
+        train_word_model(csv_path, model_save_path=model_path)
         print("Training finished successfully.")
     except Exception as e:
         import traceback
@@ -133,7 +133,7 @@ def train_words_model_background(csv_path: str, model_path: str):
     finally:
         os.remove(csv_path)
 
-def train_words_model(csv_path, model_save_path=None):
+def train_word_model(csv_path, model_save_path=None):
     if model_save_path is None:
         base = os.path.basename(csv_path)
         model_name = base.replace('.csv', '_model.pt')
