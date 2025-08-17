@@ -6,7 +6,6 @@ use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EstonianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\EsuLanguageService;
 use App\Service\LanguageDetection\LanguageServices\FrenchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GeorgianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GermanLanguageService;
@@ -47,7 +46,6 @@ class TrainIpaPredictorModelCommand extends Command
         protected DutchLanguageService $dutchLanguageService,
         protected EnglishLanguageService $englishLanguageService,
         protected EstonianLanguageService $estonianLanguageService,
-        protected EsuLanguageService $esuLanguageService,
         protected FrenchLanguageService $frenchLanguageService,
         protected GeorgianLanguageService $georgianLanguageService,
         protected GermanLanguageService $germanLanguageService,
@@ -106,9 +104,6 @@ class TrainIpaPredictorModelCommand extends Command
                 break;
             case LanguageDetectionService::ESTONIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->estonianLanguageService->fetchAllNamesAndIpa();
-                break;
-            case LanguageDetectionService::ESU_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->esuLanguageService->fetchAllNamesAndIpa();
                 break;
             case LanguageDetectionService::FRENCH_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->frenchLanguageService->fetchAllNamesAndIpa();

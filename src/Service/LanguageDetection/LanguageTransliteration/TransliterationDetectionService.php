@@ -6,7 +6,6 @@ use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EstonianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\EsuLanguageService;
 use App\Service\LanguageDetection\LanguageServices\FrenchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GeorgianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GermanLanguageService;
@@ -56,7 +55,6 @@ class TransliterationDetectionService
         protected SerboCroatianLanguageService $serboCroatianLanguageService,
         protected TagalogLanguageService $tagalogLanguageService,
         protected UkrainianLanguageService $ukrainianLanguageService,
-        protected EsuLanguageService $esuLanguageService,
         protected SpanishLanguageService $spanishLanguageService,
         protected LatinLanguageService $latinLanguageService,
         protected SwedishLanguageService $swedishLanguageService,

@@ -5,7 +5,6 @@ namespace App\Service\LanguageDetection;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EstonianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\EsuLanguageService;
 use App\Service\LanguageDetection\LanguageServices\FrenchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GeorgianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GermanLanguageService;
@@ -63,8 +62,6 @@ class LanguageDetectionService
     const string TAGALOG_LANGUAGE_CODE = 'tl';
     const string UKRAINIAN_LANGUAGE_NAME = 'Ukrainian';
     const string UKRAINIAN_LANGUAGE_CODE = 'uk';
-    const string ESU_LANGUAGE_NAME = 'Esu';
-    const string ESU_LANGUAGE_CODE = 'isu';
     const string SPANISH_LANGUAGE_NAME = 'Spanish';
     const string SPANISH_LANGUAGE_CODE = 'es';
     const string LATIN_LANGUAGE_NAME = 'Latin';
@@ -100,7 +97,6 @@ class LanguageDetectionService
         protected SerboCroatianLanguageService $serboCroatianLanguageService,
         protected TagalogLanguageService $tagalogLanguageService,
         protected UkrainianLanguageService $ukrainianLanguageService,
-        protected EsuLanguageService $esuLanguageService,
         protected SpanishLanguageService $spanishLanguageService,
         protected LatinLanguageService $latinLanguageService,
         protected SwedishLanguageService $swedishLanguageService,
@@ -190,9 +186,6 @@ class LanguageDetectionService
                 }
                 if ($this->checkUkrainianLanguage($word)) {
                     $result[$word] = $this->getWordEntry($uuidStr, self::UKRAINIAN_LANGUAGE_NAME, self::UKRAINIAN_LANGUAGE_CODE);
-                }
-                if ($this->checkEsuLanguage($word)) {
-                    $result[$word] = $this->getWordEntry($uuidStr, self::ESU_LANGUAGE_NAME, self::ESU_LANGUAGE_CODE);
                 }
                 if ($this->checkSpanishLanguage($word)) {
                     $result[$word] = $this->getWordEntry($uuidStr, self::SPANISH_LANGUAGE_NAME, self::SPANISH_LANGUAGE_CODE);
@@ -339,11 +332,6 @@ class LanguageDetectionService
         return $this->ukrainianLanguageService->checkLanguage($word);
     }
 
-    protected function checkEsuLanguage(string $word): bool
-    {
-        return $this->esuLanguageService->checkLanguage($word);
-    }
-
     protected function checkSpanishLanguage(string $word): bool
     {
         return $this->spanishLanguageService->checkLanguage($word);
@@ -405,7 +393,6 @@ class LanguageDetectionService
             self::SERBOCROATIAN_LANGUAGE_CODE,
             self::TAGALOG_LANGUAGE_CODE,
             self::UKRAINIAN_LANGUAGE_CODE,
-            self::ESU_LANGUAGE_CODE,
             self::SPANISH_LANGUAGE_CODE,
             self::LATIN_LANGUAGE_CODE,
             self::SWEDISH_LANGUAGE_CODE,
