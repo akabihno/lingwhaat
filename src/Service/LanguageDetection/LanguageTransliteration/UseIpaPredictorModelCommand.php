@@ -14,15 +14,12 @@ use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsCommand(name: 'ml:use:ipa-predictor')]
 class UseIpaPredictorModelCommand extends Command
 {
-    protected string $modelName;
-    protected string $dataPath;
     public function __construct(
-        protected HttpClientInterface $httpClient,
+        protected UseIpaPredictorModelService $ipaPredictorModelService,
     )
     {
         parent::__construct();
@@ -45,7 +42,7 @@ class UseIpaPredictorModelCommand extends Command
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      */
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         // example: php bin/console ml:use:ipa-predictor --lang lv --word zivis
 
@@ -57,36 +54,17 @@ class UseIpaPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $this->modelName = "{$lang}_model.pt";
-
-        if (!file_exists(IpaPredictorConstants::getMlServiceIpaModelsPath() . $this->modelName)) {
+        if (!file_exists(IpaPredictorConstants::getMlServiceIpaModelsPath() . $lang.'_model.pt')) {
             $output->writeln("<error>Model for {$lang} not found! Train model first.</error>");
             return Command::FAILURE;
         }
 
-        $this->dataPath = "{$lang}.csv";
-
-        if (!file_exists(IpaPredictorConstants::getMlServiceDataPath() . $this->dataPath)) {
+        if (!file_exists(IpaPredictorConstants::getMlServiceDataPath() . $lang.'.csv')) {
             $output->writeln("<error>Data for {$lang} not found! Train model first.</error>");
             return Command::FAILURE;
         }
 
-        $response = $this->httpClient->request(
-            'GET',
-            'http://' . IpaPredictorConstants::getMlServiceHost() .
-            ':' . IpaPredictorConstants::getMlServicePort() .
-            '/' . IpaPredictorConstants::getMlServicePredictIpaRoute() . '/',
-            [
-                'query' => [
-                    'word' => $word,
-                    'model_name' => $this->modelName,
-                    'file' => $this->dataPath,
-                ],
-            ]
-        );
-
-        $data = $response->toArray();
-        $ipa = $data['ipa'];
+        $ipa = $this->ipaPredictorModelService->run($lang, $word);
 
         $output->writeln("Predicted IPA: {$ipa}");
 

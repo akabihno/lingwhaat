@@ -5,7 +5,6 @@ namespace App\Service\LanguageDetection;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EstonianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\EsuLanguageService;
 use App\Service\LanguageDetection\LanguageServices\FrenchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GeorgianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GermanLanguageService;
@@ -25,9 +24,15 @@ use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
+use App\Service\LanguageDetection\LanguageTransliteration\TransliterationDetectionService;
 use App\Service\LanguageNormalizationService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class LanguageDetectionService
 {
@@ -57,8 +62,6 @@ class LanguageDetectionService
     const string TAGALOG_LANGUAGE_CODE = 'tl';
     const string UKRAINIAN_LANGUAGE_NAME = 'Ukrainian';
     const string UKRAINIAN_LANGUAGE_CODE = 'uk';
-    const string ESU_LANGUAGE_NAME = 'Esu';
-    const string ESU_LANGUAGE_CODE = 'isu';
     const string SPANISH_LANGUAGE_NAME = 'Spanish';
     const string SPANISH_LANGUAGE_CODE = 'es';
     const string LATIN_LANGUAGE_NAME = 'Latin';
@@ -94,7 +97,6 @@ class LanguageDetectionService
         protected SerboCroatianLanguageService $serboCroatianLanguageService,
         protected TagalogLanguageService $tagalogLanguageService,
         protected UkrainianLanguageService $ukrainianLanguageService,
-        protected EsuLanguageService $esuLanguageService,
         protected SpanishLanguageService $spanishLanguageService,
         protected LatinLanguageService $latinLanguageService,
         protected SwedishLanguageService $swedishLanguageService,
@@ -104,11 +106,19 @@ class LanguageDetectionService
         protected HindiLanguageService $hindiLanguageService,
         protected GeorgianLanguageService $georgianLanguageService,
         protected TurkishLanguageService $turkishLanguageService,
+        protected TransliterationDetectionService $transliterationDetectionService,
     )
     {
     }
 
-    public function process($languageInput): array
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function process(string $languageInput, int $translitDetection): array
     {
         $uuid = Uuid::v4();
         $uuidStr = $uuid->toRfc4122();
@@ -177,9 +187,6 @@ class LanguageDetectionService
                 if ($this->checkUkrainianLanguage($word)) {
                     $result[$word] = $this->getWordEntry($uuidStr, self::UKRAINIAN_LANGUAGE_NAME, self::UKRAINIAN_LANGUAGE_CODE);
                 }
-                if ($this->checkEsuLanguage($word)) {
-                    $result[$word] = $this->getWordEntry($uuidStr, self::ESU_LANGUAGE_NAME, self::ESU_LANGUAGE_CODE);
-                }
                 if ($this->checkSpanishLanguage($word)) {
                     $result[$word] = $this->getWordEntry($uuidStr, self::SPANISH_LANGUAGE_NAME, self::SPANISH_LANGUAGE_CODE);
                 }
@@ -223,6 +230,16 @@ class LanguageDetectionService
             $matchCount = $languageCounts[$topEntry];
         } else {
             $matchCount = 0;
+        }
+
+        //TODO
+        /*
+        if ($language == self::LANGUAGE_NOT_FOUND && $translitDetection) {
+            return $this->transliterationDetectionService->run($words, $uuidStr, $start);
+        }
+        */
+        if ($translitDetection) {
+            return $this->transliterationDetectionService->run($words, $uuidStr, $start);
         }
 
         $finish = microtime(true);
@@ -315,11 +332,6 @@ class LanguageDetectionService
         return $this->ukrainianLanguageService->checkLanguage($word);
     }
 
-    protected function checkEsuLanguage(string $word): bool
-    {
-        return $this->esuLanguageService->checkLanguage($word);
-    }
-
     protected function checkSpanishLanguage(string $word): bool
     {
         return $this->spanishLanguageService->checkLanguage($word);
@@ -381,7 +393,6 @@ class LanguageDetectionService
             self::SERBOCROATIAN_LANGUAGE_CODE,
             self::TAGALOG_LANGUAGE_CODE,
             self::UKRAINIAN_LANGUAGE_CODE,
-            self::ESU_LANGUAGE_CODE,
             self::SPANISH_LANGUAGE_CODE,
             self::LATIN_LANGUAGE_CODE,
             self::SWEDISH_LANGUAGE_CODE,
@@ -391,6 +402,14 @@ class LanguageDetectionService
             self::HINDI_LANGUAGE_CODE,
             self::GEORGIAN_LANGUAGE_CODE,
             self::TURKISH_LANGUAGE_CODE,
+        ];
+    }
+
+    public static function getLanguageCodesForTransliteration(): array
+    {
+        return [
+            self::LATVIAN_LANGUAGE_CODE,
+            self::RUSSIAN_LANGUAGE_CODE,
         ];
     }
 

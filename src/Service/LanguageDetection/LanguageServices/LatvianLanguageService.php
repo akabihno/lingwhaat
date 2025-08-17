@@ -2,9 +2,10 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\LatvianLanguageRepository;
 
-class LatvianLanguageService
+class LatvianLanguageService extends AbstractLanguageService
 {
     public function __construct(protected LatvianLanguageRepository $latvianLanguageRepository)
     {
@@ -20,4 +21,8 @@ class LatvianLanguageService
         return $this->latvianLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->latvianLanguageRepository;
+    }
 }

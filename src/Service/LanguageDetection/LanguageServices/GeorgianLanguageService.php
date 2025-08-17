@@ -2,9 +2,10 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\GeorgianLanguageRepository;
 
-class GeorgianLanguageService
+class GeorgianLanguageService extends AbstractLanguageService
 {
     public function __construct(protected GeorgianLanguageRepository $georgianLanguageRepository)
     {
@@ -20,4 +21,8 @@ class GeorgianLanguageService
         return $this->georgianLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->georgianLanguageRepository;
+    }
 }

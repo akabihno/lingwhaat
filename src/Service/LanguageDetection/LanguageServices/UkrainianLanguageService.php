@@ -2,9 +2,10 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\UkrainianLanguageRepository;
 
-class UkrainianLanguageService
+class UkrainianLanguageService extends AbstractLanguageService
 {
     public function __construct(protected UkrainianLanguageRepository $ukrainianLanguageRepository)
     {
@@ -20,4 +21,8 @@ class UkrainianLanguageService
         return $this->ukrainianLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->ukrainianLanguageRepository;
+    }
 }

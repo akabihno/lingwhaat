@@ -2,9 +2,10 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\FrenchLanguageRepository;
 
-class FrenchLanguageService
+class FrenchLanguageService extends AbstractLanguageService
 {
     public function __construct(protected FrenchLanguageRepository $frenchLanguageRepository)
     {
@@ -20,4 +21,8 @@ class FrenchLanguageService
         return $this->frenchLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->frenchLanguageRepository;
+    }
 }

@@ -2,9 +2,10 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\GreekLanguageRepository;
 
-class GreekLanguageService
+class GreekLanguageService extends AbstractLanguageService
 {
     public function __construct(protected GreekLanguageRepository $greekLanguageRepository)
     {
@@ -20,4 +21,8 @@ class GreekLanguageService
         return $this->greekLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->greekLanguageRepository;
+    }
 }
