@@ -77,21 +77,23 @@ class TransliterationDetectionService
      */
     public function run(array $words, string $uuidStr, float $start): array
     {
-        $result = [];
-        $languageCounts = [];
+        foreach ($words as $word) {
+            $wordResults = [];
+            $languageCodes = LanguageDetectionService::getLanguageCodes();
 
-        foreach (LanguageDetectionService::getLanguageCodes() as $srcLanguageCode) {
-            foreach (LanguageDetectionService::getLanguageCodes() as $dstLanguageCode) {
-                foreach ($words as $word) {
-                    $wordPredictedIpa = $this->ipaPredictorModelService->run($srcLanguageCode, $word);
+            foreach ($languageCodes as $srcLanguageCode) {
+                $wordPredictedIpa = $this->ipaPredictorModelService->run($srcLanguageCode, $word);
+
+                foreach ($languageCodes as $dstLanguageCode) {
                     $predictedTargetWord = $this->wordPredictorModelService->run($dstLanguageCode, $wordPredictedIpa);
-
-                    $languageCounts[$word][$srcLanguageCode][$dstLanguageCode] = $this->checkLanguage($dstLanguageCode, $predictedTargetWord);
+                    $wordResults[$srcLanguageCode][$dstLanguageCode] = $this->checkLanguage($dstLanguageCode, $predictedTargetWord);
                 }
             }
-        }
 
-        $this->logLanguageDetectionResult($uuidStr, $languageCounts);
+            $languageCounts[$word] = $wordResults;
+
+            $this->logLanguageDetectionResult($uuidStr, [$word => $wordResults]);
+        }
 
         $finish = microtime(true);
 
