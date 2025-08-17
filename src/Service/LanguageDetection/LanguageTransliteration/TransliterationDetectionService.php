@@ -28,6 +28,7 @@ use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use App\Service\LanguageNormalizationService;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
@@ -114,17 +115,21 @@ class TransliterationDetectionService
      * @throws RedirectionExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
+     * @throws \Exception
      */
     public function executeIpaPredictor(string $lang, string $word): string
     {
+        $application = new Application();
+        $application->add($this->ipaPredictorModelCommand);
+
         $input = new ArrayInput([
+            'command' => 'ml:use:ipa-predictor',
             '--lang' => $lang,
             '--word' => $word,
         ]);
 
         $output = new BufferedOutput();
-
-        $this->ipaPredictorModelCommand->execute($input, $output);
+        $application->run($input, $output);
 
         return $output->fetch();
     }
@@ -135,17 +140,21 @@ class TransliterationDetectionService
      * @throws RedirectionExceptionInterface
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
+     * @throws \Exception
      */
     public function executeWordPredictor(string $lang, string $ipa): string
     {
+        $application = new Application();
+        $application->add($this->wordPredictorModelCommand);
+
         $input = new ArrayInput([
+            'command' => 'ml:use:word-predictor',
             '--lang' => $lang,
             '--ipa' => $ipa,
         ]);
 
         $output = new BufferedOutput();
-
-        $this->wordPredictorModelCommand->execute($input, $output);
+        $application->run($input, $output);
 
         return $output->fetch();
     }
