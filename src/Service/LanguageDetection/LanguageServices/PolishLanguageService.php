@@ -4,7 +4,7 @@ namespace App\Service\LanguageDetection\LanguageServices;
 
 use App\Repository\PolishLanguageRepository;
 
-class PolishLanguageService
+class PolishLanguageService extends AbstractLanguageService
 {
     public function __construct(protected PolishLanguageRepository $polishLanguageRepository)
     {

@@ -4,7 +4,7 @@ namespace App\Service\LanguageDetection\LanguageServices;
 
 use App\Repository\EstonianLanguageRepository;
 
-class EstonianLanguageService
+class EstonianLanguageService extends AbstractLanguageService
 {
     public function __construct(protected EstonianLanguageRepository $estonianLanguageRepository)
     {

@@ -4,7 +4,7 @@ namespace App\Service\LanguageDetection\LanguageServices;
 
 use App\Repository\GeorgianLanguageRepository;
 
-class GeorgianLanguageService
+class GeorgianLanguageService extends AbstractLanguageService
 {
     public function __construct(protected GeorgianLanguageRepository $georgianLanguageRepository)
     {

@@ -25,9 +25,15 @@ use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
+use App\Service\LanguageDetection\LanguageTransliteration\TransliterationDetectionService;
 use App\Service\LanguageNormalizationService;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class LanguageDetectionService
 {
@@ -104,11 +110,19 @@ class LanguageDetectionService
         protected HindiLanguageService $hindiLanguageService,
         protected GeorgianLanguageService $georgianLanguageService,
         protected TurkishLanguageService $turkishLanguageService,
+        protected TransliterationDetectionService $transliterationDetectionService,
     )
     {
     }
 
-    public function process($languageInput): array
+    /**
+     * @throws TransportExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws DecodingExceptionInterface
+     * @throws ClientExceptionInterface
+     */
+    public function process(string $languageInput, int $translitDetection): array
     {
         $uuid = Uuid::v4();
         $uuidStr = $uuid->toRfc4122();
@@ -223,6 +237,10 @@ class LanguageDetectionService
             $matchCount = $languageCounts[$topEntry];
         } else {
             $matchCount = 0;
+        }
+
+        if ($language == self::LANGUAGE_NOT_FOUND && $translitDetection) {
+            return $this->transliterationDetectionService->run($words, $uuidStr, $start);
         }
 
         $finish = microtime(true);

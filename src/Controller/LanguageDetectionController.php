@@ -23,7 +23,12 @@ class LanguageDetectionController extends AbstractController
             return $this->render('too_many_requests.html.twig');
         }
 
-        $languageAndCode = $this->languageDetectionService->process($_GET['get_language']);
+        $translitDetection = $request->query->get('translit_detection', 0);
+
+        $languageAndCode = $this->languageDetectionService->process(
+            $request->query->get('get_language'),
+            $translitDetection
+        );
 
         return $this->render('response.html.twig', [
             'language' => $languageAndCode['language'],

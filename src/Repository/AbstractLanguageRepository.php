@@ -26,6 +26,17 @@ abstract class AbstractLanguageRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
+    public function findApproximateByName(string $name): bool
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->where('e.name LIKE :name')
+            ->setParameter('name', '%'.$name.'%');
+
+        $query = $qb->getQuery();
+
+        return (bool) $query->execute();
+    }
+
     public function findAllNamesAndIpa(int $limit = self::PRONUNCIATION_MAX_RESULTS): array
     {
         return $this->createQueryBuilder('e')

@@ -45,7 +45,7 @@ class UseIpaPredictorModelCommand extends Command
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      */
-    protected function execute(InputInterface $input, OutputInterface $output): int
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         // example: php bin/console ml:use:ipa-predictor --lang lv --word zivis
 

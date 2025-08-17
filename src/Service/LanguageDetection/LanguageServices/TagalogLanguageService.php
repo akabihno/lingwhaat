@@ -4,7 +4,7 @@ namespace App\Service\LanguageDetection\LanguageServices;
 
 use App\Repository\TagalogLanguageRepository;
 
-class TagalogLanguageService
+class TagalogLanguageService extends AbstractLanguageService
 {
     public function __construct(protected TagalogLanguageRepository $tagalogLanguageRepository)
     {
