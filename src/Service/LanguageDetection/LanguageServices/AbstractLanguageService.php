@@ -6,12 +6,13 @@ use App\Repository\AbstractLanguageRepository;
 
 abstract class AbstractLanguageService
 {
-    protected AbstractLanguageRepository $repository;
+    abstract protected function getRepository(): AbstractLanguageRepository;
 
     public function findApproximateByName(string $name): bool
     {
+        $repository = $this->getRepository();
 
-        return $this->repository->findApproximateByName($this->modifyName($name));
+        return $repository->findApproximateByName($this->modifyName($name));
     }
 
     protected function modifyName(string $word): string

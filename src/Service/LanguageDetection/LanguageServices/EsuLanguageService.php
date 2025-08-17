@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\EsuLanguageRepository;
 
 class EsuLanguageService extends AbstractLanguageService
@@ -20,4 +21,8 @@ class EsuLanguageService extends AbstractLanguageService
         return $this->esuLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->esuLanguageRepository;
+    }
 }

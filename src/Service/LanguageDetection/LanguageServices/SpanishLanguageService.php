@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\SpanishLanguageRepository;
 
 class SpanishLanguageService extends AbstractLanguageService
@@ -20,4 +21,8 @@ class SpanishLanguageService extends AbstractLanguageService
         return $this->spanishLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->spanishLanguageRepository;
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\PolishLanguageRepository;
 
 class PolishLanguageService extends AbstractLanguageService
@@ -20,4 +21,8 @@ class PolishLanguageService extends AbstractLanguageService
         return $this->polishLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->polishLanguageRepository;
+    }
 }

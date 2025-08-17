@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\SerboCroatianLanguageRepository;
 
 class SerboCroatianLanguageService extends AbstractLanguageService
@@ -20,4 +21,8 @@ class SerboCroatianLanguageService extends AbstractLanguageService
         return $this->serboCroatianLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->serboCroatianLanguageRepository;
+    }
 }

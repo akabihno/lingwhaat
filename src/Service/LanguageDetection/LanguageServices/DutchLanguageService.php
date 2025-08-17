@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\DutchLanguageRepository;
 
 class DutchLanguageService extends AbstractLanguageService
@@ -20,4 +21,8 @@ class DutchLanguageService extends AbstractLanguageService
         return $this->dutchLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->dutchLanguageRepository;
+    }
 }

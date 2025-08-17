@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\TurkishLanguageRepository;
 
 class TurkishLanguageService extends AbstractLanguageService
@@ -20,4 +21,8 @@ class TurkishLanguageService extends AbstractLanguageService
         return $this->turkishLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->turkishLanguageRepository;
+    }
 }

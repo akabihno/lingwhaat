@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\GermanLanguageRepository;
 
 class GermanLanguageService extends AbstractLanguageService
@@ -21,4 +22,8 @@ class GermanLanguageService extends AbstractLanguageService
     }
 
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->germanLanguageRepository;
+    }
 }

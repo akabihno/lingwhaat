@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageServices;
 
+use App\Repository\AbstractLanguageRepository;
 use App\Repository\TagalogLanguageRepository;
 
 class TagalogLanguageService extends AbstractLanguageService
@@ -20,4 +21,8 @@ class TagalogLanguageService extends AbstractLanguageService
         return $this->tagalogLanguageRepository->findAllNamesAndIpa();
     }
 
+    protected function getRepository(): AbstractLanguageRepository
+    {
+        return $this->tagalogLanguageRepository;
+    }
 }
