@@ -405,4 +405,12 @@ class LanguageDetectionService
         ];
     }
 
+    public static function getLanguageCodesForTransliteration(): array
+    {
+        return [
+            self::LATVIAN_LANGUAGE_CODE,
+            self::RUSSIAN_LANGUAGE_CODE,
+        ];
+    }
+
 }

@@ -79,7 +79,7 @@ class TransliterationDetectionService
     {
         foreach ($words as $word) {
             $wordResults = [];
-            $languageCodes = LanguageDetectionService::getLanguageCodes();
+            $languageCodes = LanguageDetectionService::getLanguageCodesForTransliteration();
 
             foreach ($languageCodes as $srcLanguageCode) {
                 $wordPredictedIpa = $this->ipaPredictorModelService->run($srcLanguageCode, $word);
