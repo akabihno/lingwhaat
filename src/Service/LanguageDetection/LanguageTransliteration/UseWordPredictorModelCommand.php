@@ -22,7 +22,7 @@ class UseWordPredictorModelCommand extends Command
     protected string $modelName;
     protected string $dataPath;
     public function __construct(
-        protected HttpClientInterface $httpClient,
+        protected UseWordPredictorModelService $useWordPredictorModelService,
     )
     {
         parent::__construct();
@@ -57,36 +57,17 @@ class UseWordPredictorModelCommand extends Command
             return Command::FAILURE;
         }
 
-        $this->modelName = "{$lang}_model.pt";
-
-        if (!file_exists(IpaPredictorConstants::getMlServiceWordModelsPath() . $this->modelName)) {
+        if (!file_exists(IpaPredictorConstants::getMlServiceWordModelsPath() . $lang.'_model.pt')) {
             $output->writeln("<error>Model for {$lang} not found! Train model first.</error>");
             return Command::FAILURE;
         }
 
-        $this->dataPath = "{$lang}.csv";
-
-        if (!file_exists(IpaPredictorConstants::getMlServiceDataPath() . $this->dataPath)) {
+        if (!file_exists(IpaPredictorConstants::getMlServiceDataPath() . $lang.'.csv')) {
             $output->writeln("<error>Data for {$lang} not found! Train model first.</error>");
             return Command::FAILURE;
         }
 
-        $response = $this->httpClient->request(
-            'GET',
-            'http://' . IpaPredictorConstants::getMlServiceHost() .
-            ':' . IpaPredictorConstants::getMlServicePort() .
-            '/' . IpaPredictorConstants::getMlServicePredictWordRoute() . '/',
-            [
-                'query' => [
-                    'ipa' => $ipa,
-                    'model_name' => $this->modelName,
-                    'file' => $this->dataPath,
-                ],
-            ]
-        );
-
-        $data = $response->toArray();
-        $word = $data['word'];
+        $word = $this->useWordPredictorModelService->run($lang, $ipa);
 
         $output->writeln("Predicted word: {$word}");
 

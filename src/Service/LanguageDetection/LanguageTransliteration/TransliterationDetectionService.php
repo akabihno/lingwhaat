@@ -28,9 +28,6 @@ use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use App\Service\LanguageNormalizationService;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -44,6 +41,8 @@ class TransliterationDetectionService
         protected LanguageNormalizationService $languageNormalizationService,
         protected UseIpaPredictorModelCommand $ipaPredictorModelCommand,
         protected UseWordPredictorModelCommand $wordPredictorModelCommand,
+        protected UseIpaPredictorModelService $ipaPredictorModelService,
+        protected UseWordPredictorModelService $wordPredictorModelService,
         protected FrenchLanguageService $frenchLanguageService,
         protected GermanLanguageService $germanLanguageService,
         protected GreekLanguageService $greekLanguageService,
@@ -86,8 +85,8 @@ class TransliterationDetectionService
         foreach (LanguageDetectionService::getLanguageCodes() as $srcLanguageCode) {
             foreach (LanguageDetectionService::getLanguageCodes() as $dstLanguageCode) {
                 foreach ($words as $word) {
-                    $wordPredictedIpa = $this->executeIpaPredictor($srcLanguageCode, $word);
-                    $predictedTargetWord = $this->executeWordPredictor($dstLanguageCode, $wordPredictedIpa);
+                    $wordPredictedIpa = $this->ipaPredictorModelService->run($srcLanguageCode, $word);
+                    $predictedTargetWord = $this->wordPredictorModelService->run($dstLanguageCode, $wordPredictedIpa);
 
                     $languageCounts[$word][$srcLanguageCode][$dstLanguageCode] = $this->checkLanguage($dstLanguageCode, $predictedTargetWord);
                 }
@@ -107,60 +106,6 @@ class TransliterationDetectionService
             'time' => $finish - $start
         ];
 
-    }
-
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws ClientExceptionInterface
-     * @throws \Exception
-     */
-    public function executeIpaPredictor(string $lang, string $word): string
-    {
-        $application = new Application();
-        $application->add($this->ipaPredictorModelCommand);
-
-        $input = new ArrayInput([
-            'command' => 'ml:use:ipa-predictor',
-            '--lang' => $lang,
-            '--word' => $word,
-        ]);
-
-        $this->logger->info(sprintf('[TransliterationDetectionService][%s] %s', 'test', 'test'));
-
-        $output = new BufferedOutput();
-        $application->run($input, $output);
-
-        $this->logger->info(sprintf('[TransliterationDetectionService] %s', $output->fetch()));
-
-        return $output->fetch();
-    }
-
-    /**
-     * @throws TransportExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws DecodingExceptionInterface
-     * @throws ClientExceptionInterface
-     * @throws \Exception
-     */
-    public function executeWordPredictor(string $lang, string $ipa): string
-    {
-        $application = new Application();
-        $application->add($this->wordPredictorModelCommand);
-
-        $input = new ArrayInput([
-            'command' => 'ml:use:word-predictor',
-            '--lang' => $lang,
-            '--ipa' => $ipa,
-        ]);
-
-        $output = new BufferedOutput();
-        $application->run($input, $output);
-
-        return $output->fetch();
     }
 
     protected function logLanguageDetectionResult(string $uuidStr, array $result): void
