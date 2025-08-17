@@ -128,6 +128,8 @@ class TransliterationDetectionService
             '--word' => $word,
         ]);
 
+        $this->logger->info(sprintf('[TransliterationDetectionService][%s] %s', 'test', 'test'));
+
         $output = new BufferedOutput();
         $application->run($input, $output);
 
@@ -157,14 +159,6 @@ class TransliterationDetectionService
         $application->run($input, $output);
 
         return $output->fetch();
-    }
-
-    protected function getWordEntry(string $uuidStr, string $language, string $code): array
-    {
-        $result = ['language' => $language, 'code' => $code];
-        $this->logLanguageDetectionResult($uuidStr, $result);
-
-        return $result;
     }
 
     protected function logLanguageDetectionResult(string $uuidStr, array $result): void
