@@ -133,6 +133,8 @@ class TransliterationDetectionService
         $output = new BufferedOutput();
         $application->run($input, $output);
 
+        $this->logger->info(sprintf('[TransliterationDetectionService] %s', $output->fetch()));
+
         return $output->fetch();
     }
 
