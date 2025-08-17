@@ -239,7 +239,13 @@ class LanguageDetectionService
             $matchCount = 0;
         }
 
+        //TODO
+        /*
         if ($language == self::LANGUAGE_NOT_FOUND && $translitDetection) {
+            return $this->transliterationDetectionService->run($words, $uuidStr, $start);
+        }
+        */
+        if ($translitDetection) {
             return $this->transliterationDetectionService->run($words, $uuidStr, $start);
         }
 
