@@ -79,27 +79,40 @@ class TransliterationDetectionService
     {
         foreach ($words as $word) {
             $wordResults = [];
-            $languageCodes = LanguageDetectionService::getLanguageCodesForTransliteration();
+            $languageCodes = LanguageDetectionService::getLanguageCodes();
 
             foreach ($languageCodes as $srcLanguageCode) {
                 $wordPredictedIpa = $this->ipaPredictorModelService->run($srcLanguageCode, $word);
 
                 foreach ($languageCodes as $dstLanguageCode) {
-                    $predictedTargetWord = $this->wordPredictorModelService->run($dstLanguageCode, $wordPredictedIpa);
-                    $wordResults[$srcLanguageCode][$dstLanguageCode] = $this->checkLanguage($dstLanguageCode, $predictedTargetWord);
+                    if ($dstLanguageCode != $srcLanguageCode) {
+                        $predictedTargetWord = $this->wordPredictorModelService->run($dstLanguageCode, $wordPredictedIpa);
+                        $success = $this->checkLanguage($dstLanguageCode, $predictedTargetWord);
+                        $wordResults[$srcLanguageCode][$dstLanguageCode] = $success;
+
+                        if (!isset($destinationLanguageScores[$dstLanguageCode])) {
+                            $destinationLanguageScores[$dstLanguageCode] = 0;
+                        }
+                        if ($success) {
+                            $destinationLanguageScores[$dstLanguageCode]++;
+                        }
+                    }
+
                 }
             }
 
             $languageCounts[$word] = $wordResults;
-
             $this->logLanguageDetectionResult($uuidStr, [$word => $wordResults]);
         }
+
+        arsort($destinationLanguageScores);
+        $mostDetectedLanguage = array_key_first($destinationLanguageScores);
 
         $finish = microtime(true);
 
         return [
             'language' => 'Test',
-            'code' => 'tt',
+            'code' => $mostDetectedLanguage,
             'input' => 'input',
             'count' => 0,
             'matches' => 0,
