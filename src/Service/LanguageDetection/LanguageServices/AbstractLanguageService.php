@@ -12,7 +12,7 @@ abstract class AbstractLanguageService
     {
         $repository = $this->getRepository();
 
-        return $repository->findApproximateByName($this->modifyName($name));
+        return $repository->findApproximateByName($name);
     }
 
     protected function modifyName(string $word): string
