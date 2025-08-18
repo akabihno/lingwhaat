@@ -1,30 +1,16 @@
 <?php
 
-use App\Query\PronunciationQueryGeorgianLanguage;
+use App\Query\PronunciationQueryAlbanianLanguage;
 use App\Query\PronunciationQueryLatvianLanguage;
-use App\Query\PronunciationQueryTurkishLanguage;
-use App\Service\WiktionaryArticlesCategoriesGeorgianService;
-use App\Service\WiktionaryArticlesCategoriesTurkishService;
+use App\Service\WiktionaryArticlesCategoriesAlbanianService;
 
 require 'vendor/autoload.php';
 
-// docker exec -it php-app php utils/get_categories_articles.php georgian
-// docker exec -it php-app php utils/get_categories_articles.php hindi
+// docker exec -it php-app php utils/get_categories_articles.php
 
 $queryLatvian = new PronunciationQueryLatvianLanguage();
-$queryGeorgian = new PronunciationQueryGeorgianLanguage();
-$queryTurkish = new PronunciationQueryTurkishLanguage();
+$queryAlbanian = new PronunciationQueryAlbanianLanguage();
 
-if ($argv[1] == 'georgian') {
-    $categoriesService = new WiktionaryArticlesCategoriesGeorgianService($queryLatvian, $queryGeorgian);
-} else if ($argv[1] == 'turkish') {
-    $categoriesService = new WiktionaryArticlesCategoriesTurkishService($queryLatvian, $queryTurkish);
-} else {
-    echo "Invalid language\n";
-}
+$categoriesService = new WiktionaryArticlesCategoriesAlbanianService($queryLatvian, $queryAlbanian);
 
-
-
-if(isset($categoriesService)) {
-    $categoriesService->getArticlesByCategory();
-}
+$categoriesService->getArticlesByCategory();

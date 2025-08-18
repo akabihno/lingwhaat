@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection;
 
+use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EstonianLanguageService;
@@ -80,6 +81,9 @@ class LanguageDetectionService
     const string GEORGIAN_LANGUAGE_CODE = 'ka';
     const string TURKISH_LANGUAGE_NAME = 'Turkish';
     const string TURKISH_LANGUAGE_CODE = 'tr';
+    const string ALBANIAN_LANGUAGE_NAME = 'Albanian';
+    const string ALBANIAN_LANGUAGE_CODE = 'sq';
+
     const string LANGUAGE_NOT_FOUND = 'Language not found';
     public function __construct(
         protected LoggerInterface $logger,
@@ -106,6 +110,7 @@ class LanguageDetectionService
         protected HindiLanguageService $hindiLanguageService,
         protected GeorgianLanguageService $georgianLanguageService,
         protected TurkishLanguageService $turkishLanguageService,
+        protected AlbanianLanguageService $albanianLanguageService,
         protected TransliterationDetectionService $transliterationDetectionService,
     )
     {
@@ -210,6 +215,9 @@ class LanguageDetectionService
                 }
                 if ($this->checkTurkishLanguage($word)) {
                     $result[$word] = $this->getWordEntry($uuidStr, self::TURKISH_LANGUAGE_NAME, self::TURKISH_LANGUAGE_CODE);
+                }
+                if ($this->checkAlbanianLanguage($word)) {
+                    $result[$word] = $this->getWordEntry($uuidStr, self::ALBANIAN_LANGUAGE_NAME, self::ALBANIAN_LANGUAGE_CODE);
                 }
 
                 if (isset($result[$word])) {
@@ -377,6 +385,11 @@ class LanguageDetectionService
         return $this->turkishLanguageService->checkLanguage($word);
     }
 
+    protected function checkAlbanianLanguage(string $word): bool
+    {
+        return $this->albanianLanguageService->checkLanguage($word);
+    }
+
     public static function getLanguageCodes(): array
     {
         return [
@@ -402,6 +415,7 @@ class LanguageDetectionService
             self::HINDI_LANGUAGE_CODE,
             self::GEORGIAN_LANGUAGE_CODE,
             self::TURKISH_LANGUAGE_CODE,
+            self::ALBANIAN_LANGUAGE_CODE,
         ];
     }
 
