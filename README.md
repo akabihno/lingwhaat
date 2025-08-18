@@ -2,6 +2,7 @@
 
 This project aims to detect the language of written text with high speed and accuracy.\
 Supported languages:
+* Albanian
 * Dutch
 * English
 * Estonian
@@ -29,6 +30,41 @@ Class example: [WiktionaryArticlesIpaParserService](src/Service/WiktionaryArticl
 Titles (words) retrieved using MediaWiki API [categorymembers](https://www.mediawiki.org/wiki/API:Categorymembers)\
 Class example: [WiktionaryArticlesCategoriesLatvianService](src/Service/WiktionaryArticlesCategoriesLatvianService.php)\
 List of all articles IPA data has been taken from:
+* Albanian:
+[a](docs/Albanian/en_wiktionary_albanian_a.md),
+[b](docs/Albanian/en_wiktionary_albanian_b.md),
+[c](docs/Albanian/en_wiktionary_albanian_c.md),
+[ç](docs/Albanian/en_wiktionary_albanian_ç.md),
+[d](docs/Albanian/en_wiktionary_albanian_d.md),
+[dh](docs/Albanian/en_wiktionary_albanian_dh.md),
+[e](docs/Albanian/en_wiktionary_albanian_e.md),
+[ë](docs/Albanian/en_wiktionary_albanian_ë.md),
+[f](docs/Albanian/en_wiktionary_albanian_f.md),
+[g](docs/Albanian/en_wiktionary_albanian_g.md),
+[gj](docs/Albanian/en_wiktionary_albanian_gj.md),
+[h](docs/Albanian/en_wiktionary_albanian_h.md),
+[i](docs/Albanian/en_wiktionary_albanian_i.md),
+[j](docs/Albanian/en_wiktionary_albanian_j.md),
+[k](docs/Albanian/en_wiktionary_albanian_k.md),
+[l](docs/Albanian/en_wiktionary_albanian_l.md),
+[ll](docs/Albanian/en_wiktionary_albanian_ll.md),
+[m](docs/Albanian/en_wiktionary_albanian_m.md),
+[n](docs/Albanian/en_wiktionary_albanian_n.md),
+[nj](docs/Albanian/en_wiktionary_albanian_nj.md),
+[o](docs/Albanian/en_wiktionary_albanian_o.md),
+[p](docs/Albanian/en_wiktionary_albanian_p.md),
+[q](docs/Albanian/en_wiktionary_albanian_q.md),
+[r](docs/Albanian/en_wiktionary_albanian_r.md),
+[rr](docs/Albanian/en_wiktionary_albanian_rr.md),
+[s](docs/Albanian/en_wiktionary_albanian_s.md),
+[sh](docs/Albanian/en_wiktionary_albanian_sh.md),
+[t](docs/Albanian/en_wiktionary_albanian_t.md),
+[th](docs/Albanian/en_wiktionary_albanian_th.md),
+[u](docs/Albanian/en_wiktionary_albanian_u.md),
+[v](docs/Albanian/en_wiktionary_albanian_v.md),
+[x](docs/Albanian/en_wiktionary_albanian_x.md),
+[xh](docs/Albanian/en_wiktionary_albanian_xh.md),
+[y](docs/Albanian/en_wiktionary_albanian_y.md)
 * Dutch:
 [a](docs/Dutch/en_wiktionary_dutch_a.md),
 [b](docs/Dutch/en_wiktionary_dutch_b.md),

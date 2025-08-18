@@ -16,6 +16,11 @@ class WiktionaryArticlesCategoriesLatvianService
 
     public function getArticlesByCategory(): void
     {
+        \Dotenv\Dotenv::createImmutable('/var/www/html/')->load();
+
+        $uaEmail = $_ENV['WIKTIONARY_UA_EMAIL'];
+        $domain = $_ENV['DOMAIN'];
+
         $params = [
             "cmdir" => "desc",
             "format" => "json",
@@ -31,6 +36,8 @@ class WiktionaryArticlesCategoriesLatvianService
 
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_USERAGENT, $uaEmail);
+            curl_setopt($ch, CURLOPT_REFERER, $domain);
             $output = curl_exec($ch);
             curl_close($ch);
 
