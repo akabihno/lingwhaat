@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/xenofobní|
+|https://en.wiktionary.org/wiki/xylen|
+|https://en.wiktionary.org/wiki/Xeniin|
+|https://en.wiktionary.org/wiki/xylóza|
+|https://en.wiktionary.org/wiki/xylofágní|
+|https://en.wiktionary.org/wiki/xenofobický|
+|https://en.wiktionary.org/wiki/xenofob|
+|https://en.wiktionary.org/wiki/xenofobie|
+|https://en.wiktionary.org/wiki/xantin|
+|https://en.wiktionary.org/wiki/Xenie|
+|https://en.wiktionary.org/wiki/x|
+|https://en.wiktionary.org/wiki/xylofon|
+|https://en.wiktionary.org/wiki/xenon|
