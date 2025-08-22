@@ -2,7 +2,9 @@
 
 This project aims to detect the language of written text with high speed and accuracy.\
 Supported languages:
+* Afrikaans
 * Albanian
+* Czech
 * Dutch
 * English
 * Estonian
@@ -30,6 +32,33 @@ Class example: [WiktionaryArticlesIpaParserService](src/Service/WiktionaryArticl
 Titles (words) retrieved using MediaWiki API [categorymembers](https://www.mediawiki.org/wiki/API:Categorymembers)\
 Class example: [WiktionaryArticlesCategoriesLatvianService](src/Service/WiktionaryArticlesCategoriesLatvianService.php)\
 List of all articles IPA data has been taken from:
+* Afrikaans:
+[a](docs/Afrikaans/en_wiktionary_afrikaans_a.md),
+[b](docs/Afrikaans/en_wiktionary_afrikaans_b.md),
+[c](docs/Afrikaans/en_wiktionary_afrikaans_c.md),
+[d](docs/Afrikaans/en_wiktionary_afrikaans_d.md),
+[e](docs/Afrikaans/en_wiktionary_afrikaans_e.md),
+[f](docs/Afrikaans/en_wiktionary_afrikaans_f.md),
+[g](docs/Afrikaans/en_wiktionary_afrikaans_g.md),
+[h](docs/Afrikaans/en_wiktionary_afrikaans_h.md),
+[i](docs/Afrikaans/en_wiktionary_afrikaans_i.md),
+[j](docs/Afrikaans/en_wiktionary_afrikaans_j.md),
+[k](docs/Afrikaans/en_wiktionary_afrikaans_k.md),
+[l](docs/Afrikaans/en_wiktionary_afrikaans_l.md),
+[m](docs/Afrikaans/en_wiktionary_afrikaans_m.md),
+[n](docs/Afrikaans/en_wiktionary_afrikaans_n.md),
+[o](docs/Afrikaans/en_wiktionary_afrikaans_o.md),
+[p](docs/Afrikaans/en_wiktionary_afrikaans_p.md),
+[q](docs/Afrikaans/en_wiktionary_afrikaans_q.md),
+[r](docs/Afrikaans/en_wiktionary_afrikaans_r.md),
+[s](docs/Afrikaans/en_wiktionary_afrikaans_s.md),
+[t](docs/Afrikaans/en_wiktionary_afrikaans_t.md),
+[u](docs/Afrikaans/en_wiktionary_afrikaans_u.md),
+[v](docs/Afrikaans/en_wiktionary_afrikaans_v.md),
+[w](docs/Afrikaans/en_wiktionary_afrikaans_w.md),
+[x](docs/Afrikaans/en_wiktionary_afrikaans_x.md),
+[y](docs/Afrikaans/en_wiktionary_afrikaans_y.md),
+[z](docs/Afrikaans/en_wiktionary_afrikaans_z.md)
 * Albanian:
 [a](docs/Albanian/en_wiktionary_albanian_a.md),
 [b](docs/Albanian/en_wiktionary_albanian_b.md),
@@ -65,6 +94,49 @@ List of all articles IPA data has been taken from:
 [x](docs/Albanian/en_wiktionary_albanian_x.md),
 [xh](docs/Albanian/en_wiktionary_albanian_xh.md),
 [y](docs/Albanian/en_wiktionary_albanian_y.md)
+* Czech:
+[a](docs/Czech/en_wiktionary_czech_a.md),
+[á](docs/Czech/en_wiktionary_czech_á.md),
+[b](docs/Czech/en_wiktionary_czech_b.md),
+[c](docs/Czech/en_wiktionary_czech_c.md),
+[č](docs/Czech/en_wiktionary_czech_č.md),
+[d](docs/Czech/en_wiktionary_czech_d.md),
+[ď](docs/Czech/en_wiktionary_czech_ď.md),
+[e](docs/Czech/en_wiktionary_czech_e.md),
+[é](docs/Czech/en_wiktionary_czech_é.md),
+[ě](docs/Czech/en_wiktionary_czech_ě.md),
+[f](docs/Czech/en_wiktionary_czech_f.md),
+[g](docs/Czech/en_wiktionary_czech_g.md),
+[h](docs/Czech/en_wiktionary_czech_h.md),
+[ch](docs/Czech/en_wiktionary_czech_ch.md),
+[i](docs/Czech/en_wiktionary_czech_i.md),
+[í](docs/Czech/en_wiktionary_czech_í.md),
+[j](docs/Czech/en_wiktionary_czech_j.md),
+[k](docs/Czech/en_wiktionary_czech_k.md),
+[l](docs/Czech/en_wiktionary_czech_l.md),
+[m](docs/Czech/en_wiktionary_czech_m.md),
+[n](docs/Czech/en_wiktionary_czech_n.md),
+[ň](docs/Czech/en_wiktionary_czech_ň.md),
+[o](docs/Czech/en_wiktionary_czech_o.md),
+[ó](docs/Czech/en_wiktionary_czech_ó.md),
+[p](docs/Czech/en_wiktionary_czech_p.md),
+[q](docs/Czech/en_wiktionary_czech_q.md),
+[r](docs/Czech/en_wiktionary_czech_r.md),
+[ř](docs/Czech/en_wiktionary_czech_ř.md),
+[s](docs/Czech/en_wiktionary_czech_s.md),
+[š](docs/Czech/en_wiktionary_czech_š.md),
+[t](docs/Czech/en_wiktionary_czech_t.md),
+[ť](docs/Czech/en_wiktionary_czech_ť.md),
+[u](docs/Czech/en_wiktionary_czech_u.md),
+[ú](docs/Czech/en_wiktionary_czech_ú.md),
+[ů](docs/Czech/en_wiktionary_czech_ů.md),
+[v](docs/Czech/en_wiktionary_czech_v.md),
+[w](docs/Czech/en_wiktionary_czech_w.md),
+[x](docs/Czech/en_wiktionary_czech_x.md),
+[y](docs/Czech/en_wiktionary_czech_y.md),
+[ý](docs/Czech/en_wiktionary_czech_ý.md),
+[z](docs/Czech/en_wiktionary_czech_z.md),
+[ž](docs/Czech/en_wiktionary_czech_ž.md)
 * Dutch:
 [a](docs/Dutch/en_wiktionary_dutch_a.md),
 [b](docs/Dutch/en_wiktionary_dutch_b.md),
