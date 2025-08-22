@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection;
 
+use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\CzechLanguageService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
@@ -86,6 +87,8 @@ class LanguageDetectionService
     const string ALBANIAN_LANGUAGE_CODE = 'sq';
     const string CZECH_LANGUAGE_NAME = 'Czech';
     const string CZECH_LANGUAGE_CODE = 'cs';
+    const string AFRIKAANS_LANGUAGE_NAME = 'Afrikaans';
+    const string AFRIKAANS_LANGUAGE_CODE = 'af';
 
     const string LANGUAGE_NOT_FOUND = 'Language not found';
     public function __construct(
@@ -115,6 +118,7 @@ class LanguageDetectionService
         protected TurkishLanguageService $turkishLanguageService,
         protected AlbanianLanguageService $albanianLanguageService,
         protected CzechLanguageService $czechLanguageService,
+        protected AfrikaansLanguageService $afrikaansLanguageService,
         protected TransliterationDetectionService $transliterationDetectionService,
     )
     {
@@ -225,6 +229,9 @@ class LanguageDetectionService
                 }
                 if ($this->checkCzechLanguage($word)) {
                     $result[$word] = $this->getWordEntry($uuidStr, self::CZECH_LANGUAGE_NAME, self::CZECH_LANGUAGE_CODE);
+                }
+                if ($this->checkAfrikaansLanguage($word)) {
+                    $result[$word] = $this->getWordEntry($uuidStr, self::AFRIKAANS_LANGUAGE_NAME, self::AFRIKAANS_LANGUAGE_CODE);
                 }
 
                 if (isset($result[$word])) {
@@ -402,6 +409,11 @@ class LanguageDetectionService
         return $this->czechLanguageService->checkLanguage($word);
     }
 
+    protected function checkAfrikaansLanguage(string $word): bool
+    {
+        return $this->afrikaansLanguageService->checkLanguage($word);
+    }
+
     public static function getLanguageCodes(): array
     {
         return [
@@ -429,6 +441,7 @@ class LanguageDetectionService
             self::TURKISH_LANGUAGE_CODE,
             self::ALBANIAN_LANGUAGE_CODE,
             self::CZECH_LANGUAGE_CODE,
+            self::AFRIKAANS_LANGUAGE_CODE,
         ];
     }
 

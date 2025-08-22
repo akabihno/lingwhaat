@@ -3,6 +3,7 @@
 namespace App\Service\LanguageDetection\LanguageTransliteration;
 
 use App\Service\LanguageDetection\LanguageDetectionService;
+use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\CzechLanguageService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
@@ -69,6 +70,7 @@ class TrainIpaPredictorModelCommand extends Command
         protected UkrainianLanguageService $ukrainianLanguageService,
         protected AlbanianLanguageService $albanianLanguageService,
         protected CzechLanguageService $czechLanguageService,
+        protected AfrikaansLanguageService $afrikaansLanguageService,
         protected HttpClientInterface $httpClient,
     ) {
         parent::__construct();
@@ -171,6 +173,9 @@ class TrainIpaPredictorModelCommand extends Command
                 break;
             case LanguageDetectionService::CZECH_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->czechLanguageService->fetchAllNamesAndIpa();
+                break;
+            case LanguageDetectionService::AFRIKAANS_LANGUAGE_CODE:
+                $trainingDatasetArray = $this->afrikaansLanguageService->fetchAllNamesAndIpa();
                 break;
             default:
                 $acceptedLangCodes = implode(', ', LanguageDetectionService::getLanguageCodes());
