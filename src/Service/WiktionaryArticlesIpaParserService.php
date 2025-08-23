@@ -14,13 +14,13 @@ class WiktionaryArticlesIpaParserService
     )
     {
     }
-    public function run(): void
+    public function run($limit = null): void
     {
         \Dotenv\Dotenv::createImmutable('/var/www/html/')->load();
 
         $uaEmail = $_ENV['WIKTIONARY_UA_EMAIL'];
 
-        $articles = $this->getArticleNamesFromDb();
+        $articles = $this->getArticleNamesFromDb($limit);
 
         foreach ($articles as $article) {
             echo "Processing: ".$article."\n";
@@ -30,10 +30,10 @@ class WiktionaryArticlesIpaParserService
 
     }
 
-    protected function getArticleNamesFromDb(): array
+    protected function getArticleNamesFromDb($limit = null): array
     {
         $result = [];
-        $articleNamesArray = $this->query->getArticleNames();
+        $articleNamesArray = $this->query->getArticleNames($limit);
 
         foreach ($articleNamesArray as $articleNameArray) {
             $result[] = $articleNameArray['name'];

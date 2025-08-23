@@ -5,9 +5,9 @@ namespace App\Query;
 class PronunciationQueryRussianLanguage extends AbstractQuery
 {
     const PROCESSING_LIMIT = 40;
-    public function getArticleNames(): array
+    public function getArticleNames($limit = self::PROCESSING_LIMIT): array
     {
-        $query = 'SELECT name,ts_created FROM lingwhaat.'.$this->getBaseTable().' ORDER BY ts_created ASC LIMIT '.self::PROCESSING_LIMIT;
+        $query = 'SELECT name,ts_created FROM lingwhaat.'.$this->getBaseTable().' ORDER BY ts_created ASC LIMIT '.$limit;
 
         $this->connect();
         return $this->fetch($query);
