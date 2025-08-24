@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/րէ|
+|https://en.wiktionary.org/wiki/րաբունապետ|
+|https://en.wiktionary.org/wiki/րե|
+|https://en.wiktionary.org/wiki/րոպէ|
+|https://en.wiktionary.org/wiki/րոպեական|
+|https://en.wiktionary.org/wiki/Րաֆֆի|
+|https://en.wiktionary.org/wiki/ր|
+|https://en.wiktionary.org/wiki/րոպե|
