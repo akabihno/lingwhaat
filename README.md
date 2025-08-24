@@ -4,6 +4,7 @@ This project aims to detect the language of written text with high speed and acc
 Supported languages:
 * Afrikaans
 * Albanian
+* Armenian
 * Czech
 * Dutch
 * English
@@ -94,6 +95,45 @@ List of all articles IPA data has been taken from:
 [x](docs/Albanian/en_wiktionary_albanian_x.md),
 [xh](docs/Albanian/en_wiktionary_albanian_xh.md),
 [y](docs/Albanian/en_wiktionary_albanian_y.md)
+* Armenian:
+[ա](docs/Armenian/en_wiktionary_armenian_ա.md),
+[բ](docs/Armenian/en_wiktionary_armenian_բ.md),
+[գ](docs/Armenian/en_wiktionary_armenian_գ.md),
+[դ](docs/Armenian/en_wiktionary_armenian_դ.md),
+[ե](docs/Armenian/en_wiktionary_armenian_ե.md),
+[զ](docs/Armenian/en_wiktionary_armenian_զ.md),
+[է](docs/Armenian/en_wiktionary_armenian_է.md),
+[ը](docs/Armenian/en_wiktionary_armenian_ը.md),
+[թ](docs/Armenian/en_wiktionary_armenian_թ.md),
+[ժ](docs/Armenian/en_wiktionary_armenian_ժ.md),
+[ի](docs/Armenian/en_wiktionary_armenian_ի.md),
+[լ](docs/Armenian/en_wiktionary_armenian_լ.md),
+[խ](docs/Armenian/en_wiktionary_armenian_խ.md),
+[ծ](docs/Armenian/en_wiktionary_armenian_ծ.md),
+[կ](docs/Armenian/en_wiktionary_armenian_կ.md),
+[հ](docs/Armenian/en_wiktionary_armenian_հ.md),
+[ձ](docs/Armenian/en_wiktionary_armenian_ձ.md),
+[ղ](docs/Armenian/en_wiktionary_armenian_ղ.md),
+[ճ](docs/Armenian/en_wiktionary_armenian_ճ.md),
+[մ](docs/Armenian/en_wiktionary_armenian_մ.md),
+[յ](docs/Armenian/en_wiktionary_armenian_յ.md),
+[ն](docs/Armenian/en_wiktionary_armenian_ն.md),
+[շ](docs/Armenian/en_wiktionary_armenian_շ.md),
+[ո](docs/Armenian/en_wiktionary_armenian_ո.md),
+[չ](docs/Armenian/en_wiktionary_armenian_չ.md),
+[պ](docs/Armenian/en_wiktionary_armenian_պ.md),
+[ջ](docs/Armenian/en_wiktionary_armenian_ջ.md),
+[ռ](docs/Armenian/en_wiktionary_armenian_ռ.md),
+[ս](docs/Armenian/en_wiktionary_armenian_ս.md),
+[վ](docs/Armenian/en_wiktionary_armenian_վ.md),
+[տ](docs/Armenian/en_wiktionary_armenian_տ.md),
+[ր](docs/Armenian/en_wiktionary_armenian_ր.md),
+[ց](docs/Armenian/en_wiktionary_armenian_ց.md),
+[ւ](docs/Armenian/en_wiktionary_armenian_ւ.md),
+[փ](docs/Armenian/en_wiktionary_armenian_փ.md),
+[ք](docs/Armenian/en_wiktionary_armenian_ք.md),
+[օ](docs/Armenian/en_wiktionary_armenian_օ.md),
+[ֆ](docs/Armenian/en_wiktionary_armenian_ֆ.md)
 * Czech:
 [a](docs/Czech/en_wiktionary_czech_a.md),
 [á](docs/Czech/en_wiktionary_czech_á.md),
