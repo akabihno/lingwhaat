@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\LanguageDetection\LanguageTransliteration;
+namespace App\Service\LanguageDetection\LanguageTransliteration\Command;
 
 use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
@@ -32,8 +32,8 @@ use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;

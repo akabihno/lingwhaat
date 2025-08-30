@@ -25,6 +25,8 @@ use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
+use App\Service\LanguageDetection\LanguageTransliteration\Command\UseIpaPredictorModelCommand;
+use App\Service\LanguageDetection\LanguageTransliteration\Command\UseWordPredictorModelCommand;
 use App\Service\LanguageNormalizationService;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;

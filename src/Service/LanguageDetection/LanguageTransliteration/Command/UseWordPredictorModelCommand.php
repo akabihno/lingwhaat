@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Service\LanguageDetection\LanguageTransliteration;
+namespace App\Service\LanguageDetection\LanguageTransliteration\Command;
 
 use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
+use App\Service\LanguageDetection\LanguageTransliteration\UseWordPredictorModelService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,7 +15,6 @@ use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 #[AsCommand(name: 'ml:use:word-predictor')]
 class UseWordPredictorModelCommand extends Command

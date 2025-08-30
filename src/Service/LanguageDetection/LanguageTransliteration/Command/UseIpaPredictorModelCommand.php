@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Service\LanguageDetection\LanguageTransliteration;
+namespace App\Service\LanguageDetection\LanguageTransliteration\Command;
 
 use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
+use App\Service\LanguageDetection\LanguageTransliteration\UseIpaPredictorModelService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
