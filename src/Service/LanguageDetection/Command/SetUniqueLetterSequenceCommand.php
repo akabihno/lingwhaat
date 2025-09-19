@@ -3,6 +3,7 @@
 namespace App\Service\LanguageDetection\Command;
 
 use App\Entity\UniquePatternEntity;
+use App\Repository\UniquePatternRepository;
 use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
@@ -69,6 +70,7 @@ class SetUniqueLetterSequenceCommand extends Command
         protected CzechLanguageService $czechLanguageService,
         protected AfrikaansLanguageService $afrikaansLanguageService,
         protected ArmenianLanguageService $armenianLanguageService,
+        protected UniquePatternRepository $uniquePatternRepository,
     ) {
         parent::__construct();
 
@@ -217,6 +219,8 @@ class SetUniqueLetterSequenceCommand extends Command
                     ->setPosition(self::SEQUENCE_POSITION)
                     ->setCount(self::SEQUENCE_COUNT)
                     ->setLanguageCode($lang);
+
+                $this->uniquePatternRepository->add($uniquePatternEntity);
             }
 
         }
