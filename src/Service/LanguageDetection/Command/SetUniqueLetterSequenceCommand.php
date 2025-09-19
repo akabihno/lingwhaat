@@ -31,6 +31,7 @@ use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,7 +43,11 @@ class SetUniqueLetterSequenceCommand extends Command
 {
     private const int SEQUENCE_COUNT = 4;
     private const string SEQUENCE_POSITION = 'start';
+    private const int BATCH_SIZE = 1000;
+
     private array $languageServiceMap = [];
+    private array $processedSequences = [];
+
     public function __construct(
         protected DutchLanguageService $dutchLanguageService,
         protected EnglishLanguageService $englishLanguageService,
@@ -71,6 +76,7 @@ class SetUniqueLetterSequenceCommand extends Command
         protected AfrikaansLanguageService $afrikaansLanguageService,
         protected ArmenianLanguageService $armenianLanguageService,
         protected UniquePatternRepository $uniquePatternRepository,
+        protected EntityManagerInterface $entityManager,
     ) {
         parent::__construct();
 
@@ -103,6 +109,7 @@ class SetUniqueLetterSequenceCommand extends Command
             LanguageDetectionService::ARMENIAN_LANGUAGE_CODE => $this->armenianLanguageService,
         ];
     }
+
     protected function configure(): void
     {
         $this
@@ -114,141 +121,146 @@ class SetUniqueLetterSequenceCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // example: php bin/console language:sequence:set --lang lv
-
         $lang = $input->getOption('lang');
 
-        switch ($lang) {
-            case LanguageDetectionService::DUTCH_LANGUAGE_CODE:
-                $datasetArray = $this->dutchLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::ENGLISH_LANGUAGE_CODE:
-                $datasetArray = $this->englishLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::ESTONIAN_LANGUAGE_CODE:
-                $datasetArray = $this->estonianLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::FRENCH_LANGUAGE_CODE:
-                $datasetArray = $this->frenchLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::GEORGIAN_LANGUAGE_CODE:
-                $datasetArray = $this->georgianLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::GERMAN_LANGUAGE_CODE:
-                $datasetArray = $this->germanLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::GREEK_LANGUAGE_CODE:
-                $datasetArray = $this->greekLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::HINDI_LANGUAGE_CODE:
-                $datasetArray = $this->hindiLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::ITALIAN_LANGUAGE_CODE:
-                $datasetArray = $this->italianLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::LATIN_LANGUAGE_CODE:
-                $datasetArray = $this->latinLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::LATVIAN_LANGUAGE_CODE:
-                $datasetArray = $this->latvianLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::LITHUANIAN_LANGUAGE_CODE:
-                $datasetArray = $this->lithuanianLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::POLISH_LANGUAGE_CODE:
-                $datasetArray = $this->polishLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::PORTUGUESE_LANGUAGE_CODE:
-                $datasetArray = $this->portugueseLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::ROMANIAN_LANGUAGE_CODE:
-                $datasetArray = $this->romanianLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::RUSSIAN_LANGUAGE_CODE:
-                $datasetArray = $this->russianLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::SERBOCROATIAN_LANGUAGE_CODE:
-                $datasetArray = $this->serboCroatianLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::SPANISH_LANGUAGE_CODE:
-                $datasetArray = $this->spanishLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::SWEDISH_LANGUAGE_CODE:
-                $datasetArray = $this->swedishLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::TAGALOG_LANGUAGE_CODE:
-                $datasetArray = $this->tagalogLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::TURKISH_LANGUAGE_CODE:
-                $datasetArray = $this->turkishLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::UKRAINIAN_LANGUAGE_CODE:
-                $datasetArray = $this->ukrainianLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::ALBANIAN_LANGUAGE_CODE:
-                $datasetArray = $this->albanianLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::CZECH_LANGUAGE_CODE:
-                $datasetArray = $this->czechLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::AFRIKAANS_LANGUAGE_CODE:
-                $datasetArray = $this->afrikaansLanguageService->fetchAllNames();
-                break;
-            case LanguageDetectionService::ARMENIAN_LANGUAGE_CODE:
-                $datasetArray = $this->armenianLanguageService->fetchAllNames();
-                break;
-            default:
-                $acceptedLangCodes = implode(', ', LanguageDetectionService::getLanguageCodes());
-                $output->writeln('<error>No language provided in --lang parameter or language is not accepted. 
+        if (!array_key_exists($lang, $this->languageServiceMap)) {
+            $acceptedLangCodes = implode(', ', LanguageDetectionService::getLanguageCodes());
+            $output->writeln('<error>No language provided in --lang parameter or language is not accepted. 
                 Accepted language params are: '.$acceptedLangCodes.' </error>');
-                return Command::FAILURE;
+            return Command::FAILURE;
         }
 
-        if (!$datasetArray) {
+        $languageService = $this->languageServiceMap[$lang];
+
+        $datasetIterator = $this->getDatasetIterator($languageService);
+
+        if (!$datasetIterator) {
             $output->writeln('<error>No valid data found for pattern calculation.</error>');
             return Command::FAILURE;
         }
 
-        foreach ($datasetArray as $datasetRow) {
-            $word = $datasetRow['name'];
-            $sequence = $this->getSequence($word);
+        $batchCount = 0;
+        $totalProcessed = 0;
+        $uniqueSequences = [];
 
-            if (!$this->checkSequenceAgainstOtherLanguages($sequence, $lang)) {
-                $uniquePatternEntity = new UniquePatternEntity();
-                $uniquePatternEntity->setPattern($sequence)
-                    ->setPosition(self::SEQUENCE_POSITION)
-                    ->setCount(self::SEQUENCE_COUNT)
-                    ->setLanguageCode($lang);
+        foreach ($datasetIterator as $datasetRow) {
+            $word = $datasetRow['name'] ?? '';
 
-                $this->uniquePatternRepository->add($uniquePatternEntity);
+            if (empty($word)) {
+                continue;
             }
 
+            $sequence = $this->getSequence($word);
+
+            if (isset($this->processedSequences[$sequence])) {
+                continue;
+            }
+
+            $this->processedSequences[$sequence] = true;
+
+            if (!$this->checkSequenceAgainstOtherLanguages($sequence, $lang)) {
+                $uniqueSequences[] = $sequence;
+                $batchCount++;
+
+                if ($batchCount >= self::BATCH_SIZE) {
+                    $this->processBatch($uniqueSequences, $lang);
+                    $uniqueSequences = [];
+                    $batchCount = 0;
+
+                    $this->clearMemory();
+                }
+            }
+
+            $totalProcessed++;
+
+            if ($totalProcessed % 5000 === 0) {
+                $output->writeln("Processed {$totalProcessed} records...");
+                $this->clearMemory();
+            }
+
+            unset($datasetRow, $word, $sequence);
         }
+
+        if (!empty($uniqueSequences)) {
+            $this->processBatch($uniqueSequences, $lang);
+        }
+
+        $this->entityManager->flush();
+        $output->writeln("Successfully processed {$totalProcessed} records for language: {$lang}");
 
         return Command::SUCCESS;
     }
 
+    private function getDatasetIterator($languageService): ?\Iterator
+    {
+        if (method_exists($languageService, 'fetchNamesIterator')) {
+            return $languageService->fetchNamesIterator();
+        }
+
+        $datasetArray = $languageService->fetchAllNames();
+        if (!$datasetArray) {
+            return null;
+        }
+
+        return $this->arrayToGenerator($datasetArray);
+    }
+
+    private function arrayToGenerator(array $data): \Generator
+    {
+        foreach ($data as $item) {
+            yield $item;
+            unset($item);
+        }
+
+        unset($data);
+    }
+
+    private function processBatch(array $sequences, string $lang): void
+    {
+        foreach ($sequences as $sequence) {
+            $uniquePatternEntity = new UniquePatternEntity();
+            $uniquePatternEntity->setPattern($sequence)
+                ->setPosition(self::SEQUENCE_POSITION)
+                ->setCount(self::SEQUENCE_COUNT)
+                ->setLanguageCode($lang);
+
+            $this->entityManager->persist($uniquePatternEntity);
+        }
+
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+    }
+
+    private function clearMemory(): void
+    {
+        $this->entityManager->clear();
+
+        if (function_exists('gc_collect_cycles')) {
+            gc_collect_cycles();
+        }
+
+        if (count($this->processedSequences) > 100000) {
+            $this->processedSequences = [];
+        }
+    }
+
     protected function checkSequenceAgainstOtherLanguages(string $sequence, string $currentLang): bool
     {
-        $result = false;
-
         foreach ($this->languageServiceMap as $langCode => $languageService) {
             if ($langCode === $currentLang) {
                 continue;
             }
 
-            $result = $languageService->findStartingByName($sequence);
-            if ($result) {
-                return $result;
+            if ($languageService->findStartingByName($sequence)) {
+                return true;
             }
         }
 
-        return $result;
+        return false;
     }
 
     protected function getSequence(string $word, int $count = self::SEQUENCE_COUNT): string
     {
         return mb_substr($word, 0, $count);
     }
-
 }
