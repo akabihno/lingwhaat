@@ -28,4 +28,6 @@ GRANT SELECT ON lingwhaat.pronunciation_tagalog_language TO '${MYSQL_WEB_USER}'@
 GRANT SELECT ON lingwhaat.pronunciation_turkish_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT ON lingwhaat.pronunciation_ukrainian_language TO '${MYSQL_WEB_USER}'@'%';
 
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.unique_pattern TO '${MYSQL_WEB_USER}'@'%';
+
 FLUSH PRIVILEGES;

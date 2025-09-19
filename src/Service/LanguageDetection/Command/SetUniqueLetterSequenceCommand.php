@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\Command;
 
+use App\Entity\UniquePatternEntity;
 use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
@@ -38,6 +39,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'language:sequence:set')]
 class SetUniqueLetterSequenceCommand extends Command
 {
+    private const int SEQUENCE_COUNT = 4;
+    private const string SEQUENCE_POSITION = 'start';
     private array $languageServiceMap = [];
     public function __construct(
         protected DutchLanguageService $dutchLanguageService,
@@ -209,9 +212,12 @@ class SetUniqueLetterSequenceCommand extends Command
             $sequence = $this->getSequence($word);
 
             if (!$this->checkSequenceAgainstOtherLanguages($sequence, $lang)) {
-                var_dump($sequence);
+                $uniquePatternEntity = new UniquePatternEntity();
+                $uniquePatternEntity->setPattern($sequence)
+                    ->setPosition(self::SEQUENCE_POSITION)
+                    ->setCount(self::SEQUENCE_COUNT)
+                    ->setLanguageCode($lang);
             }
-
 
         }
 
@@ -236,7 +242,7 @@ class SetUniqueLetterSequenceCommand extends Command
         return $result;
     }
 
-    protected function getSequence(string $word, int $count = 4): string
+    protected function getSequence(string $word, int $count = self::SEQUENCE_COUNT): string
     {
         return mb_substr($word, 0, $count);
     }
