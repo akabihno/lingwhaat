@@ -37,12 +37,42 @@ abstract class AbstractLanguageRepository extends ServiceEntityRepository
         return (bool) $query->execute();
     }
 
+    public function findStartingByName(string $name): bool
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->where('e.name LIKE :name')
+            ->setParameter('name', $name.'%');
+
+        $query = $qb->getQuery();
+
+        return (bool) $query->execute();
+    }
+
     public function findAllNamesAndIpa(int $limit = self::PRONUNCIATION_MAX_RESULTS): array
     {
         return $this->createQueryBuilder('e')
             ->select('e.name', 'e.ipa')
             ->where('e.ipa != :na')
             ->setParameter('na', 'Not available')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function findAllNames(): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.name')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    public function findAllNamesWithoutUniquePatternCheck(int $limit = self::PRONUNCIATION_MAX_RESULTS): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.name')
+            ->where('e.uniquePatternCheck = :dt')
+            ->setParameter('dt', '1970-01-01 00:00:01')
             ->setMaxResults($limit)
             ->getQuery()
             ->getArrayResult();

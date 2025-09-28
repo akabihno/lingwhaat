@@ -20,6 +20,12 @@ class RomanianLanguageEntity
     #[ORM\Column]
     private string $ipa;
 
+    #[ORM\Column(name: 'ts_created')]
+    private string $tsCreated;
+
+    #[ORM\Column(name: 'unique_pattern_check')]
+    private string $uniquePatternCheck;
+
     public function getId(): int
     {
         return $this->id;
@@ -50,6 +56,28 @@ class RomanianLanguageEntity
     public function setIpa(string $ipa): RomanianLanguageEntity
     {
         $this->ipa = $ipa;
+        return $this;
+    }
+
+    public function getTsCreated(): string
+    {
+        return $this->tsCreated;
+    }
+
+    public function setTsCreated(string $tsCreated): RomanianLanguageEntity
+    {
+        $this->tsCreated = $tsCreated;
+        return $this;
+    }
+
+    public function getUniquePatternCheck(): string
+    {
+        return $this->uniquePatternCheck;
+    }
+
+    public function setUniquePatternCheck(string $uniquePatternCheck): RomanianLanguageEntity
+    {
+        $this->uniquePatternCheck = $uniquePatternCheck;
         return $this;
     }
 

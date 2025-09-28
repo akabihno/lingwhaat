@@ -20,6 +20,12 @@ class FrenchLanguageEntity
     #[ORM\Column]
     private string $ipa;
 
+    #[ORM\Column(name: 'ts_created')]
+    private string $tsCreated;
+
+    #[ORM\Column(name: 'unique_pattern_check')]
+    private string $uniquePatternCheck;
+
     public function getId(): int
     {
         return $this->id;
@@ -50,6 +56,28 @@ class FrenchLanguageEntity
     public function setIpa(string $ipa): FrenchLanguageEntity
     {
         $this->ipa = $ipa;
+        return $this;
+    }
+
+    public function getTsCreated(): string
+    {
+        return $this->tsCreated;
+    }
+
+    public function setTsCreated(string $tsCreated): FrenchLanguageEntity
+    {
+        $this->tsCreated = $tsCreated;
+        return $this;
+    }
+
+    public function getUniquePatternCheck(): string
+    {
+        return $this->uniquePatternCheck;
+    }
+
+    public function setUniquePatternCheck(string $uniquePatternCheck): FrenchLanguageEntity
+    {
+        $this->uniquePatternCheck = $uniquePatternCheck;
         return $this;
     }
 

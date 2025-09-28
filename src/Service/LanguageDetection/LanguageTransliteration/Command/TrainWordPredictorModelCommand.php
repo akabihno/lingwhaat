@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\LanguageDetection\LanguageTransliteration;
+namespace App\Service\LanguageDetection\LanguageTransliteration\Command;
 
 use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;

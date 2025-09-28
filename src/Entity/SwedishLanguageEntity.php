@@ -20,6 +20,12 @@ class SwedishLanguageEntity
     #[ORM\Column]
     private string $ipa;
 
+    #[ORM\Column(name: 'ts_created')]
+    private string $tsCreated;
+
+    #[ORM\Column(name: 'unique_pattern_check')]
+    private string $uniquePatternCheck;
+
     public function getId(): int
     {
         return $this->id;
@@ -50,6 +56,28 @@ class SwedishLanguageEntity
     public function setIpa(string $ipa): SwedishLanguageEntity
     {
         $this->ipa = $ipa;
+        return $this;
+    }
+
+    public function getTsCreated(): string
+    {
+        return $this->tsCreated;
+    }
+
+    public function setTsCreated(string $tsCreated): SwedishLanguageEntity
+    {
+        $this->tsCreated = $tsCreated;
+        return $this;
+    }
+
+    public function getUniquePatternCheck(): string
+    {
+        return $this->uniquePatternCheck;
+    }
+
+    public function setUniquePatternCheck(string $uniquePatternCheck): SwedishLanguageEntity
+    {
+        $this->uniquePatternCheck = $uniquePatternCheck;
         return $this;
     }
 
