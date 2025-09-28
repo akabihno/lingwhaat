@@ -1,12 +1,14 @@
 framework:
+  scheduler:
+    enabled: true
+
   messenger:
     transports:
-      # Use Doctrine transport (messages table in your DB)
       async: doctrine://default
 
-      # Required by the Scheduler
+      # This is where scheduler dispatches its jobs
       scheduler: sync://
 
     routing:
-      # Route Scheduler messages to the scheduler transport
-      'Symfony\Component\Scheduler\Messenger\ScheduledStamp': scheduler
+      # Route *all* scheduled messages to the "scheduler" transport
+      Symfony\Component\Scheduler\Messenger\RunCommandMessage: scheduler
