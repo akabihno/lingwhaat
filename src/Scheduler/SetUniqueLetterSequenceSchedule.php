@@ -16,7 +16,7 @@ class SetUniqueLetterSequenceSchedule
             ->add(
                 RecurringMessage::every(
                     'PT1M',
-                    new RunCommandMessage('app:language:sequence:set')
+                    new RunCommandMessage('app:language:sequence:set --lang=ru --limit=1000')
                 )
             );
     }

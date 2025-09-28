@@ -2,10 +2,7 @@ framework:
   messenger:
     transports:
       async: doctrine://default
-
-      # This is where scheduler dispatches its jobs
       scheduler: sync://
 
     routing:
-      # Route *all* scheduled messages to the "scheduler" transport
-      Symfony\Component\Scheduler\Messenger\RunCommandMessage: scheduler
+      Symfony\Component\Console\Messenger\RunCommandMessage: scheduler
