@@ -244,14 +244,14 @@ class SetUniqueLetterSequenceCommand extends Command
 
             $sequence = $this->getSequence($word);
 
+            $wordEntity->setUniquePatternCheck(date('Y-m-d H:i:s'));
+
             if (!$this->checkSequenceAgainstOtherLanguages($sequence, $lang)) {
                 $uniquePatternEntity = new UniquePatternEntity();
                 $uniquePatternEntity->setPattern($sequence)
                     ->setPosition(self::SEQUENCE_POSITION)
                     ->setCount(self::SEQUENCE_COUNT)
                     ->setLanguageCode($lang);
-
-                $wordEntity->setUniquePatternCheck(date('Y-m-d H:i:s'));
 
                 $this->uniquePatternRepository->add($uniquePatternEntity);
             }
