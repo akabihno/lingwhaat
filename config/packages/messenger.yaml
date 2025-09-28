@@ -1,0 +1,12 @@
+framework:
+  messenger:
+    transports:
+      # Use Doctrine transport (messages table in your DB)
+      async: doctrine://default
+
+      # Required by the Scheduler
+      scheduler: sync://
+
+    routing:
+      # Route Scheduler messages to the scheduler transport
+      'Symfony\Component\Scheduler\Messenger\ScheduledStamp': scheduler
