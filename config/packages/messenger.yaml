@@ -1,8 +1,6 @@
 framework:
   messenger:
     transports:
-      async: doctrine://default
-      scheduler: sync://
-
+      scheduler: doctrine://default   # or enqueue/redis/etc. Avoid sync:// for recurring jobs
     routing:
       Symfony\Component\Console\Messenger\RunCommandMessage: scheduler
