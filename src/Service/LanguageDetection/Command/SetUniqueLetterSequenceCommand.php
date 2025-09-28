@@ -3,6 +3,32 @@
 namespace App\Service\LanguageDetection\Command;
 
 use App\Entity\UniquePatternEntity;
+use App\Repository\AfrikaansLanguageRepository;
+use App\Repository\AlbanianLanguageRepository;
+use App\Repository\ArmenianLanguageRepository;
+use App\Repository\CzechLanguageRepository;
+use App\Repository\DutchLanguageRepository;
+use App\Repository\EnglishLanguageRepository;
+use App\Repository\EstonianLanguageRepository;
+use App\Repository\FrenchLanguageRepository;
+use App\Repository\GeorgianLanguageRepository;
+use App\Repository\GermanLanguageRepository;
+use App\Repository\GreekLanguageRepository;
+use App\Repository\HindiLanguageRepository;
+use App\Repository\ItalianLanguageRepository;
+use App\Repository\LatinLanguageRepository;
+use App\Repository\LatvianLanguageRepository;
+use App\Repository\LithuanianLanguageRepository;
+use App\Repository\PolishLanguageRepository;
+use App\Repository\PortugueseLanguageRepository;
+use App\Repository\RomanianLanguageRepository;
+use App\Repository\RussianLanguageRepository;
+use App\Repository\SerboCroatianLanguageRepository;
+use App\Repository\SpanishLanguageRepository;
+use App\Repository\SwedishLanguageRepository;
+use App\Repository\TagalogLanguageRepository;
+use App\Repository\TurkishLanguageRepository;
+use App\Repository\UkrainianLanguageRepository;
 use App\Repository\UniquePatternRepository;
 use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
@@ -41,6 +67,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SetUniqueLetterSequenceCommand extends Command
 {
     private const int SEQUENCE_COUNT = 4;
+    private const int WORDS_LIMIT = 100;
     private const string SEQUENCE_POSITION = 'start';
     private array $languageServiceMap = [];
     public function __construct(
@@ -120,82 +147,108 @@ class SetUniqueLetterSequenceCommand extends Command
 
         switch ($lang) {
             case LanguageDetectionService::DUTCH_LANGUAGE_CODE:
-                $datasetArray = $this->dutchLanguageService->fetchAllNames();
+                $datasetArray = $this->dutchLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->dutchLanguageService;
                 break;
             case LanguageDetectionService::ENGLISH_LANGUAGE_CODE:
-                $datasetArray = $this->englishLanguageService->fetchAllNames();
+                $datasetArray = $this->englishLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->englishLanguageService;
                 break;
             case LanguageDetectionService::ESTONIAN_LANGUAGE_CODE:
-                $datasetArray = $this->estonianLanguageService->fetchAllNames();
+                $datasetArray = $this->estonianLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->estonianLanguageService;
                 break;
             case LanguageDetectionService::FRENCH_LANGUAGE_CODE:
-                $datasetArray = $this->frenchLanguageService->fetchAllNames();
+                $datasetArray = $this->frenchLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->frenchLanguageService;
                 break;
             case LanguageDetectionService::GEORGIAN_LANGUAGE_CODE:
-                $datasetArray = $this->georgianLanguageService->fetchAllNames();
+                $datasetArray = $this->georgianLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->georgianLanguageService;
                 break;
             case LanguageDetectionService::GERMAN_LANGUAGE_CODE:
-                $datasetArray = $this->germanLanguageService->fetchAllNames();
+                $datasetArray = $this->germanLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->germanLanguageService;
                 break;
             case LanguageDetectionService::GREEK_LANGUAGE_CODE:
-                $datasetArray = $this->greekLanguageService->fetchAllNames();
+                $datasetArray = $this->greekLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->greekLanguageService;
                 break;
             case LanguageDetectionService::HINDI_LANGUAGE_CODE:
-                $datasetArray = $this->hindiLanguageService->fetchAllNames();
+                $datasetArray = $this->hindiLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->hindiLanguageService;
                 break;
             case LanguageDetectionService::ITALIAN_LANGUAGE_CODE:
-                $datasetArray = $this->italianLanguageService->fetchAllNames();
+                $datasetArray = $this->italianLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->italianLanguageService;
                 break;
             case LanguageDetectionService::LATIN_LANGUAGE_CODE:
-                $datasetArray = $this->latinLanguageService->fetchAllNames();
+                $datasetArray = $this->latinLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->latinLanguageService;
                 break;
             case LanguageDetectionService::LATVIAN_LANGUAGE_CODE:
-                $datasetArray = $this->latvianLanguageService->fetchAllNames();
+                $datasetArray = $this->latvianLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->latvianLanguageService;
                 break;
             case LanguageDetectionService::LITHUANIAN_LANGUAGE_CODE:
-                $datasetArray = $this->lithuanianLanguageService->fetchAllNames();
+                $datasetArray = $this->lithuanianLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->lithuanianLanguageService;
                 break;
             case LanguageDetectionService::POLISH_LANGUAGE_CODE:
-                $datasetArray = $this->polishLanguageService->fetchAllNames();
+                $datasetArray = $this->polishLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->polishLanguageService;
                 break;
             case LanguageDetectionService::PORTUGUESE_LANGUAGE_CODE:
-                $datasetArray = $this->portugueseLanguageService->fetchAllNames();
+                $datasetArray = $this->portugueseLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->portugueseLanguageService;
                 break;
             case LanguageDetectionService::ROMANIAN_LANGUAGE_CODE:
-                $datasetArray = $this->romanianLanguageService->fetchAllNames();
+                $datasetArray = $this->romanianLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->romanianLanguageService;
                 break;
             case LanguageDetectionService::RUSSIAN_LANGUAGE_CODE:
-                $datasetArray = $this->russianLanguageService->fetchAllNames();
+                $datasetArray = $this->russianLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->russianLanguageService;
                 break;
             case LanguageDetectionService::SERBOCROATIAN_LANGUAGE_CODE:
-                $datasetArray = $this->serboCroatianLanguageService->fetchAllNames();
+                $datasetArray = $this->serboCroatianLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->serboCroatianLanguageService;
                 break;
             case LanguageDetectionService::SPANISH_LANGUAGE_CODE:
-                $datasetArray = $this->spanishLanguageService->fetchAllNames();
+                $datasetArray = $this->spanishLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->spanishLanguageService;
                 break;
             case LanguageDetectionService::SWEDISH_LANGUAGE_CODE:
-                $datasetArray = $this->swedishLanguageService->fetchAllNames();
+                $datasetArray = $this->swedishLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->swedishLanguageService;
                 break;
             case LanguageDetectionService::TAGALOG_LANGUAGE_CODE:
-                $datasetArray = $this->tagalogLanguageService->fetchAllNames();
+                $datasetArray = $this->tagalogLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->tagalogLanguageService;
                 break;
             case LanguageDetectionService::TURKISH_LANGUAGE_CODE:
-                $datasetArray = $this->turkishLanguageService->fetchAllNames();
+                $datasetArray = $this->turkishLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->turkishLanguageService;
                 break;
             case LanguageDetectionService::UKRAINIAN_LANGUAGE_CODE:
-                $datasetArray = $this->ukrainianLanguageService->fetchAllNames();
+                $datasetArray = $this->ukrainianLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->ukrainianLanguageService;
                 break;
             case LanguageDetectionService::ALBANIAN_LANGUAGE_CODE:
-                $datasetArray = $this->albanianLanguageService->fetchAllNames();
+                $datasetArray = $this->albanianLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->albanianLanguageService;
                 break;
             case LanguageDetectionService::CZECH_LANGUAGE_CODE:
-                $datasetArray = $this->czechLanguageService->fetchAllNames();
+                $datasetArray = $this->czechLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->czechLanguageService;
                 break;
             case LanguageDetectionService::AFRIKAANS_LANGUAGE_CODE:
-                $datasetArray = $this->afrikaansLanguageService->fetchAllNames();
+                $datasetArray = $this->afrikaansLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->afrikaansLanguageService;
                 break;
             case LanguageDetectionService::ARMENIAN_LANGUAGE_CODE:
-                $datasetArray = $this->armenianLanguageService->fetchAllNames();
+                $datasetArray = $this->armenianLanguageService->fetchAllNamesWithoutUniquePatternCheck(self::WORDS_LIMIT);
+                $service = $this->armenianLanguageService;
                 break;
             default:
                 $acceptedLangCodes = implode(', ', LanguageDetectionService::getLanguageCodes());
@@ -211,6 +264,8 @@ class SetUniqueLetterSequenceCommand extends Command
 
         foreach ($datasetArray as $datasetRow) {
             $word = $datasetRow['name'];
+            $wordEntity = $service->fetchOneByName($word);
+
             $sequence = $this->getSequence($word);
 
             if (!$this->checkSequenceAgainstOtherLanguages($sequence, $lang)) {
@@ -219,6 +274,8 @@ class SetUniqueLetterSequenceCommand extends Command
                     ->setPosition(self::SEQUENCE_POSITION)
                     ->setCount(self::SEQUENCE_COUNT)
                     ->setLanguageCode($lang);
+
+                $wordEntity->setUniquePatternCheck(date('Y-m-d H:i:s'));
 
                 $this->uniquePatternRepository->add($uniquePatternEntity);
             }

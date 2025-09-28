@@ -67,4 +67,14 @@ abstract class AbstractLanguageRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    public function findAllNamesWithoutUniquePatternCheck(int $limit = self::PRONUNCIATION_MAX_RESULTS): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.name')
+            ->where('e.uniquePatternCheck IS NULL')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
 }
