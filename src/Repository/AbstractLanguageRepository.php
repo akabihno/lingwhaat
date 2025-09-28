@@ -71,7 +71,7 @@ abstract class AbstractLanguageRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('e')
             ->select('e.name')
-            ->where('e.uniquePatternCheck IS NULL')
+            ->where('e.uniquePatternCheck = "1970-01-01 00:00:01"')
             ->setMaxResults($limit)
             ->getQuery()
             ->getArrayResult();
