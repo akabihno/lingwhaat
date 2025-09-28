@@ -1,7 +1,4 @@
 framework:
-  scheduler:
-    enabled: true
-
   messenger:
     transports:
       async: doctrine://default
