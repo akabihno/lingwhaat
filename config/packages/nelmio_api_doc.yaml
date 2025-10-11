@@ -1,0 +1,21 @@
+nelmio_api_doc:
+  documentation:
+    info:
+      title: Language Detection API
+      description: Language Detection API
+      version: 1.0.0
+    servers:
+      - url: "%env(string:DOMAIN)%"
+        description: Production
+    paths: {}
+  areas:
+    path_patterns:
+      - ^/api(?!/doc)
+    host_patterns: []
+  swagger_ui:
+    enabled: true
+    path: /api/doc
+    swagger_ui_cdn: https://cdn.jsdelivr.net/npm/swagger-ui-dist
+  redoc:
+    enabled: true
+    path: /api/redoc
