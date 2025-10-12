@@ -1,5 +1,6 @@
 nelmio_api_doc:
-  resource: "@NelmioApiDocBundle/config/routes.yaml"
+  resource: "@NelmioApiDocBundle/config/routing/swaggerui.xml"
+  type: rest
 
 controllers:
     resource:
