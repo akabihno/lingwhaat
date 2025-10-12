@@ -46,35 +46,23 @@ class LanguageDetectionController extends AbstractController
                 description: 'Language successfully detected',
                 content: new OA\JsonContent(
                     properties: [
-                        'language' => new OA\Property(type: 'string', example: 'English'),
-                        'code' => new OA\Property(type: 'string', example: 'en'),
-                        'input' => new OA\Property(type: 'string', example: 'Hello, how are you?'),
-                        'time' => new OA\Property(type: 'float', example: 0.125),
-                        'count' => new OA\Property(type: 'integer', example: 4),
-                        'matches' => new OA\Property(type: 'array', items: new OA\Items(type: 'string'))
+                        new OA\Property(property: 'language', description: 'Detected language name', type: 'string', example: 'English'),
+                        new OA\Property(property: 'code', description: 'Language code', type: 'string', example: 'en'),
+                        new OA\Property(property: 'input', description: 'Original input text', type: 'string', example: 'Hello, how are you?'),
+                        new OA\Property(property: 'time', description: 'Processing time in seconds', type: 'number', example: 0.125),
+                        new OA\Property(property: 'count', description: 'Number of words', type: 'integer', example: 4),
+                        new OA\Property(property: 'matches', description: 'Matched language patterns', type: 'array', items: new OA\Items(type: 'string'))
                     ],
                     type: 'object'
                 )
             ),
             new OA\Response(
                 response: 400,
-                description: 'Bad request - missing required parameter',
-                content: new OA\JsonContent(
-                    properties: [
-                        'error' => new OA\Property(type: 'string', example: 'Missing required parameter: get_language')
-                    ],
-                    type: 'object'
-                )
+                description: 'Bad request - missing required parameter'
             ),
             new OA\Response(
                 response: 429,
-                description: 'Too many requests',
-                content: new OA\JsonContent(
-                    properties: [
-                        'error' => new OA\Property(type: 'string', example: 'Rate limit exceeded')
-                    ],
-                    type: 'object'
-                )
+                description: 'Too many requests - rate limit exceeded'
             )
         ]
     )]
