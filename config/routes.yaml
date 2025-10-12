@@ -1,3 +1,6 @@
+nelmio_api_doc:
+  resource: "@NelmioApiDocBundle/Resources/config/routing.yaml"
+
 controllers:
     resource:
         path: ../src/Controller/
