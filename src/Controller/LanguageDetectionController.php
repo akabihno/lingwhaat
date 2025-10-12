@@ -30,7 +30,12 @@ class LanguageDetectionController extends AbstractController
                 description: 'The text to analyze for language detection',
                 in: 'query',
                 required: true,
-                schema: new OA\Schema(type: 'string', example: 'Hello, how are you?')
+                schema: new OA\Schema(type: 'string', example: 'Lorem ipsum dolor sit amet, 
+                consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
+                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
+                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit 
+                in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
+                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')
             ),
             new OA\Parameter(
                 name: 'translit_detection',
@@ -46,12 +51,12 @@ class LanguageDetectionController extends AbstractController
                 description: 'Language successfully detected',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'language', description: 'Detected language name', type: 'string', example: 'English'),
-                        new OA\Property(property: 'code', description: 'Language code', type: 'string', example: 'en'),
-                        new OA\Property(property: 'input', description: 'Original input text', type: 'string', example: 'Hello, how are you?'),
-                        new OA\Property(property: 'time', description: 'Processing time in seconds', type: 'number', example: 0.125),
-                        new OA\Property(property: 'count', description: 'Number of words', type: 'integer', example: 4),
-                        new OA\Property(property: 'matches', description: 'Matched language patterns', type: 'array', items: new OA\Items(type: 'string'))
+                        new OA\Property(property: 'language', description: 'Detected language name', type: 'string', example: 'Latin'),
+                        new OA\Property(property: 'code', description: 'Language code', type: 'string', example: 'la'),
+                        new OA\Property(property: 'input', description: 'Original input text', type: 'string', example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
+                        new OA\Property(property: 'count', description: 'Number of words', type: 'integer', example: 51),
+                        new OA\Property(property: 'matches', description: 'Matched words count', type: 'array', items: new OA\Items(type: 'string')),
+                        new OA\Property(property: 'time', description: 'Processing time in seconds', type: 'number', example: 2.8751020431518555)
                     ],
                     type: 'object'
                 )
