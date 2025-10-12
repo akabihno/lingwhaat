@@ -73,13 +73,17 @@ class LanguageDetectionController extends AbstractController
     )]
     public function run(Request $request, RateLimiterFactory $anonymousApiLimiter): Response
     {
-        $limiter = $anonymousApiLimiter->create($request->getClientIp());
+        $clientIp = $request->getClientIp();
+        $whitelistedIp = getenv('RATE_LIMITER_WHITELISTED_IP');
+        if ($whitelistedIp && $whitelistedIp !== $clientIp) {
+            $limiter = $anonymousApiLimiter->create($clientIp);
 
-        if (false === $limiter->consume(1)->isAccepted()) {
-            return new JsonResponse(
-                ['error' => 'Rate limit exceeded'],
-                Response::HTTP_TOO_MANY_REQUESTS
-            );
+            if (false === $limiter->consume(1)->isAccepted()) {
+                return new JsonResponse(
+                    ['error' => 'Rate limit exceeded'],
+                    Response::HTTP_TOO_MANY_REQUESTS
+                );
+            }
         }
 
         $inputText = $request->query->get('get_language');
