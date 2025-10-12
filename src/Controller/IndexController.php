@@ -11,7 +11,7 @@ class IndexController extends AbstractController
     #[Route('/', name: 'index', methods: ['GET'])]
     public function index(): RedirectResponse
     {
-        return $this->redirectToRoute('nelmio_api_doc');
+        return $this->redirectToRoute('api_doc');
     }
 
 }
