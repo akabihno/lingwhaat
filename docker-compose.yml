@@ -20,6 +20,13 @@ services:
       dockerfile: Dockerfile-php
     environment:
       - DOMAIN=${DOMAIN}
+      - DB_HOST=${DB_HOST}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_WEB_USER=${MYSQL_WEB_USER}
+      - MYSQL_WEB_PASSWORD=${MYSQL_WEB_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - DATABASE_URL=${DATABASE_URL}
+      - WIKTIONARY_UA_EMAIL=${WIKTIONARY_UA_EMAIL}
     image: php:8.2-apache
     container_name: php-app
     network_mode: host
