@@ -18,9 +18,9 @@ class LanguageDetectionController extends AbstractController
     {
     }
 
-    #[Route('/language', name: 'get_language', methods: ['GET'])]
+    #[Route('/api/language', name: 'get_language', methods: ['GET'])]
     #[OA\Get(
-        path: '/language',
+        path: '/api/language',
         description: 'Detects the language of the provided text and returns language name and code',
         summary: 'Detect language from input text',
         tags: ['Language Detection'],
