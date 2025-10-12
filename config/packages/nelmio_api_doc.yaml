@@ -3,10 +3,10 @@ nelmio_api_doc:
     info:
       title: Language Detection API
       description: Language Detection API
-      version: 1.0.0
+      version: 1.0.1
     servers:
       - url: /api
-        description: Production
+        description: "%env(string:DOMAIN)%"
   areas:
     path_patterns:
       - ^/api(?!/doc)
