@@ -16,11 +16,6 @@ class ArmenianLanguageService extends AbstractLanguageService
         return (bool) $this->armenianLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->armenianLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->armenianLanguageRepository;

@@ -16,11 +16,6 @@ class SerboCroatianLanguageService extends AbstractLanguageService
         return (bool) $this->serboCroatianLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->serboCroatianLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->serboCroatianLanguageRepository;

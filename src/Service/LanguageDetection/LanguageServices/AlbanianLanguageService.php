@@ -16,11 +16,6 @@ class AlbanianLanguageService extends AbstractLanguageService
         return (bool) $this->albanianLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->albanianLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->albanianLanguageRepository;

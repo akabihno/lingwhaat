@@ -16,11 +16,6 @@ class DutchLanguageService extends AbstractLanguageService
         return (bool) $this->dutchLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->dutchLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->dutchLanguageRepository;

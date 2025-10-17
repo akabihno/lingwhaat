@@ -16,11 +16,6 @@ class LithuanianLanguageService extends AbstractLanguageService
         return (bool) $this->lithuanianLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->lithuanianLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->lithuanianLanguageRepository;

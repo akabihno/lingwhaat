@@ -16,11 +16,6 @@ class RomanianLanguageService extends AbstractLanguageService
         return (bool) $this->romanianLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->romanianLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->romanianLanguageRepository;

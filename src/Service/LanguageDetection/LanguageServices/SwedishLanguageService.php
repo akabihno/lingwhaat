@@ -16,11 +16,6 @@ class SwedishLanguageService extends AbstractLanguageService
         return (bool) $this->swedishLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->swedishLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->swedishLanguageRepository;

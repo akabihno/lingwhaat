@@ -16,11 +16,6 @@ class EstonianLanguageService extends AbstractLanguageService
         return (bool) $this->estonianLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->estonianLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->estonianLanguageRepository;

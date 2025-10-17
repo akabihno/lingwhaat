@@ -16,11 +16,6 @@ class RussianLanguageService extends AbstractLanguageService
         return (bool) $this->russianLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->russianLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->russianLanguageRepository;

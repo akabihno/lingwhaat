@@ -36,11 +36,25 @@ abstract class AbstractLanguageService
         return $repository->findOneBy(['name' => $word]);
     }
 
+    public function fetchAllNamesAndIpa(): array
+    {
+        $repository = $this->getRepository();
+
+        return $repository->findAllNamesAndIpa();
+    }
+
     public function fetchAllNamesWithoutUniquePatternCheck(int $limit): array
     {
         $repository = $this->getRepository();
 
         return $repository->findAllNamesWithoutUniquePatternCheck($limit);
+    }
+
+    public function fetchAllEntitiesWithIpa(int $limit): array
+    {
+        $repository = $this->getRepository();
+
+        return $repository->findAllEntitiesWithIpa($limit);
     }
 
     protected function modifyName(string $word): string

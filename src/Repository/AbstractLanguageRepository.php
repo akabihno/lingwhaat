@@ -59,6 +59,16 @@ abstract class AbstractLanguageRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    public function findAllEntitiesWithIpa(int $limit = self::PRONUNCIATION_MAX_RESULTS): array
+    {
+        return $this->createQueryBuilder('e')
+            ->where('e.ipa != :na')
+            ->setParameter('na', 'Not available')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findAllNames(): array
     {
         return $this->createQueryBuilder('e')
