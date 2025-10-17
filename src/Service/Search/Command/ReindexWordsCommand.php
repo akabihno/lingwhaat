@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'language:reindex-words', description: 'Rebuild Elasticsearch index from MySQL data')]
-class ReindexWordsCommand
+class ReindexWordsCommand extends Command
 {
     public function __construct(private WordIndexer $indexer) { parent::__construct(); }
 
