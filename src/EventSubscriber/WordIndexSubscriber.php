@@ -43,7 +43,7 @@ class WordIndexSubscriber
     {
         $entity = $args->getObject();
 
-        if (!method_exists($entity, 'getWord') || !method_exists($entity, 'getIpa')) {
+        if (!method_exists($entity, 'getName') || !method_exists($entity, 'getIpa')) {
             return;
         }
 
@@ -55,7 +55,7 @@ class WordIndexSubscriber
         $index = $this->wordIndexer->getClient()->getIndex($this->wordIndexer->getIndexName());
 
         $doc = new Document(null, [
-            'word' => $entity->getWord(),
+            'word' => $entity->getName(),
             'ipa' => $entity->getIpa(),
             'languageCode' => $languageCode,
         ]);
@@ -68,12 +68,12 @@ class WordIndexSubscriber
     {
         $entity = $args->getObject();
 
-        if (!method_exists($entity, 'getWord')) {
+        if (!method_exists($entity, 'getName')) {
             return;
         }
 
         $index = $this->wordIndexer->getClient()->getIndex($this->wordIndexer->getIndexName());
-        $word = $entity->getWord();
+        $word = $entity->getName();
 
         $query = new Term(['word' => $word]);
         $index->deleteByQuery($query);

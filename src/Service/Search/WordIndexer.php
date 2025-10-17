@@ -187,7 +187,7 @@ class WordIndexer
                 $docs = [];
                 foreach ($words as $wordEntity) {
                     $docs[] = new Document(null, [
-                        'word' => $wordEntity->getWord(),
+                        'word' => $wordEntity->getName(),
                         'ipa' => $wordEntity->getIpa(),
                         'languageCode' => $languageCode,
                     ]);
