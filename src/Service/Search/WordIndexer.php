@@ -61,6 +61,7 @@ use Elastica\Document;
 
 class WordIndexer
 {
+    const int INDEXING_BATCH_SIZE = 5000;
     private Client $esClient;
     private string $indexName = 'words_index';
 
@@ -182,20 +183,34 @@ class WordIndexer
             }
 
             if (isset($service)) {
-                $words = $service->fetchAllEntitiesWithIpa(100);
+                $offset = 0;
+                $batchSize = self::INDEXING_BATCH_SIZE;
 
-                $docs = [];
-                foreach ($words as $wordEntity) {
-                    $docs[] = new Document(null, [
-                        'word' => $wordEntity->getName(),
-                        'ipa' => $wordEntity->getIpa(),
-                        'languageCode' => $languageCode,
-                    ]);
-                }
-                $index->addDocuments($docs);
+                do {
+                    $words = $service->fetchAllEntitiesWithIpa($batchSize, $offset);
+
+                    if (empty($words)) {
+                        break;
+                    }
+
+                    $docs = [];
+                    foreach ($words as $wordEntity) {
+                        $docs[] = new Document(null, [
+                            'word' => $wordEntity->getName(),
+                            'ipa' => $wordEntity->getIpa(),
+                            'languageCode' => $languageCode,
+                        ]);
+                    }
+
+                    $index->addDocuments($docs);
+                    $index->refresh();
+
+                    $offset += $batchSize;
+
+                    gc_collect_cycles();
+                } while (count($words) === $batchSize);
+
             }
-
-            $index->refresh();
         }
 
     }

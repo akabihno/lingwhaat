@@ -50,11 +50,11 @@ abstract class AbstractLanguageService
         return $repository->findAllNamesWithoutUniquePatternCheck($limit);
     }
 
-    public function fetchAllEntitiesWithIpa(int $limit): array
+    public function fetchAllEntitiesWithIpa(int $limit, int $offset): array
     {
         $repository = $this->getRepository();
 
-        return $repository->findAllEntitiesWithIpa($limit);
+        return $repository->findAllEntitiesWithIpa($limit, $offset);
     }
 
     protected function modifyName(string $word): string
