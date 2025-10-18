@@ -36,11 +36,25 @@ abstract class AbstractLanguageService
         return $repository->findOneBy(['name' => $word]);
     }
 
+    public function fetchAllNamesAndIpa(int $limit = AbstractLanguageRepository::PRONUNCIATION_MAX_RESULTS, int $offset = 0): array
+    {
+        $repository = $this->getRepository();
+
+        return $repository->findAllNamesAndIpa($limit, $offset);
+    }
+
     public function fetchAllNamesWithoutUniquePatternCheck(int $limit): array
     {
         $repository = $this->getRepository();
 
         return $repository->findAllNamesWithoutUniquePatternCheck($limit);
+    }
+
+    public function fetchAllEntitiesWithIpa(int $limit, int $offset): array
+    {
+        $repository = $this->getRepository();
+
+        return $repository->findAllEntitiesWithIpa($limit, $offset);
     }
 
     protected function modifyName(string $word): string

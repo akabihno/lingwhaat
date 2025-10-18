@@ -68,7 +68,8 @@
     "twig/twig": "^3.21.1",
     "vlucas/phpdotenv": ">=5.6.2",
     "ext-mbstring": "*",
-    "nelmio/api-doc-bundle": "^v5.6.3"
+    "nelmio/api-doc-bundle": "^v5.6.3",
+    "ruflin/elastica": "^8.2.0"
   },
   "require-dev": {
     "symfony/maker-bundle": "^1.64.0",

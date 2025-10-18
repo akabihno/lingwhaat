@@ -16,11 +16,6 @@ class PolishLanguageService extends AbstractLanguageService
         return (bool) $this->polishLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->polishLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->polishLanguageRepository;

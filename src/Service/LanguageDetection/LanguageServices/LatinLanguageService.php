@@ -16,11 +16,6 @@ class LatinLanguageService extends AbstractLanguageService
         return (bool) $this->latinLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->latinLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->latinLanguageRepository;

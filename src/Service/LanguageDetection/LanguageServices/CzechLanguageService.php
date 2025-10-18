@@ -16,11 +16,6 @@ class CzechLanguageService extends AbstractLanguageService
         return (bool) $this->czechLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->czechLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->czechLanguageRepository;

@@ -16,11 +16,6 @@ class SpanishLanguageService extends AbstractLanguageService
         return (bool) $this->spanishLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->spanishLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->spanishLanguageRepository;

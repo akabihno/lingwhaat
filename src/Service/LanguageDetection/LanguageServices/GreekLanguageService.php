@@ -16,11 +16,6 @@ class GreekLanguageService extends AbstractLanguageService
         return (bool) $this->greekLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->greekLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->greekLanguageRepository;

@@ -16,11 +16,6 @@ class HindiLanguageService extends AbstractLanguageService
         return (bool) $this->hindiLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->hindiLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->hindiLanguageRepository;

@@ -16,11 +16,6 @@ class ItalianLanguageService extends AbstractLanguageService
         return (bool) $this->italianLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->italianLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->italianLanguageRepository;

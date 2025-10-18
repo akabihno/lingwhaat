@@ -16,11 +16,6 @@ class GermanLanguageService extends AbstractLanguageService
         return (bool) $this->germanLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->germanLanguageRepository->findAllNamesAndIpa();
-    }
-
 
     protected function getRepository(): AbstractLanguageRepository
     {

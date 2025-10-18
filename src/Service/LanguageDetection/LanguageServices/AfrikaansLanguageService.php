@@ -16,11 +16,6 @@ class AfrikaansLanguageService extends AbstractLanguageService
         return (bool) $this->afrikaansLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->afrikaansLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->afrikaansLanguageRepository;

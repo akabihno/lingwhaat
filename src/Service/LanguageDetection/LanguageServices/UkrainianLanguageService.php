@@ -16,11 +16,6 @@ class UkrainianLanguageService extends AbstractLanguageService
         return (bool) $this->ukrainianLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->ukrainianLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->ukrainianLanguageRepository;

@@ -16,11 +16,6 @@ class GeorgianLanguageService extends AbstractLanguageService
         return (bool) $this->georgianLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->georgianLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->georgianLanguageRepository;

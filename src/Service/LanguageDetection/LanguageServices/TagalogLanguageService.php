@@ -16,11 +16,6 @@ class TagalogLanguageService extends AbstractLanguageService
         return (bool) $this->tagalogLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->tagalogLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->tagalogLanguageRepository;

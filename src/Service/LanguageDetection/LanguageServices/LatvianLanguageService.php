@@ -16,11 +16,6 @@ class LatvianLanguageService extends AbstractLanguageService
         return (bool) $this->latvianLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->latvianLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->latvianLanguageRepository;

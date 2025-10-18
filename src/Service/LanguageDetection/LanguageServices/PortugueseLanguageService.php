@@ -16,11 +16,6 @@ class PortugueseLanguageService extends AbstractLanguageService
         return (bool) $this->portugueseLanguageRepository->findByName($word);
     }
 
-    public function fetchAllNamesAndIpa(): array
-    {
-        return $this->portugueseLanguageRepository->findAllNamesAndIpa();
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->portugueseLanguageRepository;
