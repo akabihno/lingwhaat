@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+
 use App\Service\LanguageDetection\LanguageDetectionService;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
@@ -10,7 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
-
 
 #[OA\Tag(name: 'Language Detection')]
 class LanguageDetectionController extends AbstractController
@@ -25,7 +25,7 @@ class LanguageDetectionController extends AbstractController
     #[Route('/api/language', name: 'get_language', methods: ['GET'])]
     #[OA\Get(
         path: '/api/language',
-        description: 'Detects the language of the provided text and returns language name and code',
+        description: 'Detects the language of the provided text and returns its code, input, and match statistics.',
         summary: 'Detect language from input text',
         tags: ['Language Detection'],
         parameters: [
@@ -34,12 +34,10 @@ class LanguageDetectionController extends AbstractController
                 description: 'The text to analyze for language detection',
                 in: 'query',
                 required: true,
-                schema: new OA\Schema(type: 'string', example: 'Lorem ipsum dolor sit amet, 
-                consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et 
-                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco 
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit 
-                in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
-                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.')
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                )
             ),
             new OA\Parameter(
                 name: 'translit_detection',
@@ -55,12 +53,10 @@ class LanguageDetectionController extends AbstractController
                 description: 'Language successfully detected',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'language', description: 'Detected language name', type: 'string', example: 'Latin'),
-                        new OA\Property(property: 'code', description: 'Language code', type: 'string', example: 'la'),
-                        new OA\Property(property: 'input', description: 'Original input text', type: 'string', example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'),
-                        new OA\Property(property: 'count', description: 'Number of words', type: 'integer', example: 51),
-                        new OA\Property(property: 'matches', description: 'Matched words count', type: 'array', items: new OA\Items(type: 'string')),
-                        new OA\Property(property: 'time', description: 'Processing time in seconds', type: 'number', example: 2.8751020431518555)
+                        new OA\Property(property: 'languageCode', description: 'Detected language code', type: 'string', example: 'la'),
+                        new OA\Property(property: 'input', description: 'Original input text', type: 'string', example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
+                        new OA\Property(property: 'count', description: 'Number of words in input', type: 'integer', example: 12),
+                        new OA\Property(property: 'matches', description: 'Number of matched words', type: 'integer', example: 10)
                     ],
                     type: 'object'
                 )
@@ -79,7 +75,9 @@ class LanguageDetectionController extends AbstractController
     {
         $clientIp = $request->getClientIp();
         $whitelistedIp = getenv('RATE_LIMITER_WHITELISTED_IP');
+
         $this->logger->info(sprintf('[LanguageDetectionController] client IP: %s, whitelisted IP: %s', $clientIp, $whitelistedIp));
+
         if ($whitelistedIp && $whitelistedIp !== $clientIp) {
             $limiter = $anonymousApiLimiter->create($clientIp);
 
@@ -101,11 +99,11 @@ class LanguageDetectionController extends AbstractController
 
         $translitDetection = $request->query->getInt('translit_detection', 0);
 
-        $languageAndCode = $this->languageDetectionService->process(
+        $result = $this->languageDetectionService->process(
             $inputText,
             $translitDetection
         );
 
-        return new JsonResponse($languageAndCode, Response::HTTP_OK);
+        return new JsonResponse($result, Response::HTTP_OK);
     }
 }
