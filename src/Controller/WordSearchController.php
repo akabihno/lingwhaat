@@ -6,6 +6,7 @@ use App\Service\Search\FuzzySearchService;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -55,20 +56,15 @@ class WordSearchController extends AbstractController
                     )
                 )
             ),
-            new OA\Response(
-                response: 400,
-                description: 'Bad request — missing or invalid parameters'
-            ),
-            new OA\Response(
-                response: 500,
-                description: 'Internal server error'
-            )
+            new OA\Response(response: 400, description: 'Bad request — missing or invalid parameters'),
+            new OA\Response(response: 500, description: 'Internal server error')
         ]
     )]
-    public function search(
-        #[OA\Parameter] string $word = '',
-        #[OA\Parameter] ?int $limit = 5
-    ): JsonResponse {
+    public function search(Request $request): JsonResponse
+    {
+        $word = $request->query->get('word');
+        $limit = (int) $request->query->get('limit', 5);
+
         if (empty($word)) {
             return new JsonResponse(
                 ['error' => 'Missing required parameter: word'],
@@ -77,7 +73,7 @@ class WordSearchController extends AbstractController
         }
 
         try {
-            $matches = $this->fuzzySearchService->findClosestMatches($word, $limit ?? 5);
+            $matches = $this->fuzzySearchService->findClosestMatches($word, $limit);
             return $this->json($matches, Response::HTTP_OK);
         } catch (\Throwable $e) {
             return new JsonResponse(
