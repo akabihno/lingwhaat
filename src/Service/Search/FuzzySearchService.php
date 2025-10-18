@@ -18,9 +18,12 @@ class FuzzySearchService
 
     public function findClosestMatches(string $input, int $limit = 5): array
     {
-        $fuzzy = new Fuzzy('word', $input);
-        $fuzzy->setParam('fuzziness', 1);
-        $fuzzy->setParam('prefix_length', 1);
+        $fuzzy = new Fuzzy();
+        $fuzzy->setParam('word', [
+            'value' => $input,
+            'fuzziness' => 1,
+            'prefix_length' => 1,
+        ]);
 
         $query = new Query($fuzzy);
         $query->setSize($limit);
