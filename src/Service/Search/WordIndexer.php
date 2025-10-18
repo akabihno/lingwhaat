@@ -56,8 +56,15 @@ use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use Doctrine\Persistence\ManagerRegistry;
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\MissingParameterException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Elastica\Client;
 use Elastica\Document;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class WordIndexer
 {
@@ -65,11 +72,23 @@ class WordIndexer
     private Client $esClient;
     private string $indexName = 'words_index';
 
-    public function __construct(private ManagerRegistry $em)
+    public function __construct(
+        private ManagerRegistry $em,
+        private ElasticsearchBulkStreamer $elasticsearchBulkStreamer
+    )
     {
         $this->esClient = ElasticsearchClientFactory::create();
     }
 
+    /**
+     * @throws ClientExceptionInterface
+     * @throws ClientResponseException
+     * @throws ServerExceptionInterface
+     * @throws MissingParameterException
+     * @throws RedirectionExceptionInterface
+     * @throws TransportExceptionInterface
+     * @throws ServerResponseException
+     */
     public function reindexAll(): void
     {
         $index = $this->esClient->getIndex($this->indexName);
@@ -202,7 +221,8 @@ class WordIndexer
                         ]);
                     }
 
-                    $index->addDocuments($docs, ['refresh' => false]);
+                    //$index->addDocuments($docs, ['refresh' => false]);
+                    $this->elasticsearchBulkStreamer->sendBatch($this->indexName, array_map(fn($d) => $d->getData(), $docs));
 
                     $offset += $batchSize;
 
@@ -210,9 +230,9 @@ class WordIndexer
                 } while (count($words) === $batchSize);
 
             }
-
-            $index->refresh();
         }
+
+        $index->refresh();
 
     }
 
