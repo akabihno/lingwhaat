@@ -61,7 +61,7 @@ use Elastica\Document;
 
 class WordIndexer
 {
-    const int INDEXING_BATCH_SIZE = 5000;
+    const int INDEXING_BATCH_SIZE = 1000;
     private Client $esClient;
     private string $indexName = 'words_index';
 
@@ -202,8 +202,7 @@ class WordIndexer
                         ]);
                     }
 
-                    $index->addDocuments($docs);
-                    $index->refresh();
+                    $index->addDocuments($docs, ['refresh' => false]);
 
                     $offset += $batchSize;
 
@@ -211,6 +210,8 @@ class WordIndexer
                 } while (count($words) === $batchSize);
 
             }
+
+            $index->refresh();
         }
 
     }
