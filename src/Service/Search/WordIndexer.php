@@ -206,28 +206,28 @@ class WordIndexer
                 $batchSize = self::INDEXING_BATCH_SIZE;
 
                 do {
-                    $words = $service->fetchAllEntitiesWithIpa($batchSize, $offset);
+                    $rows = $service->fetchAllNamesAndIpa($batchSize, $offset);
 
-                    if (empty($words)) {
+                    if (empty($rows)) {
                         break;
                     }
 
                     $docs = [];
-                    foreach ($words as $wordEntity) {
+                    foreach ($rows as $row) {
                         $docs[] = new Document(null, [
-                            'word' => $wordEntity->getName(),
-                            'ipa' => $wordEntity->getIpa(),
+                            'word' =>  $row['name'],
+                            'ipa' => $row['ipa'],
                             'languageCode' => $languageCode,
                         ]);
                     }
 
-                    //$index->addDocuments($docs, ['refresh' => false]);
                     $this->elasticsearchBulkStreamer->sendBatch($this->indexName, array_map(fn($d) => $d->getData(), $docs));
 
-                    $offset += $batchSize;
-
+                    unset($docs);
                     gc_collect_cycles();
-                } while (count($words) === $batchSize);
+
+                    $offset += $batchSize;
+                } while (count($rows) === $batchSize);
 
             }
         }
