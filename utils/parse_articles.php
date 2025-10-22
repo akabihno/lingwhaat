@@ -4,10 +4,10 @@ require 'vendor/autoload.php';
 
 // watch --interval 5 docker exec -it php-app php utils/parse_articles.php 100
 
-use App\Query\PronunciationQueryArmenianLanguage;
+use App\Query\PronunciationQueryAfarLanguage;
 use App\Service\WiktionaryArticlesIpaParserService;
 
-$query = new PronunciationQueryArmenianLanguage();
+$query = new PronunciationQueryAfarLanguage();
 
 $wiktionaryArticlesService = new WiktionaryArticlesIpaParserService($query);
 
