@@ -11,11 +11,6 @@ class UkrainianLanguageService extends AbstractLanguageService
     {
     }
 
-    public function checkLanguage($word): bool
-    {
-        return (bool) $this->ukrainianLanguageRepository->findByName($word);
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->ukrainianLanguageRepository;

@@ -11,11 +11,6 @@ class EstonianLanguageService extends AbstractLanguageService
     {
     }
 
-    public function checkLanguage($word): bool
-    {
-        return (bool) $this->estonianLanguageRepository->findByName($word);
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->estonianLanguageRepository;

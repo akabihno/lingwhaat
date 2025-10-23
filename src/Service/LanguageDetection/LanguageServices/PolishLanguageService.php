@@ -11,11 +11,6 @@ class PolishLanguageService extends AbstractLanguageService
     {
     }
 
-    public function checkLanguage($word): bool
-    {
-        return (bool) $this->polishLanguageRepository->findByName($word);
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->polishLanguageRepository;

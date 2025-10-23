@@ -11,11 +11,6 @@ class LatinLanguageService extends AbstractLanguageService
     {
     }
 
-    public function checkLanguage($word): bool
-    {
-        return (bool) $this->latinLanguageRepository->findByName($word);
-    }
-
     protected function getRepository(): AbstractLanguageRepository
     {
         return $this->latinLanguageRepository;

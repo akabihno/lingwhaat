@@ -5,9 +5,11 @@ namespace App\Service\LanguageDetection\Command;
 use App\Entity\UniquePatternEntity;
 use App\Repository\UniquePatternRepository;
 use App\Service\LanguageDetection\LanguageDetectionService;
+use App\Service\LanguageDetection\LanguageServices\AfarLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\ArmenianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\BengaliLanguageService;
 use App\Service\LanguageDetection\LanguageServices\CzechLanguageService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
@@ -71,6 +73,8 @@ class SetUniqueLetterSequenceCommand extends Command
         protected CzechLanguageService $czechLanguageService,
         protected AfrikaansLanguageService $afrikaansLanguageService,
         protected ArmenianLanguageService $armenianLanguageService,
+        protected AfarLanguageService $afarLanguageService,
+        protected BengaliLanguageService $bengaliLanguageService,
         protected UniquePatternRepository $uniquePatternRepository,
     ) {
         parent::__construct();
@@ -102,6 +106,8 @@ class SetUniqueLetterSequenceCommand extends Command
             LanguageDetectionService::CZECH_LANGUAGE_CODE => $this->czechLanguageService,
             LanguageDetectionService::AFRIKAANS_LANGUAGE_CODE => $this->afrikaansLanguageService,
             LanguageDetectionService::ARMENIAN_LANGUAGE_CODE => $this->armenianLanguageService,
+            LanguageDetectionService::AFAR_LANGUAGE_CODE => $this->afarLanguageService,
+            LanguageDetectionService::BENGALI_LANGUAGE_CODE => $this->bengaliLanguageService,
         ];
     }
     protected function configure(): void
@@ -225,6 +231,14 @@ class SetUniqueLetterSequenceCommand extends Command
             case LanguageDetectionService::ARMENIAN_LANGUAGE_CODE:
                 $datasetArray = $this->armenianLanguageService->fetchAllNamesWithoutUniquePatternCheck($limit);
                 $service = $this->armenianLanguageService;
+                break;
+            case LanguageDetectionService::AFAR_LANGUAGE_CODE:
+                $datasetArray = $this->afarLanguageService->fetchAllNamesWithoutUniquePatternCheck($limit);
+                $service = $this->afarLanguageService;
+                break;
+            case LanguageDetectionService::BENGALI_LANGUAGE_CODE:
+                $datasetArray = $this->bengaliLanguageService->fetchAllNamesWithoutUniquePatternCheck($limit);
+                $service = $this->bengaliLanguageService;
                 break;
             default:
                 $acceptedLangCodes = implode(', ', LanguageDetectionService::getLanguageCodes());

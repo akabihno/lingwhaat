@@ -33,6 +33,32 @@ Class example: [WiktionaryArticlesIpaParserService](src/Service/WiktionaryArticl
 Titles (words) retrieved using MediaWiki API [categorymembers](https://www.mediawiki.org/wiki/API:Categorymembers)\
 Class example: [WiktionaryArticlesCategoriesLatvianService](src/Service/WiktionaryArticlesCategoriesLatvianService.php)\
 List of all articles IPA data has been taken from:
+* Afar:
+[a](docs/Afar/en_wiktionary_afar_a.md),
+[b](docs/Afar/en_wiktionary_afar_b.md),
+[c](docs/Afar/en_wiktionary_afar_c.md),
+[d](docs/Afar/en_wiktionary_afar_d.md),
+[e](docs/Afar/en_wiktionary_afar_e.md),
+[f](docs/Afar/en_wiktionary_afar_f.md),
+[g](docs/Afar/en_wiktionary_afar_g.md),
+[h](docs/Afar/en_wiktionary_afar_h.md),
+[i](docs/Afar/en_wiktionary_afar_i.md),
+[j](docs/Afar/en_wiktionary_afar_j.md),
+[k](docs/Afar/en_wiktionary_afar_k.md),
+[l](docs/Afar/en_wiktionary_afar_l.md),
+[m](docs/Afar/en_wiktionary_afar_m.md),
+[n](docs/Afar/en_wiktionary_afar_n.md),
+[o](docs/Afar/en_wiktionary_afar_o.md),
+[q](docs/Afar/en_wiktionary_afar_q.md),
+[r](docs/Afar/en_wiktionary_afar_r.md),
+[s](docs/Afar/en_wiktionary_afar_s.md),
+[t](docs/Afar/en_wiktionary_afar_t.md),
+[u](docs/Afar/en_wiktionary_afar_u.md),
+[v](docs/Afar/en_wiktionary_afar_v.md),
+[w](docs/Afar/en_wiktionary_afar_w.md),
+[x](docs/Afar/en_wiktionary_afar_x.md),
+[y](docs/Afar/en_wiktionary_afar_y.md),
+[z](docs/Afar/en_wiktionary_afar_z.md)
 * Afrikaans:
 [a](docs/Afrikaans/en_wiktionary_afrikaans_a.md),
 [b](docs/Afrikaans/en_wiktionary_afrikaans_b.md),

@@ -13,6 +13,9 @@ ml_service/helpers/__pycache__/
 #MySQL
 mysql_data
 
+#Redis
+redis_data
+
 #IDE
 .idea
 

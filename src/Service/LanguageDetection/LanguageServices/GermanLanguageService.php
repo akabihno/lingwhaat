@@ -11,11 +11,6 @@ class GermanLanguageService extends AbstractLanguageService
     {
     }
 
-    public function checkLanguage($word): bool
-    {
-        return (bool) $this->germanLanguageRepository->findByName($word);
-    }
-
 
     protected function getRepository(): AbstractLanguageRepository
     {

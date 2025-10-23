@@ -2,9 +2,11 @@
 
 namespace App\Service\Search;
 
+use App\Repository\AfarLanguageRepository;
 use App\Repository\AfrikaansLanguageRepository;
 use App\Repository\AlbanianLanguageRepository;
 use App\Repository\ArmenianLanguageRepository;
+use App\Repository\BengaliLanguageRepository;
 use App\Repository\CzechLanguageRepository;
 use App\Repository\DutchLanguageRepository;
 use App\Repository\EnglishLanguageRepository;
@@ -29,9 +31,11 @@ use App\Repository\TagalogLanguageRepository;
 use App\Repository\TurkishLanguageRepository;
 use App\Repository\UkrainianLanguageRepository;
 use App\Service\LanguageDetection\LanguageDetectionService;
+use App\Service\LanguageDetection\LanguageServices\AfarLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\ArmenianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\BengaliLanguageService;
 use App\Service\LanguageDetection\LanguageServices\CzechLanguageService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
@@ -198,6 +202,12 @@ class WordIndexer
                     break;
                 case LanguageDetectionService::ARMENIAN_LANGUAGE_CODE:
                     $service = new ArmenianLanguageService(new ArmenianLanguageRepository($this->em));
+                    break;
+                case LanguageDetectionService::AFAR_LANGUAGE_CODE:
+                    $service = new AfarLanguageService(new AfarLanguageRepository($this->em));
+                    break;
+                case LanguageDetectionService::BENGALI_LANGUAGE_CODE:
+                    $service = new BengaliLanguageService(new BengaliLanguageRepository($this->em));
                     break;
             }
 

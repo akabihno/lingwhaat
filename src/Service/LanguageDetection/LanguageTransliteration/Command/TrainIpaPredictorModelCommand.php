@@ -3,9 +3,11 @@
 namespace App\Service\LanguageDetection\LanguageTransliteration\Command;
 
 use App\Service\LanguageDetection\LanguageDetectionService;
+use App\Service\LanguageDetection\LanguageServices\AfarLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\ArmenianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\BengaliLanguageService;
 use App\Service\LanguageDetection\LanguageServices\CzechLanguageService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
@@ -73,6 +75,8 @@ class TrainIpaPredictorModelCommand extends Command
         protected CzechLanguageService $czechLanguageService,
         protected AfrikaansLanguageService $afrikaansLanguageService,
         protected ArmenianLanguageService $armenianLanguageService,
+        protected AfarLanguageService $afarLanguageService,
+        protected BengaliLanguageService $bengaliLanguageService,
         protected HttpClientInterface $httpClient,
     ) {
         parent::__construct();
@@ -181,6 +185,12 @@ class TrainIpaPredictorModelCommand extends Command
                 break;
             case LanguageDetectionService::ARMENIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->armenianLanguageService->fetchAllNamesAndIpa();
+                break;
+            case LanguageDetectionService::AFAR_LANGUAGE_CODE:
+                $trainingDatasetArray = $this->afarLanguageService->fetchAllNamesAndIpa();
+                break;
+            case LanguageDetectionService::BENGALI_LANGUAGE_CODE:
+                $trainingDatasetArray = $this->bengaliLanguageService->fetchAllNamesAndIpa();
                 break;
             default:
                 $acceptedLangCodes = implode(', ', LanguageDetectionService::getLanguageCodes());

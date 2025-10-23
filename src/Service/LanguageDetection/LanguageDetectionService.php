@@ -62,12 +62,10 @@ class LanguageDetectionService
     const string AFRIKAANS_LANGUAGE_CODE = 'af';
     const string ARMENIAN_LANGUAGE_NAME = 'Armenian';
     const string ARMENIAN_LANGUAGE_CODE = 'hy';
-    const string CYRILLIC = 'Cyrillic';
-    const string DEVANAGARI = 'Devanagari';
-    const string LATIN = 'Latin';
-    const string ARMENIAN = 'Armenian';
-    const string GEORGIAN = 'Georgian';
-    const string GREEK = 'Greek';
+    const string AFAR_LANGUAGE_NAME = 'Afar';
+    const string AFAR_LANGUAGE_CODE = 'aa';
+    const string BENGALI_LANGUAGE_NAME = 'Bengali';
+    const string BENGALI_LANGUAGE_CODE = 'bn';
 
     const string LANGUAGE_NOT_FOUND = 'Language not found';
     public function __construct(
