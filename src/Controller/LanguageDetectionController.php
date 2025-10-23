@@ -36,7 +36,7 @@ class LanguageDetectionController extends AbstractController
                 required: true,
                 schema: new OA\Schema(
                     type: 'string',
-                    example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                    example: 'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.'
                 )
             ),
             new OA\Parameter(
@@ -54,9 +54,9 @@ class LanguageDetectionController extends AbstractController
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(property: 'languageCode', description: 'Detected language code', type: 'string', example: 'la'),
-                        new OA\Property(property: 'input', description: 'Original input text', type: 'string', example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'),
-                        new OA\Property(property: 'count', description: 'Number of words in input', type: 'integer', example: 12),
-                        new OA\Property(property: 'matches', description: 'Number of matched words', type: 'integer', example: 10)
+                        new OA\Property(property: 'input', description: 'Original input text', type: 'string', example: 'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.'),
+                        new OA\Property(property: 'count', description: 'Number of words in input', type: 'integer', example: 25),
+                        new OA\Property(property: 'matches', description: 'Number of matches (including similarity search)', type: 'integer', example: 85)
                     ],
                     type: 'object'
                 )
