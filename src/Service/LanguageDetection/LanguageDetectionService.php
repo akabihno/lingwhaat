@@ -184,6 +184,8 @@ class LanguageDetectionService
             self::CZECH_LANGUAGE_CODE,
             self::AFRIKAANS_LANGUAGE_CODE,
             self::ARMENIAN_LANGUAGE_CODE,
+            self::AFAR_LANGUAGE_CODE,
+            self::BENGALI_LANGUAGE_CODE,
         ];
     }
 
