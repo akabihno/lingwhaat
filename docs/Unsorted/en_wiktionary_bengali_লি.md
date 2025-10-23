@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/লিংকনশায়ার|
+|https://en.wiktionary.org/wiki/লিঙ্কনশায়ার|
+|https://en.wiktionary.org/wiki/লিভারপুল|
+|https://en.wiktionary.org/wiki/লিফট|
+|https://en.wiktionary.org/wiki/লিসবন|
+|https://en.wiktionary.org/wiki/লিফ্ট|
+|https://en.wiktionary.org/wiki/লিপস্টিক|
+|https://en.wiktionary.org/wiki/লিচু|
+|https://en.wiktionary.org/wiki/লিবিয়া|
+|https://en.wiktionary.org/wiki/লিশ্টেনশ্টাইন|
+|https://en.wiktionary.org/wiki/লিথুয়ানিয়া|
+|https://en.wiktionary.org/wiki/লিঙ্গ|
+|https://en.wiktionary.org/wiki/লিপি|

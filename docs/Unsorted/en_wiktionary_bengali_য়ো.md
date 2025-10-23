@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/যোগাযোগ|
+|https://en.wiktionary.org/wiki/যোগ্য|
+|https://en.wiktionary.org/wiki/যোগিনী|
+|https://en.wiktionary.org/wiki/যোগী|
+|https://en.wiktionary.org/wiki/যোগ|
+|https://en.wiktionary.org/wiki/যোজনা|
+|https://en.wiktionary.org/wiki/যোধপুর|
+|https://en.wiktionary.org/wiki/যো%20হুকুম|
+|https://en.wiktionary.org/wiki/যো|
+|https://en.wiktionary.org/wiki/যোনি|

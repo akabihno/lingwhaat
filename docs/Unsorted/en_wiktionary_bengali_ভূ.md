@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ভূ|
+|https://en.wiktionary.org/wiki/ভূমিপুত্র|
+|https://en.wiktionary.org/wiki/ভূমি|
+|https://en.wiktionary.org/wiki/ভূমধ্যসাগর|
+|https://en.wiktionary.org/wiki/ভূ-|
+|https://en.wiktionary.org/wiki/ভূমিকা|
+|https://en.wiktionary.org/wiki/ভূত|
+|https://en.wiktionary.org/wiki/ভূমিকম্প|
+|https://en.wiktionary.org/wiki/ভূগোল|

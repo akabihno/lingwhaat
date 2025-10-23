@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ঝিঙ্গুর|
+|https://en.wiktionary.org/wiki/ঝিকে%20মেরে%20বউকে%20শেখানো|
+|https://en.wiktionary.org/wiki/ঝি|
+|https://en.wiktionary.org/wiki/ঝিনুক|
+|https://en.wiktionary.org/wiki/ঝিনাইদহ|
+|https://en.wiktionary.org/wiki/ঝিঙা|
+|https://en.wiktionary.org/wiki/ঝিঙ্গা|
+|https://en.wiktionary.org/wiki/ঝিনাইদহ%20জেলা|

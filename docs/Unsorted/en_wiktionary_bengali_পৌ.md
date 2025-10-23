@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/পৌঁছানো|
+|https://en.wiktionary.org/wiki/পৌঁছা|
+|https://en.wiktionary.org/wiki/পৌনে|
+|https://en.wiktionary.org/wiki/পৌষ|
+|https://en.wiktionary.org/wiki/পৌষ%20সংক্রান্তি|
+|https://en.wiktionary.org/wiki/পৌর|
+|https://en.wiktionary.org/wiki/পৌরসভা|
+|https://en.wiktionary.org/wiki/পৌত্র|
+|https://en.wiktionary.org/wiki/পৌত্রী|
+|https://en.wiktionary.org/wiki/পৌঁছনো|
+|https://en.wiktionary.org/wiki/পৌত্তলিক|

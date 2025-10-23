@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/চেষ্টা|
+|https://en.wiktionary.org/wiki/চেরা|
+|https://en.wiktionary.org/wiki/চেপটা|
+|https://en.wiktionary.org/wiki/চেত|
+|https://en.wiktionary.org/wiki/চেতা|
+|https://en.wiktionary.org/wiki/চেয়ার|
+|https://en.wiktionary.org/wiki/চেয়ে|
+|https://en.wiktionary.org/wiki/চেহারা|
+|https://en.wiktionary.org/wiki/চেন্নাই|
+|https://en.wiktionary.org/wiki/চেক%20প্রজাতন্ত্র|
+|https://en.wiktionary.org/wiki/চেক%20ভাষা|
+|https://en.wiktionary.org/wiki/চেষ্টা%20করা|
+|https://en.wiktionary.org/wiki/চেনা|

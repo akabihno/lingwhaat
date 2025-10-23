@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ধোঁকা|
+|https://en.wiktionary.org/wiki/ধোঁকাবাজ|
+|https://en.wiktionary.org/wiki/ধোনি|
+|https://en.wiktionary.org/wiki/ধোঁয়াশা|
+|https://en.wiktionary.org/wiki/ধোঁয়া|
+|https://en.wiktionary.org/wiki/ধোওয়া|
+|https://en.wiktionary.org/wiki/ধোলাই|

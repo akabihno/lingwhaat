@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/শীষ|
+|https://en.wiktionary.org/wiki/শীঘ্র|
+|https://en.wiktionary.org/wiki/শীতাতপ|
+|https://en.wiktionary.org/wiki/শীততাপ|
+|https://en.wiktionary.org/wiki/শীরা|
+|https://en.wiktionary.org/wiki/শীতল|
+|https://en.wiktionary.org/wiki/শীত|

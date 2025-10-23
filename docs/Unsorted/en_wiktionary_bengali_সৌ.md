@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/সৌরবিদ্যুৎ|
+|https://en.wiktionary.org/wiki/সৌভাগ্য|
+|https://en.wiktionary.org/wiki/সৌরাষ্ট্র|
+|https://en.wiktionary.org/wiki/সৌরজগৎ|
+|https://en.wiktionary.org/wiki/সৌদি%20আরব|
+|https://en.wiktionary.org/wiki/সৌন্দর্য|
+|https://en.wiktionary.org/wiki/সৌর|

@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ছুঁচা|
+|https://en.wiktionary.org/wiki/ছুট|
+|https://en.wiktionary.org/wiki/ছুটি|
+|https://en.wiktionary.org/wiki/ছুঁচ|
+|https://en.wiktionary.org/wiki/ছুড়ান|
+|https://en.wiktionary.org/wiki/ছুরি|
+|https://en.wiktionary.org/wiki/ছুঁড়ী|
+|https://en.wiktionary.org/wiki/ছুপা|

@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/খিল্লিবাজ|
+|https://en.wiktionary.org/wiki/খিল্লি|
+|https://en.wiktionary.org/wiki/খির|
+|https://en.wiktionary.org/wiki/খিদা|
+|https://en.wiktionary.org/wiki/খিচুড়ি|
+|https://en.wiktionary.org/wiki/খিড়কি|
+|https://en.wiktionary.org/wiki/খিলজি|

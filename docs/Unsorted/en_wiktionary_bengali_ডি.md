@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ডিম্বক|
+|https://en.wiktionary.org/wiki/ডিম্বাণু|
+|https://en.wiktionary.org/wiki/ডিম্ব|
+|https://en.wiktionary.org/wiki/ডিভিডি|
+|https://en.wiktionary.org/wiki/ডিব্রুগড়|
+|https://en.wiktionary.org/wiki/ডিম%20ভাজি|
+|https://en.wiktionary.org/wiki/ডিম|
+|https://en.wiktionary.org/wiki/ডিকশনারি|
+|https://en.wiktionary.org/wiki/ডিফ্র্যাগমেন্ট%20করা|
+|https://en.wiktionary.org/wiki/ডিল্ডো|
+|https://en.wiktionary.org/wiki/ডিসেম্বর|
+|https://en.wiktionary.org/wiki/ডিকশনারী|
+|https://en.wiktionary.org/wiki/ডিলডো|

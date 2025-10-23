@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ঢাকাবাসী|
+|https://en.wiktionary.org/wiki/ঢাল|
+|https://en.wiktionary.org/wiki/ঢালিউড|
+|https://en.wiktionary.org/wiki/ঢাকেশ্বরী|
+|https://en.wiktionary.org/wiki/ঢাকাইয়া|
+|https://en.wiktionary.org/wiki/ঢাকনা|
+|https://en.wiktionary.org/wiki/ঢালা|
+|https://en.wiktionary.org/wiki/ঢাকা%20জেলা|
+|https://en.wiktionary.org/wiki/ঢাকা%20বিভাগ|
+|https://en.wiktionary.org/wiki/ঢাকা|

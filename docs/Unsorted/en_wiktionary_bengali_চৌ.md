@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/চৌত্রিশ|
+|https://en.wiktionary.org/wiki/চৌহদ্দি|
+|https://en.wiktionary.org/wiki/চৌরাস্তা|
+|https://en.wiktionary.org/wiki/চৌং|
+|https://en.wiktionary.org/wiki/চৌ.|
+|https://en.wiktionary.org/wiki/চৌধুরি|
+|https://en.wiktionary.org/wiki/চৌথ|
+|https://en.wiktionary.org/wiki/চৌষট্টি|
+|https://en.wiktionary.org/wiki/চৌঁতিরিশ|
+|https://en.wiktionary.org/wiki/চৌধুরী|

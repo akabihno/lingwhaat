@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ধুনা|
+|https://en.wiktionary.org/wiki/ধুতরা|
+|https://en.wiktionary.org/wiki/ধুর|
+|https://en.wiktionary.org/wiki/ধুমা|
+|https://en.wiktionary.org/wiki/ধুতি|
+|https://en.wiktionary.org/wiki/ধুনুরি|
+|https://en.wiktionary.org/wiki/ধুর%20বাল|
+|https://en.wiktionary.org/wiki/ধুতুরা|

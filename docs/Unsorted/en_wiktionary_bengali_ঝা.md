@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ঝালমুড়ি|
+|https://en.wiktionary.org/wiki/ঝান্ডা|
+|https://en.wiktionary.org/wiki/ঝাঁকানো|
+|https://en.wiktionary.org/wiki/ঝাঁটা|
+|https://en.wiktionary.org/wiki/ঝালফ্রেজী|
+|https://en.wiktionary.org/wiki/ঝাল|
+|https://en.wiktionary.org/wiki/ঝাড়ু|
+|https://en.wiktionary.org/wiki/ঝাড়খণ্ড|
+|https://en.wiktionary.org/wiki/ঝালকাঠি%20জেলা|
+|https://en.wiktionary.org/wiki/ঝাঁজ|
+|https://en.wiktionary.org/wiki/ঝাঁজালো|
+|https://en.wiktionary.org/wiki/ঝামেলা|
+|https://en.wiktionary.org/wiki/ঝাক্কাস|

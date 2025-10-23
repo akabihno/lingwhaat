@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/টিন|
+|https://en.wiktionary.org/wiki/টিপ্পনী|
+|https://en.wiktionary.org/wiki/টিক্কা|
+|https://en.wiktionary.org/wiki/টিকিট|
+|https://en.wiktionary.org/wiki/টিকট|
+|https://en.wiktionary.org/wiki/টিপাই|
+|https://en.wiktionary.org/wiki/টিকা|
+|https://en.wiktionary.org/wiki/টি-শার্ট|
+|https://en.wiktionary.org/wiki/টিকটিকি|
+|https://en.wiktionary.org/wiki/টিয়া|

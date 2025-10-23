@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/নীড়পাতা|
+|https://en.wiktionary.org/wiki/নীতি|
+|https://en.wiktionary.org/wiki/নীলুফার|
+|https://en.wiktionary.org/wiki/নীল|
+|https://en.wiktionary.org/wiki/নীরব|
+|https://en.wiktionary.org/wiki/নীরবে|
+|https://en.wiktionary.org/wiki/নীরবতা|
+|https://en.wiktionary.org/wiki/নীহারিকা|
+|https://en.wiktionary.org/wiki/নীর|
+|https://en.wiktionary.org/wiki/নীলছবি|
+|https://en.wiktionary.org/wiki/নীলতারকা|

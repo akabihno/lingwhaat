@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/গিরিঙ্গিবাজ|
+|https://en.wiktionary.org/wiki/গিরিঙ্গি|
+|https://en.wiktionary.org/wiki/গিজার|
+|https://en.wiktionary.org/wiki/গির্জা|
+|https://en.wiktionary.org/wiki/গিল্লা|
+|https://en.wiktionary.org/wiki/গিনি-বিসাউ|
+|https://en.wiktionary.org/wiki/গিনি|
+|https://en.wiktionary.org/wiki/গিগাবাইট|
+|https://en.wiktionary.org/wiki/গিটার|

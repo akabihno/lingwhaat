@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ভেক|
+|https://en.wiktionary.org/wiki/ভেকধারী|
+|https://en.wiktionary.org/wiki/ভেলপুরী|
+|https://en.wiktionary.org/wiki/ভেজানো|
+|https://en.wiktionary.org/wiki/ভেজা|
+|https://en.wiktionary.org/wiki/ভেস্তা|
+|https://en.wiktionary.org/wiki/ভেটা|
+|https://en.wiktionary.org/wiki/ভেনেজুয়েলা|
+|https://en.wiktionary.org/wiki/ভেড়া|
+|https://en.wiktionary.org/wiki/ভেতরে|
+|https://en.wiktionary.org/wiki/ভেজাল|

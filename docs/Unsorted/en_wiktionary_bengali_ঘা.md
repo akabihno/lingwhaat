@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ঘাবড়ানো|
+|https://en.wiktionary.org/wiki/ঘাবড়ান|
+|https://en.wiktionary.org/wiki/ঘাঁটা|
+|https://en.wiktionary.org/wiki/ঘাড়|
+|https://en.wiktionary.org/wiki/ঘানা|
+|https://en.wiktionary.org/wiki/ঘামানো|
+|https://en.wiktionary.org/wiki/ঘাম|
+|https://en.wiktionary.org/wiki/ঘামা|
+|https://en.wiktionary.org/wiki/ঘাপলা|

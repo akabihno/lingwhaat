@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/শ্রান্তি|
+|https://en.wiktionary.org/wiki/শ্রম|
+|https://en.wiktionary.org/wiki/শ্রাবণ|
+|https://en.wiktionary.org/wiki/শ্রুতি|
+|https://en.wiktionary.org/wiki/শ্রেণী|
+|https://en.wiktionary.org/wiki/শ্রেণি|
+|https://en.wiktionary.org/wiki/শ্রীলঙ্কান|
+|https://en.wiktionary.org/wiki/শ্রবণ|
+|https://en.wiktionary.org/wiki/শ্রীনিকেতন|
+|https://en.wiktionary.org/wiki/শ্রী|
+|https://en.wiktionary.org/wiki/শ্রীবৃক্ষ|
+|https://en.wiktionary.org/wiki/শ্রীফল|
+|https://en.wiktionary.org/wiki/শ্রীলঙ্কা|

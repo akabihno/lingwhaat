@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/রিশতাদার|
+|https://en.wiktionary.org/wiki/রিকর্ড|
+|https://en.wiktionary.org/wiki/রিজিক|
+|https://en.wiktionary.org/wiki/রিমঝিম|
+|https://en.wiktionary.org/wiki/রিষ্ট|
+|https://en.wiktionary.org/wiki/রিশকা|
+|https://en.wiktionary.org/wiki/রিকশা|
+|https://en.wiktionary.org/wiki/রিচার্ড|
+|https://en.wiktionary.org/wiki/রিয়াজ|
+|https://en.wiktionary.org/wiki/রিয়াসত|
+|https://en.wiktionary.org/wiki/রিজ়|
+|https://en.wiktionary.org/wiki/রিসালত|

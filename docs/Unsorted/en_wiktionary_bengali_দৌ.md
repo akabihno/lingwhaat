@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/দৌরাত্ম্য|
+|https://en.wiktionary.org/wiki/দৌহিত্র|
+|https://en.wiktionary.org/wiki/দৌহিত্রী|
+|https://en.wiktionary.org/wiki/দৌড়ানো|
+|https://en.wiktionary.org/wiki/দৌলতদারী|
+|https://en.wiktionary.org/wiki/দৌলতদারি|
+|https://en.wiktionary.org/wiki/দৌলত|
+|https://en.wiktionary.org/wiki/দৌলতদার|

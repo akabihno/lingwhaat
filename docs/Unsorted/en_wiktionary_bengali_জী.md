@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/জীবাশ্ম|
+|https://en.wiktionary.org/wiki/জীন|
+|https://en.wiktionary.org/wiki/জীব|
+|https://en.wiktionary.org/wiki/জীবনসঙ্গী|
+|https://en.wiktionary.org/wiki/জীবিত|
+|https://en.wiktionary.org/wiki/জী|
+|https://en.wiktionary.org/wiki/জীববিজ্ঞান|
+|https://en.wiktionary.org/wiki/জীবন্ত|
+|https://en.wiktionary.org/wiki/জীবন|
+|https://en.wiktionary.org/wiki/জীবনাবসান|
+|https://en.wiktionary.org/wiki/জীবনান্ত|

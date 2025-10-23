@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/কৌতুক|
+|https://en.wiktionary.org/wiki/কৌশল|
+|https://en.wiktionary.org/wiki/কৌশল্যা|
+|https://en.wiktionary.org/wiki/কৌঁসুলি|
+|https://en.wiktionary.org/wiki/কৌমুদী|
+|https://en.wiktionary.org/wiki/কৌরব|
+|https://en.wiktionary.org/wiki/কৌশিক|
+|https://en.wiktionary.org/wiki/কৌলিক|

@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ছি|
+|https://en.wiktionary.org/wiki/ছিপি|
+|https://en.wiktionary.org/wiki/ছিপ|
+|https://en.wiktionary.org/wiki/ছিটমহল|
+|https://en.wiktionary.org/wiki/ছিয়াত্তর|
+|https://en.wiktionary.org/wiki/ছিয়াশি|
+|https://en.wiktionary.org/wiki/ছিয়ানব্বই|
+|https://en.wiktionary.org/wiki/ছিটকানো|
+|https://en.wiktionary.org/wiki/ছিনতাইকারী|

@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ছোকরা|
+|https://en.wiktionary.org/wiki/ছোটকা|
+|https://en.wiktionary.org/wiki/ছোড়া|
+|https://en.wiktionary.org/wiki/ছোটো|
+|https://en.wiktionary.org/wiki/ছোট%20হাজরি|
+|https://en.wiktionary.org/wiki/ছোলা|
+|https://en.wiktionary.org/wiki/ছোঁয়া|
+|https://en.wiktionary.org/wiki/ছোট|

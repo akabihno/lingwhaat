@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ঘোষক|
+|https://en.wiktionary.org/wiki/ঘোমটা|
+|https://en.wiktionary.org/wiki/ঘোরা|
+|https://en.wiktionary.org/wiki/ঘোড়ার%20ডিম|
+|https://en.wiktionary.org/wiki/ঘোষাল|
+|https://en.wiktionary.org/wiki/ঘোঙ্গা|
+|https://en.wiktionary.org/wiki/ঘোষণা|
+|https://en.wiktionary.org/wiki/ঘোষ|
+|https://en.wiktionary.org/wiki/ঘোড়া|

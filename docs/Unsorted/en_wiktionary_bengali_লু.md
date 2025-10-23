@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/লুঙ্গি|
+|https://en.wiktionary.org/wiki/লুৎফুর|
+|https://en.wiktionary.org/wiki/লুচি|
+|https://en.wiktionary.org/wiki/লুকোচুরি|
+|https://en.wiktionary.org/wiki/লুডা|
+|https://en.wiktionary.org/wiki/লুক্সেমবুর্গ|
+|https://en.wiktionary.org/wiki/লুকানো|

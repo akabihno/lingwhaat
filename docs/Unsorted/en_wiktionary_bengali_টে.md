@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/টের|
+|https://en.wiktionary.org/wiki/টেংরা|
+|https://en.wiktionary.org/wiki/টেঙ্গা|
+|https://en.wiktionary.org/wiki/টেম্‌স|
+|https://en.wiktionary.org/wiki/টেমস|
+|https://en.wiktionary.org/wiki/টেলক|
+|https://en.wiktionary.org/wiki/টেহা|
+|https://en.wiktionary.org/wiki/টেবিল|
+|https://en.wiktionary.org/wiki/টেলিফোন|
+|https://en.wiktionary.org/wiki/টেলিভিশন|
+|https://en.wiktionary.org/wiki/টেরাবাইট|
+|https://en.wiktionary.org/wiki/টেমপ্লেট|

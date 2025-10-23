@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/যাহা|
+|https://en.wiktionary.org/wiki/যাতনা|
+|https://en.wiktionary.org/wiki/যাতে|
+|https://en.wiktionary.org/wiki/যাদুঘর|
+|https://en.wiktionary.org/wiki/যাপন|
+|https://en.wiktionary.org/wiki/যাচ্ছেতাই|
+|https://en.wiktionary.org/wiki/যাত্রা|
+|https://en.wiktionary.org/wiki/যা|
+|https://en.wiktionary.org/wiki/যান্ত্রিক|
+|https://en.wiktionary.org/wiki/যাওয়া|
+|https://en.wiktionary.org/wiki/যান্ত্রিকীকরণ|
+|https://en.wiktionary.org/wiki/যাকাত|
+|https://en.wiktionary.org/wiki/যাচ্ঞা|

@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/শোয়াইব|
+|https://en.wiktionary.org/wiki/শোয়েব|
+|https://en.wiktionary.org/wiki/শোষণ|
+|https://en.wiktionary.org/wiki/শোক|
+|https://en.wiktionary.org/wiki/শোহরৎ|
+|https://en.wiktionary.org/wiki/শোঁকা|
+|https://en.wiktionary.org/wiki/শোকর|
+|https://en.wiktionary.org/wiki/শোয়া|
+|https://en.wiktionary.org/wiki/শোনা|
+|https://en.wiktionary.org/wiki/শোয়াস|

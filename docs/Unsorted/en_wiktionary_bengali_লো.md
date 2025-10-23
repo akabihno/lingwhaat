@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/লোধ্র|
+|https://en.wiktionary.org/wiki/লোবান|
+|https://en.wiktionary.org/wiki/লোকসান|
+|https://en.wiktionary.org/wiki/লোপ|
+|https://en.wiktionary.org/wiki/লোহা|
+|https://en.wiktionary.org/wiki/লোচন|
+|https://en.wiktionary.org/wiki/লোকসভা|
+|https://en.wiktionary.org/wiki/লোহিত|
+|https://en.wiktionary.org/wiki/লোফ|
+|https://en.wiktionary.org/wiki/লোকমা|
+|https://en.wiktionary.org/wiki/লোক|
+|https://en.wiktionary.org/wiki/লোকান্তরপ্রাপ্তি|

@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ষান্ডা|
+|https://en.wiktionary.org/wiki/ষড়ঋতু|
+|https://en.wiktionary.org/wiki/ষড়যন্ত্র|
+|https://en.wiktionary.org/wiki/ষোলো|
+|https://en.wiktionary.org/wiki/ষাঁড়|
+|https://en.wiktionary.org/wiki/ষড়ভুজ|
+|https://en.wiktionary.org/wiki/ষাট|
+|https://en.wiktionary.org/wiki/ষ|

@@ -1,0 +1,16 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/মূর্তি|
+|https://en.wiktionary.org/wiki/মূর্ধন্য|
+|https://en.wiktionary.org/wiki/মূঢ়|
+|https://en.wiktionary.org/wiki/মূল্যবান|
+|https://en.wiktionary.org/wiki/মূসা|
+|https://en.wiktionary.org/wiki/মূল্যহীন|
+|https://en.wiktionary.org/wiki/মূল্য|
+|https://en.wiktionary.org/wiki/মূত|
+|https://en.wiktionary.org/wiki/মূত্রনালি|
+|https://en.wiktionary.org/wiki/মূত্র|
+|https://en.wiktionary.org/wiki/মূত্রনালী|
+|https://en.wiktionary.org/wiki/মূর্খ|
+|https://en.wiktionary.org/wiki/মূর্খতা|
+|https://en.wiktionary.org/wiki/মূল|

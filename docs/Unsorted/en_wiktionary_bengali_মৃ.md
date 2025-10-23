@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/মৃগ|
+|https://en.wiktionary.org/wiki/মৃণ্ময়|
+|https://en.wiktionary.org/wiki/মৃত্তিকা|
+|https://en.wiktionary.org/wiki/মৃদু|
+|https://en.wiktionary.org/wiki/মৃত্যুঞ্জয়|
+|https://en.wiktionary.org/wiki/মৃতদেহ|
+|https://en.wiktionary.org/wiki/মৃগাঙ্ক|
+|https://en.wiktionary.org/wiki/মৃত|
+|https://en.wiktionary.org/wiki/মৃত্যু|
+|https://en.wiktionary.org/wiki/মৃদুতা|

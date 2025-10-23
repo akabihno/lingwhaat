@@ -1,0 +1,16 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/বৃহত্তম|
+|https://en.wiktionary.org/wiki/বৃদ্ধি|
+|https://en.wiktionary.org/wiki/বৃক্ক|
+|https://en.wiktionary.org/wiki/বৃশ্চিকদংশন|
+|https://en.wiktionary.org/wiki/বৃহস্পতি|
+|https://en.wiktionary.org/wiki/বৃন্দাবন|
+|https://en.wiktionary.org/wiki/বৃত্ত|
+|https://en.wiktionary.org/wiki/বৃহদান্ত্র|
+|https://en.wiktionary.org/wiki/বৃষ্টি%20পড়া|
+|https://en.wiktionary.org/wiki/বৃষ্টি%20হওয়া|
+|https://en.wiktionary.org/wiki/বৃষ্টি|
+|https://en.wiktionary.org/wiki/বৃশ্চিক|
+|https://en.wiktionary.org/wiki/বৃক্ষ|
+|https://en.wiktionary.org/wiki/বৃহস্পতিবার|

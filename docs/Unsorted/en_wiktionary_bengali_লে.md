@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/লেখনী|
+|https://en.wiktionary.org/wiki/লেওড়া|
+|https://en.wiktionary.org/wiki/লেপটানো|
+|https://en.wiktionary.org/wiki/লেখানো|
+|https://en.wiktionary.org/wiki/লেমনেড|
+|https://en.wiktionary.org/wiki/লেনিন|
+|https://en.wiktionary.org/wiki/লেপ|
+|https://en.wiktionary.org/wiki/লেফাফা|
+|https://en.wiktionary.org/wiki/লেসোথো|
+|https://en.wiktionary.org/wiki/লেবানন|
+|https://en.wiktionary.org/wiki/লেজ|
+|https://en.wiktionary.org/wiki/লেসবিয়ান|
+|https://en.wiktionary.org/wiki/লেখক|
+|https://en.wiktionary.org/wiki/লেখা|
+|https://en.wiktionary.org/wiki/লেবু|

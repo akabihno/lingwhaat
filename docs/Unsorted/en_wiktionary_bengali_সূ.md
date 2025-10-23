@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/সূর্য্য|
+|https://en.wiktionary.org/wiki/সূত্রধর|
+|https://en.wiktionary.org/wiki/সূচী|
+|https://en.wiktionary.org/wiki/সূতা|
+|https://en.wiktionary.org/wiki/সূরা|
+|https://en.wiktionary.org/wiki/সূর্যগ্রহণ|
+|https://en.wiktionary.org/wiki/সূর্য|

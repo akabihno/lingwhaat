@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/জোড়া|
+|https://en.wiktionary.org/wiki/জোরাজুরি|
+|https://en.wiktionary.org/wiki/জোয়ান|
+|https://en.wiktionary.org/wiki/জোয়াল|
+|https://en.wiktionary.org/wiki/জোচ্চর|
+|https://en.wiktionary.org/wiki/জোরে|
+|https://en.wiktionary.org/wiki/জোয়ার|
+|https://en.wiktionary.org/wiki/জোনাকি|
+|https://en.wiktionary.org/wiki/জোর|
+|https://en.wiktionary.org/wiki/জোঁক|
+|https://en.wiktionary.org/wiki/জোছনা|
+|https://en.wiktionary.org/wiki/জোস|

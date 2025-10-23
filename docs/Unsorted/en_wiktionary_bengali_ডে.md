@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ডেবরা|
+|https://en.wiktionary.org/wiki/ডেস্ক|
+|https://en.wiktionary.org/wiki/ডেস্কটপ|
+|https://en.wiktionary.org/wiki/ডেহা|
+|https://en.wiktionary.org/wiki/ডেক|
+|https://en.wiktionary.org/wiki/ডেকচি|
+|https://en.wiktionary.org/wiki/ডেনমার্ক|
+|https://en.wiktionary.org/wiki/ডেনীয়%20ভাষা|

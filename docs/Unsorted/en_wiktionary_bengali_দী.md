@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/দীর্ঘ|
+|https://en.wiktionary.org/wiki/দীপাঞ্জন|
+|https://en.wiktionary.org/wiki/দীপঙ্কর|
+|https://en.wiktionary.org/wiki/দীপান্বিতা|
+|https://en.wiktionary.org/wiki/দীয়া|
+|https://en.wiktionary.org/wiki/দীদার|
+|https://en.wiktionary.org/wiki/দীপাবলি|
+|https://en.wiktionary.org/wiki/দীপোৎসব|

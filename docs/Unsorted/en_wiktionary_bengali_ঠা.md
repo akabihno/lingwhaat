@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ঠাণ্ডা|
+|https://en.wiktionary.org/wiki/ঠাকুরমা|
+|https://en.wiktionary.org/wiki/ঠাকুরগাঁও|
+|https://en.wiktionary.org/wiki/ঠাকুরঘর|
+|https://en.wiktionary.org/wiki/ঠান্ডা%20যুদ্ধ|
+|https://en.wiktionary.org/wiki/ঠান্ডা|
+|https://en.wiktionary.org/wiki/ঠাটা|
+|https://en.wiktionary.org/wiki/ঠাকুর|
+|https://en.wiktionary.org/wiki/ঠাঁঁই|
+|https://en.wiktionary.org/wiki/ঠাকুরগাঁও%20জেলা|
