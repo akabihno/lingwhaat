@@ -44,7 +44,7 @@
     "ext-pdo": "*",
     "doctrine/dbal": "^3.10.3",
     "doctrine/doctrine-bundle": "^2.18.0",
-    "doctrine/doctrine-migrations-bundle": "^3.4.2",
+    "doctrine/doctrine-migrations-bundle": "^3.5.0",
     "doctrine/orm": "^3.5.2",
     "ivopetkov/html5-dom-document-php": "^2.8.1",
     "symfony/config": "^7.3.4",
@@ -68,7 +68,7 @@
     "twig/twig": "^3.21.1",
     "vlucas/phpdotenv": ">=5.6.2",
     "ext-mbstring": "*",
-    "nelmio/api-doc-bundle": "^v5.6.3",
+    "nelmio/api-doc-bundle": "^5.6.5",
     "ruflin/elastica": "^8.2.0"
   },
   "require-dev": {
