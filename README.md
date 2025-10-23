@@ -2,9 +2,11 @@
 
 This project aims to detect the language of written text with high speed and accuracy.\
 Supported languages:
+* Afar
 * Afrikaans
 * Albanian
 * Armenian
+* Bengali
 * Czech
 * Dutch
 * English
