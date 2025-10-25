@@ -32,5 +32,5 @@ services:
         $client: '@Elastica\Client'
         $indexName: 'app-logs'
 
-      elasticsearch_logger:
-        alias: App\Service\Logging\ElasticsearchLogger
+    App\Service\Logging\ElasticsearchLogger $elasticsearchLogger:
+      alias: App\Service\Logging\ElasticsearchLogger
