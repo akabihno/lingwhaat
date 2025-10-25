@@ -27,10 +27,10 @@ services:
       tags:
         - { name: doctrine.event_subscriber }
 
-    App\Service\Logging\ElasticsearchLogger:
-      arguments:
-        $client: '@Elastica\Client'
-        $indexName: 'app-logs'
+    Elastica\Client:
+      factory: [ 'App\Service\Search\ElasticsearchClientFactory', 'create' ]
 
-    App\Service\Logging\ElasticsearchLogger $elasticsearchLogger:
-      alias: App\Service\Logging\ElasticsearchLogger
+      App\Service\Logging\ElasticsearchLogger:
+        arguments:
+          $client: '@Elastica\Client'
+          $indexName: 'application-logs'
