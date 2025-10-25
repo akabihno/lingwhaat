@@ -30,7 +30,7 @@ services:
     Elastica\Client:
       factory: [ 'App\Service\Search\ElasticsearchClientFactory', 'create' ]
 
-      App\Service\Logging\ElasticsearchLogger:
-        arguments:
-          $client: '@Elastica\Client'
-          $indexName: 'application-logs'
+    App\Service\Logging\ElasticsearchLogger:
+      arguments:
+        $client: '@Elastica\Client'
+        $indexName: 'application-logs'
