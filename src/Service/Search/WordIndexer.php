@@ -2,6 +2,7 @@
 
 namespace App\Service\Search;
 
+use App\Constant\LanguageServicesAndCodes;
 use App\Repository\AfarLanguageRepository;
 use App\Repository\AfrikaansLanguageRepository;
 use App\Repository\AlbanianLanguageRepository;
@@ -30,6 +31,7 @@ use App\Repository\SwedishLanguageRepository;
 use App\Repository\TagalogLanguageRepository;
 use App\Repository\TurkishLanguageRepository;
 use App\Repository\UkrainianLanguageRepository;
+use App\Repository\UzbekLanguageRepository;
 use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageServices\AfarLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
@@ -59,6 +61,7 @@ use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\UzbekLanguageService;
 use Doctrine\Persistence\ManagerRegistry;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\MissingParameterException;
@@ -123,91 +126,94 @@ class WordIndexer
 
 
 
-        foreach (LanguageDetectionService::getLanguageCodes() as $languageCode) {
+        foreach (LanguageServicesAndCodes::getLanguageCodes() as $languageCode) {
             switch ($languageCode) {
-                case LanguageDetectionService::FRENCH_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::FRENCH_LANGUAGE_CODE:
                     $service = new FrenchLanguageService(new FrenchLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::GERMAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::GERMAN_LANGUAGE_CODE:
                     $service = new GermanLanguageService(new GermanLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::GREEK_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::GREEK_LANGUAGE_CODE:
                     $service = new GreekLanguageService(new GreekLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::ITALIAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::ITALIAN_LANGUAGE_CODE:
                     $service = new ItalianLanguageService(new ItalianLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::LATVIAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::LATVIAN_LANGUAGE_CODE:
                     $service = new LatvianLanguageService(new LatvianLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::LITHUANIAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::LITHUANIAN_LANGUAGE_CODE:
                     $service = new LithuanianLanguageService(new LithuanianLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::POLISH_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::POLISH_LANGUAGE_CODE:
                     $service = new PolishLanguageService(new PolishLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::PORTUGUESE_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::PORTUGUESE_LANGUAGE_CODE:
                     $service = new PortugueseLanguageService(new PortugueseLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::ROMANIAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::ROMANIAN_LANGUAGE_CODE:
                     $service = new RomanianLanguageService(new RomanianLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::RUSSIAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::RUSSIAN_LANGUAGE_CODE:
                     $service = new RussianLanguageService(new RussianLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::SERBOCROATIAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::SERBOCROATIAN_LANGUAGE_CODE:
                     $service = new SerboCroatianLanguageService(new SerboCroatianLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::TAGALOG_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::TAGALOG_LANGUAGE_CODE:
                     $service = new TagalogLanguageService(new TagalogLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::UKRAINIAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::UKRAINIAN_LANGUAGE_CODE:
                     $service = new UkrainianLanguageService(new UkrainianLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::SPANISH_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::SPANISH_LANGUAGE_CODE:
                     $service = new SpanishLanguageService(new SpanishLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::LATIN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::LATIN_LANGUAGE_CODE:
                     $service = new LatinLanguageService(new LatinLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::SWEDISH_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::SWEDISH_LANGUAGE_CODE:
                     $service = new SwedishLanguageService(new SwedishLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::ESTONIAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::ESTONIAN_LANGUAGE_CODE:
                     $service = new EstonianLanguageService(new EstonianLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::ENGLISH_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::ENGLISH_LANGUAGE_CODE:
                     $service = new EnglishLanguageService(new EnglishLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::DUTCH_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::DUTCH_LANGUAGE_CODE:
                     $service = new DutchLanguageService(new DutchLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::HINDI_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::HINDI_LANGUAGE_CODE:
                     $service = new HindiLanguageService(new HindiLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::GEORGIAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::GEORGIAN_LANGUAGE_CODE:
                     $service = new GeorgianLanguageService(new GeorgianLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::TURKISH_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::TURKISH_LANGUAGE_CODE:
                     $service = new TurkishLanguageService(new TurkishLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::ALBANIAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::ALBANIAN_LANGUAGE_CODE:
                     $service = new AlbanianLanguageService(new AlbanianLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::CZECH_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::CZECH_LANGUAGE_CODE:
                     $service = new CzechLanguageService(new CzechLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::AFRIKAANS_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::AFRIKAANS_LANGUAGE_CODE:
                     $service = new AfrikaansLanguageService(new AfrikaansLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::ARMENIAN_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::ARMENIAN_LANGUAGE_CODE:
                     $service = new ArmenianLanguageService(new ArmenianLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::AFAR_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::AFAR_LANGUAGE_CODE:
                     $service = new AfarLanguageService(new AfarLanguageRepository($this->em));
                     break;
-                case LanguageDetectionService::BENGALI_LANGUAGE_CODE:
+                case LanguageServicesAndCodes::BENGALI_LANGUAGE_CODE:
                     $service = new BengaliLanguageService(new BengaliLanguageRepository($this->em));
+                    break;
+                case LanguageServicesAndCodes::UZBEK_LANGUAGE_CODE:
+                    $service = new UzbekLanguageService(new UzbekLanguageRepository($this->em));
                     break;
             }
 

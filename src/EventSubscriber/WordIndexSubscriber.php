@@ -2,6 +2,7 @@
 
 namespace App\EventSubscriber;
 
+use App\Constant\LanguageServicesAndCodes;
 use App\Service\Search\WordIndexer;
 use App\Service\LanguageDetection\LanguageDetectionService;
 use Doctrine\ORM\Events;
@@ -47,7 +48,7 @@ class WordIndexSubscriber
             return;
         }
 
-        $languageCode = $this->detectLanguageCodeFromEntity($entity);
+        $languageCode = LanguageServicesAndCodes::detectLanguageCodeFromEntity($entity);
         if (!$languageCode) {
             return;
         }
@@ -77,47 +78,6 @@ class WordIndexSubscriber
 
         $query = new Term(['word' => $word]);
         $index->deleteByQuery($query);
-    }
-
-    private function detectLanguageCodeFromEntity(object $entity): ?string
-    {
-        $class = get_class($entity);
-        $map = [
-            'AfrikaansLanguageEntity' => LanguageDetectionService::AFRIKAANS_LANGUAGE_CODE,
-            'AlbanianLanguageEntity' => LanguageDetectionService::ALBANIAN_LANGUAGE_CODE,
-            'ArmenianLanguageEntity' => LanguageDetectionService::ARMENIAN_LANGUAGE_CODE,
-            'CzechLanguageEntity' => LanguageDetectionService::CZECH_LANGUAGE_CODE,
-            'DutchLanguageEntity' => LanguageDetectionService::DUTCH_LANGUAGE_CODE,
-            'EnglishLanguageEntity' => LanguageDetectionService::ENGLISH_LANGUAGE_CODE,
-            'EstonianLanguageEntity' => LanguageDetectionService::ESTONIAN_LANGUAGE_CODE,
-            'FrenchLanguageEntity' => LanguageDetectionService::FRENCH_LANGUAGE_CODE,
-            'GeorgianLanguageEntity' => LanguageDetectionService::GEORGIAN_LANGUAGE_CODE,
-            'GermanLanguageEntity' => LanguageDetectionService::GERMAN_LANGUAGE_CODE,
-            'GreekLanguageEntity' => LanguageDetectionService::GREEK_LANGUAGE_CODE,
-            'HindiLanguageEntity' => LanguageDetectionService::HINDI_LANGUAGE_CODE,
-            'ItalianLanguageEntity' => LanguageDetectionService::ITALIAN_LANGUAGE_CODE,
-            'LatinLanguageEntity' => LanguageDetectionService::LATIN_LANGUAGE_CODE,
-            'LatvianLanguageEntity' => LanguageDetectionService::LATVIAN_LANGUAGE_CODE,
-            'LithuanianLanguageEntity' => LanguageDetectionService::LITHUANIAN_LANGUAGE_CODE,
-            'PolishLanguageEntity' => LanguageDetectionService::POLISH_LANGUAGE_CODE,
-            'PortugueseLanguageEntity' => LanguageDetectionService::PORTUGUESE_LANGUAGE_CODE,
-            'RomanianLanguageEntity' => LanguageDetectionService::ROMANIAN_LANGUAGE_CODE,
-            'RussianLanguageEntity' => LanguageDetectionService::RUSSIAN_LANGUAGE_CODE,
-            'SerboCroatianLanguageEntity' => LanguageDetectionService::SERBOCROATIAN_LANGUAGE_CODE,
-            'SpanishLanguageEntity' => LanguageDetectionService::SPANISH_LANGUAGE_CODE,
-            'SwedishLanguageEntity' => LanguageDetectionService::SWEDISH_LANGUAGE_CODE,
-            'TagalogLanguageEntity' => LanguageDetectionService::TAGALOG_LANGUAGE_CODE,
-            'TurkishLanguageEntity' => LanguageDetectionService::TURKISH_LANGUAGE_CODE,
-            'UkrainianLanguageEntity' => LanguageDetectionService::UKRAINIAN_LANGUAGE_CODE,
-        ];
-
-        foreach ($map as $entityFragment => $code) {
-            if (str_contains($class, $entityFragment)) {
-                return $code;
-            }
-        }
-
-        return null;
     }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageTransliteration\Command;
 
+use App\Constant\LanguageServicesAndCodes;
 use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageServices\AfarLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
@@ -31,6 +32,7 @@ use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
 use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
 use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\UzbekLanguageService;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -77,6 +79,7 @@ class TrainIpaPredictorModelCommand extends Command
         protected ArmenianLanguageService $armenianLanguageService,
         protected AfarLanguageService $afarLanguageService,
         protected BengaliLanguageService $bengaliLanguageService,
+        protected UzbekLanguageService $uzbekLanguageService,
         protected HttpClientInterface $httpClient,
     ) {
         parent::__construct();
@@ -87,7 +90,7 @@ class TrainIpaPredictorModelCommand extends Command
         $this
             ->setDescription('Train IPA prediction model for a specific language')
             ->addOption('lang', 'l', InputOption::VALUE_REQUIRED,
-                'Language code in: ' . implode(', ', LanguageDetectionService::getLanguageCodes())
+                'Language code in: ' . implode(', ', LanguageServicesAndCodes::getLanguageCodes())
             )->addOption('prepare', 'p', InputOption::VALUE_OPTIONAL,
             'Optional argument to update existing dataset in CSV file (can be used if data in DB was populated)');
     }
@@ -108,92 +111,95 @@ class TrainIpaPredictorModelCommand extends Command
         $this->trainingDataPath = realpath(".")."/ml_service/data/{$lang}.csv";
 
         switch ($lang) {
-            case LanguageDetectionService::DUTCH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::DUTCH_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->dutchLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::ENGLISH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::ENGLISH_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->englishLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::ESTONIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::ESTONIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->estonianLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::FRENCH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::FRENCH_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->frenchLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::GEORGIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::GEORGIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->georgianLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::GERMAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::GERMAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->germanLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::GREEK_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::GREEK_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->greekLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::HINDI_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::HINDI_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->hindiLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::ITALIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::ITALIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->italianLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::LATIN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::LATIN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->latinLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::LATVIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::LATVIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->latvianLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::LITHUANIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::LITHUANIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->lithuanianLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::POLISH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::POLISH_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->polishLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::PORTUGUESE_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::PORTUGUESE_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->portugueseLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::ROMANIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::ROMANIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->romanianLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::RUSSIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::RUSSIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->russianLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::SERBOCROATIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::SERBOCROATIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->serboCroatianLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::SPANISH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::SPANISH_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->spanishLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::SWEDISH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::SWEDISH_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->swedishLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::TAGALOG_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::TAGALOG_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->tagalogLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::TURKISH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::TURKISH_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->turkishLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::UKRAINIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::UKRAINIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->ukrainianLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::ALBANIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::ALBANIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->albanianLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::CZECH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::CZECH_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->czechLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::AFRIKAANS_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::AFRIKAANS_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->afrikaansLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::ARMENIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::ARMENIAN_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->armenianLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::AFAR_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::AFAR_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->afarLanguageService->fetchAllNamesAndIpa();
                 break;
-            case LanguageDetectionService::BENGALI_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::BENGALI_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->bengaliLanguageService->fetchAllNamesAndIpa();
                 break;
+            case LanguageServicesAndCodes::UZBEK_LANGUAGE_CODE:
+                $trainingDatasetArray = $this->uzbekLanguageService->fetchAllNamesAndIpa();
+                break;
             default:
-                $acceptedLangCodes = implode(', ', LanguageDetectionService::getLanguageCodes());
+                $acceptedLangCodes = implode(', ', LanguageServicesAndCodes::getLanguageCodes());
                 $output->writeln('<error>No language provided in --lang parameter or language is not accepted. 
                 Accepted language params are: '.$acceptedLangCodes.' </error>');
                 return Command::FAILURE;

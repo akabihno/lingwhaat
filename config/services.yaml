@@ -26,3 +26,11 @@ services:
     App\EventSubscriber\WordIndexSubscriber:
       tags:
         - { name: doctrine.event_subscriber }
+
+    App\Service\Logging\ElasticsearchLogger:
+      arguments:
+        $client: '@Elastica\Client'
+        $indexName: 'app-logs'
+
+      elasticsearch_logger:
+        alias: App\Service\Logging\ElasticsearchLogger
