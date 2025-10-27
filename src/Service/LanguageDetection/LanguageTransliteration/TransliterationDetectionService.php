@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageTransliteration;
 
+use App\Constant\LanguageServicesAndCodes;
 use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
@@ -28,7 +29,7 @@ use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 use App\Service\LanguageDetection\LanguageTransliteration\Command\UseIpaPredictorModelCommand;
 use App\Service\LanguageDetection\LanguageTransliteration\Command\UseWordPredictorModelCommand;
 use App\Service\LanguageNormalizationService;
-use Psr\Log\LoggerInterface;
+use App\Service\Logging\ElasticsearchLogger;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
@@ -38,7 +39,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class TransliterationDetectionService
 {
     public function __construct(
-        protected LoggerInterface $logger,
+        protected ElasticsearchLogger $logger,
         protected LanguageNormalizationService $languageNormalizationService,
         protected UseIpaPredictorModelCommand $ipaPredictorModelCommand,
         protected UseWordPredictorModelCommand $wordPredictorModelCommand,
@@ -125,55 +126,58 @@ class TransliterationDetectionService
 
     protected function logLanguageDetectionResult(string $uuidStr, array $result): void
     {
-        $this->logger->info(sprintf('[TransliterationDetectionService][%s] %s', $uuidStr, json_encode($result)));
+        $this->logger->info(
+            json_encode($result),
+            ['uuid' => $uuidStr, 'service' => '[TransliterationDetectionService]']
+        );
     }
 
     protected function checkLanguage(string $languageCode, string $word): bool
     {
         switch ($languageCode) {
-            case LanguageDetectionService::FRENCH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::FRENCH_LANGUAGE_CODE:
                 return $this->checkFrenchLanguage($word);
-            case LanguageDetectionService::GERMAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::GERMAN_LANGUAGE_CODE:
                 return $this->checkGermanLanguage($word);
-            case LanguageDetectionService::GREEK_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::GREEK_LANGUAGE_CODE:
                 return $this->checkGreekLanguage($word);
-            case LanguageDetectionService::ITALIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::ITALIAN_LANGUAGE_CODE:
                 return $this->checkItalianLanguage($word);
-            case LanguageDetectionService::LATVIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::LATVIAN_LANGUAGE_CODE:
                 return $this->checkLatvianLanguage($word);
-            case LanguageDetectionService::LITHUANIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::LITHUANIAN_LANGUAGE_CODE:
                 return $this->checkLithuanianLanguage($word);
-            case LanguageDetectionService::POLISH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::POLISH_LANGUAGE_CODE:
                 return $this->checkPolishLanguage($word);
-            case LanguageDetectionService::PORTUGUESE_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::PORTUGUESE_LANGUAGE_CODE:
                 return $this->checkPortugueseLanguage($word);
-            case LanguageDetectionService::ROMANIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::ROMANIAN_LANGUAGE_CODE:
                 return $this->checkRomanianLanguage($word);
-            case LanguageDetectionService::RUSSIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::RUSSIAN_LANGUAGE_CODE:
                 return $this->checkRussianLanguage($word);
-            case LanguageDetectionService::SERBOCROATIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::SERBOCROATIAN_LANGUAGE_CODE:
                 return $this->checkSerboCroatianLanguage($word);
-            case LanguageDetectionService::TAGALOG_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::TAGALOG_LANGUAGE_CODE:
                 return $this->checkTagalogLanguage($word);
-            case LanguageDetectionService::UKRAINIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::UKRAINIAN_LANGUAGE_CODE:
                 return $this->checkUkrainianLanguage($word);
-            case LanguageDetectionService::SPANISH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::SPANISH_LANGUAGE_CODE:
                 return $this->checkSpanishLanguage($word);
-            case LanguageDetectionService::LATIN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::LATIN_LANGUAGE_CODE:
                 return $this->checkLatinLanguage($word);
-            case LanguageDetectionService::SWEDISH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::SWEDISH_LANGUAGE_CODE:
                 return $this->checkSwedishLanguage($word);
-            case LanguageDetectionService::ESTONIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::ESTONIAN_LANGUAGE_CODE:
                 return $this->checkEstonianLanguage($word);
-            case LanguageDetectionService::ENGLISH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::ENGLISH_LANGUAGE_CODE:
                 return $this->checkEnglishLanguage($word);
-            case LanguageDetectionService::DUTCH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::DUTCH_LANGUAGE_CODE:
                 return $this->checkDutchLanguage($word);
-            case LanguageDetectionService::HINDI_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::HINDI_LANGUAGE_CODE:
                 return $this->checkHindiLanguage($word);
-            case LanguageDetectionService::GEORGIAN_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::GEORGIAN_LANGUAGE_CODE:
                 return $this->checkGeorgianLanguage($word);
-            case LanguageDetectionService::TURKISH_LANGUAGE_CODE:
+            case LanguageServicesAndCodes::TURKISH_LANGUAGE_CODE:
                 return $this->checkTurkishLanguage($word);
         }
 

@@ -2,7 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageTransliteration\Command;
 
-use App\Service\LanguageDetection\LanguageDetectionService;
+use App\Constant\LanguageServicesAndCodes;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -33,7 +33,7 @@ class TrainWordPredictorModelCommand extends Command
         $this
             ->setDescription('Train word based on IPA prediction model for a specific language')
             ->addOption('lang', 'l', InputOption::VALUE_REQUIRED,
-                'Language code in: ' . implode(', ', LanguageDetectionService::getLanguageCodes())
+                'Language code in: ' . implode(', ', LanguageServicesAndCodes::getLanguageCodes())
             );
     }
 

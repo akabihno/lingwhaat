@@ -30,6 +30,7 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_swedish_language TO '${MYS
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_tagalog_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_turkish_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_ukrainian_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_uzbek_language TO '${MYSQL_WEB_USER}'@'%';
 
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.unique_pattern TO '${MYSQL_WEB_USER}'@'%';
 
