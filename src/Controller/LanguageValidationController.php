@@ -3,9 +3,9 @@
 namespace App\Controller;
 
 use App\Service\LanguageDetection\LanguageValidation\LanguageValidationService;
+use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use OpenApi\Attributes as OA;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -131,7 +131,7 @@ class LanguageValidationController extends AbstractController
         $clientIp = $request->getClientIp();
         $whitelistedIp = getenv('RATE_LIMITER_WHITELISTED_IP');
 
-        $this->logger->info(sprintf('[NaturalLanguageDetectionController] client IP: %s, whitelisted IP: %s', $clientIp, $whitelistedIp));
+        $this->logger->info(sprintf('[LanguageValidationController] client IP: %s, whitelisted IP: %s', $clientIp, $whitelistedIp));
 
         if ($whitelistedIp && $whitelistedIp !== $clientIp) {
             $limiter = $anonymousApiLimiter->create($clientIp);
