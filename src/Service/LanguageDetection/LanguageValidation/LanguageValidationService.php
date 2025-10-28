@@ -2,6 +2,8 @@
 
 namespace App\Service\LanguageDetection\LanguageValidation;
 
+use App\Service\Logging\ElasticsearchLogger;
+
 class LanguageValidationService
 {
     private const string VOWELS = 'aeiouAEIOU';
@@ -9,6 +11,10 @@ class LanguageValidationService
     private const float MIN_VOWEL_RATIO = 0.20;  // At least 20% vowels
     private const float MAX_VOWEL_RATIO = 0.60;  // At most 60% vowels
     private const float OPTIMAL_VOWEL_RATIO = 0.40; // Ideal around 40%
+
+    public function __construct(protected ElasticsearchLogger $logger)
+    {
+    }
 
     /**
      * Analyzes text and returns a score from 0 to 100
@@ -48,6 +54,16 @@ class LanguageValidationService
             $scores['consonantClusters'] * 0.35 +
             $scores['vowelClusters'] * 0.20 +
             $scores['alternationPattern'] * 0.15
+        );
+
+        $this->logger->info(
+            'Completed validation',
+            [
+                'input' => $text,
+                'service' => '[LanguageValidationService]',
+                'isNatural' => $totalScore >= 60,
+                'score' => round($totalScore, 2)
+            ]
         );
 
         return [

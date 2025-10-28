@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Service\LanguageDetection\LanguageDetectionService;
+use App\Service\Logging\ElasticsearchLogger;
 use OpenApi\Attributes as OA;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ use Symfony\Component\RateLimiter\RateLimiterFactory;
 class LanguageDetectionController extends AbstractController
 {
     public function __construct(
-        protected LoggerInterface $logger,
+        protected ElasticsearchLogger $logger,
         protected LanguageDetectionService $languageDetectionService
     )
     {
@@ -76,7 +76,10 @@ class LanguageDetectionController extends AbstractController
         $clientIp = $request->getClientIp();
         $whitelistedIp = getenv('RATE_LIMITER_WHITELISTED_IP');
 
-        $this->logger->info(sprintf('[LanguageDetectionController] client IP: %s, whitelisted IP: %s', $clientIp, $whitelistedIp));
+        $this->logger->info(
+            'Validating IP address',
+            ['client_ip' => $clientIp, 'whitelisted_ip' => $whitelistedIp, 'service' => '[LanguageDetectionController]']
+        );
 
         if ($whitelistedIp && $whitelistedIp !== $clientIp) {
             $limiter = $anonymousApiLimiter->create($clientIp);

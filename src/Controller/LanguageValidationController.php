@@ -131,7 +131,10 @@ class LanguageValidationController extends AbstractController
         $clientIp = $request->getClientIp();
         $whitelistedIp = getenv('RATE_LIMITER_WHITELISTED_IP');
 
-        $this->logger->info(sprintf('[LanguageValidationController] client IP: %s, whitelisted IP: %s', $clientIp, $whitelistedIp));
+        $this->logger->info(
+            'Validating IP address',
+            ['client_ip' => $clientIp, 'whitelisted_ip' => $whitelistedIp, 'service' => '[LanguageValidationController]']
+        );
 
         if ($whitelistedIp && $whitelistedIp !== $clientIp) {
             $limiter = $anonymousApiLimiter->create($clientIp);
