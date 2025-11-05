@@ -28,6 +28,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - WIKTIONARY_UA_EMAIL=${WIKTIONARY_UA_EMAIL}
       - RATE_LIMITER_WHITELISTED_IP=${RATE_LIMITER_WHITELISTED_IP}
+      - LOCK_DSN=${LOCK_DSN}
     image: php:8.2-apache
     container_name: php-app
     network_mode: host
