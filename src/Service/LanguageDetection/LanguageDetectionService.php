@@ -20,7 +20,7 @@ class LanguageDetectionService
     {
     }
 
-    public function process(string $languageInput, int $translitDetection): array
+    public function process(string $languageInput, int $translitDetection, int $excludeArticles): array
     {
         $uuid = Uuid::v4()->toRfc4122();
 
@@ -44,7 +44,9 @@ class LanguageDetectionService
 
         $normalizedInput = $this->languageNormalizationService->normalizeText($languageInput);
         $words = explode(' ', $normalizedInput);
-        $words = $this->languageNormalizationService->removeArticles($words);
+        if ($excludeArticles) {
+            $words = $this->languageNormalizationService->removeArticles($words);
+        }
         $count = count($words);
 
         if ($translitDetection) {

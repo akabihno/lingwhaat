@@ -45,6 +45,13 @@ class LanguageDetectionController extends AbstractController
                 in: 'query',
                 required: false,
                 schema: new OA\Schema(type: 'integer', default: 0, example: 0)
+            ),
+            new OA\Parameter(
+                name: 'exclude_articles',
+                description: 'Exclude less then 3 letter words which are considered articles (0 or 1)',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'integer', default: 0, example: 0)
             )
         ],
         responses: [
@@ -101,10 +108,12 @@ class LanguageDetectionController extends AbstractController
         }
 
         $translitDetection = $request->query->getInt('translit_detection', 0);
+        $excludeArticles = $request->query->getInt('exclude_articles', 0);
 
         $result = $this->languageDetectionService->process(
             $inputText,
-            $translitDetection
+            $translitDetection,
+            $excludeArticles
         );
 
         return new JsonResponse($result, Response::HTTP_OK);
