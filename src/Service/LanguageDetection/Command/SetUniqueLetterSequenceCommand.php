@@ -4,6 +4,7 @@ namespace App\Service\LanguageDetection\Command;
 
 use App\Constant\LanguageServicesAndCodes;
 use App\Entity\UniquePatternEntity;
+use App\Repository\BretonLanguageRepository;
 use App\Repository\UniquePatternRepository;
 use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageServices\AfarLanguageService;
@@ -11,6 +12,7 @@ use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\ArmenianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\BengaliLanguageService;
+use App\Service\LanguageDetection\LanguageServices\BretonLanguageService;
 use App\Service\LanguageDetection\LanguageServices\CzechLanguageService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
@@ -78,6 +80,7 @@ class SetUniqueLetterSequenceCommand extends Command
         protected AfarLanguageService $afarLanguageService,
         protected BengaliLanguageService $bengaliLanguageService,
         protected UzbekLanguageService $uzbekLanguageService,
+        protected BretonLanguageService $bretonLanguageService,
         protected UniquePatternRepository $uniquePatternRepository,
     ) {
         parent::__construct();
@@ -112,6 +115,7 @@ class SetUniqueLetterSequenceCommand extends Command
             LanguageServicesAndCodes::AFAR_LANGUAGE_CODE => $this->afarLanguageService,
             LanguageServicesAndCodes::BENGALI_LANGUAGE_CODE => $this->bengaliLanguageService,
             LanguageServicesAndCodes::UZBEK_LANGUAGE_CODE => $this->uzbekLanguageService,
+            LanguageServicesAndCodes::BRETON_LANGUAGE_CODE => $this->bretonLanguageService,
         ];
     }
     protected function configure(): void
@@ -247,6 +251,10 @@ class SetUniqueLetterSequenceCommand extends Command
             case LanguageServicesAndCodes::UZBEK_LANGUAGE_CODE:
                 $datasetArray = $this->uzbekLanguageService->fetchAllNamesWithoutUniquePatternCheck($limit);
                 $service = $this->uzbekLanguageService;
+                break;
+            case LanguageServicesAndCodes::BRETON_LANGUAGE_CODE:
+                $datasetArray = $this->bretonLanguageService->fetchAllNamesWithoutUniquePatternCheck($limit);
+                $service = $this->bretonLanguageService;
                 break;
             default:
                 $acceptedLangCodes = implode(', ', LanguageServicesAndCodes::getLanguageCodes());

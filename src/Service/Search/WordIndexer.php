@@ -8,6 +8,7 @@ use App\Repository\AfrikaansLanguageRepository;
 use App\Repository\AlbanianLanguageRepository;
 use App\Repository\ArmenianLanguageRepository;
 use App\Repository\BengaliLanguageRepository;
+use App\Repository\BretonLanguageRepository;
 use App\Repository\CzechLanguageRepository;
 use App\Repository\DutchLanguageRepository;
 use App\Repository\EnglishLanguageRepository;
@@ -38,6 +39,7 @@ use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\ArmenianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\BengaliLanguageService;
+use App\Service\LanguageDetection\LanguageServices\BretonLanguageService;
 use App\Service\LanguageDetection\LanguageServices\CzechLanguageService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
@@ -214,6 +216,9 @@ class WordIndexer
                     break;
                 case LanguageServicesAndCodes::UZBEK_LANGUAGE_CODE:
                     $service = new UzbekLanguageService(new UzbekLanguageRepository($this->em));
+                    break;
+                case LanguageServicesAndCodes::BRETON_LANGUAGE_CODE:
+                    $service = new BretonLanguageService(new BretonLanguageRepository($this->em));
                     break;
             }
 

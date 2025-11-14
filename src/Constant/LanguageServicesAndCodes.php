@@ -93,6 +93,8 @@ class LanguageServicesAndCodes
     public const string BENGALI_LANGUAGE_CODE = 'bn';
     public const string UZBEK_LANGUAGE_NAME = 'Uzbek';
     public const string UZBEK_LANGUAGE_CODE = 'uz';
+    public const string BRETON_LANGUAGE_NAME = 'Breton';
+    public const string BRETON_LANGUAGE_CODE = 'br';
 
     public const string LANGUAGE_NOT_FOUND = 'Language not found';
 

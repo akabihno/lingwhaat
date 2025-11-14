@@ -45,7 +45,7 @@
     "doctrine/dbal": "^3.10.3",
     "doctrine/doctrine-bundle": "^2.18.1",
     "doctrine/doctrine-migrations-bundle": "^3.6.0",
-    "doctrine/orm": "^3.5.3",
+    "doctrine/orm": "^3.5.7",
     "ivopetkov/html5-dom-document-php": "^2.8.1",
     "symfony/config": "^7.3.6",
     "symfony/console": "^7.3.6",
@@ -53,8 +53,8 @@
     "symfony/dotenv": "^7.3.2",
     "symfony/flex": "^2.9.0",
     "symfony/framework-bundle": "^7.3.6",
-    "symfony/http-foundation": "^7.3.6",
-    "symfony/http-kernel": "^7.3.6",
+    "symfony/http-foundation": "^7.3.7",
+    "symfony/http-kernel": "^7.3.7",
     "symfony/http-client": "^7.3.6",
     "symfony/routing": "^7.3.6",
     "symfony/runtime": "7.2.*",
@@ -68,7 +68,7 @@
     "twig/twig": "^3.22.0",
     "vlucas/phpdotenv": ">=5.6.2",
     "ext-mbstring": "*",
-    "nelmio/api-doc-bundle": "^5.6.5",
+    "nelmio/api-doc-bundle": "^5.7.1",
     "ruflin/elastica": "^8.2.0"
   },
   "require-dev": {

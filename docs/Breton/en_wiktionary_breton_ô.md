@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Olier|
+|https://en.wiktionary.org/wiki/Ouzbekistan|
+|https://en.wiktionary.org/wiki/ouzhpennañ|
+|https://en.wiktionary.org/wiki/Oanez|
+|https://en.wiktionary.org/wiki/oaled|
+|https://en.wiktionary.org/wiki/ouzh|
+|https://en.wiktionary.org/wiki/oaz|
+|https://en.wiktionary.org/wiki/oabl|
+|https://en.wiktionary.org/wiki/okitaneg|
+|https://en.wiktionary.org/wiki/okitan|
+|https://en.wiktionary.org/wiki/okitaneger|
+|https://en.wiktionary.org/wiki/Okitania|
+|https://en.wiktionary.org/wiki/oan|
+|https://en.wiktionary.org/wiki/ober|
+|https://en.wiktionary.org/wiki/o|

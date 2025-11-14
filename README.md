@@ -7,6 +7,7 @@ Supported languages:
 * Albanian
 * Armenian
 * Bengali
+* Breton
 * Czech
 * Dutch
 * English
@@ -29,6 +30,7 @@ Supported languages:
 * Tagalog (Filipino)
 * Turkish
 * Ukrainian
+* Uzbek
 
 IPA data for universal transliteration was parsed from [Wiktionary](https://en.wiktionary.org/wiki/Wiktionary:Main_Page) using Wikimedia REST API route [/page/html/{title}](https://en.wiktionary.org/api/rest_v1/#/Page%20content/get_page_html__title_)\
 Class example: [WiktionaryArticlesIpaParserService](src/Service/WiktionaryArticlesIpaParserService.php)\
@@ -433,6 +435,39 @@ List of all articles IPA data has been taken from:
 [ক্ষো](docs/Bengali/en_wiktionary_bengali_ক্ষো.md),
 [জ্ঞ](docs/Bengali/en_wiktionary_bengali_জ্ঞ.md),
 [জ্ঞা](docs/Bengali/en_wiktionary_bengali_জ্ঞা.md)
+* Breton
+[a](docs/Breton/en_wiktionary_breton_a.md),
+[b](docs/Breton/en_wiktionary_breton_b.md),
+[ch](docs/Breton/en_wiktionary_breton_ch.md),
+[d](docs/Breton/en_wiktionary_breton_d.md),
+[e](docs/Breton/en_wiktionary_breton_e.md),
+[f](docs/Breton/en_wiktionary_breton_f.md),
+[g](docs/Breton/en_wiktionary_breton_g.md),
+[h](docs/Breton/en_wiktionary_breton_h.md),
+[i](docs/Breton/en_wiktionary_breton_i.md),
+[j](docs/Breton/en_wiktionary_breton_j.md),
+[k](docs/Breton/en_wiktionary_breton_k.md),
+[l](docs/Breton/en_wiktionary_breton_l.md),
+[m](docs/Breton/en_wiktionary_breton_m.md),
+[n](docs/Breton/en_wiktionary_breton_n.md),
+[o](docs/Breton/en_wiktionary_breton_o.md),
+[p](docs/Breton/en_wiktionary_breton_p.md),
+[r](docs/Breton/en_wiktionary_breton_r.md),
+[s](docs/Breton/en_wiktionary_breton_s.md),
+[t](docs/Breton/en_wiktionary_breton_t.md),
+[u](docs/Breton/en_wiktionary_breton_u.md),
+[v](docs/Breton/en_wiktionary_breton_v.md),
+[w](docs/Breton/en_wiktionary_breton_w.md),
+[y](docs/Breton/en_wiktionary_breton_y.md),
+[z](docs/Breton/en_wiktionary_breton_z.md),
+[â](docs/Breton/en_wiktionary_breton_â.md),
+[ê](docs/Breton/en_wiktionary_breton_ê.md),
+[î](docs/Breton/en_wiktionary_breton_î.md),
+[ô](docs/Breton/en_wiktionary_breton_ô.md),
+[û](docs/Breton/en_wiktionary_breton_û.md),
+[ù](docs/Breton/en_wiktionary_breton_ù.md),
+[ü](docs/Breton/en_wiktionary_breton_ü.md),
+[ñ](docs/Breton/en_wiktionary_breton_ñ.md)
 * Czech:
 [a](docs/Czech/en_wiktionary_czech_a.md),
 [á](docs/Czech/en_wiktionary_czech_á.md),
@@ -1453,6 +1488,81 @@ List of all articles IPA data has been taken from:
 [ь](docs/Ukrainian/en_wiktionary_ukrainian_ь.md),
 [ю](docs/Ukrainian/en_wiktionary_ukrainian_ю.md),
 [я](docs/Ukrainian/en_wiktionary_ukrainian_я.md)
+* Uzbek
+
+arsolga@Arss-MacBook-Air lingwhaat % docker exec -it php-app php utils/generate_docs.php uzbek a,b,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,x,y,z,oʻ,gʻ,sh,ch,ng,а,б,в,г,д,е,ё,ж,з,и,й,к,л,м,н,о,п,р,с,т,у,ф,х,ц,ч,ш,щ,ъ,ы,ь,э,ю,я,қ,ғ,ўا,ب,پ,ت,ث,ج,چ,ح,خ,د,ذ,ر,ز,ژ,س,ش,ص,ض,ط,ظ,ع,غ,ف,ق,ک,گ,ل,م,ن,نگ,و,ۆ,ھ,ه,ى,ې
+[a](docs/Uzbek/en_wiktionary_uzbek_a.md),
+[b](docs/Uzbek/en_wiktionary_uzbek_b.md),
+[d](docs/Uzbek/en_wiktionary_uzbek_d.md),
+[e](docs/Uzbek/en_wiktionary_uzbek_e.md),
+[f](docs/Uzbek/en_wiktionary_uzbek_f.md),
+[g](docs/Uzbek/en_wiktionary_uzbek_g.md),
+[h](docs/Uzbek/en_wiktionary_uzbek_h.md),
+[i](docs/Uzbek/en_wiktionary_uzbek_i.md),
+[j](docs/Uzbek/en_wiktionary_uzbek_j.md),
+[k](docs/Uzbek/en_wiktionary_uzbek_k.md),
+[l](docs/Uzbek/en_wiktionary_uzbek_l.md),
+[m](docs/Uzbek/en_wiktionary_uzbek_m.md),
+[n](docs/Uzbek/en_wiktionary_uzbek_n.md),
+[o](docs/Uzbek/en_wiktionary_uzbek_o.md),
+[p](docs/Uzbek/en_wiktionary_uzbek_p.md),
+[q](docs/Uzbek/en_wiktionary_uzbek_q.md),
+[r](docs/Uzbek/en_wiktionary_uzbek_r.md),
+[s](docs/Uzbek/en_wiktionary_uzbek_s.md),
+[t](docs/Uzbek/en_wiktionary_uzbek_t.md),
+[u](docs/Uzbek/en_wiktionary_uzbek_u.md),
+[v](docs/Uzbek/en_wiktionary_uzbek_v.md),
+[x](docs/Uzbek/en_wiktionary_uzbek_x.md),
+[y](docs/Uzbek/en_wiktionary_uzbek_y.md),
+[z](docs/Uzbek/en_wiktionary_uzbek_z.md),
+[oʻ](docs/Uzbek/en_wiktionary_uzbek_oʻ.md),
+[gʻ](docs/Uzbek/en_wiktionary_uzbek_gʻ.md),
+[sh](docs/Uzbek/en_wiktionary_uzbek_sh.md),
+[ch](docs/Uzbek/en_wiktionary_uzbek_ch.md),
+[ng](docs/Uzbek/en_wiktionary_uzbek_ng.md),
+[а](docs/Uzbek/en_wiktionary_uzbek_а.md),
+[б](docs/Uzbek/en_wiktionary_uzbek_б.md),
+[в](docs/Uzbek/en_wiktionary_uzbek_в.md),
+[г](docs/Uzbek/en_wiktionary_uzbek_г.md),
+[д](docs/Uzbek/en_wiktionary_uzbek_д.md),
+[е](docs/Uzbek/en_wiktionary_uzbek_е.md),
+[ё](docs/Uzbek/en_wiktionary_uzbek_ё.md),
+[ж](docs/Uzbek/en_wiktionary_uzbek_ж.md),
+[з](docs/Uzbek/en_wiktionary_uzbek_з.md),
+[и](docs/Uzbek/en_wiktionary_uzbek_и.md),
+[й](docs/Uzbek/en_wiktionary_uzbek_й.md),
+[к](docs/Uzbek/en_wiktionary_uzbek_к.md),
+[л](docs/Uzbek/en_wiktionary_uzbek_л.md),
+[м](docs/Uzbek/en_wiktionary_uzbek_м.md),
+[н](docs/Uzbek/en_wiktionary_uzbek_н.md),
+[о](docs/Uzbek/en_wiktionary_uzbek_о.md),
+[п](docs/Uzbek/en_wiktionary_uzbek_п.md),
+[р](docs/Uzbek/en_wiktionary_uzbek_р.md),
+[с](docs/Uzbek/en_wiktionary_uzbek_с.md),
+[т](docs/Uzbek/en_wiktionary_uzbek_т.md),
+[у](docs/Uzbek/en_wiktionary_uzbek_у.md),
+[ф](docs/Uzbek/en_wiktionary_uzbek_ф.md),
+[х](docs/Uzbek/en_wiktionary_uzbek_х.md),
+[ц](docs/Uzbek/en_wiktionary_uzbek_ц.md),
+[ч](docs/Uzbek/en_wiktionary_uzbek_ч.md),
+[ш](docs/Uzbek/en_wiktionary_uzbek_ш.md),
+[ъ](docs/Uzbek/en_wiktionary_uzbek_ъ.md),
+[ь](docs/Uzbek/en_wiktionary_uzbek_ь.md),
+[э](docs/Uzbek/en_wiktionary_uzbek_э.md),
+[ю](docs/Uzbek/en_wiktionary_uzbek_ю.md),
+[я](docs/Uzbek/en_wiktionary_uzbek_я.md),
+[қ](docs/Uzbek/en_wiktionary_uzbek_қ.md),
+[ғ](docs/Uzbek/en_wiktionary_uzbek_ғ.md),
+[ب](docs/Uzbek/en_wiktionary_uzbek_ب.md),
+[ت](docs/Uzbek/en_wiktionary_uzbek_ت.md),
+[ح](docs/Uzbek/en_wiktionary_uzbek_ح.md),
+[خ](docs/Uzbek/en_wiktionary_uzbek_خ.md),
+[د](docs/Uzbek/en_wiktionary_uzbek_د.md),
+[ر](docs/Uzbek/en_wiktionary_uzbek_ر.md),
+[ق](docs/Uzbek/en_wiktionary_uzbek_ق.md),
+[م](docs/Uzbek/en_wiktionary_uzbek_م.md),
+[ن](docs/Uzbek/en_wiktionary_uzbek_ن.md),
+[ه](docs/Uzbek/en_wiktionary_uzbek_ه.md),
 
 ## Requirements
 * docker

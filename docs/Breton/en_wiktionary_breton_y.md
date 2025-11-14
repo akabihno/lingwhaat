@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/yec'hed%20mat|
+|https://en.wiktionary.org/wiki/yalc'h|
+|https://en.wiktionary.org/wiki/Yannig|
+|https://en.wiktionary.org/wiki/yev|
+|https://en.wiktionary.org/wiki/yec'hed|
+|https://en.wiktionary.org/wiki/yaouank|
+|https://en.wiktionary.org/wiki/yezhoniezh|
+|https://en.wiktionary.org/wiki/Yaou|
+|https://en.wiktionary.org/wiki/yod|
+|https://en.wiktionary.org/wiki/yezhadur|
+|https://en.wiktionary.org/wiki/yezh|
+|https://en.wiktionary.org/wiki/Yann|
+|https://en.wiktionary.org/wiki/yar|
+|https://en.wiktionary.org/wiki/ya|
+|https://en.wiktionary.org/wiki/yen|
