@@ -39,13 +39,6 @@ class LanguageDetectionController extends AbstractController
                     example: 'Sed ut perspiciatis, unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam eaque ipsa, quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt, explicabo.'
                 )
             ),
-            new OA\Parameter(
-                name: 'translit_detection',
-                description: 'Enable transliteration detection (0 or 1)',
-                in: 'query',
-                required: false,
-                schema: new OA\Schema(type: 'integer', default: 0, example: 0)
-            )
         ],
         responses: [
             new OA\Response(
@@ -100,12 +93,7 @@ class LanguageDetectionController extends AbstractController
             );
         }
 
-        $translitDetection = $request->query->getInt('translit_detection', 0);
-
-        $result = $this->languageDetectionService->process(
-            $inputText,
-            $translitDetection
-        );
+        $result = $this->languageDetectionService->process($inputText);
 
         return new JsonResponse($result, Response::HTTP_OK);
     }

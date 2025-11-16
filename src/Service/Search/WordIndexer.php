@@ -19,6 +19,7 @@ use App\Repository\GermanLanguageRepository;
 use App\Repository\GreekLanguageRepository;
 use App\Repository\HindiLanguageRepository;
 use App\Repository\ItalianLanguageRepository;
+use App\Repository\KazakhLanguageRepository;
 use App\Repository\LatinLanguageRepository;
 use App\Repository\LatvianLanguageRepository;
 use App\Repository\LithuanianLanguageRepository;
@@ -33,7 +34,6 @@ use App\Repository\TagalogLanguageRepository;
 use App\Repository\TurkishLanguageRepository;
 use App\Repository\UkrainianLanguageRepository;
 use App\Repository\UzbekLanguageRepository;
-use App\Service\LanguageDetection\LanguageDetectionService;
 use App\Service\LanguageDetection\LanguageServices\AfarLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
@@ -50,6 +50,7 @@ use App\Service\LanguageDetection\LanguageServices\GermanLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GreekLanguageService;
 use App\Service\LanguageDetection\LanguageServices\HindiLanguageService;
 use App\Service\LanguageDetection\LanguageServices\ItalianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\KazakhLanguageService;
 use App\Service\LanguageDetection\LanguageServices\LatinLanguageService;
 use App\Service\LanguageDetection\LanguageServices\LatvianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\LithuanianLanguageService;
@@ -220,6 +221,10 @@ class WordIndexer
                 case LanguageServicesAndCodes::BRETON_LANGUAGE_CODE:
                     $service = new BretonLanguageService(new BretonLanguageRepository($this->em));
                     break;
+                case LanguageServicesAndCodes::KAZAKH_LANGUAGE_CODE:
+                    $service = new KazakhLanguageService(new KazakhLanguageRepository($this->em));
+                    break;
+
             }
 
             if (isset($service)) {
