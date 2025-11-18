@@ -1,0 +1,16 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/aƣьlcьn|
+|https://en.wiktionary.org/wiki/añğylşan|
+|https://en.wiktionary.org/wiki/ağylşyn|
+|https://en.wiktionary.org/wiki/Amerika%20Qūrama%20Ştattary|
+|https://en.wiktionary.org/wiki/Äzırbaijan|
+|https://en.wiktionary.org/wiki/Ärmenstan|
+|https://en.wiktionary.org/wiki/Äzerbaijan|
+|https://en.wiktionary.org/wiki/älıpbi|
+|https://en.wiktionary.org/wiki/asqabaq|
+|https://en.wiktionary.org/wiki/anarxizm|
+|https://en.wiktionary.org/wiki/Almaty|
+|https://en.wiktionary.org/wiki/Astana|
+|https://en.wiktionary.org/wiki/asa|
+|https://en.wiktionary.org/wiki/aman|

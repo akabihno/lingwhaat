@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/шаввол|
+|https://en.wiktionary.org/wiki/шаъбон|
+|https://en.wiktionary.org/wiki/шарқий|
+|https://en.wiktionary.org/wiki/шимолий|
+|https://en.wiktionary.org/wiki/шоир|
+|https://en.wiktionary.org/wiki/шоира|
+|https://en.wiktionary.org/wiki/шаҳзода|
+|https://en.wiktionary.org/wiki/шоҳона|
+|https://en.wiktionary.org/wiki/Шаҳло|
+|https://en.wiktionary.org/wiki/шоколад|
+|https://en.wiktionary.org/wiki/ш|

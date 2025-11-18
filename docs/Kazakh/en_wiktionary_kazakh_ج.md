@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/جەۋ|
+|https://en.wiktionary.org/wiki/جەر|
+|https://en.wiktionary.org/wiki/جياڭيوۋ|
+|https://en.wiktionary.org/wiki/جۇما|
+|https://en.wiktionary.org/wiki/جۇمىرتقا|
+|https://en.wiktionary.org/wiki/جۇلدىز|
+|https://en.wiktionary.org/wiki/جاساعان|
+|https://en.wiktionary.org/wiki/جاڭالىق|
+|https://en.wiktionary.org/wiki/جۇرەك|
+|https://en.wiktionary.org/wiki/ج|

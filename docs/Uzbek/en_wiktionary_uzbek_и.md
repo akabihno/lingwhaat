@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Иброҳим|
+|https://en.wiktionary.org/wiki/Исмоилия|
+|https://en.wiktionary.org/wiki/иқтисод|
+|https://en.wiktionary.org/wiki/Илёс|
+|https://en.wiktionary.org/wiki/Искандария|
+|https://en.wiktionary.org/wiki/Ироқ|
+|https://en.wiktionary.org/wiki/инқилоб|
+|https://en.wiktionary.org/wiki/имом|
+|https://en.wiktionary.org/wiki/и|

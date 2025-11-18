@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Рай|
+|https://en.wiktionary.org/wiki/рақс|
+|https://en.wiktionary.org/wiki/рамазон|
+|https://en.wiktionary.org/wiki/ражаб|
+|https://en.wiktionary.org/wiki/россиялик|
+|https://en.wiktionary.org/wiki/Россия|
+|https://en.wiktionary.org/wiki/р|

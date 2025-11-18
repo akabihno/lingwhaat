@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/قىرعىزستان|
+|https://en.wiktionary.org/wiki/قازاقشا|
+|https://en.wiktionary.org/wiki/قوناق|
+|https://en.wiktionary.org/wiki/قاسقىر|
+|https://en.wiktionary.org/wiki/قان|
+|https://en.wiktionary.org/wiki/قازاقستان|
+|https://en.wiktionary.org/wiki/ق|

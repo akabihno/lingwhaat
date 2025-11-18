@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/chadennañ|
+|https://en.wiktionary.org/wiki/chadenn|
+|https://en.wiktionary.org/wiki/chug-frouezh|
+|https://en.wiktionary.org/wiki/chugonus|
+|https://en.wiktionary.org/wiki/choaz|
+|https://en.wiktionary.org/wiki/chom|
+|https://en.wiktionary.org/wiki/chañs|
+|https://en.wiktionary.org/wiki/chekenn|
+|https://en.wiktionary.org/wiki/chokolad|
+|https://en.wiktionary.org/wiki/chug|

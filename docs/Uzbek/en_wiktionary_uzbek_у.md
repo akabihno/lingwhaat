@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ўзбекистонлик|
+|https://en.wiktionary.org/wiki/ўн|
+|https://en.wiktionary.org/wiki/Ўзбекистон%20Республикаси|
+|https://en.wiktionary.org/wiki/ЎзР|
+|https://en.wiktionary.org/wiki/умумий|
+|https://en.wiktionary.org/wiki/учун|
+|https://en.wiktionary.org/wiki/ўғил|
+|https://en.wiktionary.org/wiki/уйғур|
+|https://en.wiktionary.org/wiki/ў|
+|https://en.wiktionary.org/wiki/Усмон|
