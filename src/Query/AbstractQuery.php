@@ -2,22 +2,24 @@
 
 namespace App\Query;
 
+use Dotenv\Dotenv;
 use PDO;
 use PDOException;
 
 class AbstractQuery
 {
-    const DB_PORT = 3327;
-    protected $pdo;
-    public function connect()
+    const int PROCESSING_LIMIT = 40;
+    protected PDO $pdo;
+    public function connect(): void
     {
-        \Dotenv\Dotenv::createImmutable('/var/www/html/')->load();
+        Dotenv::createImmutable('/var/www/html/')->load();
 
         $dbHost = $_ENV['DB_HOST'];
+        $dbPort = $_ENV['MYSQL_PORT'];
         $dbName = $_ENV['MYSQL_DATABASE'];
         $dbPassword = $_ENV['MYSQL_ROOT_PASSWORD'];
 
-        $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $dbHost, self::DB_PORT, $dbName);
+        $dsn = sprintf('mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4', $dbHost, $dbPort, $dbName);
         $username = 'root';
 
         try {
@@ -40,8 +42,11 @@ class AbstractQuery
         return $result;
     }
 
-    protected function updateIpa(string $query, string $ipa, string $name): void
+    public function updateIpa(string $language, string $ipa, string $name): void
     {
+        $this->connect();
+        $query = 'UPDATE '.$this->getBaseTable($language).' SET ipa = :ipa, ts_created = NOW() WHERE name = :name';
+
         $stmt = $this->pdo->prepare($query);
 
         $stmt->execute([
@@ -50,8 +55,11 @@ class AbstractQuery
         ]);
     }
 
-    protected function insertLinks(string $query, $name, $link): void
+    public function insertLinks(string $language, $name, $link): void
     {
+        $this->connect();
+        $query = 'INSERT INTO '.$this->getLinksTable($language).' (name, link) VALUES (:name, :link)';
+
         $stmt = $this->pdo->prepare($query);
 
         $stmt->execute([
@@ -61,13 +69,35 @@ class AbstractQuery
 
     }
 
-    protected function insertNames(string $query, string $name): void
+    public function insertNames(string $language, string $name): void
     {
+        $this->connect();
+        $query = 'INSERT INTO '.$this->getBaseTable($language).' (name) VALUES (:name)';
+
         $stmt = $this->pdo->prepare($query);
 
         $stmt->execute([
             ':name' => $name
         ]);
+    }
+
+    public function getBaseTable(string $language): string
+    {
+        return 'pronunciation_'.$language.'_language';
+    }
+
+    public function getLinksTable(string $language): string
+    {
+        return $language.'_links';
+    }
+
+    public function getArticleNames(string $language, int $limit = self::PROCESSING_LIMIT): array
+    {
+        $query = 'SELECT name,ts_created FROM lingwhaat.'.$this->getBaseTable($language).' ORDER BY ts_created ASC LIMIT '.$limit;
+
+        $this->connect();
+        return $this->fetch($query);
+
     }
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-use App\Query\LanguageQuery;
+use App\Query\NewLanguageQuery;
 use App\Service\LanguageAddService;
 
 require 'vendor/autoload.php';
@@ -9,10 +9,10 @@ require 'vendor/autoload.php';
 
 $language = $argv[1];
 
-$languageQuery = new LanguageQuery();
-$languageAddService = new LanguageAddService($languageQuery);
+$newLanguageQuery = new NewLanguageQuery();
+$languageAddService = new LanguageAddService($newLanguageQuery);
 
-$languageAddService->addLanguage($language);
+$languageAddService->addLanguage(strtolower($language));
 
 
 

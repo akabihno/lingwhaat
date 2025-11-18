@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/تريگونومەتريا|
+|https://en.wiktionary.org/wiki/تۇركيا|
+|https://en.wiktionary.org/wiki/تۇرىكمەنستان|
+|https://en.wiktionary.org/wiki/تاجىكستان|
+|https://en.wiktionary.org/wiki/تاڭعاجايىپ|
+|https://en.wiktionary.org/wiki/تاۋەلسىز|
+|https://en.wiktionary.org/wiki/تاۋەلسىزدىك|
+|https://en.wiktionary.org/wiki/تاباق|
+|https://en.wiktionary.org/wiki/ت|

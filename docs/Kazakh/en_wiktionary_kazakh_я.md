@@ -1,0 +1,16 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/яһуди|
+|https://en.wiktionary.org/wiki/Яһудея|
+|https://en.wiktionary.org/wiki/ядрошық|
+|https://en.wiktionary.org/wiki/Яһуда|
+|https://en.wiktionary.org/wiki/яһудилік|
+|https://en.wiktionary.org/wiki/ядролықсыз|
+|https://en.wiktionary.org/wiki/ядролық|
+|https://en.wiktionary.org/wiki/яғни|
+|https://en.wiktionary.org/wiki/яки|
+|https://en.wiktionary.org/wiki/яшма|
+|https://en.wiktionary.org/wiki/яхта|
+|https://en.wiktionary.org/wiki/Ямайка|
+|https://en.wiktionary.org/wiki/ядро|
+|https://en.wiktionary.org/wiki/Я|

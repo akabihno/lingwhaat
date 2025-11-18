@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Türkia|
+|https://en.wiktionary.org/wiki/Türıkmenstan|
+|https://en.wiktionary.org/wiki/Täjıkstan|
+|https://en.wiktionary.org/wiki/täuelsızdık|
+|https://en.wiktionary.org/wiki/täuelsız|
+|https://en.wiktionary.org/wiki/tolıqtawış|
+|https://en.wiktionary.org/wiki/táýelsizdik|
+|https://en.wiktionary.org/wiki/táýelsiz|
+|https://en.wiktionary.org/wiki/trigonometria|

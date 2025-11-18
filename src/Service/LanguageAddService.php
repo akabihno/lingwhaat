@@ -2,11 +2,11 @@
 
 namespace App\Service;
 
-use App\Query\LanguageQuery;
+use App\Query\NewLanguageQuery;
 
 class LanguageAddService
 {
-    public function __construct(protected LanguageQuery $languageQuery)
+    public function __construct(protected NewLanguageQuery $languageQuery)
     {
     }
     public function addLanguage($language): void

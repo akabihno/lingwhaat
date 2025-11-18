@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/اعىلشىن|
+|https://en.wiktionary.org/wiki/اڭعىلشان|
+|https://en.wiktionary.org/wiki/امەريكا%20قۇراما%20شتاتتارى|
+|https://en.wiktionary.org/wiki/انارحيزم|
+|https://en.wiktionary.org/wiki/الماتى|
+|https://en.wiktionary.org/wiki/استانا|
+|https://en.wiktionary.org/wiki/ارمەنستان|
+|https://en.wiktionary.org/wiki/ايبەك|
+|https://en.wiktionary.org/wiki/ازەربايجان|
+|https://en.wiktionary.org/wiki/التاي|
+|https://en.wiktionary.org/wiki/اسا|
+|https://en.wiktionary.org/wiki/ا|

@@ -2,38 +2,40 @@
 
 namespace App\Service;
 
+use App\Query\AbstractQuery;
 use App\Query\PronunciationQueryRussianLanguage;
+use Dotenv\Dotenv;
+use IvoPetkov\HTML5DOMDocument;
 
 class WiktionaryArticlesIpaParserService
 {
-    const WIKTIONARY_BASE_API_LINK = 'https://en.wiktionary.org/api/rest_v1/page/html/';
-    const WIKTIONARY_BASE_URL = 'https://en.wiktionary.org/wiki/';
+    const string WIKTIONARY_BASE_API_LINK = 'https://en.wiktionary.org/api/rest_v1/page/html/';
+    const string WIKTIONARY_BASE_URL = 'https://en.wiktionary.org/wiki/';
+    const string IPA_NOT_AVAILABLE = 'Not available';
 
-    public function __construct(
-        protected PronunciationQueryRussianLanguage $query
-    )
+    public function __construct(protected AbstractQuery $abstractQuery,)
     {
     }
-    public function run($limit = null): void
+    public function run(string $language, $limit = null): void
     {
-        \Dotenv\Dotenv::createImmutable('/var/www/html/')->load();
+        Dotenv::createImmutable('/var/www/html/')->load();
 
         $uaEmail = $_ENV['WIKTIONARY_UA_EMAIL'];
 
-        $articles = $this->getArticleNamesFromDb($limit);
+        $articles = $this->getArticleNamesFromDb($language, $limit);
 
         foreach ($articles as $article) {
             echo "Processing: ".$article."\n";
             $html = $this->getPageForTitle($uaEmail, $article);
-            $this->processWiktionaryResult($html, $article);
+            $this->processWiktionaryResult($language, $html, $article);
         }
 
     }
 
-    protected function getArticleNamesFromDb($limit = null): array
+    protected function getArticleNamesFromDb(string $language, $limit = null): array
     {
         $result = [];
-        $articleNamesArray = $this->query->getArticleNames($limit);
+        $articleNamesArray = $this->abstractQuery->getArticleNames($language, $limit);
 
         foreach ($articleNamesArray as $articleNameArray) {
             $result[] = $articleNameArray['name'];
@@ -47,17 +49,17 @@ class WiktionaryArticlesIpaParserService
         return $this->wiktionaryGetRequest($uaEmail, $title);
     }
 
-    protected function processWiktionaryResult(string $html, string $article): void
+    protected function processWiktionaryResult(string $language, string $html, string $article): void
     {
         $ipa = $this->parseWiktionaryResult($html);
 
-        if ($ipa) {
-            $this->query->update($ipa, $article);
-            $this->query->insert($article, $this->generateWiktionaryLink($article));
-        } else {
-            $this->query->update('Not available', $article);
-            $this->query->insert($article, $this->generateWiktionaryLink($article));
-        }
+        $this->abstractQuery->updateIpa(
+            $language,
+            $ipa ?: self::IPA_NOT_AVAILABLE,
+            $article
+        );
+
+        $this->abstractQuery->insertLinks($language, $article, $this->generateWiktionaryLink($article));
     }
 
     protected function generateWiktionaryLink($article): string
@@ -68,16 +70,10 @@ class WiktionaryArticlesIpaParserService
     protected function parseWiktionaryResult(string $html): string
     {
         try {
-            $dom = new \IvoPetkov\HTML5DOMDocument();
+            $dom = new HTML5DOMDocument();
             $dom->loadHTML($html);
 
-            $result = $dom->querySelector('.IPA')->innerHTML;
-
-            if ($result) {
-                return $result;
-            } else {
-                return '';
-            }
+            return $dom->querySelector('.IPA')->innerHTML ?? '';
         } catch (\Exception $e) {
             var_dump('Error parsing Wiktionary result: ' . $e->getMessage());
             return '';

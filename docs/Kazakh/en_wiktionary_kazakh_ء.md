@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ءسۇت|
+|https://en.wiktionary.org/wiki/ٴالىپبي|
+|https://en.wiktionary.org/wiki/ءو|
+|https://en.wiktionary.org/wiki/ٴۇرىمجى|
+|https://en.wiktionary.org/wiki/ٴازىربايجان|
+|https://en.wiktionary.org/wiki/ٴ|
+|https://en.wiktionary.org/wiki/ٴۇ|
+|https://en.wiktionary.org/wiki/ٴى|
+|https://en.wiktionary.org/wiki/ٴا|
