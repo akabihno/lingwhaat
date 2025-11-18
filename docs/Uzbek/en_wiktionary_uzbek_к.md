@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/курдистонлик|
+|https://en.wiktionary.org/wiki/кабоб|
+|https://en.wiktionary.org/wiki/Кирмоншоҳ|
+|https://en.wiktionary.org/wiki/Кирмон|
+|https://en.wiktionary.org/wiki/Кошғар|
+|https://en.wiktionary.org/wiki/Каъба|
+|https://en.wiktionary.org/wiki/Курдистон|
+|https://en.wiktionary.org/wiki/калий|
+|https://en.wiktionary.org/wiki/к|

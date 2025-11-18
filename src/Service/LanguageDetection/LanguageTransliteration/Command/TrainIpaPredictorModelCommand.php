@@ -9,6 +9,7 @@ use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
 use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\ArmenianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\BengaliLanguageService;
+use App\Service\LanguageDetection\LanguageServices\BretonLanguageService;
 use App\Service\LanguageDetection\LanguageServices\CzechLanguageService;
 use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
 use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
@@ -19,6 +20,7 @@ use App\Service\LanguageDetection\LanguageServices\GermanLanguageService;
 use App\Service\LanguageDetection\LanguageServices\GreekLanguageService;
 use App\Service\LanguageDetection\LanguageServices\HindiLanguageService;
 use App\Service\LanguageDetection\LanguageServices\ItalianLanguageService;
+use App\Service\LanguageDetection\LanguageServices\KazakhLanguageService;
 use App\Service\LanguageDetection\LanguageServices\LatinLanguageService;
 use App\Service\LanguageDetection\LanguageServices\LatvianLanguageService;
 use App\Service\LanguageDetection\LanguageServices\LithuanianLanguageService;
@@ -80,6 +82,8 @@ class TrainIpaPredictorModelCommand extends Command
         protected AfarLanguageService $afarLanguageService,
         protected BengaliLanguageService $bengaliLanguageService,
         protected UzbekLanguageService $uzbekLanguageService,
+        protected BretonLanguageService $bretonLanguageService,
+        protected KazakhLanguageService $kazakhLanguageService,
         protected HttpClientInterface $httpClient,
     ) {
         parent::__construct();
@@ -197,6 +201,12 @@ class TrainIpaPredictorModelCommand extends Command
                 break;
             case LanguageServicesAndCodes::UZBEK_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->uzbekLanguageService->fetchAllNamesAndIpa();
+                break;
+            case LanguageServicesAndCodes::BRETON_LANGUAGE_CODE:
+                $trainingDatasetArray = $this->bretonLanguageService->fetchAllNamesAndIpa();
+                break;
+            case LanguageServicesAndCodes::KAZAKH_LANGUAGE_CODE:
+                $trainingDatasetArray = $this->kazakhLanguageService->fetchAllNamesAndIpa();
                 break;
             default:
                 $acceptedLangCodes = implode(', ', LanguageServicesAndCodes::getLanguageCodes());

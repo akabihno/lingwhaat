@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/vi|
+|https://en.wiktionary.org/wiki/verb-skoazell|
+|https://en.wiktionary.org/wiki/viruzoniezh|
+|https://en.wiktionary.org/wiki/Varsovia|
+|https://en.wiktionary.org/wiki/vak|
+|https://en.wiktionary.org/wiki/Viêt%20Nam|
+|https://en.wiktionary.org/wiki/va|
+|https://en.wiktionary.org/wiki/verb|

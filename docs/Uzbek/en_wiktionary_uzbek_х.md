@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/хонақоҳ|
+|https://en.wiktionary.org/wiki/халқаро%20фонетик%20алифбо|
+|https://en.wiktionary.org/wiki/халқ|
+|https://en.wiktionary.org/wiki/хумс|
+|https://en.wiktionary.org/wiki/халифа|
+|https://en.wiktionary.org/wiki/хамса|
+|https://en.wiktionary.org/wiki/харита|
+|https://en.wiktionary.org/wiki/х|

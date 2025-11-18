@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/чип|
+|https://en.wiktionary.org/wiki/чуваш|
+|https://en.wiktionary.org/wiki/Челябі|
+|https://en.wiktionary.org/wiki/чирлидинг|
+|https://en.wiktionary.org/wiki/чатуранга|
+|https://en.wiktionary.org/wiki/чатни|
+|https://en.wiktionary.org/wiki/Ч|
+|https://en.wiktionary.org/wiki/чемпионат|
+|https://en.wiktionary.org/wiki/чек|
+|https://en.wiktionary.org/wiki/Чехия|
+|https://en.wiktionary.org/wiki/чукча|
+|https://en.wiktionary.org/wiki/Черногория|
+|https://en.wiktionary.org/wiki/Чили|

@@ -14,13 +14,12 @@ class LanguageDetectionService
     public function __construct(
         protected ElasticsearchLogger $logger,
         protected LanguageNormalizationService $languageNormalizationService,
-        protected TransliterationDetectionService $transliterationDetectionService,
         protected FuzzySearchService $fuzzySearchService
     )
     {
     }
 
-    public function process(string $languageInput, int $translitDetection): array
+    public function process(string $languageInput): array
     {
         $uuid = Uuid::v4()->toRfc4122();
 
@@ -46,14 +45,6 @@ class LanguageDetectionService
         $words = explode(' ', $normalizedInput);
         $words = $this->languageNormalizationService->removeArticles($words);
         $count = count($words);
-
-        if ($translitDetection) {
-            $this->logger->info(
-                'Running transliteration detection',
-                ['uuid' => $uuid, 'service' => '[LanguageDetectionService]']
-            );
-            return $this->transliterationDetectionService->run($words, $uuid, microtime(true));
-        }
 
         $languageCounts = [];
         $matchCount = 0;
@@ -110,14 +101,6 @@ class LanguageDetectionService
             'input' => $languageInput,
             'count' => $count,
             'matches' => $matchCount,
-        ];
-    }
-
-    public static function getLanguageCodesForTransliteration(): array
-    {
-        return [
-            LanguageServicesAndCodes::LATVIAN_LANGUAGE_CODE,
-            LanguageServicesAndCodes::RUSSIAN_LANGUAGE_CODE,
         ];
     }
 

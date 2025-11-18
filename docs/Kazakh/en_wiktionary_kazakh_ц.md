@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/цистеин|
+|https://en.wiktionary.org/wiki/цитозин|
+|https://en.wiktionary.org/wiki/циклофосфамид|
+|https://en.wiktionary.org/wiki/цефалексин|
+|https://en.wiktionary.org/wiki/цефтриаксон|
+|https://en.wiktionary.org/wiki/ципрофлоксацин|
+|https://en.wiktionary.org/wiki/цирк|
+|https://en.wiktionary.org/wiki/цемент|
+|https://en.wiktionary.org/wiki/цезий|
+|https://en.wiktionary.org/wiki/церий|
+|https://en.wiktionary.org/wiki/цирконий|
+|https://en.wiktionary.org/wiki/циркон|
+|https://en.wiktionary.org/wiki/Ц|

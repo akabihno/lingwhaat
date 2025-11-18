@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/баланит|
+|https://en.wiktionary.org/wiki/Баъс|
+|https://en.wiktionary.org/wiki/байроқдор|
+|https://en.wiktionary.org/wiki/Баълабак|
+|https://en.wiktionary.org/wiki/Байрут|
+|https://en.wiktionary.org/wiki/буюк|
+|https://en.wiktionary.org/wiki/бутун%20дунё%20пролетарлари,%20бирлашингиз|
+|https://en.wiktionary.org/wiki/бу|
+|https://en.wiktionary.org/wiki/боғ|
+|https://en.wiktionary.org/wiki/бир|
+|https://en.wiktionary.org/wiki/Б|

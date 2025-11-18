@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Носир|
+|https://en.wiktionary.org/wiki/наср|
+|https://en.wiktionary.org/wiki/насл|
+|https://en.wiktionary.org/wiki/нотамом|
+|https://en.wiktionary.org/wiki/ноумид|
+|https://en.wiktionary.org/wiki/намуна|
+|https://en.wiktionary.org/wiki/нағма|
+|https://en.wiktionary.org/wiki/но-|
+|https://en.wiktionary.org/wiki/нигоҳ|
+|https://en.wiktionary.org/wiki/наргис|
+|https://en.wiktionary.org/wiki/н|
