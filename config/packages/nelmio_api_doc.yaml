@@ -5,8 +5,8 @@ nelmio_api_doc:
       description: Language Detection API
       version: 1.0.1
     servers:
-      - url: ""
-        description: "%env(string:DOMAIN)%"
+      - url: "https://%env(string:DOMAIN)%"
+        description: "API Server"
   areas:
     path_patterns:
       - ^/api(?!/doc)
