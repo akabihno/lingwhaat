@@ -2,66 +2,51 @@
 
 namespace App\Service;
 
+use App\Query\AbstractQuery;
+
 class MarkdownGeneratorService
 {
-    const WIKTIONARY_PREFIX = 'en_wiktionary_';
-    public function __construct(protected array $args)
+    const string WIKTIONARY_PREFIX = 'en_wiktionary_';
+    public function __construct(protected AbstractQuery $abstractQuery)
     {
-
     }
 
-    /**
-     * @throws \Exception
-     */
-    public function generateMarkdown(): void
+    public function generateMarkdown(string $language, bool $rightToLeft = false): void
     {
-        if (empty($this->args)) {
-            throw new \Exception("Missing arguments");
-        }
+        $this->abstractQuery->connect();
 
-        if (!$this->args[1]) {
-            throw new \Exception("Missing language");
-        }
+        $query = 'SELECT DISTINCT LOWER('.$this->getDirection($rightToLeft).'
+        (name, 1)) AS first_letter FROM '
+            .$this->abstractQuery->getBaseTable($language).
+            ' ORDER BY first_letter;';
 
-        if (!$this->args[2]) {
-            throw new \Exception("Missing letters");
-        }
+        $letters = $this->abstractQuery->fetch($query);
 
-        if ($this->args[1] == 'serbocroatian') {
-            $language = 'SerboCroatian';
-        } else {
-            $language = ucfirst($this->args[1]);
-        }
-        $letters = explode(',', $this->args[2]);
+        foreach ($letters as $letterArr) {
+            foreach ($letterArr as $key => $letter) {
+                $query = 'SELECT DISTINCT link FROM lingwhaat.'
+                    .$this->abstractQuery->getLinksTable($language).' WHERE name LIKE "'.$letter.'%"';
 
-        $queryClassName = 'App\Query\PronunciationQuery'.$language.'Language';
+                $links = $this->abstractQuery->fetch($query);
 
-        $languageQuery = new $queryClassName();
+                if (!empty($links)) {
+                    $this->writeFileHeader($language, $letter);
+                    $this->echoLetterLineForMarkdown($language, $letter);
 
-        $linksTable = $languageQuery->getLinksTable();
-
-        $language = strtolower($language);
-
-        foreach ($letters as $letter) {
-
-            $query = 'SELECT DISTINCT link FROM lingwhaat.'.$linksTable.' WHERE name LIKE "'.$letter.'%"';
-
-            $languageQuery->connect();
-            $links = $languageQuery->fetch($query);
-
-            if (!empty($links)) {
-                $this->writeFileHeader($language, $letter);
-                $this->echoLetterLineForMarkdown($language, $letter);
-
-                foreach ($links as $linkArr) {
-                    foreach ($linkArr as $link) {
-                        $this->writeLink($language, $letter, $link);
+                    foreach ($links as $linkArr) {
+                        foreach ($linkArr as $link) {
+                            $this->writeLink($language, $letter, $link);
+                        }
                     }
                 }
             }
-
         }
 
+    }
+
+    protected function getDirection(bool $rightToLeft = false): string
+    {
+        return ($rightToLeft) ? 'RIGHT' : 'LEFT';
     }
 
     protected function writeFileHeader(string $language, string $letter): void
