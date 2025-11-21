@@ -9,6 +9,7 @@ use Symfony\Component\Uid\Uuid;
 
 class LanguageDetectionService
 {
+    const int EXACT_MATCH_SCORE = 5;
     public function __construct(
         protected ElasticsearchLogger $logger,
         protected LanguageNormalizationService $languageNormalizationService,
@@ -54,7 +55,21 @@ class LanguageDetectionService
             }
 
             try {
-                $matches = $this->fuzzySearchService->findClosestMatches($word, 5);
+                $exactMatches = $this->fuzzySearchService->findExactMatches($word);
+
+                if (!empty($exactMatches)) {
+                    foreach ($exactMatches as $match) {
+                        if (!isset($match['languageCode'])) {
+                            continue;
+                        }
+
+                        $code = $match['languageCode'];
+                        $languageCounts[$code] = ($languageCounts[$code] ?? 0) + self::EXACT_MATCH_SCORE;
+                        $matchCount++;
+                    }
+                }
+
+                $matches = $this->fuzzySearchService->findClosestMatches($word);
 
                 foreach ($matches as $match) {
                     if (!isset($match['languageCode'])) {
@@ -67,7 +82,7 @@ class LanguageDetectionService
                 }
             } catch (\Throwable $e) {
                 $this->logger->error(
-                    'Fuzzy search failed',
+                    'Search failed',
                     [
                         'uuid' => $uuid,
                         'service' => '[LanguageDetectionService]',
