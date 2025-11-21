@@ -9,13 +9,13 @@ use Psr\Log\LogLevel;
 
 class ElasticsearchLogger implements LoggerInterface
 {
-    private string $indexName;
+    private string $indexPrefix;
     private Client $client;
 
-    public function __construct(Client $client, string $indexName = 'application-logs')
+    public function __construct(Client $client, string $indexPrefix = 'application-logs')
     {
         $this->client = $client;
-        $this->indexName = $indexName;
+        $this->indexPrefix = $indexPrefix;
     }
 
     public function emergency($message, array $context = []): void
@@ -61,15 +61,18 @@ class ElasticsearchLogger implements LoggerInterface
     public function log($level, $message, array $context = []): void
     {
         try {
+            $now = new \DateTime();
+            $indexName = sprintf('%s-%s', $this->indexPrefix, $now->format('Y.m.d'));
+
             $document = new Document(null, [
-                'timestamp' => (new \DateTime())->format('c'),
+                'timestamp' => $now->format('c'),
                 'level' => $level,
                 'message' => $message,
                 'context' => $context,
             ]);
 
-            $this->client->getIndex($this->indexName)->addDocument($document);
-            $this->client->getIndex($this->indexName)->refresh();
+            $this->client->getIndex($indexName)->addDocument($document);
+            $this->client->getIndex($indexName)->refresh();
         } catch (\Throwable $e) {
             error_log(sprintf(
                 'Failed to log to Elasticsearch: %s. Original message: %s',
