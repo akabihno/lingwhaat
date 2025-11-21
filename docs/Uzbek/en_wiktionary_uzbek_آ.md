@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/آغیز|
+|https://en.wiktionary.org/wiki/آتش|
+|https://en.wiktionary.org/wiki/آچ|
+|https://en.wiktionary.org/wiki/آپه|
+|https://en.wiktionary.org/wiki/آته|
+|https://en.wiktionary.org/wiki/آدم|
+|https://en.wiktionary.org/wiki/آتماق|
+|https://en.wiktionary.org/wiki/آت|

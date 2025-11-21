@@ -2,8 +2,6 @@
 
 namespace App\Service\LanguageDetection;
 
-use App\Constant\LanguageServicesAndCodes;
-use App\Service\LanguageDetection\LanguageTransliteration\TransliterationDetectionService;
 use App\Service\LanguageNormalizationService;
 use App\Service\Logging\ElasticsearchLogger;
 use App\Service\Search\FuzzySearchService;

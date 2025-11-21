@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Ҳиндистон|
+|https://en.wiktionary.org/wiki/ҳиндистонлик|
+|https://en.wiktionary.org/wiki/ҳақ|
+|https://en.wiktionary.org/wiki/ҳазрат|
+|https://en.wiktionary.org/wiki/ҳукмдор|
+|https://en.wiktionary.org/wiki/ҳукмдорлик|
+|https://en.wiktionary.org/wiki/ҳукмдорлик%20қилмоқ|
+|https://en.wiktionary.org/wiki/Ҳалаб|
+|https://en.wiktionary.org/wiki/Ҳусайн|
+|https://en.wiktionary.org/wiki/ҳақида|
+|https://en.wiktionary.org/wiki/ҳ|

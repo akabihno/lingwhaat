@@ -13,27 +13,30 @@ class MarkdownGeneratorService
 
     public function generateMarkdown(string $language, bool $rightToLeft = false): void
     {
+        $this->abstractQuery->connect();
+
         $query = 'SELECT DISTINCT LOWER('.$this->getDirection($rightToLeft).'
-        (word, 1)) AS first_letter FROM '
+        (name, 1)) AS first_letter FROM '
             .$this->abstractQuery->getBaseTable($language).
             ' ORDER BY first_letter;';
 
         $letters = $this->abstractQuery->fetch($query);
 
-        foreach ($letters as $letter) {
+        foreach ($letters as $letterArr) {
+            foreach ($letterArr as $key => $letter) {
+                $query = 'SELECT DISTINCT link FROM lingwhaat.'
+                    .$this->abstractQuery->getLinksTable($language).' WHERE name LIKE "'.$letter.'%"';
 
-            $query = 'SELECT DISTINCT link FROM lingwhaat.'
-                .$this->abstractQuery->getLinksTable($language).' WHERE name LIKE "'.$letter.'%"';
+                $links = $this->abstractQuery->fetch($query);
 
-            $links = $this->abstractQuery->fetch($query);
+                if (!empty($links)) {
+                    $this->writeFileHeader($language, $letter);
+                    $this->echoLetterLineForMarkdown($language, $letter);
 
-            if (!empty($links)) {
-                $this->writeFileHeader($language, $letter);
-                $this->echoLetterLineForMarkdown($language, $letter);
-
-                foreach ($links as $linkArr) {
-                    foreach ($linkArr as $link) {
-                        $this->writeLink($language, $letter, $link);
+                    foreach ($links as $linkArr) {
+                        foreach ($linkArr as $link) {
+                            $this->writeLink($language, $letter, $link);
+                        }
                     }
                 }
             }
