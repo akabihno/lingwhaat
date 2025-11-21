@@ -93,7 +93,8 @@ class AbstractQuery
 
     public function getArticleNames(string $language, int $limit = self::PROCESSING_LIMIT): array
     {
-        $query = 'SELECT name,ts_created FROM lingwhaat.'.$this->getBaseTable($language).' ORDER BY ts_created ASC LIMIT '.$limit;
+        $query = 'SELECT name,ts_created FROM lingwhaat.'.$this->getBaseTable($language).' 
+        WHERE ipa IS NULL ORDER BY ts_created ASC LIMIT '.$limit;
 
         $this->connect();
         return $this->fetch($query);
