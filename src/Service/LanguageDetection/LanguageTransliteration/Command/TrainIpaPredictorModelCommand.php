@@ -3,38 +3,38 @@
 namespace App\Service\LanguageDetection\LanguageTransliteration\Command;
 
 use App\Constant\LanguageServicesAndCodes;
-use App\Service\LanguageDetection\LanguageDetectionService;
-use App\Service\LanguageDetection\LanguageServices\AfarLanguageService;
-use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
-use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\ArmenianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\BengaliLanguageService;
-use App\Service\LanguageDetection\LanguageServices\BretonLanguageService;
-use App\Service\LanguageDetection\LanguageServices\CzechLanguageService;
-use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
-use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\EstonianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\FrenchLanguageService;
-use App\Service\LanguageDetection\LanguageServices\GeorgianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\GermanLanguageService;
-use App\Service\LanguageDetection\LanguageServices\GreekLanguageService;
-use App\Service\LanguageDetection\LanguageServices\HindiLanguageService;
-use App\Service\LanguageDetection\LanguageServices\ItalianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\KazakhLanguageService;
-use App\Service\LanguageDetection\LanguageServices\LatinLanguageService;
-use App\Service\LanguageDetection\LanguageServices\LatvianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\LithuanianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\PolishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\PortugueseLanguageService;
-use App\Service\LanguageDetection\LanguageServices\RomanianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\RussianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\SerboCroatianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\SpanishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
-use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\UzbekLanguageService;
+use App\Repository\AfarLanguageRepository;
+use App\Repository\AfrikaansLanguageRepository;
+use App\Repository\AlbanianLanguageRepository;
+use App\Repository\ArabicLanguageRepository;
+use App\Repository\ArmenianLanguageRepository;
+use App\Repository\BengaliLanguageRepository;
+use App\Repository\BretonLanguageRepository;
+use App\Repository\CzechLanguageRepository;
+use App\Repository\DutchLanguageRepository;
+use App\Repository\EnglishLanguageRepository;
+use App\Repository\EstonianLanguageRepository;
+use App\Repository\FrenchLanguageRepository;
+use App\Repository\GeorgianLanguageRepository;
+use App\Repository\GermanLanguageRepository;
+use App\Repository\GreekLanguageRepository;
+use App\Repository\HindiLanguageRepository;
+use App\Repository\ItalianLanguageRepository;
+use App\Repository\KazakhLanguageRepository;
+use App\Repository\LatinLanguageRepository;
+use App\Repository\LatvianLanguageRepository;
+use App\Repository\LithuanianLanguageRepository;
+use App\Repository\PolishLanguageRepository;
+use App\Repository\PortugueseLanguageRepository;
+use App\Repository\RomanianLanguageRepository;
+use App\Repository\RussianLanguageRepository;
+use App\Repository\SerboCroatianLanguageRepository;
+use App\Repository\SpanishLanguageRepository;
+use App\Repository\SwedishLanguageRepository;
+use App\Repository\TagalogLanguageRepository;
+use App\Repository\TurkishLanguageRepository;
+use App\Repository\UkrainianLanguageRepository;
+use App\Repository\UzbekLanguageRepository;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -53,37 +53,38 @@ class TrainIpaPredictorModelCommand extends Command
 {
     protected string $trainingDataPath;
     public function __construct(
-        protected DutchLanguageService $dutchLanguageService,
-        protected EnglishLanguageService $englishLanguageService,
-        protected EstonianLanguageService $estonianLanguageService,
-        protected FrenchLanguageService $frenchLanguageService,
-        protected GeorgianLanguageService $georgianLanguageService,
-        protected GermanLanguageService $germanLanguageService,
-        protected GreekLanguageService $greekLanguageService,
-        protected HindiLanguageService $hindiLanguageService,
-        protected ItalianLanguageService $italianLanguageService,
-        protected LatinLanguageService $latinLanguageService,
-        protected LatvianLanguageService $latvianLanguageService,
-        protected LithuanianLanguageService $lithuanianLanguageService,
-        protected PolishLanguageService $polishLanguageService,
-        protected PortugueseLanguageService $portugueseLanguageService,
-        protected RomanianLanguageService $romanianLanguageService,
-        protected RussianLanguageService $russianLanguageService,
-        protected SerboCroatianLanguageService $serboCroatianLanguageService,
-        protected SpanishLanguageService $spanishLanguageService,
-        protected SwedishLanguageService $swedishLanguageService,
-        protected TagalogLanguageService $tagalogLanguageService,
-        protected TurkishLanguageService $turkishLanguageService,
-        protected UkrainianLanguageService $ukrainianLanguageService,
-        protected AlbanianLanguageService $albanianLanguageService,
-        protected CzechLanguageService $czechLanguageService,
-        protected AfrikaansLanguageService $afrikaansLanguageService,
-        protected ArmenianLanguageService $armenianLanguageService,
-        protected AfarLanguageService $afarLanguageService,
-        protected BengaliLanguageService $bengaliLanguageService,
-        protected UzbekLanguageService $uzbekLanguageService,
-        protected BretonLanguageService $bretonLanguageService,
-        protected KazakhLanguageService $kazakhLanguageService,
+        protected DutchLanguageRepository $dutchLanguageRepository,
+        protected EnglishLanguageRepository $englishLanguageRepository,
+        protected EstonianLanguageRepository $estonianLanguageRepository,
+        protected FrenchLanguageRepository $frenchLanguageRepository,
+        protected GeorgianLanguageRepository $georgianLanguageRepository,
+        protected GermanLanguageRepository $germanLanguageRepository,
+        protected GreekLanguageRepository $greekLanguageRepository,
+        protected HindiLanguageRepository $hindiLanguageRepository,
+        protected ItalianLanguageRepository $italianLanguageRepository,
+        protected LatinLanguageRepository $latinLanguageRepository,
+        protected LatvianLanguageRepository $latvianLanguageRepository,
+        protected LithuanianLanguageRepository $lithuanianLanguageRepository,
+        protected PolishLanguageRepository $polishLanguageRepository,
+        protected PortugueseLanguageRepository $portugueseLanguageRepository,
+        protected RomanianLanguageRepository $romanianLanguageRepository,
+        protected RussianLanguageRepository $russianLanguageRepository,
+        protected SerboCroatianLanguageRepository $serboCroatianLanguageRepository,
+        protected SpanishLanguageRepository $spanishLanguageRepository,
+        protected SwedishLanguageRepository $swedishLanguageRepository,
+        protected TagalogLanguageRepository $tagalogLanguageRepository,
+        protected TurkishLanguageRepository $turkishLanguageRepository,
+        protected UkrainianLanguageRepository $ukrainianLanguageRepository,
+        protected AlbanianLanguageRepository $albanianLanguageRepository,
+        protected CzechLanguageRepository $czechLanguageRepository,
+        protected AfrikaansLanguageRepository $afrikaansLanguageRepository,
+        protected ArmenianLanguageRepository $armenianLanguageRepository,
+        protected AfarLanguageRepository $afarLanguageRepository,
+        protected BengaliLanguageRepository $bengaliLanguageRepository,
+        protected UzbekLanguageRepository $uzbekLanguageRepository,
+        protected BretonLanguageRepository $bretonLanguageRepository,
+        protected KazakhLanguageRepository $kazakhLanguageRepository,
+        protected ArabicLanguageRepository $arabicLanguageRepository,
         protected HttpClientInterface $httpClient,
     ) {
         parent::__construct();
@@ -116,101 +117,104 @@ class TrainIpaPredictorModelCommand extends Command
 
         switch ($lang) {
             case LanguageServicesAndCodes::DUTCH_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->dutchLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->dutchLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::ENGLISH_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->englishLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->englishLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::ESTONIAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->estonianLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->estonianLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::FRENCH_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->frenchLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->frenchLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::GEORGIAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->georgianLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->georgianLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::GERMAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->germanLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->germanLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::GREEK_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->greekLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->greekLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::HINDI_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->hindiLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->hindiLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::ITALIAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->italianLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->italianLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::LATIN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->latinLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->latinLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::LATVIAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->latvianLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->latvianLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::LITHUANIAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->lithuanianLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->lithuanianLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::POLISH_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->polishLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->polishLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::PORTUGUESE_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->portugueseLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->portugueseLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::ROMANIAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->romanianLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->romanianLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::RUSSIAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->russianLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->russianLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::SERBOCROATIAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->serboCroatianLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->serboCroatianLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::SPANISH_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->spanishLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->spanishLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::SWEDISH_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->swedishLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->swedishLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::TAGALOG_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->tagalogLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->tagalogLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::TURKISH_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->turkishLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->turkishLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::UKRAINIAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->ukrainianLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->ukrainianLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::ALBANIAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->albanianLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->albanianLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::CZECH_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->czechLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->czechLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::AFRIKAANS_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->afrikaansLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->afrikaansLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::ARMENIAN_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->armenianLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->armenianLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::AFAR_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->afarLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->afarLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::BENGALI_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->bengaliLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->bengaliLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::UZBEK_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->uzbekLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->uzbekLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::BRETON_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->bretonLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->bretonLanguageRepository->findAllNamesAndIpa();
                 break;
             case LanguageServicesAndCodes::KAZAKH_LANGUAGE_CODE:
-                $trainingDatasetArray = $this->kazakhLanguageService->fetchAllNamesAndIpa();
+                $trainingDatasetArray = $this->kazakhLanguageRepository->findAllNamesAndIpa();
+                break;
+            case LanguageServicesAndCodes::ARABIC_LANGUAGE_CODE:
+                $trainingDatasetArray = $this->arabicLanguageRepository->findAllNamesAndIpa();
                 break;
             default:
                 $acceptedLangCodes = implode(', ', LanguageServicesAndCodes::getLanguageCodes());
-                $output->writeln('<error>No language provided in --lang parameter or language is not accepted. 
+                $output->writeln('<error>No language provided in --lang parameter or language is not accepted.
                 Accepted language params are: '.$acceptedLangCodes.' </error>');
                 return Command::FAILURE;
         }

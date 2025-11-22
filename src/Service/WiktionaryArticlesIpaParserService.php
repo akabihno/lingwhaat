@@ -24,18 +24,25 @@ class WiktionaryArticlesIpaParserService
 
         $articles = $this->getArticleNamesFromDb($language, $limit);
 
-        foreach ($articles as $article) {
-            echo "Processing: ".$article."\n";
-            $html = $this->getPageForTitle($uaEmail, $article);
-            $this->processWiktionaryResult($language, $html, $article);
+        if (!empty($articles)) {
+            foreach ($articles as $article) {
+                echo "Processing: ".$article."\n";
+                $html = $this->getPageForTitle($uaEmail, $article);
+                $this->processWiktionaryResult($language, $html, $article);
+            }
         }
 
+        echo "No more records to process\n";
     }
 
     protected function getArticleNamesFromDb(string $language, $limit = null): array
     {
         $result = [];
         $articleNamesArray = $this->abstractQuery->getArticleNames($language, $limit);
+
+        if (empty($articleNamesArray)) {
+            return $result;
+        }
 
         foreach ($articleNamesArray as $articleNameArray) {
             $result[] = $articleNameArray['name'];
