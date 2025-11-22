@@ -2,36 +2,6 @@
 
 namespace App\Constant;
 
-use App\Repository\UniquePatternRepository;
-use App\Service\LanguageDetection\LanguageDetectionService;
-use App\Service\LanguageDetection\LanguageServices\AfarLanguageService;
-use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
-use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\ArmenianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\BengaliLanguageService;
-use App\Service\LanguageDetection\LanguageServices\CzechLanguageService;
-use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
-use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\EstonianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\FrenchLanguageService;
-use App\Service\LanguageDetection\LanguageServices\GeorgianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\GermanLanguageService;
-use App\Service\LanguageDetection\LanguageServices\GreekLanguageService;
-use App\Service\LanguageDetection\LanguageServices\HindiLanguageService;
-use App\Service\LanguageDetection\LanguageServices\ItalianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\LatinLanguageService;
-use App\Service\LanguageDetection\LanguageServices\LatvianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\LithuanianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\PolishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\PortugueseLanguageService;
-use App\Service\LanguageDetection\LanguageServices\RomanianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\RussianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\SerboCroatianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\SpanishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
-use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
 
 class LanguageServicesAndCodes
 {
@@ -66,6 +36,7 @@ class LanguageServicesAndCodes
     public const string UZBEK_LANGUAGE_CODE = 'uz';
     public const string BRETON_LANGUAGE_CODE = 'br';
     public const string KAZAKH_LANGUAGE_CODE = 'kk';
+    public const string ARABIC_LANGUAGE_CODE = 'ar';
 
     public static function getLanguageCodes(): array
     {
@@ -101,6 +72,7 @@ class LanguageServicesAndCodes
             self::UZBEK_LANGUAGE_CODE,
             self::BRETON_LANGUAGE_CODE,
             self::KAZAKH_LANGUAGE_CODE,
+            self::ARABIC_LANGUAGE_CODE
         ];
     }
 
@@ -139,6 +111,7 @@ class LanguageServicesAndCodes
             'UzbekLanguageEntity' => self::UZBEK_LANGUAGE_CODE,
             'BretonLanguageEntity' => self::BRETON_LANGUAGE_CODE,
             'KazakhLanguageEntity' => self::KAZAKH_LANGUAGE_CODE,
+            'ArabicLanguageEntity' => self::ARABIC_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {
