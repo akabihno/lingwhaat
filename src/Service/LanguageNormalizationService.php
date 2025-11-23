@@ -4,7 +4,7 @@ namespace App\Service;
 
 class LanguageNormalizationService
 {
-    const ARTICLE_LENGTH = 3;
+    const int ARTICLE_LENGTH = 3;
     public function normalizeText(string $text): string
     {
         return mb_trim(mb_strtolower($text));

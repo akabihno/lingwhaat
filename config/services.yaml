@@ -33,4 +33,4 @@ services:
     App\Service\Logging\ElasticsearchLogger:
       arguments:
         $client: '@Elastica\Client'
-        $indexName: 'application-logs'
+        $indexPrefix: 'application-logs'

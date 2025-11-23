@@ -6,6 +6,7 @@ use App\Constant\LanguageServicesAndCodes;
 use App\Repository\AfarLanguageRepository;
 use App\Repository\AfrikaansLanguageRepository;
 use App\Repository\AlbanianLanguageRepository;
+use App\Repository\ArabicLanguageRepository;
 use App\Repository\ArmenianLanguageRepository;
 use App\Repository\BengaliLanguageRepository;
 use App\Repository\BretonLanguageRepository;
@@ -34,37 +35,6 @@ use App\Repository\TagalogLanguageRepository;
 use App\Repository\TurkishLanguageRepository;
 use App\Repository\UkrainianLanguageRepository;
 use App\Repository\UzbekLanguageRepository;
-use App\Service\LanguageDetection\LanguageServices\AfarLanguageService;
-use App\Service\LanguageDetection\LanguageServices\AfrikaansLanguageService;
-use App\Service\LanguageDetection\LanguageServices\AlbanianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\ArmenianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\BengaliLanguageService;
-use App\Service\LanguageDetection\LanguageServices\BretonLanguageService;
-use App\Service\LanguageDetection\LanguageServices\CzechLanguageService;
-use App\Service\LanguageDetection\LanguageServices\DutchLanguageService;
-use App\Service\LanguageDetection\LanguageServices\EnglishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\EstonianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\FrenchLanguageService;
-use App\Service\LanguageDetection\LanguageServices\GeorgianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\GermanLanguageService;
-use App\Service\LanguageDetection\LanguageServices\GreekLanguageService;
-use App\Service\LanguageDetection\LanguageServices\HindiLanguageService;
-use App\Service\LanguageDetection\LanguageServices\ItalianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\KazakhLanguageService;
-use App\Service\LanguageDetection\LanguageServices\LatinLanguageService;
-use App\Service\LanguageDetection\LanguageServices\LatvianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\LithuanianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\PolishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\PortugueseLanguageService;
-use App\Service\LanguageDetection\LanguageServices\RomanianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\RussianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\SerboCroatianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\SpanishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\SwedishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\TagalogLanguageService;
-use App\Service\LanguageDetection\LanguageServices\TurkishLanguageService;
-use App\Service\LanguageDetection\LanguageServices\UkrainianLanguageService;
-use App\Service\LanguageDetection\LanguageServices\UzbekLanguageService;
 use Doctrine\Persistence\ManagerRegistry;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\MissingParameterException;
@@ -132,107 +102,110 @@ class WordIndexer
         foreach (LanguageServicesAndCodes::getLanguageCodes() as $languageCode) {
             switch ($languageCode) {
                 case LanguageServicesAndCodes::FRENCH_LANGUAGE_CODE:
-                    $service = new FrenchLanguageService(new FrenchLanguageRepository($this->em));
+                    $repository = new FrenchLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::GERMAN_LANGUAGE_CODE:
-                    $service = new GermanLanguageService(new GermanLanguageRepository($this->em));
+                    $repository = new GermanLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::GREEK_LANGUAGE_CODE:
-                    $service = new GreekLanguageService(new GreekLanguageRepository($this->em));
+                    $repository = new GreekLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::ITALIAN_LANGUAGE_CODE:
-                    $service = new ItalianLanguageService(new ItalianLanguageRepository($this->em));
+                    $repository = new ItalianLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::LATVIAN_LANGUAGE_CODE:
-                    $service = new LatvianLanguageService(new LatvianLanguageRepository($this->em));
+                    $repository = new LatvianLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::LITHUANIAN_LANGUAGE_CODE:
-                    $service = new LithuanianLanguageService(new LithuanianLanguageRepository($this->em));
+                    $repository = new LithuanianLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::POLISH_LANGUAGE_CODE:
-                    $service = new PolishLanguageService(new PolishLanguageRepository($this->em));
+                    $repository = new PolishLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::PORTUGUESE_LANGUAGE_CODE:
-                    $service = new PortugueseLanguageService(new PortugueseLanguageRepository($this->em));
+                    $repository = new PortugueseLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::ROMANIAN_LANGUAGE_CODE:
-                    $service = new RomanianLanguageService(new RomanianLanguageRepository($this->em));
+                    $repository = new RomanianLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::RUSSIAN_LANGUAGE_CODE:
-                    $service = new RussianLanguageService(new RussianLanguageRepository($this->em));
+                    $repository = new RussianLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::SERBOCROATIAN_LANGUAGE_CODE:
-                    $service = new SerboCroatianLanguageService(new SerboCroatianLanguageRepository($this->em));
+                    $repository = new SerboCroatianLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::TAGALOG_LANGUAGE_CODE:
-                    $service = new TagalogLanguageService(new TagalogLanguageRepository($this->em));
+                    $repository = new TagalogLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::UKRAINIAN_LANGUAGE_CODE:
-                    $service = new UkrainianLanguageService(new UkrainianLanguageRepository($this->em));
+                    $repository = new UkrainianLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::SPANISH_LANGUAGE_CODE:
-                    $service = new SpanishLanguageService(new SpanishLanguageRepository($this->em));
+                    $repository = new SpanishLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::LATIN_LANGUAGE_CODE:
-                    $service = new LatinLanguageService(new LatinLanguageRepository($this->em));
+                    $repository = new LatinLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::SWEDISH_LANGUAGE_CODE:
-                    $service = new SwedishLanguageService(new SwedishLanguageRepository($this->em));
+                    $repository = new SwedishLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::ESTONIAN_LANGUAGE_CODE:
-                    $service = new EstonianLanguageService(new EstonianLanguageRepository($this->em));
+                    $repository = new EstonianLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::ENGLISH_LANGUAGE_CODE:
-                    $service = new EnglishLanguageService(new EnglishLanguageRepository($this->em));
+                    $repository = new EnglishLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::DUTCH_LANGUAGE_CODE:
-                    $service = new DutchLanguageService(new DutchLanguageRepository($this->em));
+                    $repository = new DutchLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::HINDI_LANGUAGE_CODE:
-                    $service = new HindiLanguageService(new HindiLanguageRepository($this->em));
+                    $repository = new HindiLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::GEORGIAN_LANGUAGE_CODE:
-                    $service = new GeorgianLanguageService(new GeorgianLanguageRepository($this->em));
+                    $repository = new GeorgianLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::TURKISH_LANGUAGE_CODE:
-                    $service = new TurkishLanguageService(new TurkishLanguageRepository($this->em));
+                    $repository = new TurkishLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::ALBANIAN_LANGUAGE_CODE:
-                    $service = new AlbanianLanguageService(new AlbanianLanguageRepository($this->em));
+                    $repository = new AlbanianLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::CZECH_LANGUAGE_CODE:
-                    $service = new CzechLanguageService(new CzechLanguageRepository($this->em));
+                    $repository = new CzechLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::AFRIKAANS_LANGUAGE_CODE:
-                    $service = new AfrikaansLanguageService(new AfrikaansLanguageRepository($this->em));
+                    $repository = new AfrikaansLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::ARMENIAN_LANGUAGE_CODE:
-                    $service = new ArmenianLanguageService(new ArmenianLanguageRepository($this->em));
+                    $repository = new ArmenianLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::AFAR_LANGUAGE_CODE:
-                    $service = new AfarLanguageService(new AfarLanguageRepository($this->em));
+                    $repository = new AfarLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::BENGALI_LANGUAGE_CODE:
-                    $service = new BengaliLanguageService(new BengaliLanguageRepository($this->em));
+                    $repository = new BengaliLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::UZBEK_LANGUAGE_CODE:
-                    $service = new UzbekLanguageService(new UzbekLanguageRepository($this->em));
+                    $repository = new UzbekLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::BRETON_LANGUAGE_CODE:
-                    $service = new BretonLanguageService(new BretonLanguageRepository($this->em));
+                    $repository = new BretonLanguageRepository($this->em);
                     break;
                 case LanguageServicesAndCodes::KAZAKH_LANGUAGE_CODE:
-                    $service = new KazakhLanguageService(new KazakhLanguageRepository($this->em));
+                    $repository = new KazakhLanguageRepository($this->em);
+                    break;
+                case LanguageServicesAndCodes::ARABIC_LANGUAGE_CODE:
+                    $repository = new ArabicLanguageRepository($this->em);
                     break;
 
             }
 
-            if (isset($service)) {
+            if (isset($repository)) {
                 $offset = 0;
                 $batchSize = self::INDEXING_BATCH_SIZE;
 
                 do {
-                    $rows = $service->fetchAllNamesAndIpa($batchSize, $offset);
+                    $rows = $repository->findAllNamesAndIpa($batchSize, $offset);
 
                     if (empty($rows)) {
                         break;
