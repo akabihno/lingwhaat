@@ -24,6 +24,7 @@ use App\Repository\KazakhLanguageRepository;
 use App\Repository\LatinLanguageRepository;
 use App\Repository\LatvianLanguageRepository;
 use App\Repository\LithuanianLanguageRepository;
+use App\Repository\OldDutchLanguageRepository;
 use App\Repository\PolishLanguageRepository;
 use App\Repository\PortugueseLanguageRepository;
 use App\Repository\RomanianLanguageRepository;
@@ -196,6 +197,9 @@ class WordIndexer
                     break;
                 case LanguageServicesAndCodes::ARABIC_LANGUAGE_CODE:
                     $repository = new ArabicLanguageRepository($this->em);
+                    break;
+                case LanguageServicesAndCodes::OLD_DUTCH_LANGUAGE_CODE:
+                    $repository = new OldDutchLanguageRepository($this->em);
                     break;
 
             }

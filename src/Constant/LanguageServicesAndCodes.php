@@ -37,6 +37,7 @@ class LanguageServicesAndCodes
     public const string BRETON_LANGUAGE_CODE = 'br';
     public const string KAZAKH_LANGUAGE_CODE = 'kk';
     public const string ARABIC_LANGUAGE_CODE = 'ar';
+    public const string OLD_DUTCH_LANGUAGE_CODE = 'odt';
 
     public static function getLanguageCodes(): array
     {
@@ -72,7 +73,8 @@ class LanguageServicesAndCodes
             self::UZBEK_LANGUAGE_CODE,
             self::BRETON_LANGUAGE_CODE,
             self::KAZAKH_LANGUAGE_CODE,
-            self::ARABIC_LANGUAGE_CODE
+            self::ARABIC_LANGUAGE_CODE,
+            self::OLD_DUTCH_LANGUAGE_CODE
         ];
     }
 
@@ -112,6 +114,7 @@ class LanguageServicesAndCodes
             'BretonLanguageEntity' => self::BRETON_LANGUAGE_CODE,
             'KazakhLanguageEntity' => self::KAZAKH_LANGUAGE_CODE,
             'ArabicLanguageEntity' => self::ARABIC_LANGUAGE_CODE,
+            'OldDutchLanguageEntity' => self::OLD_DUTCH_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {
