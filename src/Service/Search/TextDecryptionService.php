@@ -2,6 +2,7 @@
 
 namespace App\Service\Search;
 
+use App\Service\LanguageDetection\LanguageValidation\LanguageValidationService;
 use Elastica\Client;
 use Elastica\Query;
 use Elastica\Query\BoolQuery;
@@ -12,26 +13,15 @@ class TextDecryptionService
 {
     private Client $esClient;
     private string $indexName = 'words_index';
-    private LanguageNormalizationService $normalizationService;
     private array $wordExistsCache = [];
+    private array $substitutionPatterns = [];
 
-    private array $substitutionPatterns = [
-        ['d' => 'g', 'g' => 'd'],
-        ['d' => 't', 't' => 'd'],
-        ['c' => 'k', 'k' => 'c'],
-        ['e' => 'a', 'a' => 'e'],
-        ['e' => 'i', 'i' => 'e'],
-        ['o' => 'u', 'u' => 'o'],
-        ['v' => 'f', 'f' => 'v'],
-        ['s' => 'z', 'z' => 's'],
-    ];
-
-    private array $questionMarkReplacements = ['a', 'e', 'i', 'o', 'u', 'c', 'd', 'g', 'h', 'k', 'l', 'm', 'n', 'r', 's', 't', 'v', 'w'];
-
-    public function __construct()
+    public function __construct(
+        protected LanguageNormalizationService $normalizationService,
+        protected LanguageValidationService $languageValidationService
+    )
     {
         $this->esClient = ElasticsearchClientFactory::create();
-        $this->normalizationService = new LanguageNormalizationService();
     }
 
     /**
@@ -47,6 +37,17 @@ class TextDecryptionService
         $this->wordExistsCache = [];
 
         $normalizedText = $this->normalizationService->normalizeText($text);
+        $uniqueLetters = count_chars($normalizedText, 3);
+        foreach (mb_str_split($uniqueLetters) as $src) {
+            foreach (range('a', 'z') as $dst) {
+                $candidateText = str_replace($src, $dst, $normalizedText);
+                $result = $this->languageValidationService->analyze($candidateText);
+                if ($result['isNatural']) {
+                    $this->substitutionPatterns[] = [$src => $dst];
+                }
+            }
+        }
+
         $words = preg_split('/\s+/', $normalizedText);
         $words = array_filter($words, fn($w) => !empty($w));
 
@@ -89,9 +90,6 @@ class TextDecryptionService
         return $bestResult;
     }
 
-    /**
-     * Try a specific substitution pattern on the words
-     */
     private function tryDecryption(array $words, string $languageCode, array $substitutions): array
     {
         $transformedWords = [];
@@ -101,24 +99,11 @@ class TextDecryptionService
         foreach ($words as $word) {
             $transformed = $this->applySubstitutions($word, $substitutions);
 
-            if (str_contains($transformed, '?')) {
-                $variants = $this->generateQuestionMarkVariants($transformed);
-                $bestMatch = $this->findBestMatch($variants, $languageCode);
-
-                if ($bestMatch) {
-                    $transformedWords[] = $bestMatch;
-                    $matchedWords[] = $bestMatch;
-                    $matchCount++;
-                } else {
-                    $transformedWords[] = $transformed;
-                }
-            } else {
-                if ($this->wordExists($transformed, $languageCode)) {
-                    $matchedWords[] = $transformed;
-                    $matchCount++;
-                }
-                $transformedWords[] = $transformed;
+            if ($this->wordExists($transformed, $languageCode)) {
+                $matchedWords[] = $transformed;
+                $matchCount++;
             }
+            $transformedWords[] = $transformed;
         }
 
         return [
@@ -131,9 +116,6 @@ class TextDecryptionService
         ];
     }
 
-    /**
-     * Apply letter substitutions to a word
-     */
     private function applySubstitutions(string $word, array $substitutions): string
     {
         if (empty($substitutions)) {
@@ -149,78 +131,10 @@ class TextDecryptionService
         return $result;
     }
 
-    /**
-     * Generate variants by replacing ? with different letters
-     */
-    private function generateQuestionMarkVariants(string $word, int $maxVariants = 20): array
-    {
-        $questionCount = substr_count($word, '?');
-
-        if ($questionCount === 0) {
-            return [$word];
-        }
-
-        if ($questionCount > 2) {
-            $replacements = ['a', 'e', 'i', 'o', 'u'];
-        } elseif ($questionCount > 1) {
-            $replacements = ['a', 'e', 'i', 'o', 'u', 'n', 't', 's', 'r'];
-        } else {
-            $replacements = $this->questionMarkReplacements;
-        }
-
-        $variants = [];
-        $this->generateVariantsRecursive($word, $replacements, $variants, $maxVariants);
-
-        return $variants;
-    }
-
-    /**
-     * Recursively generate variants by replacing question marks
-     */
-    private function generateVariantsRecursive(string $word, array $replacements, array &$variants, int $maxVariants): void
-    {
-        if (count($variants) >= $maxVariants) {
-            return;
-        }
-
-        $pos = strpos($word, '?');
-        if ($pos === false) {
-            $variants[] = $word;
-            return;
-        }
-
-        foreach ($replacements as $replacement) {
-            $newWord = substr_replace($word, $replacement, $pos, 1);
-            $this->generateVariantsRecursive($newWord, $replacements, $variants, $maxVariants);
-
-            if (count($variants) >= $maxVariants) {
-                return;
-            }
-        }
-    }
-
-    /**
-     * Find the best matching variant from a list
-     */
-    private function findBestMatch(array $variants, string $languageCode): ?string
-    {
-        foreach ($variants as $variant) {
-            if ($this->wordExists($variant, $languageCode)) {
-                return $variant;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Check if a word exists in the language index (with caching)
-     */
     private function wordExists(string $word, string $languageCode): bool
     {
         $cacheKey = $languageCode . ':' . $word;
 
-        // Check cache first
         if (isset($this->wordExistsCache[$cacheKey])) {
             return $this->wordExistsCache[$cacheKey];
         }
