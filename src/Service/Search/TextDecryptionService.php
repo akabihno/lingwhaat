@@ -13,6 +13,7 @@ class TextDecryptionService
     private Client $esClient;
     private string $indexName = 'words_index';
     private LanguageNormalizationService $normalizationService;
+    private array $wordExistsCache = [];
 
     private array $substitutionPatterns = [
         ['d' => 'g', 'g' => 'd'],
@@ -43,9 +44,13 @@ class TextDecryptionService
      */
     public function decryptText(string $text, string $languageCode, int $minCount = 5): array
     {
+        $this->wordExistsCache = [];
+
         $normalizedText = $this->normalizationService->normalizeText($text);
         $words = preg_split('/\s+/', $normalizedText);
         $words = array_filter($words, fn($w) => !empty($w));
+
+        $totalWords = count($words);
 
         $bestResult = [
             'success' => false,
@@ -61,20 +66,20 @@ class TextDecryptionService
             $bestResult = $result;
         }
 
+        if ($bestResult['match_count'] > $totalWords * 0.8) {
+            $bestResult['success'] = $bestResult['match_count'] >= $minCount;
+            $bestResult['min_count'] = $minCount;
+            return $bestResult;
+        }
+
         foreach ($this->substitutionPatterns as $pattern) {
             $result = $this->tryDecryption($words, $languageCode, $pattern);
             if ($result['match_count'] > $bestResult['match_count']) {
                 $bestResult = $result;
             }
 
-            foreach ($this->substitutionPatterns as $secondPattern) {
-                if ($pattern === $secondPattern) continue;
-
-                $combinedPattern = array_merge($pattern, $secondPattern);
-                $result = $this->tryDecryption($words, $languageCode, $combinedPattern);
-                if ($result['match_count'] > $bestResult['match_count']) {
-                    $bestResult = $result;
-                }
+            if ($bestResult['match_count'] > $totalWords * 0.8) {
+                break;
             }
         }
 
@@ -147,7 +152,7 @@ class TextDecryptionService
     /**
      * Generate variants by replacing ? with different letters
      */
-    private function generateQuestionMarkVariants(string $word, int $maxVariants = 50): array
+    private function generateQuestionMarkVariants(string $word, int $maxVariants = 20): array
     {
         $questionCount = substr_count($word, '?');
 
@@ -155,7 +160,9 @@ class TextDecryptionService
             return [$word];
         }
 
-        if ($questionCount > 3) {
+        if ($questionCount > 2) {
+            $replacements = ['a', 'e', 'i', 'o', 'u'];
+        } elseif ($questionCount > 1) {
             $replacements = ['a', 'e', 'i', 'o', 'u', 'n', 't', 's', 'r'];
         } else {
             $replacements = $this->questionMarkReplacements;
@@ -207,10 +214,17 @@ class TextDecryptionService
     }
 
     /**
-     * Check if a word exists in the language index
+     * Check if a word exists in the language index (with caching)
      */
     private function wordExists(string $word, string $languageCode): bool
     {
+        $cacheKey = $languageCode . ':' . $word;
+
+        // Check cache first
+        if (isset($this->wordExistsCache[$cacheKey])) {
+            return $this->wordExistsCache[$cacheKey];
+        }
+
         try {
             $boolQuery = new BoolQuery();
 
@@ -227,7 +241,11 @@ class TextDecryptionService
 
             $results = $this->esClient->getIndex($this->indexName)->search($query);
 
-            return count($results->getResults()) > 0;
+            $exists = count($results->getResults()) > 0;
+
+            $this->wordExistsCache[$cacheKey] = $exists;
+
+            return $exists;
         } catch (\Exception $e) {
             return false;
         }
