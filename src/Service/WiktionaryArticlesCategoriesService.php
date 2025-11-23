@@ -58,6 +58,9 @@ class WiktionaryArticlesCategoriesService
 
     protected function getCmtitle(string $language): string
     {
+        if ($language === 'olddutch') {
+            return "Category:Old_Dutch_lemmas";
+        }
         return "Category:".ucfirst($language)."_lemmas";
     }
 
