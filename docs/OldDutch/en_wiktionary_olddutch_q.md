@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/quic|
+|https://en.wiktionary.org/wiki/quiccon|
+|https://en.wiktionary.org/wiki/quezzon|
+|https://en.wiktionary.org/wiki/quethan|
+|https://en.wiktionary.org/wiki/quedden|
+|https://en.wiktionary.org/wiki/quala|
+|https://en.wiktionary.org/wiki/quicken|
+|https://en.wiktionary.org/wiki/quena|

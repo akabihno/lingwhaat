@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Jacob|
+|https://en.wiktionary.org/wiki/jegen|
+|https://en.wiktionary.org/wiki/jonnen|
+|https://en.wiktionary.org/wiki/jaer|
+|https://en.wiktionary.org/wiki/jonc|
+|https://en.wiktionary.org/wiki/janken|
+|https://en.wiktionary.org/wiki/jagen|
