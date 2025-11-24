@@ -59,12 +59,17 @@ class WiktionaryArticlesCategoriesService
     protected function getCmtitle(string $language): string
     {
         if (str_contains($language, 'old')) {
-            return "Category:Old_".ucfirst($language)."_lemmas";
+            return "Category:Old_".ucfirst($this->trimLanguageName($language, 'old'))."_lemmas";
         } elseif (str_contains($language, 'middle')) {
-            return "Category:Middle_".ucfirst($language)."_lemmas";
+            return "Category:Middle_".ucfirst($this->trimLanguageName($language, 'middle'))."_lemmas";
         } else {
             return "Category:".ucfirst($language)."_lemmas";
         }
+    }
+
+    protected function trimLanguageName(string $language, string $prefix): string
+    {
+        return str_replace($prefix, '', $language);
     }
 
 }
