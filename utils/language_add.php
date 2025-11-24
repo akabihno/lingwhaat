@@ -13,6 +13,3 @@ $newLanguageQuery = new NewLanguageQuery();
 $languageAddService = new LanguageAddService($newLanguageQuery);
 
 $languageAddService->addLanguage(strtolower($language));
-
-
-

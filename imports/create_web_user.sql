@@ -23,6 +23,7 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_kazakh_language TO '${MYSQ
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_latvian_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_latin_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_lithuanian_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_middledutch_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_olddutch_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_polish_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_portuguese_language TO '${MYSQL_WEB_USER}'@'%';
