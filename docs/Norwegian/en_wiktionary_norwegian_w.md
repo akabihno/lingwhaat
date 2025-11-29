@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Willfred|
+|https://en.wiktionary.org/wiki/Waina|
+|https://en.wiktionary.org/wiki/Wainy|
+|https://en.wiktionary.org/wiki/Walgerd|
+|https://en.wiktionary.org/wiki/Wigdis|
+|https://en.wiktionary.org/wiki/Werner|
+|https://en.wiktionary.org/wiki/Wenche|
+|https://en.wiktionary.org/wiki/Willy|
+|https://en.wiktionary.org/wiki/Wang|
+|https://en.wiktionary.org/wiki/W|
+|https://en.wiktionary.org/wiki/William|

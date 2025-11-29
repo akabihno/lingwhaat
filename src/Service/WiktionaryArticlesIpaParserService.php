@@ -9,7 +9,7 @@ use IvoPetkov\HTML5DOMDocument;
 
 class WiktionaryArticlesIpaParserService
 {
-    const string WIKTIONARY_BASE_API_LINK = 'https://en.wiktionary.org/api/rest_v1/page/html/';
+    const string WIKTIONARY_BASE_API_LINK = 'https://en.wiktionary.org/w/api.php';
     const string WIKTIONARY_BASE_URL = 'https://en.wiktionary.org/wiki/';
     const string IPA_NOT_AVAILABLE = 'Not available';
 
@@ -89,17 +89,24 @@ class WiktionaryArticlesIpaParserService
 
     protected function wiktionaryGetRequest(string $uaEmail, string $title): string
     {
-        $ch = curl_init();
+        $params = [
+            'action' => 'parse',
+            'page' => $title,
+            'format' => 'json',
+            'prop' => 'text'
+        ];
 
-        curl_setopt($ch, CURLOPT_URL, self::WIKTIONARY_BASE_API_LINK . $title);
-        curl_setopt($ch, CURLOPT_USERAGENT, $uaEmail);
+        $url = self::WIKTIONARY_BASE_API_LINK . '?' . http_build_query($params);
+
+        $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_USERAGENT, $uaEmail);
         $response = curl_exec($ch);
-
         curl_close($ch);
 
-        return $response;
+        $result = json_decode($response, true);
 
+        return $result['parse']['text']['*'] ?? '';
     }
 
 }

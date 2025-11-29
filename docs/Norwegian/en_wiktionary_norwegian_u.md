@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/underamt|
+|https://en.wiktionary.org/wiki/UIB|
+|https://en.wiktionary.org/wiki/Unni|
+|https://en.wiktionary.org/wiki/Unn|
+|https://en.wiktionary.org/wiki/Ulrikke|
+|https://en.wiktionary.org/wiki/ups|
+|https://en.wiktionary.org/wiki/Uranus|
+|https://en.wiktionary.org/wiki/u|

@@ -23,6 +23,7 @@ Supported languages:
 * Latin
 * Lithuanian
 * Middle Dutch
+* Norwegian
 * Old Dutch
 * Polish
 * Portuguese
@@ -1309,6 +1310,46 @@ List of all articles IPA data has been taken from:
 [u](docs/MiddleDutch/en_wiktionary_middledutch_u.md),
 [v](docs/MiddleDutch/en_wiktionary_middledutch_v.md),
 [w](docs/MiddleDutch/en_wiktionary_middledutch_w.md)
+* Norwegian:
+[-](docs/Norwegian/en_wiktionary_norwegian_-.md),
+[◌](docs/Norwegian/en_wiktionary_norwegian_◌.md),
+[0](docs/Norwegian/en_wiktionary_norwegian_0.md),
+[1](docs/Norwegian/en_wiktionary_norwegian_1.md),
+[2](docs/Norwegian/en_wiktionary_norwegian_2.md),
+[3](docs/Norwegian/en_wiktionary_norwegian_3.md),
+[4](docs/Norwegian/en_wiktionary_norwegian_4.md),
+[5](docs/Norwegian/en_wiktionary_norwegian_5.md),
+[6](docs/Norwegian/en_wiktionary_norwegian_6.md),
+[7](docs/Norwegian/en_wiktionary_norwegian_7.md),
+[8](docs/Norwegian/en_wiktionary_norwegian_8.md),
+[9](docs/Norwegian/en_wiktionary_norwegian_9.md),
+[å](docs/Norwegian/en_wiktionary_norwegian_å.md),
+[æ](docs/Norwegian/en_wiktionary_norwegian_æ.md),
+[b](docs/Norwegian/en_wiktionary_norwegian_b.md),
+[c](docs/Norwegian/en_wiktionary_norwegian_c.md),
+[d](docs/Norwegian/en_wiktionary_norwegian_d.md),
+[e](docs/Norwegian/en_wiktionary_norwegian_e.md),
+[f](docs/Norwegian/en_wiktionary_norwegian_f.md),
+[g](docs/Norwegian/en_wiktionary_norwegian_g.md),
+[h](docs/Norwegian/en_wiktionary_norwegian_h.md),
+[i](docs/Norwegian/en_wiktionary_norwegian_i.md),
+[j](docs/Norwegian/en_wiktionary_norwegian_j.md),
+[k](docs/Norwegian/en_wiktionary_norwegian_k.md),
+[l](docs/Norwegian/en_wiktionary_norwegian_l.md),
+[m](docs/Norwegian/en_wiktionary_norwegian_m.md),
+[n](docs/Norwegian/en_wiktionary_norwegian_n.md),
+[ø](docs/Norwegian/en_wiktionary_norwegian_ø.md),
+[p](docs/Norwegian/en_wiktionary_norwegian_p.md),
+[q](docs/Norwegian/en_wiktionary_norwegian_q.md),
+[r](docs/Norwegian/en_wiktionary_norwegian_r.md),
+[s](docs/Norwegian/en_wiktionary_norwegian_s.md),
+[t](docs/Norwegian/en_wiktionary_norwegian_t.md),
+[u](docs/Norwegian/en_wiktionary_norwegian_u.md),
+[v](docs/Norwegian/en_wiktionary_norwegian_v.md),
+[w](docs/Norwegian/en_wiktionary_norwegian_w.md),
+[x](docs/Norwegian/en_wiktionary_norwegian_x.md),
+[y](docs/Norwegian/en_wiktionary_norwegian_y.md),
+[z](docs/Norwegian/en_wiktionary_norwegian_z.md)
 * Old Dutch
 [-](docs/OldDutch/en_wiktionary_olddutch_-.md),
 [a](docs/OldDutch/en_wiktionary_olddutch_a.md),
