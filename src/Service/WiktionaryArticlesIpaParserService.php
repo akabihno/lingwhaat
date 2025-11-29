@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Query\AbstractQuery;
+use App\Service\Logging\ElasticsearchLogger;
 use DOMDocument;
 use DOMXPath;
 use Dotenv\Dotenv;
@@ -13,10 +14,13 @@ class WiktionaryArticlesIpaParserService
     const string WIKTIONARY_BASE_URL = 'https://en.wiktionary.org/wiki/';
     const string IPA_NOT_AVAILABLE = 'Not available';
 
-    public function __construct(protected AbstractQuery $abstractQuery,)
+    public function __construct(
+        protected AbstractQuery $abstractQuery,
+        protected ElasticsearchLogger $logger,
+    )
     {
     }
-    public function run(string $language, $limit = null): void
+    public function run(string $language, int $limit = 0): void
     {
         Dotenv::createImmutable('/var/www/html/')->load();
 
@@ -35,7 +39,7 @@ class WiktionaryArticlesIpaParserService
         echo "No more records to process\n";
     }
 
-    protected function getArticleNamesFromDb(string $language, $limit = null): array
+    protected function getArticleNamesFromDb(string $language, int $limit = 0): array
     {
         $result = [];
         $articleNamesArray = $this->abstractQuery->getArticleNames($language, $limit);
@@ -47,6 +51,11 @@ class WiktionaryArticlesIpaParserService
         foreach ($articleNamesArray as $articleNameArray) {
             $result[] = $articleNameArray['name'];
         }
+
+        $this->logger->info(
+            'Got '.count($result).' articles from DB.',
+            ['service' => '[WiktionaryArticlesIpaParserService]']
+        );
 
         return $result;
     }
