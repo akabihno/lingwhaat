@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/jugint|
+|https://en.wiktionary.org/wiki/judisc|
+|https://en.wiktionary.org/wiki/jungiro|
+|https://en.wiktionary.org/wiki/jugithen|
+|https://en.wiktionary.org/wiki/junc|
+|https://en.wiktionary.org/wiki/jar|
+|https://en.wiktionary.org/wiki/judo|

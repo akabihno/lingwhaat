@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/-ijn|
+|https://en.wiktionary.org/wiki/-lijc|
+|https://en.wiktionary.org/wiki/-sch|
+|https://en.wiktionary.org/wiki/-ich|
+|https://en.wiktionary.org/wiki/-ede|
+|https://en.wiktionary.org/wiki/-ere|
+|https://en.wiktionary.org/wiki/-st|
+|https://en.wiktionary.org/wiki/-e|
+|https://en.wiktionary.org/wiki/-in|
+|https://en.wiktionary.org/wiki/-en|
+|https://en.wiktionary.org/wiki/-er|

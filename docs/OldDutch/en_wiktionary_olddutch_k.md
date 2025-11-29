@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/kestigata|
+|https://en.wiktionary.org/wiki/kirica|
+|https://en.wiktionary.org/wiki/kint|
+|https://en.wiktionary.org/wiki/keiser|
+|https://en.wiktionary.org/wiki/kuning|
+|https://en.wiktionary.org/wiki/kennen|
+|https://en.wiktionary.org/wiki/kela|

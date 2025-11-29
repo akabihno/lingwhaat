@@ -24,6 +24,7 @@ use App\Repository\KazakhLanguageRepository;
 use App\Repository\LatinLanguageRepository;
 use App\Repository\LatvianLanguageRepository;
 use App\Repository\LithuanianLanguageRepository;
+use App\Repository\MiddleDutchLanguageRepository;
 use App\Repository\OldDutchLanguageRepository;
 use App\Repository\PolishLanguageRepository;
 use App\Repository\PortugueseLanguageRepository;
@@ -87,6 +88,7 @@ class TrainIpaPredictorModelCommand extends Command
         protected KazakhLanguageRepository $kazakhLanguageRepository,
         protected ArabicLanguageRepository $arabicLanguageRepository,
         protected OldDutchLanguageRepository $oldDutchLanguageRepository,
+        protected MiddleDutchLanguageRepository $middleDutchLanguageRepository,
         protected HttpClientInterface $httpClient,
     ) {
         parent::__construct();
@@ -216,6 +218,9 @@ class TrainIpaPredictorModelCommand extends Command
                 break;
             case LanguageServicesAndCodes::OLD_DUTCH_LANGUAGE_CODE:
                 $trainingDatasetArray = $this->oldDutchLanguageRepository->findAllNamesAndIpa();
+                break;
+            case LanguageServicesAndCodes::MIDDLE_DUTCH_LANGUAGE_CODE:
+                $trainingDatasetArray = $this->middleDutchLanguageRepository->findAllNamesAndIpa();
                 break;
             default:
                 $acceptedLangCodes = implode(', ', LanguageServicesAndCodes::getLanguageCodes());

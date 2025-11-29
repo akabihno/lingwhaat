@@ -22,6 +22,8 @@ Supported languages:
 * Latvian
 * Latin
 * Lithuanian
+* Middle Dutch
+* Old Dutch
 * Polish
 * Portuguese
 * Romanian
@@ -1282,6 +1284,57 @@ List of all articles IPA data has been taken from:
 [v](docs/Lithuanian/en_wiktionary_lithuanian_v.md),
 [z](docs/Lithuanian/en_wiktionary_lithuanian_z.md),
 [ž](docs/Lithuanian/en_wiktionary_lithuanian_ž.md)
+* Middle Dutch
+[-](docs/MiddleDutch/en_wiktionary_middledutch_-.md),
+[a](docs/MiddleDutch/en_wiktionary_middledutch_a.md),
+[b](docs/MiddleDutch/en_wiktionary_middledutch_b.md),
+[c](docs/MiddleDutch/en_wiktionary_middledutch_c.md),
+[d](docs/MiddleDutch/en_wiktionary_middledutch_d.md),
+[e](docs/MiddleDutch/en_wiktionary_middledutch_e.md),
+[f](docs/MiddleDutch/en_wiktionary_middledutch_f.md),
+[g](docs/MiddleDutch/en_wiktionary_middledutch_g.md),
+[h](docs/MiddleDutch/en_wiktionary_middledutch_h.md),
+[i](docs/MiddleDutch/en_wiktionary_middledutch_i.md),
+[j](docs/MiddleDutch/en_wiktionary_middledutch_j.md),
+[k](docs/MiddleDutch/en_wiktionary_middledutch_k.md),
+[l](docs/MiddleDutch/en_wiktionary_middledutch_l.md),
+[m](docs/MiddleDutch/en_wiktionary_middledutch_m.md),
+[n](docs/MiddleDutch/en_wiktionary_middledutch_n.md),
+[o](docs/MiddleDutch/en_wiktionary_middledutch_o.md),
+[p](docs/MiddleDutch/en_wiktionary_middledutch_p.md),
+[q](docs/MiddleDutch/en_wiktionary_middledutch_q.md),
+[r](docs/MiddleDutch/en_wiktionary_middledutch_r.md),
+[s](docs/MiddleDutch/en_wiktionary_middledutch_s.md),
+[t](docs/MiddleDutch/en_wiktionary_middledutch_t.md),
+[u](docs/MiddleDutch/en_wiktionary_middledutch_u.md),
+[v](docs/MiddleDutch/en_wiktionary_middledutch_v.md),
+[w](docs/MiddleDutch/en_wiktionary_middledutch_w.md)
+* Old Dutch
+[-](docs/OldDutch/en_wiktionary_olddutch_-.md),
+[a](docs/OldDutch/en_wiktionary_olddutch_a.md),
+[b](docs/OldDutch/en_wiktionary_olddutch_b.md),
+[c](docs/OldDutch/en_wiktionary_olddutch_c.md),
+[d](docs/OldDutch/en_wiktionary_olddutch_d.md),
+[e](docs/OldDutch/en_wiktionary_olddutch_e.md),
+[f](docs/OldDutch/en_wiktionary_olddutch_f.md),
+[g](docs/OldDutch/en_wiktionary_olddutch_g.md),
+[h](docs/OldDutch/en_wiktionary_olddutch_h.md),
+[i](docs/OldDutch/en_wiktionary_olddutch_i.md),
+[j](docs/OldDutch/en_wiktionary_olddutch_j.md),
+[k](docs/OldDutch/en_wiktionary_olddutch_k.md),
+[l](docs/OldDutch/en_wiktionary_olddutch_l.md),
+[m](docs/OldDutch/en_wiktionary_olddutch_m.md),
+[n](docs/OldDutch/en_wiktionary_olddutch_n.md),
+[o](docs/OldDutch/en_wiktionary_olddutch_o.md),
+[p](docs/OldDutch/en_wiktionary_olddutch_p.md),
+[q](docs/OldDutch/en_wiktionary_olddutch_q.md),
+[r](docs/OldDutch/en_wiktionary_olddutch_r.md),
+[s](docs/OldDutch/en_wiktionary_olddutch_s.md),
+[t](docs/OldDutch/en_wiktionary_olddutch_t.md),
+[u](docs/OldDutch/en_wiktionary_olddutch_u.md),
+[v](docs/OldDutch/en_wiktionary_olddutch_v.md),
+[w](docs/OldDutch/en_wiktionary_olddutch_w.md),
+[ᚨ](docs/OldDutch/en_wiktionary_olddutch_ᚨ.md)
 * Polish:
 [а/ą](docs/Polish/en_wiktionary_polish_a.md),
 [b](docs/Polish/en_wiktionary_polish_b.md),

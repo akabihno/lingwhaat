@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Poppo|
+|https://en.wiktionary.org/wiki/predicunga|
+|https://en.wiktionary.org/wiki/pinigon|
+|https://en.wiktionary.org/wiki/predicon|
+|https://en.wiktionary.org/wiki/plagon|
+|https://en.wiktionary.org/wiki/plegan|
+|https://en.wiktionary.org/wiki/planton|
+|https://en.wiktionary.org/wiki/prisma|
+|https://en.wiktionary.org/wiki/porta|

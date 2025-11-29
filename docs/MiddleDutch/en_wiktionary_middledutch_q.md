@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/querne|
+|https://en.wiktionary.org/wiki/quast|
+|https://en.wiktionary.org/wiki/quaet|
+|https://en.wiktionary.org/wiki/quelen|
+|https://en.wiktionary.org/wiki/quedden|
+|https://en.wiktionary.org/wiki/quellen|
+|https://en.wiktionary.org/wiki/quiten|

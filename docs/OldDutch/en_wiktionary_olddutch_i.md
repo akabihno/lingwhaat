@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Idiswif|
+|https://en.wiktionary.org/wiki/idil|
+|https://en.wiktionary.org/wiki/Imma|
+|https://en.wiktionary.org/wiki/Ida|
+|https://en.wiktionary.org/wiki/isarnin|
+|https://en.wiktionary.org/wiki/irbevon|
+|https://en.wiktionary.org/wiki/irbarmon|
+|https://en.wiktionary.org/wiki/irwervan|
+|https://en.wiktionary.org/wiki/irbelgan|
+|https://en.wiktionary.org/wiki/irskellan|
+|https://en.wiktionary.org/wiki/irskinan|
+|https://en.wiktionary.org/wiki/io|
+|https://en.wiktionary.org/wiki/ik|
+|https://en.wiktionary.org/wiki/Ingoberga|
+|https://en.wiktionary.org/wiki/Ingulf|
