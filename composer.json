@@ -70,7 +70,9 @@
     "ext-mbstring": "*",
     "nelmio/api-doc-bundle": "^5.8.2",
     "ruflin/elastica": "^8.2.0",
-    "ext-curl": "*"
+    "ext-curl": "*",
+    "ext-dom": "*",
+    "ext-libxml": "*"
   },
   "require-dev": {
     "symfony/maker-bundle": "^1.65.0",

@@ -3,9 +3,9 @@
 namespace App\Service;
 
 use App\Query\AbstractQuery;
-use App\Query\PronunciationQueryRussianLanguage;
+use DOMDocument;
+use DOMXPath;
 use Dotenv\Dotenv;
-use IvoPetkov\HTML5DOMDocument;
 
 class WiktionaryArticlesIpaParserService
 {
@@ -58,7 +58,7 @@ class WiktionaryArticlesIpaParserService
 
     protected function processWiktionaryResult(string $language, string $html, string $article): void
     {
-        $ipa = $this->parseWiktionaryResult($html);
+        $ipa = $this->parseWiktionaryResult($html, $language);
 
         $this->abstractQuery->updateIpa(
             $language,
@@ -74,13 +74,62 @@ class WiktionaryArticlesIpaParserService
         return self::WIKTIONARY_BASE_URL.$article;
     }
 
-    protected function parseWiktionaryResult(string $html): string
+    protected function parseWiktionaryResult(string $html, string $language): string
     {
         try {
-            $dom = new HTML5DOMDocument();
-            $dom->loadHTML($html);
+            $dom = new DOMDocument();
+            $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+            @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
-            return $dom->querySelector('.IPA')->innerHTML ?? '';
+            $xpath = new DOMXPath($dom);
+            $languageName = ucfirst(strtolower($language));
+            $headings = $xpath->query("//h2[.//span[contains(text(), '$languageName')]]");
+
+            if ($headings->length > 0) {
+                $ipaNodes = $xpath->query(
+                    "//h2[.//span[contains(text(), '$languageName')]]/following::*[contains(concat(' ', normalize-space(@class), ' '), ' IPA ')]"
+                );
+
+                if ($ipaNodes->length > 0) {
+                    $allHeadings = $xpath->query("//h2");
+                    $nextHeadingIndex = -1;
+
+                    for ($i = 0; $i < $allHeadings->length; $i++) {
+                        $headingText = $allHeadings->item($i)->textContent;
+                        if (strpos($headingText, $languageName) !== false) {
+                            if ($i + 1 < $allHeadings->length) {
+                                $nextHeadingIndex = $i + 1;
+                            }
+                            break;
+                        }
+                    }
+
+                    foreach ($ipaNodes as $ipaNode) {
+                        $isInCorrectSection = true;
+
+                        if ($nextHeadingIndex >= 0) {
+                            $nextHeading = $allHeadings->item($nextHeadingIndex);
+                            $compareResult = $ipaNode->compareDocumentPosition($nextHeading);
+
+                            if (!($compareResult & 4)) {
+                                $isInCorrectSection = false;
+                            }
+                        }
+
+                        if ($isInCorrectSection) {
+                            return trim($ipaNode->textContent);
+                        }
+                    }
+                }
+            }
+
+            // Fallback: if language-specific search fails, try to get the first IPA
+            $nodes = $xpath->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' IPA ')]");
+            if ($nodes->length > 0) {
+                return trim($nodes->item(0)->textContent);
+            }
+
+            return '';
         } catch (\Exception $e) {
             var_dump('Error parsing Wiktionary result: ' . $e->getMessage());
             return '';
