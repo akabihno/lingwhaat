@@ -5,6 +5,7 @@ namespace App\Constant;
 
 class LanguageServicesAndCodes
 {
+    public const string LANGUAGE_ENTITY = 'LanguageEntity';
     public const string FRENCH_LANGUAGE_CODE = 'fr';
     public const string GERMAN_LANGUAGE_CODE = 'de';
     public const string GREEK_LANGUAGE_CODE = 'el';
@@ -39,6 +40,7 @@ class LanguageServicesAndCodes
     public const string ARABIC_LANGUAGE_CODE = 'ar';
     public const string OLD_DUTCH_LANGUAGE_CODE = 'odt';
     public const string MIDDLE_DUTCH_LANGUAGE_CODE = 'dum';
+    public const string NORWEGIAN_LANGUAGE_CODE = 'no';
 
     public static function getLanguageCodes(): array
     {
@@ -77,6 +79,7 @@ class LanguageServicesAndCodes
             self::ARABIC_LANGUAGE_CODE,
             self::OLD_DUTCH_LANGUAGE_CODE,
             self::MIDDLE_DUTCH_LANGUAGE_CODE,
+            self::NORWEGIAN_LANGUAGE_CODE,
         ];
     }
 
@@ -118,6 +121,7 @@ class LanguageServicesAndCodes
             'ArabicLanguageEntity' => self::ARABIC_LANGUAGE_CODE,
             'OldDutchLanguageEntity' => self::OLD_DUTCH_LANGUAGE_CODE,
             'MiddleDutchLanguageEntity' => self::MIDDLE_DUTCH_LANGUAGE_CODE,
+            'NorwegianLanguageEntity' => self::NORWEGIAN_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {

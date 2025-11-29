@@ -28,7 +28,7 @@ class OldDutchLanguageEntity
         return $this->id;
     }
 
-    public function setId(int $id): self
+    public function setId(int $id): OldDutchLanguageEntity
     {
         $this->id = $id;
         return $this;
@@ -39,7 +39,7 @@ class OldDutchLanguageEntity
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): OldDutchLanguageEntity
     {
         $this->name = $name;
         return $this;
@@ -50,7 +50,7 @@ class OldDutchLanguageEntity
         return $this->ipa;
     }
 
-    public function setIpa(string $ipa): self
+    public function setIpa(string $ipa): OldDutchLanguageEntity
     {
         $this->ipa = $ipa;
         return $this;
@@ -61,7 +61,7 @@ class OldDutchLanguageEntity
         return $this->tsCreated;
     }
 
-    public function setTsCreated(string $tsCreated): self
+    public function setTsCreated(string $tsCreated): OldDutchLanguageEntity
     {
         $this->tsCreated = $tsCreated;
         return $this;

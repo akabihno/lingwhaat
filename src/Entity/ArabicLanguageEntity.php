@@ -28,7 +28,7 @@ class ArabicLanguageEntity
         return $this->id;
     }
 
-    public function setId(int $id): self
+    public function setId(int $id): ArabicLanguageEntity
     {
         $this->id = $id;
         return $this;
@@ -39,7 +39,7 @@ class ArabicLanguageEntity
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): ArabicLanguageEntity
     {
         $this->name = $name;
         return $this;
@@ -50,7 +50,7 @@ class ArabicLanguageEntity
         return $this->ipa;
     }
 
-    public function setIpa(string $ipa): self
+    public function setIpa(string $ipa): ArabicLanguageEntity
     {
         $this->ipa = $ipa;
         return $this;
@@ -61,7 +61,7 @@ class ArabicLanguageEntity
         return $this->tsCreated;
     }
 
-    public function setTsCreated(string $tsCreated): self
+    public function setTsCreated(string $tsCreated): ArabicLanguageEntity
     {
         $this->tsCreated = $tsCreated;
         return $this;

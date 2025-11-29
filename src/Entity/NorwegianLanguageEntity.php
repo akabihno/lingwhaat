@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\EstonianLanguageRepository;
+use App\Repository\NorwegianLanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EstonianLanguageRepository::class)]
-#[ORM\Table(name: "pronunciation_estonian_language")]
-class EstonianLanguageEntity
+#[ORM\Entity(repositoryClass: NorwegianLanguageRepository::class)]
+#[ORM\Table(name: "pronunciation_norwegian_language")]
+class NorwegianLanguageEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -28,7 +28,7 @@ class EstonianLanguageEntity
         return $this->id;
     }
 
-    public function setId(int $id): EstonianLanguageEntity
+    public function setId(int $id): NorwegianLanguageEntity
     {
         $this->id = $id;
         return $this;
@@ -39,7 +39,7 @@ class EstonianLanguageEntity
         return $this->name;
     }
 
-    public function setName(string $name): EstonianLanguageEntity
+    public function setName(string $name): NorwegianLanguageEntity
     {
         $this->name = $name;
         return $this;
@@ -50,7 +50,7 @@ class EstonianLanguageEntity
         return $this->ipa;
     }
 
-    public function setIpa(string $ipa): EstonianLanguageEntity
+    public function setIpa(string $ipa): NorwegianLanguageEntity
     {
         $this->ipa = $ipa;
         return $this;
@@ -61,9 +61,10 @@ class EstonianLanguageEntity
         return $this->tsCreated;
     }
 
-    public function setTsCreated(string $tsCreated): EstonianLanguageEntity
+    public function setTsCreated(string $tsCreated): NorwegianLanguageEntity
     {
         $this->tsCreated = $tsCreated;
         return $this;
     }
+
 }

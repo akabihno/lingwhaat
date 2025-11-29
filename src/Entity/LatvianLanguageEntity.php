@@ -23,9 +23,6 @@ class LatvianLanguageEntity
     #[ORM\Column(name: 'ts_created')]
     private string $tsCreated;
 
-    #[ORM\Column(name: 'unique_pattern_check')]
-    private string $uniquePatternCheck;
-
     public function getId(): int
     {
         return $this->id;
@@ -69,16 +66,4 @@ class LatvianLanguageEntity
         $this->tsCreated = $tsCreated;
         return $this;
     }
-
-    public function getUniquePatternCheck(): string
-    {
-        return $this->uniquePatternCheck;
-    }
-
-    public function setUniquePatternCheck(string $uniquePatternCheck): LatvianLanguageEntity
-    {
-        $this->uniquePatternCheck = $uniquePatternCheck;
-        return $this;
-    }
-
 }

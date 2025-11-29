@@ -23,9 +23,6 @@ class AlbanianLanguageEntity
     #[ORM\Column(name: 'ts_created')]
     private string $tsCreated;
 
-    #[ORM\Column(name: 'unique_pattern_check')]
-    private string $uniquePatternCheck;
-
     public function getId(): int
     {
         return $this->id;
@@ -69,16 +66,4 @@ class AlbanianLanguageEntity
         $this->tsCreated = $tsCreated;
         return $this;
     }
-
-    public function getUniquePatternCheck(): string
-    {
-        return $this->uniquePatternCheck;
-    }
-
-    public function setUniquePatternCheck(string $uniquePatternCheck): AlbanianLanguageEntity
-    {
-        $this->uniquePatternCheck = $uniquePatternCheck;
-        return $this;
-    }
-
 }
