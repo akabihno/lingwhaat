@@ -42,31 +42,68 @@ class AbstractQuery
         return $result;
     }
 
-    public function updateIpa(string $language, string $ipa, string $name): void
+    public function bulkUpdateIpa(string $language, array $updates): void
     {
+        if (empty($updates)) {
+            return;
+        }
+
         $this->connect();
-        $query = 'UPDATE '.$this->getBaseTable($language).' SET ipa = :ipa, ts_created = NOW() WHERE name = :name';
+
+        $caseStatements = [];
+        $names = [];
+        $params = [];
+
+        foreach ($updates as $index => $update) {
+            $nameParam = ":name{$index}";
+            $ipaParam = ":ipa{$index}";
+
+            $caseStatements[] = "WHEN name = {$nameParam} THEN {$ipaParam}";
+            $names[] = $nameParam;
+
+            $params[$nameParam] = $update['name'];
+            $params[$ipaParam] = $update['ipa'];
+        }
+
+        $caseClause = implode(' ', $caseStatements);
+        $namesClause = implode(', ', $names);
+
+        $query = "UPDATE {$this->getBaseTable($language)}
+                  SET ipa = CASE {$caseClause} END,
+                      ts_created = NOW()
+                  WHERE name IN ({$namesClause})";
 
         $stmt = $this->pdo->prepare($query);
-
-        $stmt->execute([
-            ':ipa' => $ipa,
-            ':name' => $name
-        ]);
+        $stmt->execute($params);
     }
 
-    public function insertLinks(string $language, $name, $link): void
+    public function bulkInsertLinks(string $language, array $links): void
     {
+        if (empty($links)) {
+            return;
+        }
+
         $this->connect();
-        $query = 'INSERT INTO '.$this->getLinksTable($language).' (name, link) VALUES (:name, :link)';
+
+        $valuePlaceholders = [];
+        $params = [];
+
+        foreach ($links as $index => $link) {
+            $nameParam = ":name{$index}";
+            $linkParam = ":link{$index}";
+
+            $valuePlaceholders[] = "({$nameParam}, {$linkParam})";
+
+            $params[$nameParam] = $link['name'];
+            $params[$linkParam] = $link['link'];
+        }
+
+        $valuesClause = implode(', ', $valuePlaceholders);
+
+        $query = "INSERT INTO {$this->getLinksTable($language)} (name, link) VALUES {$valuesClause}";
 
         $stmt = $this->pdo->prepare($query);
-
-        $stmt->execute([
-            ':name' => $name,
-            ':link' => $link
-        ]);
-
+        $stmt->execute($params);
     }
 
     public function insertNames(string $language, string $name): void

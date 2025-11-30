@@ -29,10 +29,26 @@ class WiktionaryArticlesIpaParserService
         $articles = $this->getArticleNamesFromDb($language, $limit);
 
         if (!empty($articles)) {
+            $ipaUpdates = [];
+            $linksInserts = [];
+
             foreach ($articles as $article) {
                 echo "Processing: ".$article."\n";
                 $html = $this->getPageForTitle($uaEmail, $article);
-                $this->processWiktionaryResult($language, $html, $article);
+                $data = $this->processWiktionaryResult($language, $html, $article);
+
+                if ($data) {
+                    $ipaUpdates[] = $data['ipa'];
+                    $linksInserts[] = $data['link'];
+                }
+            }
+
+            if (!empty($ipaUpdates)) {
+                $this->abstractQuery->bulkUpdateIpa($language, $ipaUpdates);
+            }
+
+            if (!empty($linksInserts)) {
+                $this->abstractQuery->bulkInsertLinks($language, $linksInserts);
             }
         }
 
@@ -65,17 +81,20 @@ class WiktionaryArticlesIpaParserService
         return $this->wiktionaryGetRequest($uaEmail, $title);
     }
 
-    protected function processWiktionaryResult(string $language, string $html, string $article): void
+    protected function processWiktionaryResult(string $language, string $html, string $article): ?array
     {
         $ipa = $this->parseWiktionaryResult($html, $language);
 
-        $this->abstractQuery->updateIpa(
-            $language,
-            $ipa ?: self::IPA_NOT_AVAILABLE,
-            $article
-        );
-
-        $this->abstractQuery->insertLinks($language, $article, $this->generateWiktionaryLink($article));
+        return [
+            'ipa' => [
+                'name' => $article,
+                'ipa' => $ipa ?: self::IPA_NOT_AVAILABLE
+            ],
+            'link' => [
+                'name' => $article,
+                'link' => $this->generateWiktionaryLink($article)
+            ]
+        ];
     }
 
     protected function generateWiktionaryLink($article): string
@@ -88,6 +107,9 @@ class WiktionaryArticlesIpaParserService
         try {
             $dom = new DOMDocument();
             $html = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+            if (!$html) {
+                return '';
+            }
             @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
             $xpath = new DOMXPath($dom);

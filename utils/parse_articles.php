@@ -2,7 +2,7 @@
 
 require 'vendor/autoload.php';
 
-// watch --interval 5 docker exec -it php-app php utils/parse_articles.php bengali 100
+// watch --interval 360 docker exec -it php-app php utils/parse_articles.php icelandic 300
 
 use App\Query\AbstractQuery;
 use App\Service\Logging\ElasticsearchLogger;
