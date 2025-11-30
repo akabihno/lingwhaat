@@ -41,6 +41,7 @@ class LanguageServicesAndCodes
     public const string OLD_DUTCH_LANGUAGE_CODE = 'odt';
     public const string MIDDLE_DUTCH_LANGUAGE_CODE = 'dum';
     public const string NORWEGIAN_LANGUAGE_CODE = 'no';
+    public const string DANISH_LANGUAGE_CODE = 'da';
 
     public static function getLanguageCodes(): array
     {
@@ -80,6 +81,7 @@ class LanguageServicesAndCodes
             self::OLD_DUTCH_LANGUAGE_CODE,
             self::MIDDLE_DUTCH_LANGUAGE_CODE,
             self::NORWEGIAN_LANGUAGE_CODE,
+            self::DANISH_LANGUAGE_CODE,
         ];
     }
 
@@ -122,6 +124,7 @@ class LanguageServicesAndCodes
             'OldDutchLanguageEntity' => self::OLD_DUTCH_LANGUAGE_CODE,
             'MiddleDutchLanguageEntity' => self::MIDDLE_DUTCH_LANGUAGE_CODE,
             'NorwegianLanguageEntity' => self::NORWEGIAN_LANGUAGE_CODE,
+            'DanishLanguageEntity' => self::DANISH_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {

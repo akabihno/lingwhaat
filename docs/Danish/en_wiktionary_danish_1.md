@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/1000%20meter%20stafet|
+|https://en.wiktionary.org/wiki/11-meterplet|
+|https://en.wiktionary.org/wiki/12-talspige|
+|https://en.wiktionary.org/wiki/1-værelses|
+|https://en.wiktionary.org/wiki/10.|
+|https://en.wiktionary.org/wiki/10'er|
+|https://en.wiktionary.org/wiki/1'er|

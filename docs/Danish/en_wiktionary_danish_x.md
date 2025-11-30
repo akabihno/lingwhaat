@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/X-kromosom|
+|https://en.wiktionary.org/wiki/xenofobisk|
+|https://en.wiktionary.org/wiki/x-akse|
+|https://en.wiktionary.org/wiki/Xenia|
+|https://en.wiktionary.org/wiki/xenofob|
+|https://en.wiktionary.org/wiki/xanthangummi|
+|https://en.wiktionary.org/wiki/xylofon|
+|https://en.wiktionary.org/wiki/xenon|
+|https://en.wiktionary.org/wiki/Xanthippe|
+|https://en.wiktionary.org/wiki/xenofobi|

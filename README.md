@@ -9,6 +9,7 @@ Supported languages:
 * Bengali
 * Breton
 * Czech
+* Danish
 * Dutch
 * English
 * Estonian
@@ -515,6 +516,47 @@ List of all articles IPA data has been taken from:
 [ý](docs/Czech/en_wiktionary_czech_ý.md),
 [z](docs/Czech/en_wiktionary_czech_z.md),
 [ž](docs/Czech/en_wiktionary_czech_ž.md)
+* Danish:
+[-](docs/Danish/en_wiktionary_danish_-.md),
+[›](docs/Danish/en_wiktionary_danish_›.md),
+[»](docs/Danish/en_wiktionary_danish_».md),
+[1](docs/Danish/en_wiktionary_danish_1.md),
+[2](docs/Danish/en_wiktionary_danish_2.md),
+[3](docs/Danish/en_wiktionary_danish_3.md),
+[4](docs/Danish/en_wiktionary_danish_4.md),
+[5](docs/Danish/en_wiktionary_danish_5.md),
+[6](docs/Danish/en_wiktionary_danish_6.md),
+[7](docs/Danish/en_wiktionary_danish_7.md),
+[8](docs/Danish/en_wiktionary_danish_8.md),
+[9](docs/Danish/en_wiktionary_danish_9.md),
+[a](docs/Danish/en_wiktionary_danish_a.md),
+[æ](docs/Danish/en_wiktionary_danish_æ.md),
+[b](docs/Danish/en_wiktionary_danish_b.md),
+[c](docs/Danish/en_wiktionary_danish_c.md),
+[d](docs/Danish/en_wiktionary_danish_d.md),
+[e](docs/Danish/en_wiktionary_danish_e.md),
+[f](docs/Danish/en_wiktionary_danish_f.md),
+[g](docs/Danish/en_wiktionary_danish_g.md),
+[h](docs/Danish/en_wiktionary_danish_h.md),
+[i](docs/Danish/en_wiktionary_danish_i.md),
+[j](docs/Danish/en_wiktionary_danish_j.md),
+[k](docs/Danish/en_wiktionary_danish_k.md),
+[l](docs/Danish/en_wiktionary_danish_l.md),
+[m](docs/Danish/en_wiktionary_danish_m.md),
+[n](docs/Danish/en_wiktionary_danish_n.md),
+[ö](docs/Danish/en_wiktionary_danish_ö.md),
+[ɔ](docs/Danish/en_wiktionary_danish_ɔ.md),
+[p](docs/Danish/en_wiktionary_danish_p.md),
+[q](docs/Danish/en_wiktionary_danish_q.md),
+[r](docs/Danish/en_wiktionary_danish_r.md),
+[s](docs/Danish/en_wiktionary_danish_s.md),
+[t](docs/Danish/en_wiktionary_danish_t.md),
+[u](docs/Danish/en_wiktionary_danish_u.md),
+[v](docs/Danish/en_wiktionary_danish_v.md),
+[w](docs/Danish/en_wiktionary_danish_w.md),
+[x](docs/Danish/en_wiktionary_danish_x.md),
+[y](docs/Danish/en_wiktionary_danish_y.md),
+[z](docs/Danish/en_wiktionary_danish_z.md)
 * Dutch:
 [a](docs/Dutch/en_wiktionary_dutch_a.md),
 [b](docs/Dutch/en_wiktionary_dutch_b.md),
