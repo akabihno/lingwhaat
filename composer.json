@@ -40,7 +40,7 @@
     "symfony/polyfill-php84": "*"
   },
   "require": {
-    "php": "^8.4",
+    "php": "^8.5",
     "ext-pdo": "*",
     "doctrine/dbal": "^3.10.4",
     "doctrine/doctrine-bundle": "^2.18.1",
@@ -65,6 +65,7 @@
     "symfony/uid": "^7.4.0",
     "symfony/rate-limiter": "v7.2.0",
     "symfony/lock": "^7.4.0",
+    "symfony/var-exporter": "^7.4.0",
     "twig/twig": "^3.22.0",
     "vlucas/phpdotenv": ">=5.6.2",
     "ext-mbstring": "*",
