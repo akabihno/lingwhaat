@@ -105,7 +105,8 @@ class LanguageDetectionService
                 'uuid' => $uuid,
                 'service' => '[LanguageDetectionService]',
                 'detectedLanguage' => $topLanguageCode ?? 'none',
-                'matches' => $matchCount
+                'matches' => $matchCount,
+                'input' => $languageInput
             ]
         );
 
