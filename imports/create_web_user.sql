@@ -24,6 +24,7 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_latvian_language TO '${MYS
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_latin_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_lithuanian_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_middledutch_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_norwegian_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_olddutch_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_polish_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_portuguese_language TO '${MYSQL_WEB_USER}'@'%';
@@ -38,6 +39,5 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_ukrainian_language TO '${M
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_uzbek_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_wolof_language TO '${MYSQL_WEB_USER}'@'%';
 
-GRANT SELECT,INSERT,UPDATE ON lingwhaat.unique_pattern TO '${MYSQL_WEB_USER}'@'%';
-
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_danish_language TO '${MYSQL_WEB_USER}'@'%';
 FLUSH PRIVILEGES;

@@ -23,15 +23,12 @@ class KazakhLanguageEntity
     #[ORM\Column(name: 'ts_created')]
     private string $tsCreated;
 
-    #[ORM\Column(name: 'unique_pattern_check')]
-    private string $uniquePatternCheck;
-
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function setId(int $id): self
+    public function setId(int $id): KazakhLanguageEntity
     {
         $this->id = $id;
         return $this;
@@ -42,7 +39,7 @@ class KazakhLanguageEntity
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): KazakhLanguageEntity
     {
         $this->name = $name;
         return $this;
@@ -53,7 +50,7 @@ class KazakhLanguageEntity
         return $this->ipa;
     }
 
-    public function setIpa(string $ipa): self
+    public function setIpa(string $ipa): KazakhLanguageEntity
     {
         $this->ipa = $ipa;
         return $this;
@@ -64,21 +61,9 @@ class KazakhLanguageEntity
         return $this->tsCreated;
     }
 
-    public function setTsCreated(string $tsCreated): self
+    public function setTsCreated(string $tsCreated): KazakhLanguageEntity
     {
         $this->tsCreated = $tsCreated;
         return $this;
     }
-
-    public function getUniquePatternCheck(): string
-    {
-        return $this->uniquePatternCheck;
-    }
-
-    public function setUniquePatternCheck(string $uniquePatternCheck): self
-    {
-        $this->uniquePatternCheck = $uniquePatternCheck;
-        return $this;
-    }
-
 }

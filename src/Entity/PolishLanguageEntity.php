@@ -23,9 +23,6 @@ class PolishLanguageEntity
     #[ORM\Column(name: 'ts_created')]
     private string $tsCreated;
 
-    #[ORM\Column(name: 'unique_pattern_check')]
-    private string $uniquePatternCheck;
-
     public function getId(): int
     {
         return $this->id;
@@ -67,17 +64,6 @@ class PolishLanguageEntity
     public function setTsCreated(string $tsCreated): PolishLanguageEntity
     {
         $this->tsCreated = $tsCreated;
-        return $this;
-    }
-
-    public function getUniquePatternCheck(): string
-    {
-        return $this->uniquePatternCheck;
-    }
-
-    public function setUniquePatternCheck(string $uniquePatternCheck): PolishLanguageEntity
-    {
-        $this->uniquePatternCheck = $uniquePatternCheck;
         return $this;
     }
 }

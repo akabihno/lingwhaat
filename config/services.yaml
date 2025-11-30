@@ -11,6 +11,11 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+    # Auto-tag all language repositories
+    _instanceof:
+        App\Repository\AbstractLanguageRepository:
+            tags: ['app.language_repository']
+
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -34,3 +39,8 @@ services:
       arguments:
         $client: '@Elastica\Client'
         $indexPrefix: 'application-logs'
+
+    # Service locator for TrainIpaPredictorModelCommand
+    App\Service\LanguageDetection\LanguageTransliteration\Command\TrainIpaPredictorModelCommand:
+        arguments:
+            $container: !tagged_locator app.language_repository
