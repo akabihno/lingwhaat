@@ -40,7 +40,7 @@
     "symfony/polyfill-php84": "*"
   },
   "require": {
-    "php": "^8.4",
+    "php": "^8.5",
     "ext-pdo": "*",
     "doctrine/dbal": "^3.10.4",
     "doctrine/doctrine-bundle": "^2.18.1",
