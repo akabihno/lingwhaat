@@ -65,6 +65,7 @@
     "symfony/uid": "^7.4.0",
     "symfony/rate-limiter": "v7.2.0",
     "symfony/lock": "^7.4.0",
+    "symfony/var-exporter": "^7.4.0",
     "twig/twig": "^3.22.0",
     "vlucas/phpdotenv": ">=5.6.2",
     "ext-mbstring": "*",
