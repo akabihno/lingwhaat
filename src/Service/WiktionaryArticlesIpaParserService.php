@@ -34,7 +34,7 @@ class WiktionaryArticlesIpaParserService
 
             foreach ($articles as $article) {
                 echo "Processing: ".$article."\n";
-                $html = $this->getPageForTitle($uaEmail, $article);
+                $html = $this->getPageForTitle($uaEmail, $article, $language);
                 $data = $this->processWiktionaryResult($language, $html, $article);
 
                 if ($data) {
@@ -76,9 +76,9 @@ class WiktionaryArticlesIpaParserService
         return $result;
     }
 
-    protected function getPageForTitle(string $uaEmail, string $title): string
+    protected function getPageForTitle(string $uaEmail, string $title, string $language): string
     {
-        return $this->wiktionaryGetRequest($uaEmail, $title);
+        return $this->wiktionaryGetRequest($uaEmail, $title, $language);
     }
 
     protected function processWiktionaryResult(string $language, string $html, string $article): ?array
@@ -92,14 +92,22 @@ class WiktionaryArticlesIpaParserService
             ],
             'link' => [
                 'name' => $article,
-                'link' => $this->generateWiktionaryLink($article)
+                'link' => $this->generateWiktionaryLink($article, $language)
             ]
         ];
     }
 
-    protected function generateWiktionaryLink($article): string
+    protected function generateWiktionaryLink($article, $language): string
     {
-        return self::WIKTIONARY_BASE_URL.$article;
+        return $this->getWiktionaryBaseUrl($language).$article;
+    }
+
+    protected function getWiktionaryBaseUrl($language): string
+    {
+        if ($language == 'dutch') {
+            return "https://nl.wiktionary.org/wiki/";
+        }
+        return self::WIKTIONARY_BASE_URL;
     }
 
     protected function parseWiktionaryResult(string $html, string $language): string
@@ -167,7 +175,7 @@ class WiktionaryArticlesIpaParserService
         }
     }
 
-    protected function wiktionaryGetRequest(string $uaEmail, string $title): string
+    protected function wiktionaryGetRequest(string $uaEmail, string $title, string $language): string
     {
         $params = [
             'action' => 'parse',
@@ -176,7 +184,7 @@ class WiktionaryArticlesIpaParserService
             'prop' => 'text'
         ];
 
-        $url = self::WIKTIONARY_BASE_API_LINK . '?' . http_build_query($params);
+        $url = $this->getWiktionaryBaseApiLink($language) . '?' . http_build_query($params);
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -187,6 +195,14 @@ class WiktionaryArticlesIpaParserService
         $result = json_decode($response, true);
 
         return $result['parse']['text']['*'] ?? '';
+    }
+
+    protected function getWiktionaryBaseApiLink(string $language): string
+    {
+        if ($language == 'dutch') {
+            return "https://nl.wiktionary.org/w/api.php";
+        }
+        return self::WIKTIONARY_BASE_API_LINK;
     }
 
 }
