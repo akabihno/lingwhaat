@@ -17,7 +17,8 @@ framework:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
 
             # Failed messages transport
-            failed: 'doctrine://default?queue_name=failed'
+            failed:
+                dsn: '%env(MESSENGER_FAILED_DSN)%'
 
         routing:
             # Route scheduled messages to scheduler transport

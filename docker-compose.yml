@@ -144,6 +144,7 @@ services:
       - WIKTIONARY_UA_EMAIL=${WIKTIONARY_UA_EMAIL}
       - LOCK_DSN=${LOCK_DSN}
       - MESSENGER_TRANSPORT_DSN=${MESSENGER_TRANSPORT_DSN}
+      - MESSENGER_FAILED_DSN=${MESSENGER_FAILED_DSN}
     network_mode: host
     depends_on:
       - db
@@ -173,6 +174,7 @@ services:
       - WIKTIONARY_UA_EMAIL=${WIKTIONARY_UA_EMAIL}
       - LOCK_DSN=${LOCK_DSN}
       - MESSENGER_TRANSPORT_DSN=${MESSENGER_TRANSPORT_DSN}
+      - MESSENGER_FAILED_DSN=${MESSENGER_FAILED_DSN}
     network_mode: host
     depends_on:
       - db
