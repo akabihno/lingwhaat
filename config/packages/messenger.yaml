@@ -21,7 +21,5 @@ framework:
                 dsn: '%env(MESSENGER_FAILED_DSN)%'
 
         routing:
-            # Route scheduled messages to scheduler transport
-            'Symfony\Component\Scheduler\Messenger\ScheduledStamp': scheduler_wiktionary
-            # Route your custom messages to async transport
+            # Route your custom messages to async transport for actual processing
             'App\Message\ParseWiktionaryArticlesMessage': async
