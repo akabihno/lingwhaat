@@ -151,7 +151,7 @@ services:
       - redis
     volumes:
       - .:/var/www/html
-    command: php /var/www/html/bin/console messenger:consume scheduler_default -vv
+    command: php /var/www/html/bin/console messenger:consume scheduler_wiktionary -vv
     restart: on-failure
     deploy:
       resources:

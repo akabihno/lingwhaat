@@ -13,7 +13,7 @@ framework:
                     max_delay: 0
 
             # Scheduler messages transport
-            scheduler_default:
+            scheduler_wiktionary:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
 
             # Failed messages transport
@@ -22,6 +22,6 @@ framework:
 
         routing:
             # Route scheduled messages to scheduler transport
-            'Symfony\Component\Scheduler\Messenger\ScheduledStamp': scheduler_default
+            'Symfony\Component\Scheduler\Messenger\ScheduledStamp': scheduler_wiktionary
             # Route your custom messages to async transport
             'App\Message\ParseWiktionaryArticlesMessage': async
