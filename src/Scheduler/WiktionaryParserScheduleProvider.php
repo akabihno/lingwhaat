@@ -8,7 +8,7 @@ use Symfony\Component\Scheduler\RecurringMessage;
 use Symfony\Component\Scheduler\Schedule;
 use Symfony\Component\Scheduler\ScheduleProviderInterface;
 
-#[AsSchedule('wiktionary_parser')]
+#[AsSchedule('default')]
 class WiktionaryParserScheduleProvider implements ScheduleProviderInterface
 {
 
