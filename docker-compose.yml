@@ -119,7 +119,9 @@ services:
     restart: on-failure
 
   composer:
-    image: composer:latest
+    build:
+      context: .
+      dockerfile: Dockerfile-composer
     container_name: composer-installer
     working_dir: /var/www/html
     volumes:
