@@ -65,6 +65,7 @@
     "symfony/rate-limiter": "v7.2.0",
     "symfony/lock": "^7.4.0",
     "symfony/messenger": "^7.4.0",
+    "symfony/redis-messenger": "^7.4.0",
     "symfony/scheduler": "^7.4.0",
     "symfony/var-exporter": "^7.4.0",
     "twig/twig": "^3.22.0",
