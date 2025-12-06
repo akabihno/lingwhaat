@@ -12,10 +12,6 @@ framework:
                     multiplier: 2
                     max_delay: 0
 
-            # Scheduler messages transport
-            scheduler_wiktionary:
-                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
-
             # Failed messages transport
             failed:
                 dsn: '%env(MESSENGER_FAILED_DSN)%'
