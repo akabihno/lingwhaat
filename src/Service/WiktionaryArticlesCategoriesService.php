@@ -39,7 +39,6 @@ class WiktionaryArticlesCategoriesService
             curl_setopt($ch, CURLOPT_USERAGENT, $uaEmail);
             curl_setopt($ch, CURLOPT_REFERER, $domain);
             $output = curl_exec($ch);
-            curl_close($ch);
 
             $result = json_decode($output, true);
 
