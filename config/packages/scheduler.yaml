@@ -1,0 +1,4 @@
+framework:
+    scheduler:
+        # Use Redis for distributed scheduling (prevents duplicate runs across multiple workers)
+        lock_factory: 'lock.default.factory'
