@@ -26,7 +26,7 @@ class Schedule implements ScheduleProviderInterface
             // Parse Wiktionary articles for Dutch every 10 minutes
             ->add(
                 RecurringMessage::every(
-                    '10 minutes',
+                    '5 minutes',
                     new ParseWiktionaryArticlesMessage('dutch', 300)
                 )->withJitter(30) // Add 30 seconds jitter to avoid exact timing conflicts
             )
