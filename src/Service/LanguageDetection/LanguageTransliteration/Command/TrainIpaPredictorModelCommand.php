@@ -127,7 +127,7 @@ class TrainIpaPredictorModelCommand extends Command
         $statusCode = $response->getStatusCode();
         $content = $response->getContent();
 
-        $output->writeln("Training complete on dataset {$this->trainingDataPath} with status {$statusCode}");
+        $output->writeln("Training scheduled on dataset {$this->trainingDataPath} with status {$statusCode}");
 
         return Command::SUCCESS;
     }

@@ -48,7 +48,7 @@ class TrainWordPredictorModelCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // example: php bin/console ml:train:word-predictor --lang lv
+        // example: php bin/console ml:train:word-predictor --lang latvian
 
         $lang = $input->getOption('lang');
 
@@ -78,7 +78,7 @@ class TrainWordPredictorModelCommand extends Command
             $output->writeln('<error>Exception: '.$e.'</error>');
         }
 
-        $output->writeln("Training complete on dataset {$this->trainingDataPath} with status {$statusCode}");
+        $output->writeln("Training scheduled on dataset {$this->trainingDataPath} with status {$statusCode}");
 
 
         return Command::SUCCESS;
