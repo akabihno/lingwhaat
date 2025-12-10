@@ -46,7 +46,6 @@
     "doctrine/doctrine-bundle": "^2.18.1",
     "doctrine/doctrine-migrations-bundle": "^3.7.0",
     "doctrine/orm": "^3.5.8",
-    "ivopetkov/html5-dom-document-php": "^2.8.1",
     "symfony/config": "^7.4.0",
     "symfony/console": "^7.4.0",
     "symfony/dependency-injection": "^7.4.0",
@@ -65,8 +64,11 @@
     "symfony/uid": "^7.4.0",
     "symfony/rate-limiter": "v7.2.0",
     "symfony/lock": "^7.4.0",
+    "symfony/messenger": "^7.4.0",
+    "symfony/redis-messenger": "^7.4.0",
+    "symfony/scheduler": "^7.4.0",
     "symfony/var-exporter": "^7.4.0",
-    "twig/twig": "^3.22.0",
+    "twig/twig": "^3.22.1",
     "vlucas/phpdotenv": ">=5.6.2",
     "ext-mbstring": "*",
     "nelmio/api-doc-bundle": "^5.8.2",
@@ -76,8 +78,7 @@
     "ext-libxml": "*"
   },
   "require-dev": {
-    "symfony/maker-bundle": "^1.65.0",
-    "vimeo/psalm": "^6.13.1"
+    "symfony/maker-bundle": "^1.65.1"
   },
   "scripts": {
     "auto-scripts": {

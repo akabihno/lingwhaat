@@ -21,10 +21,10 @@ class TextDecryptionController extends AbstractController
     ) {
     }
 
-    #[Route('/api/decrypt', name: 'decrypt_text', methods: ['POST', 'GET'])]
+    #[Route('/api/decrypt', name: 'decrypt_text', methods: ['POST'])]
     #[OA\Post(
         path: '/api/decrypt',
-        description: 'Attempts to decrypt text by trying different letter substitutions and question mark replacements, then validates words against Elasticsearch. Useful for decoding encrypted or corrupted historical texts.',
+        description: 'Attempts to decrypt text by trying different letter substitutions and question mark replacements, then validates words against Elasticsearch.',
         summary: 'Decrypt text using letter substitution and fuzzy matching',
         requestBody: new OA\RequestBody(
             description: 'Text decryption parameters',
@@ -34,9 +34,9 @@ class TextDecryptionController extends AbstractController
                 properties: [
                     new OA\Property(
                         property: 'text',
-                        description: 'The encrypted or corrupted text to decrypt. Can include question marks (?) for unknown letters.',
+                        description: 'The encrypted or corrupted text to decrypt.',
                         type: 'string',
-                        example: 'geel desdem ecolevol dem vomica gdegda ie iek necdekecu neca dem vol ecda dem kia dekdeva devol d?avol ie deke d?em devol'
+                        example: 'geel desdem ecolevol dem vomica'
                     ),
                     new OA\Property(
                         property: 'languageCode',
@@ -123,105 +123,8 @@ class TextDecryptionController extends AbstractController
             )
         ]
     )]
-    #[OA\Get(
-        path: '/api/decrypt',
-        description: 'Alternative GET endpoint for text decryption (use POST for longer texts). Attempts to decrypt text by trying different letter substitutions and question mark replacements.',
-        summary: 'Decrypt text using query parameters',
-        tags: ['Text Decryption'],
-        parameters: [
-            new OA\Parameter(
-                name: 'text',
-                description: 'The encrypted or corrupted text to decrypt',
-                in: 'query',
-                required: true,
-                schema: new OA\Schema(
-                    type: 'string',
-                    example: 'geel desdem ecolevol dem vomica'
-                )
-            ),
-            new OA\Parameter(
-                name: 'languageCode',
-                description: 'Target language code (e.g., "odt" for Old Dutch)',
-                in: 'query',
-                required: true,
-                schema: new OA\Schema(
-                    type: 'string',
-                    example: 'odt'
-                )
-            ),
-            new OA\Parameter(
-                name: 'minCount',
-                description: 'Minimum number of words that must match',
-                in: 'query',
-                required: false,
-                schema: new OA\Schema(
-                    type: 'integer',
-                    default: 5,
-                    example: 5
-                )
-            )
-        ],
-        responses: [
-            new OA\Response(
-                response: 200,
-                description: 'Decryption attempt completed (check "success" field for result)',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(
-                            property: 'success',
-                            description: 'Whether decryption met the minimum match threshold',
-                            type: 'boolean',
-                            example: true
-                        ),
-                        new OA\Property(
-                            property: 'original_text',
-                            description: 'The original input text',
-                            type: 'string',
-                            example: 'geel desdem ecolevol dem vomica'
-                        ),
-                        new OA\Property(
-                            property: 'decrypted_text',
-                            description: 'The best decrypted version found',
-                            type: 'string',
-                            example: 'ghel gestem ecolevol tem vomica'
-                        ),
-                        new OA\Property(
-                            property: 'match_count',
-                            description: 'Number of words successfully matched in Elasticsearch',
-                            type: 'integer',
-                            example: 12
-                        ),
-                        new OA\Property(
-                            property: 'min_count',
-                            description: 'The minimum count required for success',
-                            type: 'integer',
-                            example: 5
-                        ),
-                        new OA\Property(
-                            property: 'matched_words',
-                            description: 'List of words that were found in the language database',
-                            type: 'array',
-                            items: new OA\Items(type: 'string'),
-                            example: ['ghel', 'gestem', 'tem', 'vomica']
-                        ),
-                        new OA\Property(
-                            property: 'substitutions',
-                            description: 'Letter substitution pattern applied (from => to)',
-                            type: 'object',
-                            example: ['d' => 't', 'e' => 'a']
-                        )
-                    ],
-                    type: 'object'
-                )
-            ),
-            new OA\Response(response: 400, description: 'Bad request - missing required parameters'),
-            new OA\Response(response: 429, description: 'Rate limit exceeded'),
-            new OA\Response(response: 500, description: 'Internal server error during decryption')
-        ]
-    )]
     public function decrypt(Request $request, RateLimiterFactory $anonymousApiLimiter): Response
     {
-        // Rate limiting
         $clientIp = $request->getClientIp();
         $whitelistedIp = getenv('RATE_LIMITER_WHITELISTED_IP');
 

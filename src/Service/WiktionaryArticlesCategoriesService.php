@@ -32,14 +32,13 @@ class WiktionaryArticlesCategoriesService
         ];
 
         do {
-            $url = self::WIKTIONARY_BASE_API_LINK . "?" . http_build_query($params);
+            $url = $this->getWiktionaryBaseApiLink($language) . "?" . http_build_query($params);
 
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($ch, CURLOPT_USERAGENT, $uaEmail);
             curl_setopt($ch, CURLOPT_REFERER, $domain);
             $output = curl_exec($ch);
-            curl_close($ch);
 
             $result = json_decode($output, true);
 
@@ -56,12 +55,23 @@ class WiktionaryArticlesCategoriesService
         } while (true);
     }
 
+    protected function getWiktionaryBaseApiLink($language): string
+    {
+        if ($language == 'dutch') {
+            return "https://nl.wiktionary.org/w/api.php";
+        } else {
+            return self::WIKTIONARY_BASE_API_LINK;
+        }
+    }
+
     protected function getCmtitle(string $language): string
     {
         if (str_contains($language, 'old')) {
             return "Category:Old_".ucfirst($this->trimLanguageName($language, 'old'))."_lemmas";
         } elseif (str_contains($language, 'middle')) {
             return "Category:Middle_".ucfirst($this->trimLanguageName($language, 'middle'))."_lemmas";
+        } elseif ($language == 'dutch') {
+            return "Categorie:Woorden_in_het_Nederlands";
         } else {
             return "Category:".ucfirst($language)."_lemmas";
         }

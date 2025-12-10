@@ -1,0 +1,21 @@
+framework:
+    messenger:
+        failure_transport: failed
+
+        transports:
+            # Using Redis for async transport
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+                    max_delay: 0
+
+            # Failed messages transport
+            failed:
+                dsn: '%env(MESSENGER_FAILED_DSN)%'
+
+        routing:
+            # Route your custom messages to async transport for actual processing
+            'App\Message\ParseWiktionaryArticlesMessage': async
