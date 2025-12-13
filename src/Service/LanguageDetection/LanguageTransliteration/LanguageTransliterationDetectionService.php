@@ -107,6 +107,10 @@ class LanguageTransliterationDetectionService
 
                     try {
                         $ipa = $this->ipaPredictorModelService->run($languageNameLower, $word);
+                        $this->logger->info(
+                            'Predicted IPA for word: ' . $word . ' in language: ' . $languageNameLower . ' is: ' . $ipa,
+                            ['uuid' => $uuid, 'service' => '[LanguageTransliterationDetectionService]']
+                        );
 
                         if (!$ipa) {
                             continue;
