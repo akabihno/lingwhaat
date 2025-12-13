@@ -3,7 +3,7 @@ nelmio_api_doc:
     info:
       title: Language Detection API
       description: Language Detection API
-      version: 1.0.1
+      version: 1.0.2
     servers:
       - url: "https://%env(string:DOMAIN)%"
         description: "API Server"

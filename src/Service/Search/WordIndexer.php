@@ -2,7 +2,7 @@
 
 namespace App\Service\Search;
 
-use App\Constant\LanguageServicesAndCodes;
+use App\Constant\LanguageMappings;
 use App\Repository\AbstractLanguageRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
@@ -40,7 +40,7 @@ class WordIndexer
         foreach ($allMetadata as $metadata) {
             $entityClass = $metadata->getName();
 
-            if (str_ends_with($entityClass, LanguageServicesAndCodes::LANGUAGE_ENTITY)) {
+            if (str_ends_with($entityClass, LanguageMappings::LANGUAGE_ENTITY)) {
                 $languageEntities[] = $entityClass;
             }
         }
@@ -91,7 +91,7 @@ class WordIndexer
             /** @var AbstractLanguageRepository $repository */
             $repository = $this->em->getRepository($entityClass);
 
-            $languageCode = LanguageServicesAndCodes::detectLanguageCodeFromEntity(new $entityClass());
+            $languageCode = LanguageMappings::detectLanguageCodeFromEntity(new $entityClass());
 
             if (!$languageCode) {
                 continue;

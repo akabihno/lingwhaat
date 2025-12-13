@@ -2,7 +2,7 @@
 
 namespace App\EventSubscriber;
 
-use App\Constant\LanguageServicesAndCodes;
+use App\Constant\LanguageMappings;
 use App\Service\Search\WordIndexer;
 use App\Service\LanguageDetection\LanguageDetectionService;
 use Doctrine\ORM\Events;
@@ -48,7 +48,7 @@ class WordIndexSubscriber
             return;
         }
 
-        $languageCode = LanguageServicesAndCodes::detectLanguageCodeFromEntity($entity);
+        $languageCode = LanguageMappings::detectLanguageCodeFromEntity($entity);
         if (!$languageCode) {
             return;
         }

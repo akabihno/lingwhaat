@@ -52,4 +52,34 @@ class FuzzySearchService
 
         return array_map(fn($r) => $r->getSource(), $results->getResults());
     }
+
+    public function findExactMatchesByIpa(string $ipa, int $limit = 5): array
+    {
+        $term = new Term();
+        $term->setTerm('ipa', $ipa);
+
+        $query = new Query($term);
+        $query->setSize($limit);
+
+        $results = $this->esClient->getIndex($this->indexName)->search($query);
+
+        return array_map(fn($r) => $r->getSource(), $results->getResults());
+    }
+
+    public function findClosestMatchesByIpa(string $ipa, int $limit = 5): array
+    {
+        $fuzzy = new Fuzzy();
+        $fuzzy->setParam('ipa', [
+            'value' => $ipa,
+            'fuzziness' => 1,
+            'prefix_length' => 1,
+        ]);
+
+        $query = new Query($fuzzy);
+        $query->setSize($limit);
+
+        $results = $this->esClient->getIndex($this->indexName)->search($query);
+
+        return array_map(fn($r) => $r->getSource(), $results->getResults());
+    }
 }
