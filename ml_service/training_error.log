@@ -1,8 +1,6 @@
 Traceback (most recent call last):
-  File "/app/train.py", line 51, in train_model_background
-    train_model(csv_path, model_save_path=model_path)
-  File "/app/train.py", line 70, in train_model
-    pairs = [
-  File "/app/train.py", line 71, in <listcomp>
-    (list(word), list(re.sub(r'[\[\]/]', '', ipa)))
-TypeError: 'float' object is not iterable
+  File "/app/train.py", line 51, in train_ipa_model_background
+    train_ipa_model(csv_path, model_save_path=model_path)
+  File "/app/train.py", line 107, in train_ipa_model
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5, verbose=True)
+TypeError: ReduceLROnPlateau.__init__() got an unexpected keyword argument 'verbose'

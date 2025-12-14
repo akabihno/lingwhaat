@@ -80,21 +80,38 @@ def train_ipa_model(csv_path, model_save_path=None):
     config.INPUT_DIM = len(src_stoi)
     config.OUTPUT_DIM = len(trg_stoi)
 
-    train_data = IPADataset(src_seqs, trg_seqs, src_stoi, trg_stoi)
+    # Train/validation split
+    from sklearn.model_selection import train_test_split
+    train_src, val_src, train_trg, val_trg = train_test_split(
+        src_seqs, trg_seqs, test_size=config.VALIDATION_SPLIT, random_state=42
+    )
+
+    train_data = IPADataset(train_src, train_trg, src_stoi, trg_stoi)
+    val_data = IPADataset(val_src, val_trg, src_stoi, trg_stoi)
+
     train_iterator = DataLoader(train_data, batch_size=config.BATCH_SIZE, shuffle=True, collate_fn=collate_fn)
+    val_iterator = DataLoader(val_data, batch_size=config.BATCH_SIZE, shuffle=False, collate_fn=collate_fn)
 
-    print(
-        f"Max src index in dataset: {max(i for seq in src_seqs for i in [src_stoi.get(c, src_stoi['<unk>']) for c in seq])}")
-    print(f"config.INPUT_DIM: {len(src_stoi)}")
+    print(f"Training samples: {len(train_data)}, Validation samples: {len(val_data)}")
+    print(f"Input vocab size: {len(src_stoi)}, Output vocab size: {len(trg_stoi)}")
 
-    enc = Encoder(config.INPUT_DIM, config.ENC_EMB_DIM, config.HID_DIM)
-    dec = Decoder(config.OUTPUT_DIM, config.DEC_EMB_DIM, config.HID_DIM)
+    # Initialize model with attention, multiple layers, and dropout
+    enc = Encoder(config.INPUT_DIM, config.ENC_EMB_DIM, config.HID_DIM, config.ENC_LAYERS, config.ENC_DROPOUT)
+    dec = Decoder(config.OUTPUT_DIM, config.DEC_EMB_DIM, config.HID_DIM, config.DEC_LAYERS, config.DEC_DROPOUT)
     model = Seq2Seq(enc, dec, device).to(device)
 
-    optimizer = optim.Adam(model.parameters())
+    optimizer = optim.Adam(model.parameters(), lr=config.LEARNING_RATE)
     criterion = nn.CrossEntropyLoss(ignore_index=0)
 
+    # Learning rate scheduler
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
+
+    # Early stopping
+    best_val_loss = float('inf')
+    patience_counter = 0
+
     for epoch in range(config.N_EPOCHS):
+        # Training
         model.train()
         epoch_loss = 0
 
@@ -112,14 +129,55 @@ def train_ipa_model(csv_path, model_save_path=None):
             optimizer.step()
             epoch_loss += loss.item()
 
-        print(f'Epoch {epoch + 1}: Loss = {epoch_loss / len(train_iterator):.4f}')
+        train_loss = epoch_loss / len(train_iterator)
 
-    torch.save({
-        'model_state_dict': model.state_dict(),
-        'input_stoi': src_stoi,
-        'output_stoi': trg_stoi,
-        'output_itos': trg_itos
-    }, model_save_path)
+        # Validation
+        model.eval()
+        val_loss = 0
+        with torch.no_grad():
+            for src, trg in val_iterator:
+                src, trg = src.to(device), trg.to(device)
+                output = model(src, trg, teacher_forcing_ratio=0)  # No teacher forcing during validation
+
+                output_dim = output.shape[-1]
+                output = output[1:].view(-1, output_dim)
+                trg = trg[1:].view(-1)
+                loss = criterion(output, trg)
+                val_loss += loss.item()
+
+        val_loss = val_loss / len(val_iterator)
+
+        print(f'Epoch {epoch + 1}: Train Loss = {train_loss:.4f} | Val Loss = {val_loss:.4f}')
+
+        # Learning rate scheduling
+        old_lr = optimizer.param_groups[0]['lr']
+        scheduler.step(val_loss)
+        new_lr = optimizer.param_groups[0]['lr']
+        if new_lr != old_lr:
+            print(f'Learning rate reduced: {old_lr:.6f} -> {new_lr:.6f}')
+
+        # Early stopping
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            patience_counter = 0
+            # Save best model
+            torch.save({
+                'model_state_dict': model.state_dict(),
+                'input_stoi': src_stoi,
+                'output_stoi': trg_stoi,
+                'output_itos': trg_itos,
+                'train_loss': train_loss,
+                'val_loss': val_loss,
+                'epoch': epoch + 1
+            }, model_save_path)
+            print(f'✓ Model saved (val_loss improved to {val_loss:.4f})')
+        else:
+            patience_counter += 1
+            if patience_counter >= config.PATIENCE:
+                print(f'Early stopping triggered after {epoch + 1} epochs')
+                break
+
+    print(f'Training completed. Best validation loss: {best_val_loss:.4f}')
 
 def train_word_model_background(csv_path: str, model_path: str):
     try:
@@ -154,21 +212,38 @@ def train_word_model(csv_path, model_save_path=None):
     config.INPUT_DIM = len(src_stoi)
     config.OUTPUT_DIM = len(trg_stoi)
 
-    train_data = IPADataset(src_seqs, trg_seqs, src_stoi, trg_stoi)
+    # Train/validation split
+    from sklearn.model_selection import train_test_split
+    train_src, val_src, train_trg, val_trg = train_test_split(
+        src_seqs, trg_seqs, test_size=config.VALIDATION_SPLIT, random_state=42
+    )
+
+    train_data = IPADataset(train_src, train_trg, src_stoi, trg_stoi)
+    val_data = IPADataset(val_src, val_trg, src_stoi, trg_stoi)
+
     train_iterator = DataLoader(train_data, batch_size=config.BATCH_SIZE, shuffle=True, collate_fn=collate_fn)
+    val_iterator = DataLoader(val_data, batch_size=config.BATCH_SIZE, shuffle=False, collate_fn=collate_fn)
 
-    print(
-        f"Max src index in dataset: {max(i for seq in src_seqs for i in [src_stoi.get(c, src_stoi['<unk>']) for c in seq])}")
-    print(f"config.INPUT_DIM: {len(src_stoi)}")
+    print(f"Training samples: {len(train_data)}, Validation samples: {len(val_data)}")
+    print(f"Input vocab size: {len(src_stoi)}, Output vocab size: {len(trg_stoi)}")
 
-    enc = Encoder(config.INPUT_DIM, config.ENC_EMB_DIM, config.HID_DIM)
-    dec = Decoder(config.OUTPUT_DIM, config.DEC_EMB_DIM, config.HID_DIM)
+    # Initialize model with attention, multiple layers, and dropout
+    enc = Encoder(config.INPUT_DIM, config.ENC_EMB_DIM, config.HID_DIM, config.ENC_LAYERS, config.ENC_DROPOUT)
+    dec = Decoder(config.OUTPUT_DIM, config.DEC_EMB_DIM, config.HID_DIM, config.DEC_LAYERS, config.DEC_DROPOUT)
     model = Seq2Seq(enc, dec, device).to(device)
 
-    optimizer = optim.Adam(model.parameters())
+    optimizer = optim.Adam(model.parameters(), lr=config.LEARNING_RATE)
     criterion = nn.CrossEntropyLoss(ignore_index=0)
 
+    # Learning rate scheduler
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=5)
+
+    # Early stopping
+    best_val_loss = float('inf')
+    patience_counter = 0
+
     for epoch in range(config.N_EPOCHS):
+        # Training
         model.train()
         epoch_loss = 0
 
@@ -186,11 +261,52 @@ def train_word_model(csv_path, model_save_path=None):
             optimizer.step()
             epoch_loss += loss.item()
 
-        print(f'Epoch {epoch + 1}: Loss = {epoch_loss / len(train_iterator):.4f}')
+        train_loss = epoch_loss / len(train_iterator)
 
-    torch.save({
-        'model_state_dict': model.state_dict(),
-        'input_stoi': src_stoi,
-        'output_stoi': trg_stoi,
-        'output_itos': trg_itos
-    }, model_save_path)
+        # Validation
+        model.eval()
+        val_loss = 0
+        with torch.no_grad():
+            for src, trg in val_iterator:
+                src, trg = src.to(device), trg.to(device)
+                output = model(src, trg, teacher_forcing_ratio=0)  # No teacher forcing during validation
+
+                output_dim = output.shape[-1]
+                output = output[1:].view(-1, output_dim)
+                trg = trg[1:].view(-1)
+                loss = criterion(output, trg)
+                val_loss += loss.item()
+
+        val_loss = val_loss / len(val_iterator)
+
+        print(f'Epoch {epoch + 1}: Train Loss = {train_loss:.4f} | Val Loss = {val_loss:.4f}')
+
+        # Learning rate scheduling
+        old_lr = optimizer.param_groups[0]['lr']
+        scheduler.step(val_loss)
+        new_lr = optimizer.param_groups[0]['lr']
+        if new_lr != old_lr:
+            print(f'Learning rate reduced: {old_lr:.6f} -> {new_lr:.6f}')
+
+        # Early stopping
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            patience_counter = 0
+            # Save best model
+            torch.save({
+                'model_state_dict': model.state_dict(),
+                'input_stoi': src_stoi,
+                'output_stoi': trg_stoi,
+                'output_itos': trg_itos,
+                'train_loss': train_loss,
+                'val_loss': val_loss,
+                'epoch': epoch + 1
+            }, model_save_path)
+            print(f'✓ Model saved (val_loss improved to {val_loss:.4f})')
+        else:
+            patience_counter += 1
+            if patience_counter >= config.PATIENCE:
+                print(f'Early stopping triggered after {epoch + 1} epochs')
+                break
+
+    print(f'Training completed. Best validation loss: {best_val_loss:.4f}')
