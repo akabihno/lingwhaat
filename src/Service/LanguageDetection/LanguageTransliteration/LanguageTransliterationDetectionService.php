@@ -20,7 +20,8 @@ class LanguageTransliterationDetectionService
         protected UseWordPredictorModelService $useWordPredictorModelService,
         protected ScriptDetectionService $scriptDetectionService,
         protected FuzzySearchService $fuzzySearchService,
-        protected LanguageNormalizationService $languageNormalizationService
+        protected LanguageNormalizationService $languageNormalizationService,
+        protected string $projectDir
     )
     {
     }
@@ -230,8 +231,8 @@ class LanguageTransliterationDetectionService
 
     private function modelExists(string $languageNameLower): bool
     {
-        $modelPath = IpaPredictorConstants::getMlServiceIpaModelsPath() . $languageNameLower . '_model.pt';
-        $dataPath = IpaPredictorConstants::getMlServiceDataPath() . $languageNameLower . '.csv';
+        $modelPath = $this->projectDir . '/' . IpaPredictorConstants::getMlServiceIpaModelsPath() . $languageNameLower . '_model.pt';
+        $dataPath = $this->projectDir . '/' . IpaPredictorConstants::getMlServiceDataPath() . $languageNameLower . '.csv';
 
         return file_exists($modelPath) && file_exists($dataPath);
     }
