@@ -98,9 +98,8 @@ class LanguageTransliterationDetectionService
         }
 
         $normalizedInput = $this->languageNormalizationService->normalizeText($languageInput);
-        $words = explode(' ', $normalizedInput);
-        $words = $this->languageNormalizationService->removeArticles($words);
-        $count = count($words);
+        $allWords = explode(' ', $normalizedInput);
+        $count = count($allWords);
 
         $languageCounts = [];
         $matchCount = 0;
@@ -116,11 +115,14 @@ class LanguageTransliterationDetectionService
             }
         }
 
-        foreach ($words as $word) {
-            $word = $this->languageNormalizationService->normalizeWord($word);
+        // Process all words for language detection scoring
+        foreach ($allWords as $rawWord) {
+            $word = $this->languageNormalizationService->normalizeWord($rawWord);
             if (!$word) {
                 continue;
             }
+
+            $isLongWord = mb_strlen($word, 'utf8') > LanguageNormalizationService::ARTICLE_LENGTH;
 
             // Use SOURCE language models (e.g., Russian model for Cyrillic input)
             foreach ($sourceLanguages as $scriptName => $languageNames) {
@@ -165,8 +167,11 @@ class LanguageTransliterationDetectionService
 
                                 // Count ONLY if the match is in a TARGET language (not source language)
                                 if (in_array($matchedLanguageCode, $targetLanguageCodes, true)) {
-                                    $languageCounts[$matchedLanguageCode] = ($languageCounts[$matchedLanguageCode] ?? 0) + self::EXACT_MATCH_SCORE;
-                                    $matchCount++;
+                                    // Only count longer words for language detection scoring
+                                    if ($isLongWord) {
+                                        $languageCounts[$matchedLanguageCode] = ($languageCounts[$matchedLanguageCode] ?? 0) + self::EXACT_MATCH_SCORE;
+                                        $matchCount++;
+                                    }
                                 }
                             }
                         }
@@ -182,8 +187,11 @@ class LanguageTransliterationDetectionService
 
                             // Count ONLY if the match is in a TARGET language (not source language)
                             if (in_array($matchedLanguageCode, $targetLanguageCodes, true)) {
-                                $languageCounts[$matchedLanguageCode] = ($languageCounts[$matchedLanguageCode] ?? 0) + 1;
-                                $matchCount++;
+                                // Only count longer words for language detection scoring
+                                if ($isLongWord) {
+                                    $languageCounts[$matchedLanguageCode] = ($languageCounts[$matchedLanguageCode] ?? 0) + 1;
+                                    $matchCount++;
+                                }
                             }
                         }
                     } catch (\Throwable $e) {
@@ -209,6 +217,17 @@ class LanguageTransliterationDetectionService
             $topLanguageCode = array_key_first($languageCounts);
         }
 
+        // Build reconstructed text - refine matches to only use detected language
+        $reconstructedText = null;
+        if ($topLanguageCode) {
+            $reconstructedText = $this->buildReconstructedText(
+                $allWords,
+                $topLanguageCode,
+                $sourceLanguages,
+                $uuid
+            );
+        }
+
         $this->logger->info(
             'Completed transliteration detection',
             [
@@ -217,6 +236,7 @@ class LanguageTransliterationDetectionService
                 'detectedLanguage' => $topLanguageCode ?? 'none',
                 'matches' => $matchCount,
                 'input' => $languageInput,
+                'reconstructed' => $reconstructedText,
                 'script' => $languageScript
             ]
         );
@@ -224,9 +244,96 @@ class LanguageTransliterationDetectionService
         return [
             'languageCode' => $topLanguageCode,
             'input' => $languageInput,
+            'reconstructed' => $reconstructedText,
             'count' => $count,
             'matches' => $matchCount,
         ];
+    }
+
+    private function buildReconstructedText(
+        array $allWords,
+        string $targetLanguageCode,
+        array $sourceLanguages,
+        string $uuid
+    ): string {
+        $reconstructedWords = [];
+
+        foreach ($allWords as $rawWord) {
+            $word = $this->languageNormalizationService->normalizeWord($rawWord);
+            if (!$word) {
+                $reconstructedWords[] = $rawWord;
+                continue;
+            }
+
+            $bestMatch = null;
+            $bestScore = 0;
+
+            // Try each source language model
+            foreach ($sourceLanguages as $scriptName => $languageNames) {
+                foreach ($languageNames as $languageName) {
+                    $languageNameLower = strtolower($languageName);
+
+                    if (!$this->modelExists($languageNameLower)) {
+                        continue;
+                    }
+
+                    try {
+                        $ipa = $this->ipaPredictorModelService->run($languageNameLower, $word);
+                        if (!$ipa) {
+                            continue;
+                        }
+
+                        // Try exact matches first
+                        $exactMatches = $this->fuzzySearchService->findExactMatchesByIpa($ipa);
+                        foreach ($exactMatches as $match) {
+                            if (
+                                isset($match['languageCode'], $match['word']) &&
+                                $match['languageCode'] === $targetLanguageCode &&
+                                $bestScore < self::EXACT_MATCH_SCORE
+                            ) {
+                                $bestMatch = $match['word'];
+                                $bestScore = self::EXACT_MATCH_SCORE;
+                                break 2; // Found exact match, stop searching
+                            }
+                        }
+
+                        // Try fuzzy matches if no exact match found
+                        if ($bestScore < self::EXACT_MATCH_SCORE) {
+                            $fuzzyMatches = $this->fuzzySearchService->findClosestMatchesByIpa($ipa);
+                            foreach ($fuzzyMatches as $match) {
+                                if (
+                                    isset($match['languageCode'], $match['word']) &&
+                                    $match['languageCode'] === $targetLanguageCode &&
+                                    $bestScore < 1
+                                ) {
+                                    $bestMatch = $match['word'];
+                                    $bestScore = 1;
+                                }
+                            }
+                        }
+                    } catch (\Throwable $e) {
+                        $this->logger->error(
+                            'Reconstruction failed for word',
+                            [
+                                'uuid' => $uuid,
+                                'service' => '[LanguageTransliterationDetectionService]',
+                                'word' => $word,
+                                'error' => $e->getMessage()
+                            ]
+                        );
+                    }
+                }
+
+                // If we found an exact match, no need to try other source languages
+                if ($bestScore >= self::EXACT_MATCH_SCORE) {
+                    break;
+                }
+            }
+
+            $reconstructedWords[] = $bestMatch ?? $rawWord;
+        }
+
+        return implode(' ', $reconstructedWords);
     }
 
     private function modelExists(string $languageNameLower): bool

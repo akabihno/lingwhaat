@@ -36,7 +36,7 @@ class LanguageTransliterationDetectionController extends AbstractController
                 required: true,
                 schema: new OA\Schema(
                     type: 'string',
-                    example: 'Араа лиист. Лаби, ка шодиен нэкур нау яайиет, седеешу маайас ар сиеву ун катьи'
+                    example: 'Араа лиист. Лаби, ка шодиен нэкур нау яайиет, седеешу маайас ар сиеву ун катьи.'
                 )
             ),
         ],
@@ -46,10 +46,12 @@ class LanguageTransliterationDetectionController extends AbstractController
                 description: 'Language successfully detected',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'languageCode', description: 'Detected language code', type: 'string', example: 'lv'),
-                        new OA\Property(property: 'input', description: 'Guess original text', type: 'string', example: 'Ārā līst. Labi, ka šodien nekur nav jāiet, sēdēšu mājās ar sievu un kaķi..'),
-                        new OA\Property(property: 'count', description: 'Number of words in input', type: 'integer', example: 14),
-                        new OA\Property(property: 'matches', description: 'Number of matches', type: 'integer', example: 14)
+                        new OA\Property(property: 'languageCode', description: 'Detected language code', type: 'string', example: 'ru'),
+                        new OA\Property(property: 'input', description: 'Original transliterated input', type: 'string', example: 'Араа лиист. Лаби, ка шодиен нэкур нау яайиет, седеешу маайас ар сиеву ун катьи.'),
+                        new OA\Property(property: 'reconstructed', description: 'Reconstructed text in original script', type: 'string', example: 'Ārā līst. Labi, ka šodien 
+          -  nekur nav jāiet, sēdēšu mājās ar sievu un kaķi.'),
+                        new OA\Property(property: 'count', description: 'Number of words in input', type: 'integer', example: 7),
+                        new OA\Property(property: 'matches', description: 'Number of matches', type: 'integer', example: 7)
                     ],
                     type: 'object'
                 )
