@@ -102,6 +102,10 @@ class LanguageTransliterationDetectionService
                     $languageNameLower = strtolower($languageName);
 
                     if (!$this->modelExists($languageNameLower)) {
+                        $this->logger->warning(
+                            'Model not found for language: ' . $languageNameLower,
+                            ['uuid' => $uuid, 'service' => '[LanguageTransliterationDetectionService]', 'input' => $languageInput]
+                        );
                         continue;
                     }
 
