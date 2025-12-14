@@ -2,6 +2,7 @@
 
 namespace App\Service\Search;
 
+use App\Service\Logging\ElasticsearchLogger;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Elastica\Client;
@@ -14,7 +15,9 @@ class FuzzySearchService
     private Client $esClient;
     private string $indexName = 'words_index';
 
-    public function __construct()
+    public function __construct(
+        protected ElasticsearchLogger $logger,
+    )
     {
         $this->esClient = ElasticsearchClientFactory::create();
     }
@@ -33,7 +36,19 @@ class FuzzySearchService
 
         $results = $this->esClient->getIndex($this->indexName)->search($query);
 
-        return array_map(fn($r) => $r->getSource(), $results->getResults());
+        $result = array_map(fn($r) => $r->getSource(), $results->getResults());
+
+        $this->logger->info(
+            'Fuzzy search completed.',
+            [
+                'service' => '[FuzzySearchService]',
+                'type' => 'exact_word',
+                'result' => $result,
+                'input' => $input,
+            ]
+        );
+
+        return $result;
     }
 
     public function findClosestMatches(string $input, int $limit = 5): array
@@ -50,7 +65,19 @@ class FuzzySearchService
 
         $results = $this->esClient->getIndex($this->indexName)->search($query);
 
-        return array_map(fn($r) => $r->getSource(), $results->getResults());
+        $result = array_map(fn($r) => $r->getSource(), $results->getResults());
+
+        $this->logger->info(
+            'Fuzzy search completed.',
+            [
+                'service' => '[FuzzySearchService]',
+                'type' => 'closest_word',
+                'result' => $result,
+                'input' => $input,
+            ]
+        );
+
+        return $result;
     }
 
     public function findExactMatchesByIpa(string $ipa, int $limit = 5): array
@@ -63,7 +90,19 @@ class FuzzySearchService
 
         $results = $this->esClient->getIndex($this->indexName)->search($query);
 
-        return array_map(fn($r) => $r->getSource(), $results->getResults());
+        $result = array_map(fn($r) => $r->getSource(), $results->getResults());
+
+        $this->logger->info(
+            'Fuzzy search completed.',
+            [
+                'service' => '[FuzzySearchService]',
+                'type' => 'exact_ipa',
+                'result' => $result,
+                'input' => $ipa,
+            ]
+        );
+
+        return $result;
     }
 
     public function findClosestMatchesByIpa(string $ipa, int $limit = 5): array
@@ -80,6 +119,18 @@ class FuzzySearchService
 
         $results = $this->esClient->getIndex($this->indexName)->search($query);
 
-        return array_map(fn($r) => $r->getSource(), $results->getResults());
+        $result = array_map(fn($r) => $r->getSource(), $results->getResults());
+
+        $this->logger->info(
+            'Fuzzy search completed.',
+            [
+                'service' => '[FuzzySearchService]',
+                'type' => 'closest_ipa',
+                'result' => $result,
+                'input' => $ipa,
+            ]
+        );
+
+        return $result;
     }
 }
