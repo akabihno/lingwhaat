@@ -114,6 +114,11 @@ class ScriptDetectionService
         return [LanguageMappings::GEORGIAN_LANGUAGE_NAME];
     }
 
+    protected function getHebrewScriptLanguageNames(): array
+    {
+        return [LanguageMappings::HEBREW_LANGUAGE_NAME];
+    }
+
     protected function getAllScriptLanguages(): array
     {
         return [
@@ -124,6 +129,7 @@ class ScriptDetectionService
             self::DEVANAGARI_SCRIPT => $this->getDevanagariScriptLanguageNames(),
             self::ARMENIAN_SCRIPT => $this->getArmenianScriptLanguageNames(),
             self::GEORGIAN_SCRIPT => $this->getGeorgianScriptLanguageNames(),
+            self::HEBREW_SCRIPT => $this->getHebrewScriptLanguageNames(),
         ];
     }
 
@@ -176,6 +182,13 @@ class ScriptDetectionService
         return $allScripts;
     }
 
+    public function getHebrewScriptTransliterationCandidates(): array
+    {
+        $allScripts = $this->getAllScriptLanguages();
+        unset($allScripts[self::HEBREW_SCRIPT]);
+        return $allScripts;
+    }
+
     public function getTransliterationCandidatesByScript(string $script): array
     {
         return match ($script) {
@@ -186,6 +199,7 @@ class ScriptDetectionService
             self::DEVANAGARI_SCRIPT => $this->getDevanagariScriptTransliterationCandidates(),
             self::ARMENIAN_SCRIPT => $this->getArmenianScriptTransliterationCandidates(),
             self::GEORGIAN_SCRIPT => $this->getGeorgianScriptTransliterationCandidates(),
+            self::HEBREW_SCRIPT => $this->getHebrewScriptTransliterationCandidates(),
             default => [],
         };
     }
@@ -204,6 +218,7 @@ class ScriptDetectionService
             self::DEVANAGARI_SCRIPT => [self::DEVANAGARI_SCRIPT => $this->getDevanagariScriptLanguageNames()],
             self::ARMENIAN_SCRIPT => [self::ARMENIAN_SCRIPT => $this->getArmenianScriptLanguageNames()],
             self::GEORGIAN_SCRIPT => [self::GEORGIAN_SCRIPT => $this->getGeorgianScriptLanguageNames()],
+            self::HEBREW_SCRIPT => [self::HEBREW_SCRIPT => $this->getHebrewScriptLanguageNames()],
             default => [],
         };
     }

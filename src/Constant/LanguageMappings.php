@@ -80,6 +80,8 @@ class LanguageMappings
     public const string DANISH_LANGUAGE_NAME = 'Danish';
     public const string ICELANDIC_LANGUAGE_CODE = 'is';
     public const string ICELANDIC_LANGUAGE_NAME = 'Islandic';
+    public const string HEBREW_LANGUAGE_CODE = 'he';
+    public const string HEBREW_LANGUAGE_NAME = 'Hebrew';
 
     public static function getLanguageCodes(): array
     {
@@ -121,6 +123,7 @@ class LanguageMappings
             self::NORWEGIAN_LANGUAGE_CODE,
             self::DANISH_LANGUAGE_CODE,
             self::ICELANDIC_LANGUAGE_CODE,
+            self::HEBREW_LANGUAGE_CODE,
         ];
     }
 
@@ -165,6 +168,7 @@ class LanguageMappings
             'NorwegianLanguageEntity' => self::NORWEGIAN_LANGUAGE_CODE,
             'DanishLanguageEntity' => self::DANISH_LANGUAGE_CODE,
             'IcelandicLanguageEntity' => self::ICELANDIC_LANGUAGE_CODE,
+            'HebrewLanguageEntity' => self::HEBREW_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {
@@ -216,6 +220,7 @@ class LanguageMappings
             self::NORWEGIAN_LANGUAGE_NAME => self::NORWEGIAN_LANGUAGE_CODE,
             self::DANISH_LANGUAGE_NAME => self::DANISH_LANGUAGE_CODE,
             self::ICELANDIC_LANGUAGE_NAME => self::ICELANDIC_LANGUAGE_CODE,
+            self::HEBREW_LANGUAGE_NAME => self::HEBREW_LANGUAGE_CODE,
         ];
 
         return $map[$languageName] ?? null;
