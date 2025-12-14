@@ -62,7 +62,26 @@ class LanguageTransliterationDetectionService
             ];
         }
 
+        // Get source languages (languages that USE the detected script, e.g., Russian for Cyrillic input)
+        // These models will be used to predict IPA from the transliterated text
+        $sourceLanguages = $this->scriptDetectionService->getLanguagesByScript($languageScript);
+
+        // Get target languages (languages that DON'T use the detected script, e.g., Latvian for Cyrillic input)
+        // These are the languages we'll search for matches in
         $transliterationCandidates = $this->scriptDetectionService->getTransliterationCandidatesByScript($languageScript);
+
+        if (empty($sourceLanguages)) {
+            $this->logger->warning(
+                'No source languages found for script',
+                ['uuid' => $uuid, 'service' => '[LanguageTransliterationDetectionService]', 'script' => $languageScript]
+            );
+            return [
+                'languageCode' => null,
+                'input' => $languageInput,
+                'count' => 0,
+                'matches' => 0,
+            ];
+        }
 
         if (empty($transliterationCandidates)) {
             $this->logger->warning(
@@ -85,17 +104,29 @@ class LanguageTransliterationDetectionService
         $languageCounts = [];
         $matchCount = 0;
 
+        // Build a flat list of target language codes for efficient checking
+        $targetLanguageCodes = [];
+        foreach ($transliterationCandidates as $scriptName => $languageNames) {
+            foreach ($languageNames as $languageName) {
+                $code = LanguageMappings::getLanguageCodeByName($languageName);
+                if ($code) {
+                    $targetLanguageCodes[] = $code;
+                }
+            }
+        }
+
         foreach ($words as $word) {
             $word = $this->languageNormalizationService->normalizeWord($word);
             if (!$word) {
                 continue;
             }
 
-            foreach ($transliterationCandidates as $scriptName => $languageNames) {
+            // Use SOURCE language models (e.g., Russian model for Cyrillic input)
+            foreach ($sourceLanguages as $scriptName => $languageNames) {
                 foreach ($languageNames as $languageName) {
-                    $languageCode = LanguageMappings::getLanguageCodeByName($languageName);
+                    $sourceLanguageCode = LanguageMappings::getLanguageCodeByName($languageName);
 
-                    if (!$languageCode) {
+                    if (!$sourceLanguageCode) {
                         continue;
                     }
 
@@ -103,16 +134,17 @@ class LanguageTransliterationDetectionService
 
                     if (!$this->modelExists($languageNameLower)) {
                         $this->logger->warning(
-                            'Model not found for language: ' . $languageNameLower,
+                            'Model not found for source language: ' . $languageNameLower,
                             ['uuid' => $uuid, 'service' => '[LanguageTransliterationDetectionService]', 'input' => $languageInput]
                         );
                         continue;
                     }
 
                     try {
+                        // Predict IPA using source language model (e.g., Russian model)
                         $ipa = $this->ipaPredictorModelService->run($languageNameLower, $word);
                         $this->logger->info(
-                            'Predicted IPA for word: ' . $word . ' in language: ' . $languageNameLower . ' is: ' . $ipa,
+                            'Predicted IPA for word: ' . $word . ' using source language: ' . $languageNameLower . ' is: ' . $ipa,
                             ['uuid' => $uuid, 'service' => '[LanguageTransliterationDetectionService]']
                         );
 
@@ -130,8 +162,9 @@ class LanguageTransliterationDetectionService
 
                                 $matchedLanguageCode = $match['languageCode'];
 
-                                if ($matchedLanguageCode === $languageCode) {
-                                    $languageCounts[$languageCode] = ($languageCounts[$languageCode] ?? 0) + self::EXACT_MATCH_SCORE;
+                                // Count ONLY if the match is in a TARGET language (not source language)
+                                if (in_array($matchedLanguageCode, $targetLanguageCodes, true)) {
+                                    $languageCounts[$matchedLanguageCode] = ($languageCounts[$matchedLanguageCode] ?? 0) + self::EXACT_MATCH_SCORE;
                                     $matchCount++;
                                 }
                             }
@@ -146,8 +179,9 @@ class LanguageTransliterationDetectionService
 
                             $matchedLanguageCode = $match['languageCode'];
 
-                            if ($matchedLanguageCode === $languageCode) {
-                                $languageCounts[$languageCode] = ($languageCounts[$languageCode] ?? 0) + 1;
+                            // Count ONLY if the match is in a TARGET language (not source language)
+                            if (in_array($matchedLanguageCode, $targetLanguageCodes, true)) {
+                                $languageCounts[$matchedLanguageCode] = ($languageCounts[$matchedLanguageCode] ?? 0) + 1;
                                 $matchCount++;
                             }
                         }
@@ -158,8 +192,8 @@ class LanguageTransliterationDetectionService
                                 'uuid' => $uuid,
                                 'service' => '[LanguageTransliterationDetectionService]',
                                 'word' => $word,
-                                'languageName' => $languageNameLower,
-                                'languageCode' => $languageCode,
+                                'sourceLanguageName' => $languageNameLower,
+                                'sourceLanguageCode' => $sourceLanguageCode,
                                 'error' => $e->getMessage()
                             ]
                         );

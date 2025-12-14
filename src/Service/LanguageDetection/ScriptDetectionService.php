@@ -190,4 +190,22 @@ class ScriptDetectionService
         };
     }
 
+    /**
+     * Get languages that USE the specified script (for transliteration detection)
+     * These are the source languages whose models will be used to predict IPA
+     */
+    public function getLanguagesByScript(string $script): array
+    {
+        return match ($script) {
+            self::LATIN_SCRIPT => [self::LATIN_SCRIPT => $this->getLatinScriptLanguageNames()],
+            self::ARABIC_SCRIPT => [self::ARABIC_SCRIPT => $this->getArabicScriptLanguageNames()],
+            self::GREEK_SCRIPT => [self::GREEK_SCRIPT => $this->getGreekScriptLanguageNames()],
+            self::CYRILLIC_SCRIPT => [self::CYRILLIC_SCRIPT => $this->getCyrillicScriptLanguageNames()],
+            self::DEVANAGARI_SCRIPT => [self::DEVANAGARI_SCRIPT => $this->getDevanagariScriptLanguageNames()],
+            self::ARMENIAN_SCRIPT => [self::ARMENIAN_SCRIPT => $this->getArmenianScriptLanguageNames()],
+            self::GEORGIAN_SCRIPT => [self::GEORGIAN_SCRIPT => $this->getGeorgianScriptLanguageNames()],
+            default => [],
+        };
+    }
+
 }
