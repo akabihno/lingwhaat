@@ -20,6 +20,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[AsCommand(name: 'ml:train:ipa-predictor')]
 class TrainIpaPredictorModelCommand extends Command
 {
+    protected const int DATASET_LIMIT = 1000000;
     protected string $trainingDataPath;
 
     public function __construct(
@@ -89,7 +90,7 @@ class TrainIpaPredictorModelCommand extends Command
         $langFileName = strtolower($languageName);
         $this->trainingDataPath = realpath(".")."/ml_service/data/{$langFileName}.csv";
 
-        $trainingDatasetArray = $repository->findAllNamesAndIpa();
+        $trainingDatasetArray = $repository->findAllNamesAndIpa(self::DATASET_LIMIT);
 
         if (!$trainingDatasetArray) {
             $output->writeln('<error>No valid data found for training.</error>');
