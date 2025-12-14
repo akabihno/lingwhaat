@@ -44,3 +44,8 @@ services:
     App\Service\LanguageDetection\LanguageTransliteration\Command\TrainIpaPredictorModelCommand:
         arguments:
             $container: !tagged_locator app.language_repository
+
+    # Inject project directory for model file path resolution
+    App\Service\LanguageDetection\LanguageTransliteration\LanguageTransliterationDetectionService:
+        arguments:
+            $projectDir: '%kernel.project_dir%'

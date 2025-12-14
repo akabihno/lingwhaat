@@ -2,7 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageTransliteration\Command;
 
-use App\Constant\LanguageServicesAndCodes;
+use App\Constant\LanguageMappings;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
 use App\Service\LanguageDetection\LanguageTransliteration\UseIpaPredictorModelService;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -31,7 +31,7 @@ class UseIpaPredictorModelCommand extends Command
         $this
             ->setDescription('Use IPA prediction model for a specific language and word')
             ->addOption('lang', 'l', InputOption::VALUE_REQUIRED,
-                'Language code in: ' . implode(', ', LanguageServicesAndCodes::getLanguageCodes())
+                'Language code in: ' . implode(', ', LanguageMappings::getLanguageCodes())
             )
             ->addOption('word', 'w', InputOption::VALUE_REQUIRED, 'Word to use for IPA prediction.');
     }
@@ -45,7 +45,7 @@ class UseIpaPredictorModelCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        // example: php bin/console ml:use:ipa-predictor --lang lv --word zivis
+        // example: php bin/console ml:use:ipa-predictor --lang latvian --word zivis
 
         $lang = $input->getOption('lang');
         $word = $input->getOption('word');

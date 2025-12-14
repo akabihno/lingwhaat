@@ -2,8 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageTransliteration\Command;
 
-use App\Constant\LanguageServicesAndCodes;
-use App\Service\LanguageDetection\LanguageDetectionService;
+use App\Constant\LanguageMappings;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
 use App\Service\LanguageDetection\LanguageTransliteration\UseWordPredictorModelService;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -20,8 +19,6 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 #[AsCommand(name: 'ml:use:word-predictor')]
 class UseWordPredictorModelCommand extends Command
 {
-    protected string $modelName;
-    protected string $dataPath;
     public function __construct(
         protected UseWordPredictorModelService $useWordPredictorModelService,
     )
@@ -34,7 +31,7 @@ class UseWordPredictorModelCommand extends Command
         $this
             ->setDescription('Use word prediction model for a specific language and IPA')
             ->addOption('lang', 'l', InputOption::VALUE_REQUIRED,
-                'Language code in: ' . implode(', ', LanguageServicesAndCodes::getLanguageCodes())
+                'Language code in: ' . implode(', ', LanguageMappings::getLanguageCodes())
             )
             ->addOption('ipa', 'i', InputOption::VALUE_REQUIRED, 'IPA to use for word prediction.');
     }
@@ -48,7 +45,7 @@ class UseWordPredictorModelCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        // example: php bin/console ml:use:word-predictor --lang ru --ipa [ˈpot͡ɕvə]
+        // example: php bin/console ml:use:word-predictor --lang russian --ipa [ˈpot͡ɕvə]
 
         $lang = $input->getOption('lang');
         $ipa = $input->getOption('ipa');

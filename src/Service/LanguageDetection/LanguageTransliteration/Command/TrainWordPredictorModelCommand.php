@@ -2,7 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageTransliteration\Command;
 
-use App\Constant\LanguageServicesAndCodes;
+use App\Constant\LanguageMappings;
 use App\Service\LanguageDetection\LanguageTransliteration\Constants\IpaPredictorConstants;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -33,7 +33,7 @@ class TrainWordPredictorModelCommand extends Command
         $this
             ->setDescription('Train word based on IPA prediction model for a specific language')
             ->addOption('lang', 'l', InputOption::VALUE_REQUIRED,
-                'Language code in: ' . implode(', ', LanguageServicesAndCodes::getLanguageCodes())
+                'Language code in: ' . implode(', ', LanguageMappings::getLanguageCodes())
             );
     }
 
@@ -48,7 +48,7 @@ class TrainWordPredictorModelCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // example: php bin/console ml:train:word-predictor --lang lv
+        // example: php bin/console ml:train:word-predictor --lang latvian
 
         $lang = $input->getOption('lang');
 
@@ -78,7 +78,7 @@ class TrainWordPredictorModelCommand extends Command
             $output->writeln('<error>Exception: '.$e.'</error>');
         }
 
-        $output->writeln("Training complete on dataset {$this->trainingDataPath} with status {$statusCode}");
+        $output->writeln("Training scheduled on dataset {$this->trainingDataPath} with status {$statusCode}");
 
 
         return Command::SUCCESS;

@@ -2,6 +2,7 @@
 
 require 'vendor/autoload.php';
 
+// deprecated, now managed by src/Schedule.php
 // watch --interval 360 docker exec -it php-app php utils/parse_articles.php icelandic 300
 
 use App\Query\AbstractQuery;
