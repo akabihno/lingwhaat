@@ -90,7 +90,7 @@ class TrainIpaPredictorModelCommand extends Command
         $langFileName = strtolower($languageName);
         $this->trainingDataPath = realpath(".")."/ml_service/data/{$langFileName}.csv";
 
-        $trainingDatasetArray = $repository->findAllNamesAndIpa(self::DATASET_LIMIT);
+        $trainingDatasetArray = $repository->findAllNamesAndIpaWithMaxLength(self::DATASET_LIMIT);
 
         if (!$trainingDatasetArray) {
             $output->writeln('<error>No valid data found for training.</error>');

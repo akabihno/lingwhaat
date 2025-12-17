@@ -28,4 +28,18 @@ abstract class AbstractLanguageRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    public function findAllNamesAndIpaWithMaxLength(int $limit = self::PRONUNCIATION_MAX_RESULTS, int $offset = 0, int $minLength = 3): array
+    {
+        return $this->createQueryBuilder('e')
+            ->select('e.name', 'e.ipa')
+            ->where('e.ipa != :na')
+            ->andWhere('LENGTH(e.name) > :minLength')
+            ->setParameter('na', 'Not available')
+            ->setParameter('minLength', $minLength)
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
 }
