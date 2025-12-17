@@ -12,27 +12,30 @@ This project aims to detect the language of written text with high speed and acc
 
 ## Supported Languages
 
-| | | | |
-|---|---|---|---|
-| Afar | Afrikaans | Albanian | Armenian |
-| Bengali | Breton | Czech | Danish |
-| Dutch | English | Estonian | French |
-| Georgian | German | Greek | Hindi |
-| Icelandic | Italian | Kazakh | Latin |
-| Latvian | Lithuanian | Middle Dutch | Norwegian |
-| Old Dutch | Polish | Portuguese | Romanian |
-| Russian | Serbo-Croatian* | Spanish | Tagalog (Filipino) |
-| Turkish | Ukrainian | Uzbek | |
+|                    |           |                 |              |
+|--------------------|-----------|-----------------|--------------|
+| Afar               | Afrikaans | Albanian        | Armenian     |
+| Bengali            | Breton    | Czech           | Danish       |
+| Dutch              | English   | Estonian        | French       |
+| Georgian           | German    | Greek           | Hebrew       |
+| Hindi              | Icelandic | Italian         | Kazakh       |
+| Latin              | Latvian   | Lithuanian      | Middle Dutch |
+| Norwegian          | Old Dutch | Polish          | Portuguese   |
+| Romanian           | Russian   | Serbo-Croatian* | Spanish      |
+| Tagalog (Filipino) | Turkish   | Ukrainian       | Uzbek        |
 
 *Serbo-Croatian includes: Bosnian, Croatian, Montenegrin, Serbian
 
 ## Data Sources
 
-IPA data for universal transliteration is parsed from [Wiktionary](https://en.wiktionary.org/wiki/Wiktionary:Main_Page) using:
-- **REST API:** [/page/html/{title}](https://en.wiktionary.org/api/rest_v1/#/Page%20content/get_page_html__title_) for IPA data extraction
-  - Implementation: [WiktionaryArticlesIpaParserService](src/Service/WiktionaryArticlesIpaParserService.php)
-- **MediaWiki API:** [categorymembers](https://www.mediawiki.org/wiki/API:Categorymembers) for retrieving word lists
-  - Implementation: [WiktionaryArticlesCategoriesService](src/Service/WiktionaryArticlesCategoriesService.php)
+IPA data for universal transliteration is parsed from [Wiktionary](https://en.wiktionary.org/wiki/Wiktionary:Main_Page) using 
+[MediaWiki API](https://www.mediawiki.org/wiki/API)
+
+Note: for some languages used Wiktionary in it's respective language, e.g. https://nl.wiktionary.org/w/api.php for Dutch.
+
+Implementations:
+- [WiktionaryArticlesCategoriesService](src/Service/WiktionaryArticlesCategoriesService.php)
+- [WiktionaryArticlesIpaParserService](src/Service/WiktionaryArticlesIpaParserService.php)
 
 For a complete list of all source articles organized by language, see **[WORD_LISTS.md](WORD_LISTS.md)**.
 

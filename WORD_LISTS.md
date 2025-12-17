@@ -2,16 +2,6 @@
 
 This document contains links to all the IPA (International Phonetic Alphabet) data sources used for language detection and transliteration.
 
-## Data Collection Method
-
-IPA data for universal transliteration was parsed from [Wiktionary](https://en.wiktionary.org/wiki/Wiktionary:Main_Page) using Wikimedia REST API route [/page/html/{title}](https://en.wiktionary.org/api/rest_v1/#/Page%20content/get_page_html__title_)
-
-**Class example:** [WiktionaryArticlesIpaParserService](src/Service/WiktionaryArticlesIpaParserService.php)
-
-Titles (words) were retrieved using MediaWiki API [categorymembers](https://www.mediawiki.org/wiki/API:Categorymembers)
-
-**Class example:** [WiktionaryArticlesCategoriesLatvianService](src/Service/WiktionaryArticlesCategoriesService.php)
-
 ## List of All Articles by Language
 
 Below are links to all articles from which IPA data has been extracted, organized alphabetically by language and then by letter/character:
@@ -738,6 +728,29 @@ List of all articles IPA data has been taken from:
 [χ](docs/Greek/en_wiktionary_greek_χ.md),
 [ψ](docs/Greek/en_wiktionary_greek_ψ.md),
 [ω](docs/Greek/en_wiktionary_greek_ω.md)
+* Hebrew:
+[א](docs/Hebrew/en_wiktionary_hebrew_א.md),
+[ב](docs/Hebrew/en_wiktionary_hebrew_ב.md),
+[ג](docs/Hebrew/en_wiktionary_hebrew_ג.md),
+[ד](docs/Hebrew/en_wiktionary_hebrew_ד.md),
+[ה](docs/Hebrew/en_wiktionary_hebrew_ה.md),
+[ו](docs/Hebrew/en_wiktionary_hebrew_ו.md),
+[ז](docs/Hebrew/en_wiktionary_hebrew_ז.md),
+[ח](docs/Hebrew/en_wiktionary_hebrew_ח.md),
+[ט](docs/Hebrew/en_wiktionary_hebrew_ט.md),
+[י](docs/Hebrew/en_wiktionary_hebrew_י.md),
+[ך](docs/Hebrew/en_wiktionary_hebrew_ך.md),
+[ל](docs/Hebrew/en_wiktionary_hebrew_ל.md),
+[ם](docs/Hebrew/en_wiktionary_hebrew_ם.md),
+[ן](docs/Hebrew/en_wiktionary_hebrew_ן.md),
+[ס](docs/Hebrew/en_wiktionary_hebrew_ס.md),
+[ע](docs/Hebrew/en_wiktionary_hebrew_ע.md),
+[ף](docs/Hebrew/en_wiktionary_hebrew_ף.md),
+[ץ](docs/Hebrew/en_wiktionary_hebrew_ץ.md),
+[ק](docs/Hebrew/en_wiktionary_hebrew_ק.md),
+[ר](docs/Hebrew/en_wiktionary_hebrew_ר.md),
+[ש](docs/Hebrew/en_wiktionary_hebrew_ש.md),
+[ת](docs/Hebrew/en_wiktionary_hebrew_ת.md)
 * Hindi:
 [अ](docs/Hindi/en_wiktionary_hindi_अ.md),
 [आ](docs/Hindi/en_wiktionary_hindi_आ.md),
