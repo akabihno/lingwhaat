@@ -65,8 +65,18 @@ def train_ipa_model(csv_path, model_save_path=None, resume_from_checkpoint=False
         model_name = base.replace('.csv', '_model.pt')
         model_save_path = os.path.join(models, model_name)
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Using device: {device}")
+    # Select best available device: CUDA (NVIDIA GPU) > MPS (Apple Silicon GPU) > CPU
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+        device_name = f"CUDA GPU ({torch.cuda.get_device_name(0)})"
+    elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+        device = torch.device('mps')
+        device_name = "Apple Silicon GPU (Metal)"
+    else:
+        device = torch.device('cpu')
+        device_name = "CPU"
+
+    print(f"Using device: {device_name}")
 
     # Load and prepare data
     print("Loading data...")
@@ -291,8 +301,18 @@ def train_word_model(csv_path, model_save_path=None, resume_from_checkpoint=Fals
         model_name = base.replace('.csv', '_model.pt')
         model_save_path = os.path.join(models, model_name)
 
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Using device: {device}")
+    # Select best available device: CUDA (NVIDIA GPU) > MPS (Apple Silicon GPU) > CPU
+    if torch.cuda.is_available():
+        device = torch.device('cuda')
+        device_name = f"CUDA GPU ({torch.cuda.get_device_name(0)})"
+    elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+        device = torch.device('mps')
+        device_name = "Apple Silicon GPU (Metal)"
+    else:
+        device = torch.device('cpu')
+        device_name = "CPU"
+
+    print(f"Using device: {device_name}")
 
     # Load and prepare data
     print("Loading data...")
