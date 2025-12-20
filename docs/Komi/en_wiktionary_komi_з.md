@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://ru.wiktionary.org/wiki/зільны|
+|https://ru.wiktionary.org/wiki/заводъясын|
+|https://ru.wiktionary.org/wiki/зажиточнӧй|
+|https://ru.wiktionary.org/wiki/зӧр|
+|https://ru.wiktionary.org/wiki/зі|
+|https://ru.wiktionary.org/wiki/Зӧвсьӧрт|
+|https://ru.wiktionary.org/wiki/зіля|
+|https://ru.wiktionary.org/wiki/зэр|
+|https://ru.wiktionary.org/wiki/зоология|
+|https://ru.wiktionary.org/wiki/здоровье|

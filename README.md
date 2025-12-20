@@ -12,17 +12,18 @@ This project aims to detect the language of written text with high speed and acc
 
 ## Supported Languages
 
-|                    |           |                 |              |
-|--------------------|-----------|-----------------|--------------|
-| Afar               | Afrikaans | Albanian        | Armenian     |
-| Bengali            | Breton    | Czech           | Danish       |
-| Dutch              | English   | Estonian        | French       |
-| Georgian           | German    | Greek           | Hebrew       |
-| Hindi              | Icelandic | Italian         | Kazakh       |
-| Latin              | Latvian   | Lithuanian      | Middle Dutch |
-| Norwegian          | Old Dutch | Polish          | Portuguese   |
-| Romanian           | Russian   | Serbo-Croatian* | Spanish      |
-| Tagalog (Filipino) | Turkish   | Ukrainian       | Uzbek        |
+|                 |              |                    |           |
+|-----------------|--------------|--------------------|-----------|
+| Afar            | Afrikaans    | Albanian           | Armenian  |
+| Bengali         | Breton       | Czech              | Danish    |
+| Dutch           | English      | Estonian           | French    |
+| Georgian        | German       | Greek              | Hebrew    |
+| Hindi           | Hungarian    | Icelandic          | Italian   |
+| Kazakh          | Komi         | Latin              | Latvian   |
+| Lithuanian      | Middle Dutch | Norwegian          | Old Dutch |
+| Polish          | Portuguese   | Romanian           | Russian   |
+| Serbo-Croatian* | Spanish      | Tagalog (Filipino) | Turkish   |
+| Ukrainian       | Uzbek        |                    |           |
 
 *Serbo-Croatian includes: Bosnian, Croatian, Montenegrin, Serbian
 
