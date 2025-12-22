@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Pijo|
+|https://en.wiktionary.org/wiki/Palasɗinu|
+|https://en.wiktionary.org/wiki/Pasha|
+|https://en.wiktionary.org/wiki/pasaje|
+|https://en.wiktionary.org/wiki/parmi|
+|https://en.wiktionary.org/wiki/pil|
+|https://en.wiktionary.org/wiki/po|
+|https://en.wiktionary.org/wiki/Pakistan|
+|https://en.wiktionary.org/wiki/Paris|

@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/философи|
+|https://en.wiktionary.org/wiki/франц|
+|https://en.wiktionary.org/wiki/фото%20аппарат|
+|https://en.wiktionary.org/wiki/футболк|
+|https://en.wiktionary.org/wiki/Финланд|
+|https://en.wiktionary.org/wiki/Финлянд|
+|https://en.wiktionary.org/wiki/функц|
+|https://en.wiktionary.org/wiki/фирм|
+|https://en.wiktionary.org/wiki/ферм|
+|https://en.wiktionary.org/wiki/факсдах|

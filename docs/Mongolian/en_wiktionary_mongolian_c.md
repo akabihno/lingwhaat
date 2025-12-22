@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Category:Mongolian%20multiword%20terms|
+|https://en.wiktionary.org/wiki/Category:Mongolian%20vowel%20harmonic%20lemmas|
+|https://en.wiktionary.org/wiki/Category:Mongolian%20determiners|
+|https://en.wiktionary.org/wiki/Category:Mongolian%20phrases|
+|https://en.wiktionary.org/wiki/Category:Mongolian%20postpositions|
+|https://en.wiktionary.org/wiki/Category:Mongolian%20interjections|
+|https://en.wiktionary.org/wiki/Category:Mongolian%20numerals|
+|https://en.wiktionary.org/wiki/Category:Mongolian%20morphemes|
+|https://en.wiktionary.org/wiki/Category:Mongolian%20conjunctions|

@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Варшав|
+|https://en.wiktionary.org/wiki/ваар|
+|https://en.wiktionary.org/wiki/вандан|
+|https://en.wiktionary.org/wiki/валют|
+|https://en.wiktionary.org/wiki/вакцин|
+|https://en.wiktionary.org/wiki/винтов|
+|https://en.wiktionary.org/wiki/ватт|
+|https://en.wiktionary.org/wiki/видео|
+|https://en.wiktionary.org/wiki/вант%20улс|
+|https://en.wiktionary.org/wiki/виз|
+|https://en.wiktionary.org/wiki/вий|
+|https://en.wiktionary.org/wiki/Википедиа|
+|https://en.wiktionary.org/wiki/ван|

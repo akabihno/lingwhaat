@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ерөөх|
+|https://en.wiktionary.org/wiki/Есүс|
+|https://en.wiktionary.org/wiki/ёкозуна|
+|https://en.wiktionary.org/wiki/есдүгээр|
+|https://en.wiktionary.org/wiki/ерөнхий|
+|https://en.wiktionary.org/wiki/ерөнхийлөх|
+|https://en.wiktionary.org/wiki/Европын%20Холбоо|
+|https://en.wiktionary.org/wiki/Еврази|
+|https://en.wiktionary.org/wiki/Европ|
+|https://en.wiktionary.org/wiki/ерөнхийлөгч|
+|https://en.wiktionary.org/wiki/еэвэн|
+|https://en.wiktionary.org/wiki/ёслол|
+|https://en.wiktionary.org/wiki/ёстой|
+|https://en.wiktionary.org/wiki/ёс|
+|https://en.wiktionary.org/wiki/ерэн|

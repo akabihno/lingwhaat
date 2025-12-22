@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ɓauna|
+|https://en.wiktionary.org/wiki/ɓangwalgwal|
+|https://en.wiktionary.org/wiki/ɓelele|
+|https://en.wiktionary.org/wiki/ɓal-ɓal|
+|https://en.wiktionary.org/wiki/ɓaga-ɓaga|
+|https://en.wiktionary.org/wiki/ɓalo-ɓalo|
+|https://en.wiktionary.org/wiki/Ɓaɓura|
+|https://en.wiktionary.org/wiki/ɓarawo|
+|https://en.wiktionary.org/wiki/ɓaure|
+|https://en.wiktionary.org/wiki/ɓakutu|
+|https://en.wiktionary.org/wiki/ɓurma|
+|https://en.wiktionary.org/wiki/ɓulla|
+|https://en.wiktionary.org/wiki/Ɓ|

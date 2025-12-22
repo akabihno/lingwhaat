@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/yaanyo|
+|https://en.wiktionary.org/wiki/yeel|
+|https://en.wiktionary.org/wiki/yaab|
+|https://en.wiktionary.org/wiki/yimaad|
+|https://en.wiktionary.org/wiki/Yuusuf|
+|https://en.wiktionary.org/wiki/yar|
+|https://en.wiktionary.org/wiki/Y|

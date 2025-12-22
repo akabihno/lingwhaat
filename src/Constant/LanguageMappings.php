@@ -92,6 +92,12 @@ class LanguageMappings
     public const string MONGOLIAN_LANGUAGE_NAME = 'Mongolian';
     public const string GALICIAN_LANGUAGE_CODE = 'gl';
     public const string GALICIAN_LANGUAGE_NAME = 'Galician';
+    public const string HAUSA_LANGUAGE_CODE = 'ha';
+    public const string HAUSA_LANGUAGE_NAME = 'Hausa';
+    public const string SOMALI_LANGUAGE_CODE = 'so';
+    public const string SOMALI_LANGUAGE_NAME = 'Somali';
+    public const string URDU_LANGUAGE_CODE = 'ur';
+    public const string URDU_LANGUAGE_NAME = 'Urdu';
 
     public static function getLanguageCodes(): array
     {
@@ -139,6 +145,9 @@ class LanguageMappings
             self::KOMI_LANGUAGE_CODE,
             self::MONGOLIAN_LANGUAGE_CODE,
             self::GALICIAN_LANGUAGE_CODE,
+            self::HAUSA_LANGUAGE_CODE,
+            self::SOMALI_LANGUAGE_CODE,
+            self::URDU_LANGUAGE_CODE,
         ];
     }
 
@@ -189,6 +198,9 @@ class LanguageMappings
             'KomiLanguageEntity' => self::KOMI_LANGUAGE_CODE,
             'MongolianLanguageEntity' => self::MONGOLIAN_LANGUAGE_CODE,
             'GalicianLanguageEntity' => self::GALICIAN_LANGUAGE_CODE,
+            'HausaLanguageEntity' => self::HAUSA_LANGUAGE_CODE,
+            'SomaliLanguageEntity' => self::SOMALI_LANGUAGE_CODE,
+            'UrduLanguageEntity' => self::URDU_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {
@@ -246,6 +258,9 @@ class LanguageMappings
             self::KOMI_LANGUAGE_NAME => self::KOMI_LANGUAGE_CODE,
             self::MONGOLIAN_LANGUAGE_NAME => self::MONGOLIAN_LANGUAGE_CODE,
             self::GALICIAN_LANGUAGE_NAME => self::GALICIAN_LANGUAGE_CODE,
+            self::HAUSA_LANGUAGE_NAME => self::HAUSA_LANGUAGE_CODE,
+            self::SOMALI_LANGUAGE_NAME => self::SOMALI_LANGUAGE_CODE,
+            self::URDU_LANGUAGE_NAME => self::URDU_LANGUAGE_CODE,
         ];
 
         return $map[$languageName] ?? null;
