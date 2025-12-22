@@ -77,7 +77,6 @@ class PatternSearchController extends AbstractController
             type: 'object'
         )
     )]
-    #[OA\Tag(name: 'Search')]
     public function search(Request $request): JsonResponse
     {
         $pattern = $request->query->get('pattern');
