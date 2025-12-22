@@ -165,9 +165,8 @@ class PatternSearchService
         try {
             $scriptSource = $this->buildPainlessScript($samePositions, $fixedChars);
 
-            $scriptQuery = new Query\Script(
-                new Script($scriptSource)
-            );
+            $script = new Script($scriptSource, null, 'painless');
+            $scriptQuery = new Query\Script($script);
 
             $query = new Query\BoolQuery();
             $query->addFilter($scriptQuery);
@@ -226,8 +225,9 @@ class PatternSearchService
     {
         $conditions = [];
 
-        // Get the word field value
-        $script = "String word = doc['word.keyword'].size() > 0 ? doc['word.keyword'].value.toLowerCase() : ''; ";
+        // Get the word field value from doc values
+        $script = "if (doc['word'].size() == 0) { return false; } ";
+        $script .= "String word = doc['word'].value.toLowerCase(); ";
 
         // Check minimum length
         $maxPosition = 0;
