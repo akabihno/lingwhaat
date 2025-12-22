@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class PatternSearchController extends AbstractController
 {
     public function __construct(
-        private readonly PatternSearchService $patternSearchService,
+        protected PatternSearchService $patternSearchService,
     ) {
     }
 
@@ -22,7 +22,7 @@ class PatternSearchController extends AbstractController
     #[OA\Get(
         path: '/api/pattern-search',
         summary: 'Search for words matching a pattern with unknown letters',
-        tags: ['Pattern Search']
+        tags: ['Search']
     )]
     #[OA\Parameter(
         name: 'pattern',
@@ -77,7 +77,7 @@ class PatternSearchController extends AbstractController
             type: 'object'
         )
     )]
-    #[OA\Tag(name: 'Pattern Search')]
+    #[OA\Tag(name: 'Search')]
     public function search(Request $request): JsonResponse
     {
         $pattern = $request->query->get('pattern');
