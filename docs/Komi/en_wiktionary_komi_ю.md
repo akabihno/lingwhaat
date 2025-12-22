@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://ru.wiktionary.org/wiki/юрвеж|
+|https://ru.wiktionary.org/wiki/юрсигусь|
+|https://ru.wiktionary.org/wiki/юренькай|
+|https://ru.wiktionary.org/wiki/юркар|
+|https://ru.wiktionary.org/wiki/юалӧм|
+|https://ru.wiktionary.org/wiki/юбилей|
+|https://ru.wiktionary.org/wiki/ювелир|

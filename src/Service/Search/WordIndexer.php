@@ -78,7 +78,14 @@ class WordIndexer
             ],
             'mappings' => [
                 'properties' => [
-                    'word' => ['type' => 'text'],
+                    'word' => [
+                        'type' => 'text',
+                        'fields' => [
+                            'keyword' => [
+                                'type' => 'keyword'
+                            ]
+                        ]
+                    ],
                     'ipa' => ['type' => 'text'],
                     'languageCode' => ['type' => 'keyword']
                 ]

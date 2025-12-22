@@ -1,23 +1,9 @@
 word,ipa
 signaal,/sɪnˈaːl/
-X,/ʃ/
-x,/ʃ/
 igrek,/ˈiɡ̊rek/
 üpsilon,/ˈypsilon/
-y,[yː]
-Y,[yː]
 päikeseprillid,/ˈpæi̯keseˌprilˑid̥/
 sidrunhape,/ˈsid̥runˌhɑpe/
-ü,"<a rel=""mw:WikiLink"" href=""./y"" title=""y"">y</a>"
-Ü,"<a rel=""mw:WikiLink"" href=""./y"" title=""y"">y</a>"
-w,"[wːɑː, ɑwwɑː]"
-W,"[wːɑː, ɑwwɑː]"
-v,[ɑvvɑʔ]
-V,[ɑvvɑʔ]
-u,"<a rel=""mw:WikiLink"" href=""./y"" title=""y"">y</a>"
-U,"<a rel=""mw:WikiLink"" href=""./y"" title=""y"">y</a>"
-t,"[tɑː, ɑttɑː]"
-T,"[tɑː, ɑttɑː]"
 kraanikauss,/ˈkrɑˑniˌkɑu̯sː/
 põhjatuul,/ˈpɤhjɑˌtuːl/
 kaaluma,/ˈkɑːlumɑ/
@@ -177,7 +163,6 @@ söör,/ˈsøːr/
 tagastama,/ˈtɑɡ̊ɑstɑmɑ/
 taotlema,/ˈtɑo̯tlemɑ/
 töötaja,/ˈtøːtɑjɑ/
-nõõ,/ˈnɤː/
 harilikult,/ˈhɑrilikult/
 raudsepp,/ˈrɑu̯d̥ˌsepː/
 pliidiraud,/ˈpliˑd̥iˌrɑu̯d̥/
@@ -283,7 +268,6 @@ Maali,/ˈmɑˑli/
 maalane,/ˈmɑːlɑne/
 Eestimaa,/ˈeˑstiˌmɑː/
 eestimaalane,/ˈeˑstiˌmɑːlɑne/
-◌̃,"<span typeof=""mw:Entity"">[</span>b<b>ɔ̃</b>vi<b>vɑ̃</b><span typeof=""mw:Entity"">]</span>"
 laukapuu,/ˈlɑu̯kɑˌpuː/
 surnukeha,/ˈsurnuˌkehɑ/
 gaasimask,/ˈɡ̊ɑˑsiˌmɑsʲk/
@@ -296,7 +280,6 @@ pohhui,/ˈpohːui̯/
 rõivas,/ˈrɤi̯vɑs/
 korruselamu,/ˈkorːuselɑmu/
 korrusmaja,/ˈkorːusmɑjɑ/
-Ots,/ˈots/
 kuljus,/ˈkuljus/
 pläru,/ˈplæru/
 riidepuu,/ˈriːd̥epuː/
@@ -475,7 +458,6 @@ kiirabi,/ˈkiːrˌɑb̥i/
 Matis,[ˈmacis]
 kondiüdi,/ˈkonʲd̥iˌyd̥i/
 luuüdi,/ˈluːˌyd̥i/
-üdi,/ˈyd̥i/
 kvoot,/ˈkvoːt/
 feminiinne,/femiˈniːnːe/
 feminiinum,/femiˈniːnum/
@@ -491,7 +473,6 @@ Tähti,/ˈtæhti/
 söögituba,/ˈsøːɡ̊itub̥ɑ/
 raamatukapp,/ˈrɑːmɑtukɑpː/
 võrd,/ˈvɤrd̥/
-Õun,/ˈɤu̯n/
 leppima,/ˈlepːimɑ/
 sõnaliik,/ˈsɤnɑliːk/
 jõulurõõm,/ˈjɤu̯lurɤːm/
@@ -714,7 +695,6 @@ lesima,/ˈlesimɑ/
 kaenlaauk,/ˈkɑe̯nlɑˌɑu̯k/
 vimm,/ˈvimː/
 kampsun,/ˈkɑmpsun/
-Ita,/ˈʔita/
 riik,/ˈriːk/
 veevarustus,/ˈveːvɑrustus/
 kapuuts,/kɑˈpuːts/
@@ -829,7 +809,6 @@ hütt,/ˈhytʲː/
 katood,"/katoˈʔod/ [ka.toˈʔod̪]"
 artišokk,/ˈɑrtiʃokː/
 Ellu,/ˈelːu/
-Evi,/ˈeː.vi/
 ebakindlus,/ˈeb̥ɑˌkind̥lus/
 ebakindel,/ˈeb̥ɑˌkind̥el/
 otsustama,/ˈotsustɑmɑ/
@@ -967,7 +946,6 @@ linastama,/ˈlinɑstɑmɑ/
 kalmistu,/ˈkɑlʲmistu/
 surnuaed,/ˈsurnuˌɑe̯d̥/
 maa-ala,/ˈmɑːˌ(ʔ)ɑlɑ/
-ürt,/ˈyrt/
 sadomasohhism,/sɑd̥omɑsohˈhism/
 raamatupidaja,/ˈrɑˑmɑtuˌpid̥ɑjɑ/
 kaskadöör,/ˈkɑskɑd̥øːr/
@@ -981,7 +959,6 @@ tsensuur,/tsenˈsuːr/
 pediküür,/ˈped̥ikyːr/
 maniküür,/ˈmɑnikyːr/
 umbrohi,/ˈumb̥ˌrohi/
--∅,/-/
 tunnistaja,/ˈtunːistɑjɑ/
 filantroopia,/ˈfilɑntˌroːpiɑ̯/
 võistlus,/vˈɤi̯stlus/
@@ -1011,7 +988,6 @@ Laul,/ˈlɑu̯l/
 Kõrvits,/ˈkɤrvits/
 Kaar,[kɑːrˠ]
 Haab,/ˈhɑːb̥/
-Oja,/ˈojɑ/
 Mänd,/ˈmænʲd̥/
 Liiv,/ˈliːv/
 ealine,-ine
@@ -1024,7 +1000,6 @@ kruus,/kʀuːs/
 lubama,/ˈlub̥ɑmɑ/
 poola,/ˈpoːlɑ/
 poole,/ˈpoːle/
-Ilo,/ˈilo/
 rüperaal,/ˈrype(ˌ)rɑːl/
 Magdaleena,/ˈmɑɡdɑleːnɑ/
 uulits,/ˈuˑlits/
@@ -1033,7 +1008,6 @@ vahetama,/ˈvɑhetɑmɑ/
 neelama,/ˈneːlɑmɑ/
 liikuma,/ˈliˑkumɑ/
 jõuk,/ˈjɤu̯k/
-urg,/ˈurːk/
 paisuma,/ˈpɑi̯sumɑ/
 hirm,/ˈhirm/
 esirida,/ˈesiˌrid̥ɑ/
@@ -1095,7 +1069,6 @@ püss,/ˈpusː/
 püstol,/ˈpystol/
 lahing,"/ˈlahiŋ/ [ˈl̪a.hɪŋ]"
 umbtee,/ˈumb̥ˌteː/
--lt,/-ltɑ/
 vastama,/ˈvɑstɑmɑ/
 kaduma,/ˈkɑd̥umɑ/
 koobas,/ˈkoˑb̥ɑs/
@@ -1133,7 +1106,6 @@ rahvastik,/ˈrɑhvɑstik/
 elanikkond,/ˈelɑnikːond̥/
 marssima,/ˈmɑrsːimɑ/
 sisestama,/ˈsisestɑmɑ/
-üür,/ˈyːr/
 müüma,/ˈmyːmɑ/
 Õunapuu,/ˈɤu̯nɑpˌpuː/
 Raud,/rɑu̯d̥/
@@ -1224,7 +1196,6 @@ lodu,/ˈlod̥u/
 Arktika,[ar(k)ˈtika]
 Toom,-uːm
 küps,/ˈkyps/
-Aru,"/ˈaru/ [ˈʔʌɾʊ]"
 noku,/ˈnoku/
 juhtkoer,/ˈjuhtˌkoe̯r/
 taud,/to/
@@ -1331,12 +1302,9 @@ harmoonia,/hɑrˈmoːniɑ̯/
 maantee,/ˈmɑːnˌteː/
 maamuna,/ˈmɑːˌmunɑ/
 vägi,/ˈvæɡ̊i/
-süü,/ˈsuː/
 võitma,/ˈvɤi̯tmɑ/
 lämmi,/ˈlæmːiː/
-ahm,/ˈɑhm/
 maakond,/ˈmɑːˌkond̥/
-hää,/hɑː/
 kõva,/ˈkɤvɑ/
 tõsi,/ˈtɤsi/
 põlv,/ˈpɤlʲv/
@@ -1388,7 +1356,6 @@ vesimelon,/ˈvesimelon/
 alalõug,/ˈɑlɑˌlɤu̯ɡ̊/
 laegas,/ˈlɑe̯ɡ̊ɑs/
 võti,/ˈvɤti/
--tu,"/-tu/ [-tʊ]"
 Ahvenamaa,/ˈɑhvenɑˌmɑː/
 pandeism,/pænˈdiːɪz(ə)m/
 jaht,/ˈjɑhtʲ/
@@ -1401,7 +1368,6 @@ grammatika,/ɡ̊rɑmˈmɑtikɑ/
 rull,[ˈruʎ]
 tünn,/tynː/
 Aruküla,/ˈɑrukylɑ/
-õõ,/ˈəʊ.əʊ/
 jott,/jot/
 vatnik,/ˈvætnɪk/
 deism,/ˈdiːɪz(ə)m/
@@ -1414,7 +1380,6 @@ tagasi,/ˈtɑɡ̊ɑsi/
 eest,/eːst/
 kunagi,/kunˈaɡi/
 ainult,/ˈɑi̯nult/
-nii,/ˈniː/
 pärdik,/ˈpærd̥ik/
 vaen,/ˈvɑe̯n/
 kilu,[ˈkɪlu]
@@ -1441,14 +1406,10 @@ telefoniseks,/ˈtelefoniˌseks/
 veider,/ˈvei̯d̥er/
 autobuss,/ˈɑu̯toˌb̥usʲː/
 varamu,/ˈvɑrɑmu/
--ti,"[ cɪ]"
 vesiveski,/ˈʋesiˌʋeski/
--ki,/-ki/
 turvas,/ˈturʋɑs/
 torm,/tɔrm/
 mererand,/ˈmereˌrɑnd̥/
-üü,/ˈyː/
-oht,/oːxt/
 vintpüss,/ˈvinʲtˌpysː/
 Kardo,/ˈkaɾdo/
 kunn,/kun/
@@ -1461,7 +1422,6 @@ Nork,/nˈɤrk/
 käsipuu,/ˈkæsiˌpuː/
 vandenõu,/vˈɑnd̥enˈɤu̯/
 jalanõu,/ˈjɑlɑnˈɤu̯/
-nõu,/nˈɤu̯/
 kalli,/ˈkɑlʲːi/
 esmalt,[əzˈmal]
 Sauk,/ˈsɑu̯k/
@@ -1491,7 +1451,6 @@ ostsillaator,/ostsilˈlɑːtor/
 matus,/ˈmɑtus/
 tasu,/ˈtasu/
 suht,/ˈsuht/
-emm,/ɛːm²²/
 sangar,/ˈsaŋə/
 bemar,/ˈb̥emɑr/
 koht,/ˈkoht/
@@ -1513,8 +1472,6 @@ pepu,/ˈpepu/
 tahe,/taɣe/
 ootama,/ˈoːtɑmɑ/
 entsüklopeedia,/entsykloˈpeːd̥iɑ̯/
-ahu,/ˈɑhu/
-püü,/ˈpuː/
 aiamaa,/ˈɑi̯ɑˌmɑː/
 tegevusnimi,/ˈteɡ̊evusˌnimi/
 ruut,/ˈruːt/
@@ -1608,7 +1565,6 @@ kole,[ˈkolɛ]
 sülg,/sˈylʲɡ̊/
 kohtupidamine,/ˈkohtuˌpid̥ɑmine/
 eutanaasia,/eu̯tɑˈnɑːsiɑ̯/
-urr,/ˈurː/
 suletud,/ˈsuletud̥/
 kolonelleitnant,/ˈkolonelˌlei̯tnɑnt/
 nooremleitnant,/ˈnoːremˌlei̯tnɑnt/
@@ -1636,7 +1592,6 @@ palitu,/ˈpɑlitu/
 ödeem,/øˈd̥eːm/
 šampus,[ˈʃampus]
 möga,/ˈmøɡ̊ɑ/
-udu,/uˈtu/
 Dmitri,/d͡ʒiˈmi.tɾi/
 släng,-ɛŋː
 rott,/ˈrotʲː/
@@ -1662,8 +1617,6 @@ salv,[ˈsalf]
 veoauto,/ˈveo̯ˌɑu̯to/
 tapatalgud,/ˈtɑpɑˌtɑlɡ̊ud̥/
 hambaarst,/ˈhɑmb̥ɑˌɑrst/
--gi,/-kɪ̀/
-ots,/ˈots/
 geograafia,/ɡ̊eo̯ˈɡ̊rɑːfiɑ̯/
 võõrastemaja,/ˈvɤˑrɑsteˌmɑjɑ/
 Eskola,/ˈeskolɑ/
@@ -1684,7 +1637,6 @@ pühapäevakool,/ˈpyhɑˌb̥æe̯vɑˌkoːl(ʲ)/
 sõnastik,/sɤnɑsˈtik/
 rõõm,/ˈrɤːm/
 ajalugu,/ˈɑjɑˌluɡ̊u/
-ehe,/e.he/
 tass,/tæs/
 Saks,/sɑks/
 parool,-oːl
@@ -1712,12 +1664,10 @@ võimalus,/ˈvɤi̯mɑlus/
 seksuaalne,/seksuˈɑːlne/
 pidu,/ˈpid̥u/
 abielumees,/ˈɑb̥ie̯luˌmeːs/
-õde,/ˈɤd̥e/
 õigusriik,/ˈɤi̯ɡ̊usriːk/
 öölaud,/ˈøːˌlɑu̯d̥/
 armee,/ɑrˈmeː/
 amulett,/ɑmuˈletʲː/
-Ö,/œ/
 suguküpsus,/ˈsuɡ̊uˌkypsus/
 orientatsioon,/orie̯ntɑtˈsio̯ːn/
 puuvili,/ˈpuː(ˌ)vili/
@@ -1725,7 +1675,6 @@ restoran,/ˈrestorɑn/
 senat,/ˈsenɑt/
 aseksuaal,/ˈɑ(ˌ)seksuˌɑːl/
 alfabeet,/ˌɑl.faːˈbeːt/
-tn,/tɛn/
 väsinud,/ˈvæsinud̥/
 noor,/ˈnoːr/
 õnnelik,/ˈɤnˑelik/
@@ -1743,27 +1692,21 @@ malend,/ˈmɑlend̥/
 haikala,/ˈhɑi̯ˌkɑlɑ/
 jõehobu,/jˈɤe̯ˈhob̥u/
 kesa,[kəsaʔ]
-peo,/pe͜oː/
-mnt,/ˈmaːnat/
 väike,/ˈvæi̯ke/
 helmes,/ˈxel.mes/
 korral,[ˈkorːɒl]
 paks,/ˈpɑks/
--ga,/ɡɑ/
 Jelena,/jɛˈleɪnə/
 Juri,/ˈjuri/
 Hanno,/ˈhan.noː/
 tarbija,/ˈtɑrb̥ijɑ/
 narkolepsia,/ˌnɑrkoˈlepsiɑ̯/
-Eda,/iː.də/
-Ebe,/ē.bè/
 lombard,/lɔ̃.baʁ/
 jünger,/ˈjʏŋɐ/
 Valli,/ˈʋɑlːi/
 Ille,/il/
 Hille,/ˈhilːe/
 Aire,/ˈɛː/
-Elo,/ˈiːloʊ/
 Olari,/ˈolɑri/
 Imre,[ˈimrɛ]
 leitnant,/ˈlei̯tnɑnt/
@@ -1777,7 +1720,6 @@ lavastaja,/ˈlɑvɑstɑjɑ/
 Vallo,/ˈʋɑlːo/
 Kauri,/ˈkaʊ̯ʁi/
 Tarvo,/ˈtɑrʋo/
-Ago,/ˈa.ɡɔ/
 Arved,/²arvə/
 Kirke,/ˈkirke/
 Robi,[ˈrobi]
@@ -1786,7 +1728,6 @@ Feliks,/ˈfɛ.liks/
 Evelin,[ˈɛvɛlin]
 jube,/dʒuːb/
 Reet,/ʁeːt/
-Enn,/ɛn/
 liin,/ˈliːn/
 tolmuimeja,/ˈtolmuˌimejɑ/
 demograafia,/d̥emoˈɡ̊rɑːfiɑ̯/
@@ -1859,9 +1800,7 @@ politseiriik,/ˈpolit(ˌ)sei̯ˌriːk/
 põhiseadus,/ˈpɤhisˈeɑ̯d̥us/
 sõnavabadus,/ˈsɤnɑˈvɑb̥ɑd̥us/
 mulk,/ˈmulʲk/
-Ä,/ɛ/
 Säde,/ˈsædeˣ/
-ö,/œ/
 juures,/ˈjuːres/
 instituut,/ˌɪn.stiˈtyt/
 omadussõna,/ˈomɑd̥usˌsɤnɑ/
@@ -1901,18 +1840,15 @@ balustraad,/b̥ɑlustˈrɑːd̥/
 Aldo,/ˈal.do/
 vaik,-ɑik
 kohvimasin,/ˈkohviˌmɑsin/
--mu,/ˈ-mu/
 kandidatuur,-yr
 kord,[ˈkort]
 joodik,/ˈjoˑd̥ik/
 lage,/laɡe/
 intelligents,/intelˑiˈɡ̊en(ʲ)ts/
-või,/vˈɤi̯/
 keema,/kiːmə/
 piraat,/piˈraːt/
 lõug,/lˈɤu̯ɡ̊/
 universum,/ˌy.niˈvɛr.zʏm/
--r,/r/
 kajakas,/ˈkɑjɑkɑs/
 kallistus,/ˈkɑlːistus/
 kokaraamat,/ˈkokɑrɑːmɑt/
@@ -1933,7 +1869,6 @@ taig,/teɪɡ/
 Jüri,/ˈjuri/
 laup,/læʉp/
 diplomaat,/ˌdi.ploːˈmaːt/
-äss,/ˈæsː/
 lauk,/lauk/
 Peterson,/ˈpitɚsən/
 Salme,/ˈsɑlme/
@@ -1942,13 +1877,10 @@ seto,[ˈsɛto]
 puder,/ˈpu.dɛr/
 miski,"/ˈmiski/ [ˈmis.ki]"
 Emajõgi,/ˈemɑjɤɡ̊i/
-üle,/ˈyle/
 ristkülik,/ˈrisʲtˌkylik/
 juba,/ˈjub̥ɑ/
 vadak,/ˈvɑd̥ɑk/
 aitäh,/ˌɑi̯tˈtæhː/
--k,/-k/
-ise,/ìsé/
 tobi,/tó.bī/
 kõne,/ˈkɤne/
 vars,/fars/
@@ -2027,7 +1959,6 @@ Ruuben,/ˈruːben/
 taara,/ˈtɑːrɑ/
 žanr,/ˈʒ̊ɑnr/
 arhitekt,/arxǐtekt/
-Ott,/ɔt/
 Elvi,/ˈelʋi/
 Hypnos,/ˈhɪpnɒs/
 varras,/ˈʋɑrːɑs/
@@ -2035,7 +1966,6 @@ Mooses,/ˈmoːses/
 ruik,/rœy̯k/
 Erno,/ˈerno/
 kaos,/ˈkæo̯s/
--ke,/-keˣ/
 Kiira,/ˈkiːrɑ/
 skorpion,/ˈskorpio̯n/
 Veera,/ˈʋeːrɑ/
@@ -2068,10 +1998,6 @@ hukkama,/ˈhukːɑmɑ/
 Eeden,/ˈeːd̥en/
 eeden,/ˈeːd̥en/
 Iiris,/ˈiːris/
--m,"/-m/ [-m]"
-ää,/ˈæː/
-haa,/hɑː/
-kaa,"/ˈkaː/ [ˈkaː]"
 teema,/ˈteːmɑ/
 rebu,/ʁeˈbu/
 kaua,/ˈkau̯.a/
@@ -2113,7 +2039,6 @@ Nele,/ˈneːlə/
 fuuga,/ˈfuːɡɑ/
 Helvi,/ˈhelʋi/
 Arvi,/ˈɑrʋi/
-esi,/ˈesi/
 Konstantin,[ˈkonstantiːn]
 lesk,/lɛsk/
 Signe,/ˈsiɡne/
@@ -2122,7 +2047,6 @@ ajaleht,/ˈɑjɑˌleht/
 Taimi,/ˈtɑi̯mi/
 Saima,/ˈsɑi̯mɑ/
 raba,"/ˈraba/ [ˈɾʌbʌ]"
--ma,[mɒ]
 Raili,/ˈrɑi̯li/
 Hilja,/ˈhiljɑ/
 Helmi,/ˈhelmi/
@@ -2140,7 +2064,6 @@ Galina,[ˈɡalɪna]
 Ilja,[ˈɪlja]
 Gita,[ˈɡɪta]
 Raimo,/ˈrɑi̯mo/
--la,[lɑ]
 tõlk,/ˈtɤlʲk/
 turist,[tuˈrist]
 sööma,/ˈsøːmɑ/
@@ -2167,7 +2090,6 @@ aamen,/ˈɑːmen/
 algoritm,/ɑlɡ̊oˈritm/
 lihtne,/ˈlihtne/
 kodanik,/ˈkod̥ɑnik/
-kes,[ˈkɛs]
 kaun,-ɑun
 kasvama,/ˈkɑsʋɑmɑ/
 kasvuhoone,/ˈkɑsvuˈhoːne/
@@ -2188,13 +2110,11 @@ orjus,/ˈorjus/
 organisatsioon,/orɡ̊ɑnisɑtsiˈoːn/
 omlett,/omˈletʲː/
 naljakas,/ˈnɑljɑkɑs/
-õli,/ˈɤli/
 oliivipuu,/ˈoliˑviˌpuː/
 oksendama,/ˈoksend̥ɑmɑ/
 ohutu,/ˈohutu/
 hüüdsõna,/ˈhyːd̥ˌsɤnɑ/
 hüüumärk,/ˈhyi̯u̯ˌmærk/
-hea,/hɛ˧/
 haud,/ˈhau̯d/
 haige,/ˈhaɟɪ/
 haigla,/ˈhɑi̯ɡ̊lɑ/
@@ -2216,9 +2136,6 @@ helilaine,-ɑine
 heli,[ˈɛ.li]
 haarama,/ˈhɑːrɑmɑ/
 elama,/ˈelɑmɑ/
-eos,/ˈe.oːs/
-ehk,/ˈehk/
-ega,/ˈeɡa/
 efektiivne,/efekˈtiːvne/
 tuvi,/ˈtuvi/
 selg,/ˈselɡ̊/
@@ -2254,7 +2171,6 @@ Joonas,/ˈjoːnɑs/
 Luukas,/ˈluːkɑs/
 kaplan,[ˈkaplan]
 lask,/lɑːsk/
-ilu,/ɪluː/
 klass,/ˈɡ̥lɑs/
 punkt,[ˈpuŋkt]
 karamell,[ˈkɒrɒmɛlː]
@@ -2262,7 +2178,6 @@ Sander,/ˈsɑːndə/
 Verner,[ˈvɛrnɛr]
 metroo,/meˈtroo/
 temperatuur,/tɛmpəraːˈtyːr/
-ära,/²æːra/
 valu,/ˈʋɑlu/
 alkoholism,/ɑlkohoˈlism/
 Piia,/ˈpiː.ɑ/
@@ -2282,7 +2197,6 @@ Ernst,[ænsd̥]
 Saara,/ˈsɑːrɑ/
 puit,/pjuːt/
 -nik,/nʲik/
--ik,/-ɪk/
 Ivar,/²iːvar/
 Ingrid,[ˈɪŋɡrɪt]
 Sigrid,/ˈsiɡɹɪd/
@@ -2304,8 +2218,6 @@ hobi,/ˈhob̥i/
 Helle,/ˈhɛlɪ/
 Helga,/ˈhɛlɡə/
 džemper,/ˈd̥ʒ̊emper/
--ne,/ni/
-akt,[ˈakt]
 ainus,/ˈɑi̯nus/
 Tauno,/ˈtɑu̯no/
 Joona,/ˈjoːnɑ/
@@ -2415,9 +2327,6 @@ kättemaks,/ˈkætːe(ˌ)mɑks/
 keha,"/ˈkeha/ [ˈke.ha]"
 Haapsalu,/ˈhɑːpsɑlu/
 Jaakob,/ˈjɑːkob/
-Ž,/ʒ/
-š,"<a rel=""mw:WikiLink"" href=""./%CA%83"" title=""ʃ"">ʃ</a>"
-Š,"<a rel=""mw:WikiLink"" href=""./%CA%83"" title=""ʃ"">ʃ</a>"
 Inglismaa,/ˈinɡ̊lisˌmɑː/
 keskus,/ˈkeskus/
 Hendrik,/ˈɦɛn.drɪk/
@@ -2484,7 +2393,6 @@ antisemitism,/ˈɑnʲtisemiˌtism/
 Anneli,/ˈɑnːeli/
 Anni,/ˈɑnːi/
 oluline,/ˈoluline/
-oks,/ˈʔoks/
 nuga,/ˈnuɡ̊ɑ/
 Juho,/ˈjuho/
 Janne,/ˈjɑnːe/
@@ -2506,10 +2414,8 @@ allkiri,/ˈɑlːˌkiri/
 kurv,/kurˀv/
 sile,/saɪl/
 rääkima,/ˈræːkimɑ/
-amb,/əm/
 voodi,/ˈvoːd̥i/
 kuiv,/ˈkui̯v/
-õlg,/ˈɤlɡ̊/
 alam,/ˈʔalam/
 kass,/ˈkɑsʲː/
 munk,[ˈmɔŋˀɡ̊]
@@ -2535,7 +2441,6 @@ Marek,[ˈmarɛk]
 -kas,/-kɑs/
 Kirsi,/ˈkirsi/
 orgia,/ˈɔr.d͡ʒa/
-eit,/ˈe.id/
 hallitus,/ˈhɑlːitus/
 huvi,/ˈhuʋi/
 olema,/ˈolemɑ/
@@ -2576,7 +2481,6 @@ traktor,[ˈtraktor]
 Selma,/ˈsɛlmə/
 Artur,[ərˈtur]
 Šveits,/ˈʃvei̯ts/
-Ivo,/ˈaɪvəʊ/
 kodu,/ˈkɔ.du/
 Kristina,[ˈkrɪstɪna]
 käima,/ˈkæi̯mɑ/
@@ -2584,7 +2488,6 @@ käik,/kˈæi̯k/
 patt,/pʰaht/
 usklik,/ûskliːk/
 nafta,[ˈnafta]
-kui,/ˈkui̯/
 Vikipeedia,/vikipˈpeːd̥iɑ̯/
 kalla,/ˈkɑlːɑ/
 Gunnar,/ˈkʊnːaɹ/
@@ -2599,7 +2502,6 @@ allergia,/ɑlˈlerɡ̊iɑ̯/
 Markus,/ˈmɑrkus/
 kaan,/kaːan/
 hani,/ˈhɛaːnɪ/
-gei,/ˈd͡ʒɛj/
 õhtu,/ˈɤhtu/
 agressor,[ə.ɣɾəˈso]
 Gruusia,/ˈɡ̊ruːsiɑ̯/
@@ -2662,7 +2564,6 @@ tonn,/ˈtonʲː/
 ala-,/ˈɑlɑ-/
 tasku,/ˈtɑsku/
 essee,/esˈseː/
-ju,/ju/
 sohva,/ˈsohʋɑ/
 Vilma,[ˈvɪlma]
 ning,"/ˈniŋ/ [ˈn̪iŋ]"
@@ -2676,10 +2577,8 @@ emme,[ˈɛmə]
 laama,/ˈlɑːmɑ/
 savi,[ˈsa.βi]
 paaria,/ˈpɑːriɑ/
-alk,[ˈalˀɡ]
 diiler,/ˈd̥iːler/
 maur,/møːɥr̥/
-õun,/ˈɤu̯n/
 õunapuu,/ˈɤu̯nɑpˌpuː/
 haab,/ˈhɑːb̥/
 saar,/saːɾ/
@@ -2687,7 +2586,6 @@ pöök,/ˈpøːk/
 šampanja,/ˈʃɑmpɑnjɑ/
 konjak,/ˈkonjɑk/
 brändi,/ˈb̥rænd̥i/
-iha,/ˈihɑ/
 kabel,/ˈkʌbel/
 kott,/kotʲː/
 kukk,/ˈkykː/
@@ -2754,13 +2652,11 @@ emaplaat,/ˈemɑˌplɑːtʲ/
 tibla,/ˈtib̥lɑ/
 põder,/ˈpɤd̥er/
 somm,/ˈsomː/
-uks,/ˈuks/
 mürk,/ˈmyrk/
 mahl,/ˈmɑhl/
 piim,/ˈpiːm/
 kohv,/ˈkohv/
 sperma,[ˈspɛrma]
-aju,/aːˈjy/
 roim,/ˈroi̯m/
 rukis,/ˈrukis/
 kõrv,/kˈɤrv/
@@ -2786,8 +2682,6 @@ juuni,/juːni/
 märts,/mærts/
 jaanuar,/ˈjɑˑnuɑ̯r/
 tund,[tʊnt]
-Õ,/œ/
-õ,/œ/
 Turu,/ˈturu/
 Horvaatia,/horˈvɑːtiɑ̯/
 Bulgaaria,/b̥ulˈɡ̊ɑːriɑ̯/
@@ -2833,8 +2727,6 @@ järv,/ˈjærv/
 jääpurikas,/ˈjæːˌpurikɑs/
 pulm,/ˈpulm/
 hoone,/ˈhoːne/
-ämm,/ˈæmː/
-äi,/ˈæi̯/
 bürokraatia,/b̥yroˈkrɑːtiɑ̯/
 baar,[bɑːɾ]
 astenosfäär,/ˈɑstenoˌsfæːr/
@@ -2860,7 +2752,6 @@ küüslauk,/ˈkyːslɑu̯k/
 puding,[ˈpudiŋɡ]
 Ines,/ˈiːnəs/
 rada,[ˈrada]
-soe,/səʊ/
 karu,[karu]
 Platon,[ˈpʰl̥æːtˢʌn]
 viha,/ˈʋihɑ/
@@ -2868,12 +2759,10 @@ hukka,/ˈhukːɑ/
 kutsu,/ˈkutʲsu/
 Korsika,[ˈkorsɪka]
 tige,/tiʒ/
-kee,/kiː/
 asukas,/ˈɑsukɑs/
 porr,/porr/
 tõlkima,/ˈtɤlʲkimɑ/
 looming,/ˈluːmɪŋ/
-ais,/ais/
 konstant,/kɔnˈstant/
 Aleksander,/a.lɛkˈsan.dɛr/
 Aleksandra,/ɑlekˈsɑnd̥rɑ/
@@ -2884,7 +2773,6 @@ Hubert,/ˈhjubɚt/
 Jürgen,/ˈjʏrɡən/
 Jakob,/ˈjaː.kɔp/
 ateist,/ɑtəɪst/
-arv,/arv/
 Rebeka,[ˈrɛbɛka]
 Inga,/ˈɪŋɡə/
 Inge,/ˈiŋːe/
@@ -2893,7 +2781,6 @@ vare,/vɛə(ɹ)/
 Hilda,/ˈhɪldə/
 tase,/teɪz/
 sajas,/ˈsaxas/
-loe,/ˈlɔ.e/
 palee,/pɑˈleː/
 moos,/muːz/
 kraam,/kraːm/
@@ -2905,7 +2792,6 @@ asuma,/ˈɑsumɑ/
 armas,/ˈarmas/
 Leevi,/ˈleːʋi/
 Timo,/ˈtimo/
-ent,/ɛnt/
 libe,/lip/
 soum,/ˈsou̯m/
 Jasper,/ˈdʒaspə/
@@ -2981,10 +2867,8 @@ orel,[ˈorɛl]
 Karina,[ˈkarɪna]
 varblane,/ˈvɑrb̥lɑne/
 Allan,/ˈɑlːɑn/
-aia,/ʔiaː/
 Podgorica,/ˈpɒdɡəɹɪtsa/
 lause,/ˈlɑu̯seˣ/
-aur,/øyːr/
 kunde,/konə/
 tari,/ˈtʰɛaːɹɪ/
 Helena,/ˈhɛlənə/
@@ -2994,15 +2878,11 @@ avama,/ˈɑvɑmɑ/
 alati,/ˈɑlɑti(ˣ)/
 ajal,/ˈad͡ʒal/
 aitama,/ˈɑi̯tɑmɑ/
-aga,"/ˈʔaɡa/ [ˈʔa.ɡa]"
-aeg,/ˈɑe̯ɡ̊/
 aasta,/ˈɑːstɑ/
 koda,/kó.dà/
 tuju,/ˈtuɟu/
 liha,/ˈlihɑ/
-Eva,/ˈiːvə/
 hapu,/ˈhʌːpuː/
-ava,/ɑː.və/
 Ungari,/ˈuŋɡ̊ɑri/
 armastama,/ˈɑrmɑstɑmɑ/
 pada,/ˈpɑːdə/
@@ -3019,7 +2899,6 @@ Vikisõnaraamat,/ˈvikiˌsɤnɑ(ˌ)rɑˑmɑt/
 mida,[ˈmi.ðə]
 tere,-eːrə
 pilu,/pilu/
-oga,/ˈəʊ.ɡə/
 oras,/ˈorɑs/
 eile,/ˈei̯le/
 Astana,/əsˈtɑːnə/
@@ -3028,7 +2907,6 @@ fosfor,[ˈfosfor]
 Oinas,/ˈoi̯nɑs/
 Minsk,/mɪnsk/
 vanus,/ˈu̯aː.nus/
-abi,/abi/
 naba,"/naˈba/ [nʌˈbʌ]"
 siil,/siˈʔil/
 munn,/ˈmunʲː/
@@ -3044,10 +2922,7 @@ esimene,/ˈesimene/
 kont,/kɔnt/
 karp,[kɑrp]
 jala,[ˈjala]
-ida,"/iˈda/ [ʔɪˈdʌ]"
 hein,/ɛ̃/
-arg,/ɑrɡ/
-aru,"/ˈaru/ [ˈʔʌɾʊ]"
 rong,/ʒoŋ˧˩/
 tüvi,/ˈtuvi/
 avar,[ɑˈvɑr]
@@ -3061,15 +2936,11 @@ koor,/koːr/
 sool,-uːl
 maks,/ˈmɑks/
 pesa,[pesa]
-uus,/ˈuːs/
 pilv,/ˈpilv/
 talv,/ˈtɑlʲv/
-ige,[ˈiɡɛ]
-ees,/ˈiːz/
 pauk,/pɑu̯k/
 Roland,[ruˈlan]
 arvuti,/ˈɑrvuti/
-täi,/tˈæi̯/
 maja,/ˈmaja/
 kohta,/ˈkohtɑ/
 paras,"/paˈɾas/ [paˈɾas]"
@@ -3080,12 +2951,10 @@ taga,"/taˈɡaʔ/ [taˈɡaʔ]"
 teke,/tèꜛké/
 kaja,/ˈka.ja/
 paju,/ˈpɑju/
-kas,"/ˈkas/ [ˈkʌs]"
 hari,/aɾi/
 aina,/ajna/
 kari,/kari/
 vall,[ˈbaʎ]
-iga,[ˈiɡɒ]
 teras,/ˈteras/
 ment,[ˈmen]
 hind,/haɪnd/
@@ -3099,19 +2968,15 @@ Renate,/reˈnaː.te/
 abil,/abil/
 laut,/laut/
 jamb,/d͡ʒæm/
-aed,/ˈaːɨ̯d/
 Paula,/ˈpɔːlə/
 haru,/ˈxa.ru/
 Miller,/ˈmɪlɚ/
 sultan,/ˈsʌltən/
 Agnes,/ˈæɡ.nɪs/
-aas,/aːs/
-osa,[ˈosa]
 maal,/maːl/
 hispaania,/hisˈpɑːniɑ̯/
 Susanna,-ænə
 Marta,/ˈmɑː(ɹ)tə/
-kus,/kœs/
 banaan,/baːˈnaːn/
 ader,/ˈaː.dər/
 tulp,/tʏlp/
@@ -3131,13 +2996,10 @@ probleem,/ˌproːˈbleːm/
 alles,/ˈɑləs/
 raam,/raːm/
 säng,/sɛŋː/
-soo,/ˈsoː/
 kann,/ˈkɑnː/
 aken,/əˈkɛn/
 masin,/ˈmɑsin/
-ike,/ī.kē/
 Soome,/ˈsoːme/
-ema,[ˈe.mə]
 sugu,/ˈsuː.ɡu/
 Silvia,/ˈsɪlvi.ə/
 pori,[ˈpori]
@@ -3159,10 +3021,7 @@ imago,/ɪˈmeɪɡəʊ/
 Lett,[ˈlɛtː]
 kuni,/ˈkuni/
 tasa,"/ˈtasa/ [ˈta.sa]"
-ihu,/ˈi.hu/
 ikka,/ˈikːɑ/
-erk,-ɜː(ɹ)k
-isu,/iˈsu/
 saldo,[ˈsaldo]
 kisa,"/ˈkisa/ [ˈki.sa]"
 Eesti,/ˈeˑsti/
@@ -3171,7 +3030,6 @@ vanne,/ˈʋɑnːeˣ/
 vann,/vãn/
 katt,/ˈkɑtː/
 gangster,/ˈɡæŋ.stə/
-ost,/ˈost/
 tuus,/ˈtuːs/
 Jeesus,/ˈjeːsus/
 Henri,/ˈhenri/
@@ -3190,15 +3048,12 @@ Margot,/ˈmɑː.ɡəʊ/
 laps,/læps/
 Elina,/ˈelinɑ/
 teos,/ˈteos/
-koi,/kɔɪ/
-ase,"/aˈse/ [ʔʌˈsɛ]"
 ajaja,/ˈɑjɑjɑ/
 ahne,/ˈɑhne/
 peni,/ˈpe.ni/
 Usbekistan,/ʊsˈbeːkɪstaːn/
 Erik,[ˈɛrɪk]
 oder,/ˈoː.dər/
-Ain,/ɛ̃/
 Volga,/ˈvoʊlɡə/
 naps,/ˈnɑps/
 Venda,/ˈvɛndə/
@@ -3236,13 +3091,10 @@ eine,/ˈaɛnɛ/
 mesi,[ˈmɛ.zi]
 täht,/ˈtæht/
 viski,/ˈʋiski/
-jaa,/ˈjɑː/
 dinosaurus,[ˈdɪnosau̯rus]
 poni,/ˈponi/
 puuma,/ˈpuːmɑ/
 alus,/ˈɑlus/
-hui,/ˈhʉː.iː/
-töö,/ˈtøː/
 Aasia,/ˈɑːsiɑ̯/
 katse,/ˈkɑtseˣ/
 suvi,/ˈsuʋi/
@@ -3251,25 +3103,17 @@ seller,/ˈsɛlə/
 lohe,/ˈlo.he/
 koma,/ˈko.ma/
 esi-,/ˈesi-/
-eri,/eɾi/
-ori,[ˈo.ɾi]
-vöö,/ˈʋøː/
 muna,"/ˈmuʔna/ [ˈmuʔ.n̪a]"
 viis,/ˈviːs/
 kolm,/ˈkolm/
-üks,/ˈuks/
 kümme,/ˈkymˑe/
 üheksa,/ˈyheksɑ/
 kaheksa,/ˈkɑheksɑ/
 seitse,/ˈsei̯tse/
 neli,/ˈneli/
 kaks,/ˈkɑks/
-onu,/ò.nũ̀/
-oja,/ˈojɑ/
 oinas,/ˈoi̯nɑs/
 muslim,[muzˈlim]
-ž,/ʒ/
-iva,[ˈi.βə]
 kaamera,/ˈkɑːmerɑ/
 Helen,/ˈhɛlən/
 laupäev,/ˈlɑu̯ˌb̥æe̯v/
@@ -3284,18 +3128,10 @@ paine,/ˈpɑi̯ne/
 assistent,[ə.sisˈten]
 habe,/ˈhɛːbə/
 Aristoteles,[ˈarɪstotɛlɛs]
-imu,/ī.mú/
-ahi,/ˈɑ.hi/
 salat,/səˈlɑːt/
-edu,/ˤɛˈdʊ/
-oma,/ˈoʊmə/
-ohi,/ˈohi(ˣ)/
 raja,/ˈɹɑː.d͡ʒə/
-ime,/ime/
-mv,/ᵐv/
 maine,-ɑine
 mandel,[ˈmanˀəl]
-dee,/ˈdiː/
 seminar,/ˈsɛmɪnɑɹ/
 autism,/ˈɔːtɪzəm/
 sekretär,/ˈsekretær/
@@ -3305,21 +3141,15 @@ saami,/ˈsɑːmi/
 november,[ˈnovɛmbɛr]
 september,/səptɛmbər/
 kurt,/kuə̯t/
-pm,/pe.ɛm/
-Z,/ʒ/
 Vilnius,/ˈvɪlni.əs/
 Ville,/ˈʋilːe/
 Veli,/ˈʋeli/
-Uno,/ˈuno/
 Tuuli,/ˈtuːli/
-Tea,/ˈteɑ/
 Tallinn,/ˈtɑːlɪn/
-Tai,/tˈæi̯/
 Susi,"/ˈsusiʔ/ [ˈsu.siʔ]"
 Stella,/ˈstɛlə/
 Soul,/ˈsøul/
 Silver,/ˈsilvɐ/
-S,"<a rel=""mw:WikiLink"" href=""./%CA%83"" title=""ʃ"">ʃ</a>"
 Ruth,/ɹuːθ/
 Roman,/ˈɹəʊ.mən/
 Robin,/ˈɹɒbɪn/
@@ -3327,13 +3157,8 @@ Rein,/ˈrei̯n/
 Regina,/ɹɪˈd͡ʒiːnə/
 Rand,-ænd
 Rain,/ʁaɪ̯n/
-R,/r/
-Q,/kjuː/
 Pilvi,/ˈpilʋi/
-P,/pʰiː/
 Otto,/ˈɑtoʊ/
-O,/œ/
-N,/ɛn/
 Moskva,/məsˈkvɑː/
 Meta,/ˈmeta/
 Merle,/ˈmɛrlə/
@@ -3344,56 +3169,32 @@ Marina,/məˈɹiːnə/
 Mari,-ɑːɹi
 Marge,/mɑɹd͡ʒ/
 Maire,/ˈmɑi̯re/
-Mai,/mai̯/
 Magnus,/ˈmæɡnəs/
 Made,/ˈmaːdə/
-Maa,/mɑː/
-M,/ɛm/
 Luik,/lœy̯k/
 Linda,/ˈlɪndə/
-Lea,-iːə
 Laine,/ˈlɑi̯neˣ/
-L,/ɛl/
-Ken,/kɛn/
 Kama,/ˈka.ma/
-Kai,/kaɪ/
-K,/keɪ/
-J,/d͡ʒeɪ/
 Island,[ˈɪslant]
 Iris,/ˈiː.rɪs/
-Ira,/ˈaɪɹə/
-I,/aɪ/
 Hans,/ˈhæns/
-H,/eɪtʃ/
-G,/dʒiː/
-F,/ɛf/
 Evert,/ˈeː.vərt/
-Eve,/iːv/
 Ester,[əsˈter]
 Elma,/ˈelmɑ/
 Ellen,/ˈɛl.ən/
 Elle,/ˈelːe/
-E,/ɛ/
 Daan,/ˌdɑˈɑn/
-D,/diː/
-C,/siː/
-B,/b/
-Ave,/ˈɑːveɪ/
 August,/ˈɔː.ɡəst/
 Arvo,/ˈɑrʋo/
 Argo,/ˈar.ɡoː/
-Anu,/ˈɑnu/
 Anti,[ˈɒnti]
 Anna,/ˈænə/
 Andra,/ˈɑndrə/
 Alma,/ˈɑl.maː/
-Ado,/ˈadɔ/
-a,/ɛ/
 pood,/puːd/
 ravi,/ˈravi/
 vader,/ˈfɑːdər/
 mari,-ɑːɹi
-uu,/ˈyː/
 monument,/ˈmɑnjʊmənt/
 Montenegro,/mɒn.tɪˈnɛɡ.ɹəʊ/
 Julius,/ˈd͡ʒuːliəs/
@@ -3403,24 +3204,17 @@ vitt,[ˈvitː]
 Afganistan,/afɡanis̺tan/
 Serbia,/ˈsɜː.bi.ə/
 taal,/tɑːl/
-ait,/eɪt/
 vint,/vɪnt/
-Ann,/æn/
-asi,"/aˈsi/ [ʔʌˈsɪ]"
 kuningas,/ˈkuninɡ̊ɑs/
 homme,/ˈhomːe/
-öö,/ˈəʊ.əʊ/
 nimisõna,/ˈnimiˌsɤnɑ/
 absint,[ˈapsɪnt]
 Diana,/daɪˈænə/
 Vesta,/ˈvɛstə/
-enn,/ɛn/
 Erika,/ˈerikɑ/
 referendum,/ˌɹɛfəˈɹɛndəm/
 sild,/sɪld/
-alg,/ɑlx/
 perse,/pɜːs/
-ka,/kɑː/
 Margaret,/ˈmɑːɡɹɪt/
 Janus,/ˈd͡ʒeɪnəs/
 resto,/ˈɹɛstəʊ/
@@ -3431,21 +3225,17 @@ Karl,-ɑː(ɹ)l
 Angela,/ˈænd͡ʒələ/
 pill,/pɪl/
 supermarket,/ˌsupɚˈmɑɹkət/
-nad,[ˈnat]
 smaragd,/ˈsmæɹæɡd/
 säga,/²sɛjːa/
 agar,/ˈeɪ.ɡə/
 mais,"/maˈʔis/ [maˈʔis]"
 laine,/ˈlɑi̯neˣ/
 pung,/pʌŋ/
-elu,/ˈe.lu/
 laud,/lɔːd/
 miljon,/ˈmiljon/
 miljard,/mɪlˈjɑrt/
 kipper,/ˈkɪpə(ɹ)/
 kiosk,/ˈkiːˌɒsk/
-uss,/ˈusʲː/
-err,/ɜː/
 Mario,/ˈmaɹiəʊ/
 valge,/ˈvɑlɡ̊e/
 tabu,"/ˈtabu/ [ˈtʌbʊ]"
@@ -3458,44 +3248,32 @@ Kamerun,/kameɾun/
 Antarktis,/ɑnˈtɑrktis/
 mina,-aɪnə
 kolmas,/ˈkolmɑs/
-org,/ˈorɡ̊/
 plast,[ˈplasd]
 sisu,/ˈsɪsʉː/
 tequila,/ˌtəˈkiː.lə/
 Saturnus,/saːˈtʏr.nʏs/
 laager,/ˈlɑː.ɡə/
 volfram,/ʋóːlfram/
--us,[uʃ]
 Jane,/d͡ʒeɪn/
--is,/i/
--i,/iː/
-lai,/laɪ/
 kink,/kɪŋk/
 realism,/ˈɹi.əlɪzəm/
 lamp,/læmp/
 Irene,/aɪˈɹiːn/
-KKK,"/kej kej kej/"
 veer,/vɪə̯/
 vismut,/ˈvisːmuːh(t)/
 summa,/ˈsumːɑ/
 adapter,/əˈdæptə(ɹ)/
 ranne,/ˈrɑnːeˣ/
 lehm,/ˈlehm/
-mis,/məs/
-mil,/mɪl/
 korv,/kˈɤrv/
 iste,/isteː/
-ii,/ˈiː/
 ester,[əsˈter]
 Oliver,/ˈɑlɪvɚ/
 sink,/sɪŋk/
-isa,/iˈsa/
-muu,/ˈmuu/
 variant,/ˈvɛəɹi.ənt/
 Arvid,/²arvɪ/
 seks,[sɛks]
 Marit,[ˈmɒrit]
-oda,[ˈɔ.ðə]
 alla,/ɑˈlɑː/
 firma,[ˈfɪrma]
 feminism,/ˈfɛmɪnɪz(ə)m/
@@ -3507,7 +3285,6 @@ Anne,/æn/
 grappa,/ˈɡɹɑpə/
 burger,/ˈbɜː(ɹ)ɡə(ɹ)/
 padi,"/ˈpadiʔ/ [ˈpa.d̪iʔ]"
-mai,/mai̯/
 -sti,/-stiˣ/
 trend,/tɹɛnd/
 tint,/tɪnt/
@@ -3520,37 +3297,25 @@ manner,/ˈmænə/
 loom,/luːm/
 lame,/leɪm/
 embargo,/ɪmˈbɑɹɡoʊ/
-vee,/ˈviː/
 sage,/seɪd͡ʒ/
 peal,/piːl/
 pall,/pɔːl/
 mull,/mʌl/
 loll,/lɒl/
-ell,/ˈɛl/
-auk,/ɔːk/
 Heidi,/ˈhaɪdi/
 orgasm,/ˈɔː.ɡæ.zəm/
-gee,/ˈd͡ʒiː/
 õetütar,/ˈɤe̯ˌtytɑr/
 vennatütar,/ˈvenˑɑˌtytɑr/
 õepoeg,/ˈɤe̯ˌpoe̯ɡ̊/
 vennapoeg,/ˈvenˑɑˌpoe̯ɡ̊/
-oo,/ˈəʊ.əʊ/
 sport,/spɔːt/
 kuna,-uːnə
 hall,/hɛl/
-ä,/ɛ/
 magnet,/ˈmæɡnət/
--ja,/d/
 Torino,/toˈriːno/
 Milano,/miˈlano/
--ta,"/-ta/ [-tʌ]"
 need,/niːd/
 Robert,/ˈɹɒb.ət/
--u,[u]
--na,/na/
--s,/s/
-eff,/ɛf/
 vittu,/ˈʋitːu/
 alatus,/aːˈlaː.tus/
 oskama,/ˈoskɑmɑ/
@@ -3575,29 +3340,22 @@ Andreas,/ˌɑnˈdreː.ɑs/
 Ahto,/ˈɑhto/
 Ahti,/ˈɑhti/
 vara,[ˈba.ɾə]
-tra,[ˈtra]
 känguru,/ˈkænɡ̊uru/
 kama,/ˈka.ma/
-ma,/mɑː/
 park,/pɑɹk/
 pang,/pæŋ/
 telefon,/teleˈfon/
 vast,/vɑːst/
 poro,/pòꜛɾó/
 susi,"/ˈsusiʔ/ [ˈsu.siʔ]"
-kai,/kaɪ/
 grupp,/ˈɡ̊rup/
-ess,/ˈɛs/
-abt,/ɑpt/
 aaker,"/aːˈker/ [ʔaːˈkɛɾ]"
 frank,/fɹæŋk/
 protest,/ˈpɹəʊ.tɛst/
 soon,/suːn/
 magus,/ˈmeɪɡəs/
 vale,/veɪl/
-ala,/ˈeɪ.lə/
 Paul,/pɔːl/
-aer,/ɛʁ/
 medal,/ˈmɛdəl/
 varvas,/ˈʋɑrʋɑs/
 nimi,[ˈɲɪmɪ]
@@ -3607,8 +3365,6 @@ toit,/tˈoi̯t/
 ilma,/ˈilmɑ/
 broom,/bɹuːm/
 porno,/ˈpɔːnəʊ/
-puu,/ˈpuː/
-suu,/ˈsuː/
 till,/tɪl/
 leek,/liːk/
 kakao,[ˈkakao]
@@ -3617,22 +3373,16 @@ terve,/ˈterʋeˣ/
 Praha,[ˈpraɦa]
 paha,"/ˈpahaʔ/ [ˈpa.haʔ]"
 rikas,"/ɾiˈkas/ [ɾiˈkas]"
-aus,[ˈaws]
 kala,/kaˈla/
 Bern,/bɜː(ɹ)n/
 lumi,/ˈlumi/
 lahja,/ˈlɑhjɑ/
 jalka,/ˈjɑlkɑ/
-orb,/ɔɹb/
 tema,[ˈte.mə]
 raha,/ˈrɑhɑ/
 Bratislava,/ˌbɹætɪˈslɑːvə/
 kallis,/ˈkɑlːis/
 kaunis,/ˈkɑu̯nis/
-uni,/ˈjuː.ni/
-roe,/ˈɹəʊ/
-sai,/saɪ/
-sa,/sa/
 dessert,/dɪˈzɜːt/
 lammas,/ˈlɑmːɑs/
 lahti,/ˈlɑhti/
@@ -3640,21 +3390,15 @@ kirves,/ˈkirves/
 käsi,/ˈkæsi/
 tuul,/ˈtuːl/
 tera,/ˈtera/
-tee,/ˈtiː/
 kilo-,/ʃi/
-WC,"/ˌdʌbəlju ˈsiː/"
 vesi,/ˈvesi/
 vene,/ˈvene/
-maa,/mɑː/
 tuhat,/ˈtuhɑt/
-kuu,/ˈkuː/
 lagi,/ˈlɑɡi/
 enam,/ˈenɑm/
 film,/fɪlm/
 Belgia,/ˈb̥el(ʲ)ɡ̊iɑ̯/
 vaba,/ˈvɑb̥ɑ/
-ale,/eɪl/
-aim,/eɪm/
 Napoli,/ˈnɑpəli/
 Aaron,/ˈɛɹ.ən/
 Öland,/ˈøːlɑnd̥/
@@ -3665,20 +3409,15 @@ kuur,/kyr/
 boor,/bʊə(ɹ)/
 voor,/fʊə̯r/
 moor,/mʊə(ɹ)/
-hai,/ˈhaɪ̯/
 leer,/lɪə/
-pea,/piː/
-pee,/ˈpiː/
 Saturn,/ˈsæt.ɚn/
 auto,/ˈɔːtəʊ/
-ja,/jaː/
 rand,-ænd
 mood,/muːd/
 just,/d͡ʒʌst/
 Venus,/ˈviːnəs/
 saal,/sɑːl/
 paar,[pɑːɾ]
-ee,-iː
 lust,/lʌst/
 pool,/puːl/
 sees,/siːz/
@@ -3713,10 +3452,8 @@ Kabul,/ˈkɑːbəl/
 Edinburgh,/ˈɛd.ɪn.bə.ɹə/
 Dublin,/ˈdʌblən/
 Belfast,/ˈbɛl.fæst/
-jää,/ˈjɑː/
 mast,/mɑːst/
 side,/saɪd/
-ei,[ˈej]
 must,/ˈmʌst/
 Budapest,/ˈbuːdəpɛst/
 lava,/ˈlɑːvə/
@@ -3727,7 +3464,6 @@ buss,/bʌs/
 Albert,/ˈælb.ət/
 meri,/ˈmeri/
 kana,/ˈkɑːnə/
-au,/æʊ/
 ununseptium,/uːnuːnˈsɛpti.əm/
 ununpentium,/ˈun.un.pentium/
 ununtrium,/ˈun.un.trium/
@@ -3750,9 +3486,7 @@ tort,/tɔːt/
 Madrid,/məˈdɹɪd/
 Stockholm,/ˈstɒkhɒlm/
 London,/ˈlʌn.dən/
-ta,/tɑː/
 null,/nʌl/
-aa,/ˈæː/
 peen,/piːn/
 luik,/lœy̯k/
 Ursula,/ˈɜː(ɹ).sjʊ.lə/
@@ -3763,30 +3497,12 @@ asteroid,/ˈæst(ə)ɹɔɪd/
 menu,/ˈmɛnjuː/
 peer,/pɪə̯/
 valve,/ˈʋɑlʋeˣ/
-ese,/ˈɛˌseɪ/
 seep,/siːp/
-z,/ʒ/
-s,"<a rel=""mw:WikiLink"" href=""./%CA%83"" title=""ʃ"">ʃ</a>"
-r,/r/
-q,/kjuː/
-p,/pʰiː/
-n,/ɛn/
-m,/ɛm/
-l,/ɛl/
-k,/keɪ/
-j,/d͡ʒeɪ/
-h,/eɪtʃ/
-g,/dʒiː/
-d,/diː/
-c,/siː/
-b,/b/
 vein,/veɪn/
-e,/ɛ/
 lift,/lɪft/
 pull,/pʊl/
 loss,/lɒs/
 tall,/tɔːl/
-et,/ɛt/
 vermut,[bərˈmut]
 torn,/tɔɹn/
 tore,/tɔː(ɹ)/
@@ -3800,22 +3516,12 @@ keep,/kiːp/
 hang,/hæŋ/
 darmstadtium,/dɑːɹmˈʃtɑːtiəm/
 sama,/s̺ama/
-aku,/ˈaku/
-uba,/ʔù.báː/
 mutt,/mʌt/
-me,/miː/
-ai,/ˈæi̯/
-jah,/ˈjɑh/
 minister,/ˈmɪn.əˌstɚ/
 male,/meːl/
-bee,/ˈbiː/
-arm,/ɑːm/
-all,/ɔːl/
 hunt,/hʌnt/
-too,/ˈtøː/
 tennis,/ˈtɛnɪs/
 plankton,/ˈplæŋk.tən/
-see,/ˈsiː/
 king,/kɪŋ/
 tuba,/ˈtjuː.bə/
 pink,/pɪŋk/
@@ -3824,7 +3530,6 @@ Jupiter,/ˈd͡ʒupɪtɚ/
 Wales,/weɪlz/
 Benin,/bɪˈniːn/
 Barbados,/bɑː(ɹ)ˈbeɪ.dɒs/
-UFO,/ˌjuːɛfˈəʊ/
 Portugal,/ˈpɔːt͡ʃəɡəl/
 Panama,/ˈpæn.ə.mɑː/
 Malta,/ˈmɒl.tə/
@@ -3841,19 +3546,11 @@ Andorra,/ænˈdɔː.ɹə/
 last,/lɑːst/
 Austria,/ˈɒs.tɹɪə/
 euro,/ˈjʊəɹəʊ/
-and,/ænd/
 hell,/hɛl/
 adverb,/ˈæd.vɜːb/
-luu,/ˈluu/
-i,/aɪ/
 number,/ˈnʌmbər/
-o,/œ/
-te,/tiː/
 abort,/əˈbɔːt/
-aam,/ɑːm/
-f,/ɛf/
 august,/ˈɔː.ɡəst/
-A,/ɛ/
 teravili,/ˈterɑvili/
 kašelott,/ˈkɑʃelotː/
 lipsusõlm,/ˈlipsuˌsɤlʲm/
@@ -3873,7 +3570,6 @@ hoorama,/ˈhoːrɑmɑ/
 avalikkus,/ˈɑvɑlikːus/
 pärmseen,/ˈpærmˌseːn/
 Aardlapalu,/ˈɑːrd̥lɑpɑlu/
-irw,/irv/
 hädaoht,/ˈhæd̥ɑˌoht/
 Roos,/ɹuːz/
 Ruus,/ruːs/

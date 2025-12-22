@@ -22,6 +22,13 @@ class MarkdownGeneratorService
 
         $letters = $this->abstractQuery->fetch($query);
 
+        $letters = array_filter($letters, function($letterArr) {
+            foreach ($letterArr as $letter) {
+                return preg_match('/^\p{L}$/u', $letter) === 1;
+            }
+            return false;
+        });
+
         foreach ($letters as $letterArr) {
             foreach ($letterArr as $key => $letter) {
                 $query = 'SELECT DISTINCT link FROM lingwhaat.'

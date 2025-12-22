@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://ru.wiktionary.org/wiki/европаса|
+|https://ru.wiktionary.org/wiki/ёрт|
+|https://ru.wiktionary.org/wiki/еджыдлун|
+|https://ru.wiktionary.org/wiki/ёкмыль|
+|https://ru.wiktionary.org/wiki/енлы%20эскӧм|
+|https://ru.wiktionary.org/wiki/Ёдз|
+|https://ru.wiktionary.org/wiki/Ёмвош|
+|https://ru.wiktionary.org/wiki/Ереван|

@@ -8,10 +8,8 @@ use DOMDocument;
 use DOMXPath;
 use Dotenv\Dotenv;
 
-class WiktionaryArticlesIpaParserService
+class WiktionaryArticlesIpaParserService extends AbstractWiktionaryParserService
 {
-    const string WIKTIONARY_BASE_API_LINK = 'https://en.wiktionary.org/w/api.php';
-    const string WIKTIONARY_BASE_URL = 'https://en.wiktionary.org/wiki/';
     const string IPA_NOT_AVAILABLE = 'Not available';
 
     public function __construct(
@@ -102,14 +100,6 @@ class WiktionaryArticlesIpaParserService
         return $this->getWiktionaryBaseUrl($language).$article;
     }
 
-    protected function getWiktionaryBaseUrl($language): string
-    {
-        if ($language == 'dutch') {
-            return "https://nl.wiktionary.org/wiki/";
-        }
-        return self::WIKTIONARY_BASE_URL;
-    }
-
     protected function parseWiktionaryResult(string $html, string $language): string
     {
         try {
@@ -194,14 +184,6 @@ class WiktionaryArticlesIpaParserService
         $result = json_decode($response, true);
 
         return $result['parse']['text']['*'] ?? '';
-    }
-
-    protected function getWiktionaryBaseApiLink(string $language): string
-    {
-        if ($language == 'dutch') {
-            return "https://nl.wiktionary.org/w/api.php";
-        }
-        return self::WIKTIONARY_BASE_API_LINK;
     }
 
 }

@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://ru.wiktionary.org/wiki/жвучкыны|
+|https://ru.wiktionary.org/wiki/жӧник|
+|https://ru.wiktionary.org/wiki/жель|
+|https://ru.wiktionary.org/wiki/жугӧдӧм|
+|https://ru.wiktionary.org/wiki/жонь|
+|https://ru.wiktionary.org/wiki/жов|
+|https://ru.wiktionary.org/wiki/Женева|
+|https://ru.wiktionary.org/wiki/железа|
+|https://ru.wiktionary.org/wiki/жаба|

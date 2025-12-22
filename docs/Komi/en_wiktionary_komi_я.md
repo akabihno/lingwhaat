@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://ru.wiktionary.org/wiki/яблӧг|
+|https://ru.wiktionary.org/wiki/ябыр|
+|https://ru.wiktionary.org/wiki/яблӧк|
+|https://ru.wiktionary.org/wiki/яй|
+|https://ru.wiktionary.org/wiki/Ямайка|
+|https://ru.wiktionary.org/wiki/Япония|
+|https://ru.wiktionary.org/wiki/яд|

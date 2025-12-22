@@ -59,8 +59,10 @@ def predict_ipa(word: str = Query(...), model_name: str = Query(...), file = Que
         ipa = evaluate.predict_ipa(file, word, model_name)
         return {"ipa": ipa}
     except (FileNotFoundError, KeyError, ValueError) as e:
+        logging.error(f"Client error in predict_ipa: {str(e)}")
         return JSONResponse(content={"error": str(e)}, status_code=400)
     except Exception as e:
+        logging.error(f"Server error in predict_ipa: {str(e)}\n{traceback.format_exc()}")
         return JSONResponse(content={"error": "Server error: " + str(e)}, status_code=500)
 
 @app.get("/predict-word/")
@@ -69,6 +71,8 @@ def predict_word(ipa: str = Query(...), model_name: str = Query(...), file = Que
         word = evaluate.predict_word(file, ipa, model_name)
         return {"word": word}
     except (FileNotFoundError, KeyError, ValueError) as e:
+        logging.error(f"Client error in predict_word: {str(e)}")
         return JSONResponse(content={"error": str(e)}, status_code=400)
     except Exception as e:
+        logging.error(f"Server error in predict_word: {str(e)}\n{traceback.format_exc()}")
         return JSONResponse(content={"error": "Server error: " + str(e)}, status_code=500)

@@ -2,16 +2,6 @@
 
 This document contains links to all the IPA (International Phonetic Alphabet) data sources used for language detection and transliteration.
 
-## Data Collection Method
-
-IPA data for universal transliteration was parsed from [Wiktionary](https://en.wiktionary.org/wiki/Wiktionary:Main_Page) using Wikimedia REST API route [/page/html/{title}](https://en.wiktionary.org/api/rest_v1/#/Page%20content/get_page_html__title_)
-
-**Class example:** [WiktionaryArticlesIpaParserService](src/Service/WiktionaryArticlesIpaParserService.php)
-
-Titles (words) were retrieved using MediaWiki API [categorymembers](https://www.mediawiki.org/wiki/API:Categorymembers)
-
-**Class example:** [WiktionaryArticlesCategoriesLatvianService](src/Service/WiktionaryArticlesCategoriesService.php)
-
 ## List of All Articles by Language
 
 Below are links to all articles from which IPA data has been extracted, organized alphabetically by language and then by letter/character:
@@ -738,6 +728,29 @@ List of all articles IPA data has been taken from:
 [χ](docs/Greek/en_wiktionary_greek_χ.md),
 [ψ](docs/Greek/en_wiktionary_greek_ψ.md),
 [ω](docs/Greek/en_wiktionary_greek_ω.md)
+* Hebrew:
+[א](docs/Hebrew/en_wiktionary_hebrew_א.md),
+[ב](docs/Hebrew/en_wiktionary_hebrew_ב.md),
+[ג](docs/Hebrew/en_wiktionary_hebrew_ג.md),
+[ד](docs/Hebrew/en_wiktionary_hebrew_ד.md),
+[ה](docs/Hebrew/en_wiktionary_hebrew_ה.md),
+[ו](docs/Hebrew/en_wiktionary_hebrew_ו.md),
+[ז](docs/Hebrew/en_wiktionary_hebrew_ז.md),
+[ח](docs/Hebrew/en_wiktionary_hebrew_ח.md),
+[ט](docs/Hebrew/en_wiktionary_hebrew_ט.md),
+[י](docs/Hebrew/en_wiktionary_hebrew_י.md),
+[ך](docs/Hebrew/en_wiktionary_hebrew_ך.md),
+[ל](docs/Hebrew/en_wiktionary_hebrew_ל.md),
+[ם](docs/Hebrew/en_wiktionary_hebrew_ם.md),
+[ן](docs/Hebrew/en_wiktionary_hebrew_ן.md),
+[ס](docs/Hebrew/en_wiktionary_hebrew_ס.md),
+[ע](docs/Hebrew/en_wiktionary_hebrew_ע.md),
+[ף](docs/Hebrew/en_wiktionary_hebrew_ף.md),
+[ץ](docs/Hebrew/en_wiktionary_hebrew_ץ.md),
+[ק](docs/Hebrew/en_wiktionary_hebrew_ק.md),
+[ר](docs/Hebrew/en_wiktionary_hebrew_ר.md),
+[ש](docs/Hebrew/en_wiktionary_hebrew_ש.md),
+[ת](docs/Hebrew/en_wiktionary_hebrew_ת.md)
 * Hindi:
 [अ](docs/Hindi/en_wiktionary_hindi_अ.md),
 [आ](docs/Hindi/en_wiktionary_hindi_आ.md),
@@ -1101,6 +1114,34 @@ List of all articles IPA data has been taken from:
 [हौ](docs/Hindi/en_wiktionary_hindi_हौ.md),
 [हं](docs/Hindi/en_wiktionary_hindi_हं.md),
 [हः](docs/Hindi/en_wiktionary_hindi_हः.md)
+* Hungarian:
+[á](docs/Hungarian/en_wiktionary_hungarian_á.md),
+[b](docs/Hungarian/en_wiktionary_hungarian_b.md),
+[c](docs/Hungarian/en_wiktionary_hungarian_c.md),
+[d](docs/Hungarian/en_wiktionary_hungarian_d.md),
+[é](docs/Hungarian/en_wiktionary_hungarian_é.md),
+[f](docs/Hungarian/en_wiktionary_hungarian_f.md),
+[g](docs/Hungarian/en_wiktionary_hungarian_g.md),
+[h](docs/Hungarian/en_wiktionary_hungarian_h.md),
+[í](docs/Hungarian/en_wiktionary_hungarian_í.md),
+[j](docs/Hungarian/en_wiktionary_hungarian_j.md),
+[k](docs/Hungarian/en_wiktionary_hungarian_k.md),
+[l](docs/Hungarian/en_wiktionary_hungarian_l.md),
+[m](docs/Hungarian/en_wiktionary_hungarian_m.md),
+[n](docs/Hungarian/en_wiktionary_hungarian_n.md),
+[ó](docs/Hungarian/en_wiktionary_hungarian_ó.md),
+[p](docs/Hungarian/en_wiktionary_hungarian_p.md),
+[q](docs/Hungarian/en_wiktionary_hungarian_q.md),
+[r](docs/Hungarian/en_wiktionary_hungarian_r.md),
+[s](docs/Hungarian/en_wiktionary_hungarian_s.md),
+[t](docs/Hungarian/en_wiktionary_hungarian_t.md),
+[ű](docs/Hungarian/en_wiktionary_hungarian_ű.md),
+[v](docs/Hungarian/en_wiktionary_hungarian_v.md),
+[w](docs/Hungarian/en_wiktionary_hungarian_w.md),
+[x](docs/Hungarian/en_wiktionary_hungarian_x.md),
+[y](docs/Hungarian/en_wiktionary_hungarian_y.md),
+[z](docs/Hungarian/en_wiktionary_hungarian_z.md),
+[𐳀](docs/Hungarian/en_wiktionary_hungarian_𐳀.md),
 * Italian:
 [a](docs/Italian/en_wiktionary_italian_a.md),
 [à](docs/Italian/en_wiktionary_italian_à.md),
@@ -1222,6 +1263,36 @@ List of all articles IPA data has been taken from:
 [ۋ](docs/Kazakh/en_wiktionary_kazakh_ۋ.md),
 [ي](docs/Kazakh/en_wiktionary_kazakh_ي.md),
 [ء](docs/Kazakh/en_wiktionary_kazakh_ء.md),
+* Komi:
+[а](docs/Komi/en_wiktionary_komi_а.md),
+[б](docs/Komi/en_wiktionary_komi_б.md),
+[в](docs/Komi/en_wiktionary_komi_в.md),
+[г](docs/Komi/en_wiktionary_komi_г.md),
+[д](docs/Komi/en_wiktionary_komi_д.md),
+[е](docs/Komi/en_wiktionary_komi_е.md),
+[ж](docs/Komi/en_wiktionary_komi_ж.md),
+[з](docs/Komi/en_wiktionary_komi_з.md),
+[и](docs/Komi/en_wiktionary_komi_и.md),
+[й](docs/Komi/en_wiktionary_komi_й.md),
+[к](docs/Komi/en_wiktionary_komi_к.md),
+[л](docs/Komi/en_wiktionary_komi_л.md),
+[м](docs/Komi/en_wiktionary_komi_м.md),
+[н](docs/Komi/en_wiktionary_komi_н.md),
+[о](docs/Komi/en_wiktionary_komi_о.md),
+[п](docs/Komi/en_wiktionary_komi_п.md),
+[р](docs/Komi/en_wiktionary_komi_р.md),
+[с](docs/Komi/en_wiktionary_komi_с.md),
+[т](docs/Komi/en_wiktionary_komi_т.md),
+[у](docs/Komi/en_wiktionary_komi_у.md),
+[ф](docs/Komi/en_wiktionary_komi_ф.md),
+[х](docs/Komi/en_wiktionary_komi_х.md),
+[ц](docs/Komi/en_wiktionary_komi_ц.md),
+[ч](docs/Komi/en_wiktionary_komi_ч.md),
+[ш](docs/Komi/en_wiktionary_komi_ш.md),
+[ы](docs/Komi/en_wiktionary_komi_ы.md),
+[э](docs/Komi/en_wiktionary_komi_э.md),
+[ю](docs/Komi/en_wiktionary_komi_ю.md),
+[я](docs/Komi/en_wiktionary_komi_я.md)
 * Latin:
 [a](docs/Latin/en_wiktionary_latin_a.md),
 [b](docs/Latin/en_wiktionary_latin_b.md),

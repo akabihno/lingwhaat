@@ -42,4 +42,7 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.language_parse_schedule TO '${MYSQL_WEB_
 
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_danish_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_icelandic_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_hungarian_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_komi_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_swahili_language TO '${MYSQL_WEB_USER}'@'%';
 FLUSH PRIVILEGES;

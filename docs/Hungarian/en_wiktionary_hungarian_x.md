@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/x-edik|
+|https://en.wiktionary.org/wiki/xeroxozik|
+|https://en.wiktionary.org/wiki/xenotranszplantáció|
+|https://en.wiktionary.org/wiki/Xerxész|
+|https://en.wiktionary.org/wiki/xenofóbia|
+|https://en.wiktionary.org/wiki/Xavér|
+|https://en.wiktionary.org/wiki/xenon%20villanólámpa|
+|https://en.wiktionary.org/wiki/xilofon|
+|https://en.wiktionary.org/wiki/x|
+|https://en.wiktionary.org/wiki/Xerox|
+|https://en.wiktionary.org/wiki/xenon|

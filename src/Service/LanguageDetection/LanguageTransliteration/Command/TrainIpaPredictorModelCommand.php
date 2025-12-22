@@ -20,6 +20,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 #[AsCommand(name: 'ml:train:ipa-predictor')]
 class TrainIpaPredictorModelCommand extends Command
 {
+    protected const int DATASET_LIMIT = 1000000;
     protected string $trainingDataPath;
 
     public function __construct(
@@ -36,7 +37,8 @@ class TrainIpaPredictorModelCommand extends Command
             ->addOption('lang', 'l', InputOption::VALUE_REQUIRED,
                 'Language name (e.g., latvian, norwegian, dutch)'
             )->addOption('prepare', 'p', InputOption::VALUE_OPTIONAL,
-                'Optional argument to update existing dataset in CSV file (can be used if data in DB was populated)');
+                'Optional argument to update existing dataset in CSV file (can be used if data in DB was populated)')
+            ->addOption('save_only', 's', InputOption::VALUE_OPTIONAL, 'Save dataset to CSV file only, do not train model');
     }
 
     /**
@@ -72,6 +74,7 @@ class TrainIpaPredictorModelCommand extends Command
 
         $languageName = $input->getOption('lang');
         $prepare = $input->getOption('prepare');
+        $saveOnly = $input->getOption('save_only');
 
         if (!$languageName) {
             $output->writeln('<error>No language provided in --lang parameter.</error>');
@@ -89,7 +92,7 @@ class TrainIpaPredictorModelCommand extends Command
         $langFileName = strtolower($languageName);
         $this->trainingDataPath = realpath(".")."/ml_service/data/{$langFileName}.csv";
 
-        $trainingDatasetArray = $repository->findAllNamesAndIpa();
+        $trainingDatasetArray = $repository->findAllNamesAndIpaWithMaxLength(self::DATASET_LIMIT);
 
         if (!$trainingDatasetArray) {
             $output->writeln('<error>No valid data found for training.</error>');
@@ -114,20 +117,22 @@ class TrainIpaPredictorModelCommand extends Command
 
         $file = new File($this->trainingDataPath);
 
-        $response = $this->httpClient->request('POST', 'http://'.IpaPredictorConstants::getMlServiceHost().':'.IpaPredictorConstants::getMlServicePort().'/'.IpaPredictorConstants::getMlServiceTrainIpaRoute().'/', [
-            'headers' => [
-                'Content-Type' => 'multipart/form-data',
-            ],
-            'body' => [
-                'file' => fopen($file->getRealPath(), 'r'),
-            ],
-            'timeout' => 600,
-        ]);
+        if (!$saveOnly) {
+            $response = $this->httpClient->request('POST', 'http://'.IpaPredictorConstants::getMlServiceHost().':'.IpaPredictorConstants::getMlServicePort().'/'.IpaPredictorConstants::getMlServiceTrainIpaRoute().'/', [
+                'headers' => [
+                    'Content-Type' => 'multipart/form-data',
+                ],
+                'body' => [
+                    'file' => fopen($file->getRealPath(), 'r'),
+                ],
+                'timeout' => 600,
+            ]);
 
-        $statusCode = $response->getStatusCode();
-        $content = $response->getContent();
+            $statusCode = $response->getStatusCode();
+            $content = $response->getContent();
 
-        $output->writeln("Training scheduled on dataset {$this->trainingDataPath} with status {$statusCode}");
+            $output->writeln("Training scheduled on dataset {$this->trainingDataPath} with status {$statusCode}");
+        }
 
         return Command::SUCCESS;
     }

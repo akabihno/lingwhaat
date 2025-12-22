@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://ru.wiktionary.org/wiki/йылавек|
+|https://ru.wiktionary.org/wiki/йӧлӧ-вӧлӧ|
+|https://ru.wiktionary.org/wiki/йиджтӧм|
+|https://ru.wiktionary.org/wiki/йитчанлун|
+|https://ru.wiktionary.org/wiki/йитӧс|
+|https://ru.wiktionary.org/wiki/йӧзви|
+|https://ru.wiktionary.org/wiki/йӧрсӧн|
+|https://ru.wiktionary.org/wiki/йӧра|
+|https://ru.wiktionary.org/wiki/йӧлӧга|
+|https://ru.wiktionary.org/wiki/йирым%20тӧлысь|
+|https://ru.wiktionary.org/wiki/йирым|
+|https://ru.wiktionary.org/wiki/йи|

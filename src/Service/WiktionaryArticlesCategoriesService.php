@@ -5,9 +5,8 @@ namespace App\Service;
 use App\Query\AbstractQuery;
 use Dotenv\Dotenv;
 
-class WiktionaryArticlesCategoriesService
+class WiktionaryArticlesCategoriesService extends AbstractWiktionaryParserService
 {
-    const string WIKTIONARY_BASE_API_LINK = 'https://en.wiktionary.org/w/api.php';
     const int WIKTIONARY_RESULT_LIMIT = 500;
 
     public function __construct(protected AbstractQuery $abstractQuery)
@@ -55,15 +54,6 @@ class WiktionaryArticlesCategoriesService
         } while (true);
     }
 
-    protected function getWiktionaryBaseApiLink($language): string
-    {
-        if ($language == 'dutch') {
-            return "https://nl.wiktionary.org/w/api.php";
-        } else {
-            return self::WIKTIONARY_BASE_API_LINK;
-        }
-    }
-
     protected function getCmtitle(string $language): string
     {
         if (str_contains($language, 'old')) {
@@ -72,7 +62,10 @@ class WiktionaryArticlesCategoriesService
             return "Category:Middle_".ucfirst($this->trimLanguageName($language, 'middle'))."_lemmas";
         } elseif ($language == 'dutch') {
             return "Categorie:Woorden_in_het_Nederlands";
-        } else {
+        } elseif ($language == 'komi') {
+            return "Категория:Коми-зырянский_язык";
+        }
+        else {
             return "Category:".ucfirst($language)."_lemmas";
         }
     }
