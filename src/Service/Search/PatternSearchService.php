@@ -225,9 +225,9 @@ class PatternSearchService
     {
         $conditions = [];
 
-        // Get the word field value from doc values
-        $script = "if (doc['word'].size() == 0) { return false; } ";
-        $script .= "String word = doc['word'].value.toLowerCase(); ";
+        // Get the word field value from keyword field (text fields don't have doc values)
+        $script = "if (doc['word.keyword'].size() == 0) { return false; } ";
+        $script .= "String word = doc['word.keyword'].value.toLowerCase(); ";
 
         // Check minimum length
         $maxPosition = 0;
