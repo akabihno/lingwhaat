@@ -7,6 +7,7 @@ use Elastica\Client;
 use Elastica\Query;
 use Elastica\Query\Regexp;
 use Elastica\Query\Wildcard;
+use Elastica\Script\Script;
 use Exception;
 
 class PatternSearchService
@@ -162,12 +163,14 @@ class PatternSearchService
         }
 
         try {
-            $regexpPattern = $this->buildRegexpPattern($samePositions, $fixedChars);
+            $scriptSource = $this->buildPainlessScript($samePositions, $fixedChars);
 
-            $regexpQuery = new Regexp('word', $regexpPattern);
+            $scriptQuery = new Query\Script(
+                new Script($scriptSource)
+            );
 
             $query = new Query\BoolQuery();
-            $query->addMust($regexpQuery);
+            $query->addFilter($scriptQuery);
 
             if ($languageCode !== null) {
                 $languageQuery = new Query\Term();
@@ -180,7 +183,7 @@ class PatternSearchService
 
             $this->logger->info('Advanced pattern search initiated', [
                 'service' => '[PatternSearchService]',
-                'regexp_pattern' => $regexpPattern,
+                'script' => $scriptSource,
                 'same_positions' => $samePositions,
                 'fixed_chars' => $fixedChars,
                 'languageCode' => $languageCode,
@@ -195,7 +198,7 @@ class PatternSearchService
 
             $this->logger->info('Advanced pattern search completed', [
                 'service' => '[PatternSearchService]',
-                'regexp_pattern' => $regexpPattern,
+                'script' => $scriptSource,
                 'result_count' => count($result),
             ]);
 
@@ -213,74 +216,69 @@ class PatternSearchService
     }
 
     /**
-     * Builds a regular expression pattern based on positional constraints.
+     * Builds a Painless script for positional pattern matching.
      *
      * @param array $samePositions Groups of positions that must contain the same character
      * @param array $fixedChars Fixed characters at specific positions
-     * @return string Regular expression pattern for Elasticsearch
+     * @return string Painless script for Elasticsearch
      */
-    private function buildRegexpPattern(array $samePositions, array $fixedChars): string
+    private function buildPainlessScript(array $samePositions, array $fixedChars): string
     {
-        $positionMap = [];
-        $captureGroupCount = 0;
+        $conditions = [];
 
+        // Get the word field value
+        $script = "String word = doc['word.keyword'].size() > 0 ? doc['word.keyword'].value.toLowerCase() : ''; ";
+
+        // Check minimum length
+        $maxPosition = 0;
         foreach ($samePositions as $group) {
-            if (empty($group)) {
+            foreach ($group as $position) {
+                if ($position > $maxPosition) {
+                    $maxPosition = $position;
+                }
+            }
+        }
+        foreach ($fixedChars as $position => $char) {
+            if ($position > $maxPosition) {
+                $maxPosition = $position;
+            }
+        }
+
+        if ($maxPosition > 0) {
+            $conditions[] = "word.length() >= $maxPosition";
+        }
+
+        // Add same position constraints
+        foreach ($samePositions as $groupIndex => $group) {
+            if (empty($group) || count($group) < 2) {
                 continue;
             }
 
             sort($group);
-            $captureGroupCount++;
+            $firstPos = $group[0] - 1; // Convert to 0-indexed
 
-            foreach ($group as $position) {
-                if ($position < 1) {
-                    continue;
-                }
-                $positionMap[$position] = [
-                    'type' => 'capture',
-                    'group' => $captureGroupCount,
-                    'isFirst' => $position === $group[0],
-                ];
+            for ($i = 1; $i < count($group); $i++) {
+                $currentPos = $group[$i] - 1; // Convert to 0-indexed
+                $conditions[] = "word.charAt($firstPos) == word.charAt($currentPos)";
             }
         }
 
+        // Add fixed character constraints
         foreach ($fixedChars as $position => $char) {
             if ($position < 1) {
                 continue;
             }
-            $positionMap[$position] = [
-                'type' => 'fixed',
-                'char' => strtolower($char),
-            ];
+            $pos = $position - 1; // Convert to 0-indexed
+            $escapedChar = addslashes(strtolower($char));
+            $conditions[] = "word.charAt($pos) == '$escapedChar'";
         }
 
-        if (empty($positionMap)) {
-            return '.*';
+        if (empty($conditions)) {
+            return "return true;";
         }
 
-        $maxPosition = max(array_keys($positionMap));
-        $pattern = '';
+        $script .= "return " . implode(" && ", $conditions) . ";";
 
-        for ($i = 1; $i <= $maxPosition; $i++) {
-            if (isset($positionMap[$i])) {
-                $constraint = $positionMap[$i];
-
-                if ($constraint['type'] === 'fixed') {
-                    $pattern .= preg_quote($constraint['char'], '/');
-                } elseif ($constraint['type'] === 'capture') {
-                    if ($constraint['isFirst']) {
-                        $pattern .= '(.)';
-                    } else {
-                        $pattern .= '\\' . $constraint['group'];
-                    }
-                }
-            } else {
-                $pattern .= '.';
-            }
-        }
-
-        $pattern .= '.*';
-
-        return $pattern;
+        return $script;
     }
 }
