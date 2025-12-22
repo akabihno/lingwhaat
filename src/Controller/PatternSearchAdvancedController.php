@@ -39,6 +39,13 @@ class PatternSearchAdvancedController extends PatternSearchController
                     example: ['2' => 'o', '5' => 'x']
                 ),
                 new OA\Property(
+                    property: 'exactLength',
+                    description: 'Optional exact word length filter',
+                    type: 'integer',
+                    example: 5,
+                    nullable: true
+                ),
+                new OA\Property(
                     property: 'languageCode',
                     description: 'Optional language code to filter results (e.g., en, ka, ru)',
                     type: 'string',
@@ -58,6 +65,7 @@ class PatternSearchAdvancedController extends PatternSearchController
             example: [
                 'samePositions' => [[1, 3, 6]],
                 'fixedChars' => ['2' => 'o'],
+                'exactLength' => 7,
                 'languageCode' => 'en',
                 'limit' => 100
             ]
@@ -101,6 +109,7 @@ class PatternSearchAdvancedController extends PatternSearchController
 
         $samePositions = $data['samePositions'] ?? [];
         $fixedChars = $data['fixedChars'] ?? [];
+        $exactLength = isset($data['exactLength']) ? (int) $data['exactLength'] : null;
         $languageCode = $data['languageCode'] ?? null;
         $limit = (int) ($data['limit'] ?? 100);
 
@@ -125,6 +134,13 @@ class PatternSearchAdvancedController extends PatternSearchController
             );
         }
 
+        if ($exactLength !== null && $exactLength < 1) {
+            return new JsonResponse(
+                ['error' => 'exactLength must be a positive integer'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
         if ($limit < 1 || $limit > 1000) {
             return new JsonResponse(
                 ['error' => 'Limit must be between 1 and 1000'],
@@ -136,6 +152,7 @@ class PatternSearchAdvancedController extends PatternSearchController
             $results = $this->patternSearchService->findByAdvancedPattern(
                 $samePositions,
                 $fixedChars,
+                $exactLength,
                 $languageCode,
                 $limit
             );

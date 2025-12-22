@@ -5,7 +5,6 @@ namespace App\Service\Search;
 use App\Service\Logging\ElasticsearchLogger;
 use Elastica\Client;
 use Elastica\Query;
-use Elastica\Query\Regexp;
 use Elastica\Query\Wildcard;
 use Elastica\Script\Script;
 use Exception;
@@ -148,6 +147,7 @@ class PatternSearchService
      *                             Example: [[1,3,6], [2,4]] means positions 1,3,6 are same AND positions 2,4 are same
      * @param array $fixedChars Associative array of position => character for fixed positions
      *                          Example: [2 => 'o', 5 => 'x'] means position 2 must be 'o' and position 5 must be 'x'
+     * @param int|null $exactLength Optional exact word length filter
      * @param string|null $languageCode Optional language filter
      * @param int $limit Maximum number of results to return
      * @return array Array of matching words with their IPA and language code
@@ -155,6 +155,7 @@ class PatternSearchService
     public function findByAdvancedPattern(
         array $samePositions = [],
         array $fixedChars = [],
+        ?int $exactLength = null,
         ?string $languageCode = null,
         int $limit = 100
     ): array {
@@ -163,7 +164,7 @@ class PatternSearchService
         }
 
         try {
-            $scriptSource = $this->buildPainlessScript($samePositions, $fixedChars);
+            $scriptSource = $this->buildPainlessScript($samePositions, $fixedChars, $exactLength);
 
             $script = new Script($scriptSource, null, 'painless');
             $scriptQuery = new Query\Script($script);
@@ -185,6 +186,7 @@ class PatternSearchService
                 'script' => $scriptSource,
                 'same_positions' => $samePositions,
                 'fixed_chars' => $fixedChars,
+                'exact_length' => $exactLength,
                 'languageCode' => $languageCode,
                 'limit' => $limit,
             ]);
@@ -207,6 +209,7 @@ class PatternSearchService
                 'service' => '[PatternSearchService]',
                 'same_positions' => $samePositions,
                 'fixed_chars' => $fixedChars,
+                'exact_length' => $exactLength,
                 'error' => $e->getMessage(),
             ]);
 
@@ -219,9 +222,10 @@ class PatternSearchService
      *
      * @param array $samePositions Groups of positions that must contain the same character
      * @param array $fixedChars Fixed characters at specific positions
+     * @param int|null $exactLength Optional exact word length
      * @return string Painless script for Elasticsearch
      */
-    private function buildPainlessScript(array $samePositions, array $fixedChars): string
+    private function buildPainlessScript(array $samePositions, array $fixedChars, ?int $exactLength = null): string
     {
         $conditions = [];
 
@@ -229,23 +233,28 @@ class PatternSearchService
         $script = "if (doc['word.keyword'].size() == 0) { return false; } ";
         $script .= "String word = doc['word.keyword'].value.toLowerCase(); ";
 
-        // Check minimum length
-        $maxPosition = 0;
-        foreach ($samePositions as $group) {
-            foreach ($group as $position) {
+        // Check exact length if specified
+        if ($exactLength !== null && $exactLength > 0) {
+            $conditions[] = "word.length() == $exactLength";
+        } else {
+            // Check minimum length based on position constraints
+            $maxPosition = 0;
+            foreach ($samePositions as $group) {
+                foreach ($group as $position) {
+                    if ($position > $maxPosition) {
+                        $maxPosition = $position;
+                    }
+                }
+            }
+            foreach ($fixedChars as $position => $char) {
                 if ($position > $maxPosition) {
                     $maxPosition = $position;
                 }
             }
-        }
-        foreach ($fixedChars as $position => $char) {
-            if ($position > $maxPosition) {
-                $maxPosition = $position;
-            }
-        }
 
-        if ($maxPosition > 0) {
-            $conditions[] = "word.length() >= $maxPosition";
+            if ($maxPosition > 0) {
+                $conditions[] = "word.length() >= $maxPosition";
+            }
         }
 
         // Add same position constraints
