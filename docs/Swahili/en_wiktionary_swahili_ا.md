@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/اِـ|
+|https://en.wiktionary.org/wiki/اِلاَّ|
+|https://en.wiktionary.org/wiki/اَوُ|
+|https://en.wiktionary.org/wiki/اِغَ|
+|https://en.wiktionary.org/wiki/اِدَ|
+|https://en.wiktionary.org/wiki/اُلِمِغُ|
+|https://en.wiktionary.org/wiki/اِيْـ|

@@ -23,7 +23,7 @@ This project aims to detect the language of written text with high speed and acc
 | Lithuanian      | Middle Dutch | Norwegian          | Old Dutch |
 | Polish          | Portuguese   | Romanian           | Russian   |
 | Serbo-Croatian* | Spanish      | Tagalog (Filipino) | Turkish   |
-| Ukrainian       | Uzbek        |                    |           |
+| Ukrainian       | Uzbek        | Swahili            |           |
 
 *Serbo-Croatian includes: Bosnian, Croatian, Montenegrin, Serbian
 

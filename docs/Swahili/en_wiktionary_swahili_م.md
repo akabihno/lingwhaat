@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/مْـ|
+|https://en.wiktionary.org/wiki/مَيُتُ|
+|https://en.wiktionary.org/wiki/مُوَاغَزَ|
+|https://en.wiktionary.org/wiki/مَانَ|
+|https://en.wiktionary.org/wiki/مُيُوْنِ|
+|https://en.wiktionary.org/wiki/مُيُ|
+|https://en.wiktionary.org/wiki/مَاسِ|

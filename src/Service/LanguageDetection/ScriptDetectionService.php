@@ -67,6 +67,8 @@ class ScriptDetectionService
             LanguageMappings::ICELANDIC_LANGUAGE_NAME,
             LanguageMappings::KAZAKH_LANGUAGE_NAME,
             LanguageMappings::UZBEK_LANGUAGE_NAME,
+            LanguageMappings::HUNGARIAN_LANGUAGE_NAME,
+            LanguageMappings::SWAHILI_LANGUAGE_NAME,
         ];
     }
 
@@ -91,6 +93,7 @@ class ScriptDetectionService
             LanguageMappings::UKRAINIAN_LANGUAGE_NAME,
             LanguageMappings::KAZAKH_LANGUAGE_NAME,
             LanguageMappings::UZBEK_LANGUAGE_NAME,
+            LanguageMappings::KOMI_LANGUAGE_NAME,
         ];
 
     }

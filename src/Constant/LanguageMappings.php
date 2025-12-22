@@ -82,6 +82,16 @@ class LanguageMappings
     public const string ICELANDIC_LANGUAGE_NAME = 'Islandic';
     public const string HEBREW_LANGUAGE_CODE = 'he';
     public const string HEBREW_LANGUAGE_NAME = 'Hebrew';
+    public const string HUNGARIAN_LANGUAGE_CODE = 'hu';
+    public const string HUNGARIAN_LANGUAGE_NAME = 'Hungarian';
+    public const string SWAHILI_LANGUAGE_CODE = 'sw';
+    public const string SWAHILI_LANGUAGE_NAME = 'Swahili';
+    public const string KOMI_LANGUAGE_CODE = 'kv';
+    public const string KOMI_LANGUAGE_NAME = 'Komi';
+    public const string MONGOLIAN_LANGUAGE_CODE = 'mn';
+    public const string MONGOLIAN_LANGUAGE_NAME = 'Mongolian';
+    public const string GALICIAN_LANGUAGE_CODE = 'gl';
+    public const string GALICIAN_LANGUAGE_NAME = 'Galician';
 
     public static function getLanguageCodes(): array
     {
@@ -124,6 +134,11 @@ class LanguageMappings
             self::DANISH_LANGUAGE_CODE,
             self::ICELANDIC_LANGUAGE_CODE,
             self::HEBREW_LANGUAGE_CODE,
+            self::HUNGARIAN_LANGUAGE_CODE,
+            self::SWAHILI_LANGUAGE_CODE,
+            self::KOMI_LANGUAGE_CODE,
+            self::MONGOLIAN_LANGUAGE_CODE,
+            self::GALICIAN_LANGUAGE_CODE,
         ];
     }
 
@@ -169,6 +184,11 @@ class LanguageMappings
             'DanishLanguageEntity' => self::DANISH_LANGUAGE_CODE,
             'IcelandicLanguageEntity' => self::ICELANDIC_LANGUAGE_CODE,
             'HebrewLanguageEntity' => self::HEBREW_LANGUAGE_CODE,
+            'HungarianLanguageEntity' => self::HUNGARIAN_LANGUAGE_CODE,
+            'SwahiliLanguageEntity' => self::SWAHILI_LANGUAGE_CODE,
+            'KomiLanguageEntity' => self::KOMI_LANGUAGE_CODE,
+            'MongolianLanguageEntity' => self::MONGOLIAN_LANGUAGE_CODE,
+            'GalicianLanguageEntity' => self::GALICIAN_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {
@@ -221,6 +241,11 @@ class LanguageMappings
             self::DANISH_LANGUAGE_NAME => self::DANISH_LANGUAGE_CODE,
             self::ICELANDIC_LANGUAGE_NAME => self::ICELANDIC_LANGUAGE_CODE,
             self::HEBREW_LANGUAGE_NAME => self::HEBREW_LANGUAGE_CODE,
+            self::HUNGARIAN_LANGUAGE_NAME => self::HUNGARIAN_LANGUAGE_CODE,
+            self::SWAHILI_LANGUAGE_NAME => self::SWAHILI_LANGUAGE_CODE,
+            self::KOMI_LANGUAGE_NAME => self::KOMI_LANGUAGE_CODE,
+            self::MONGOLIAN_LANGUAGE_NAME => self::MONGOLIAN_LANGUAGE_CODE,
+            self::GALICIAN_LANGUAGE_NAME => self::GALICIAN_LANGUAGE_CODE,
         ];
 
         return $map[$languageName] ?? null;
