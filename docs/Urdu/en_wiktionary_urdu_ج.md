@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/جامعہ|
+|https://en.wiktionary.org/wiki/جائیداد|
+|https://en.wiktionary.org/wiki/جوانی|
+|https://en.wiktionary.org/wiki/جھٹکا|
+|https://en.wiktionary.org/wiki/جھمیلا|
+|https://en.wiktionary.org/wiki/جان|
+|https://en.wiktionary.org/wiki/جنگل|

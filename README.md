@@ -5,7 +5,7 @@ This project aims to detect the language of written text with high speed and acc
 ## Features
 
 - Fast and accurate language detection
-- Support for 38+ languages including modern and historical variants
+- Support for 46 languages
 - IPA-based transliteration system
 - Data sourced from Wiktionary using MediaWiki APIs
 - Docker-based deployment
@@ -13,17 +13,19 @@ This project aims to detect the language of written text with high speed and acc
 ## Supported Languages
 
 |                 |              |                    |           |
-|-----------------|--------------|--------------------|-----------|
-| Afar            | Afrikaans    | Albanian           | Armenian  |
-| Bengali         | Breton       | Czech              | Danish    |
-| Dutch           | English      | Estonian           | French    |
-| Georgian        | German       | Greek              | Hebrew    |
-| Hindi           | Hungarian    | Icelandic          | Italian   |
-| Kazakh          | Komi         | Latin              | Latvian   |
-| Lithuanian      | Middle Dutch | Norwegian          | Old Dutch |
+|-----------------|--------------|--------------------|-----------| 
+| Afar            | Afrikaans    | Albanian           | Arabic    |
+| Armenian        | Bengali      | Breton             | Czech     |
+| Danish          | Dutch        | English            | Estonian  |
+| French          | Galician     | Georgian           | German    |
+| Greek           | Hausa        | Hebrew             | Hindi     |
+| Hungarian       | Icelandic    | Italian            | Kazakh    |
+| Komi            | Latin        | Latvian            | Lithuanian|
+| Middle Dutch    | Mongolian    | Norwegian          | Old Dutch |
 | Polish          | Portuguese   | Romanian           | Russian   |
-| Serbo-Croatian* | Spanish      | Tagalog (Filipino) | Turkish   |
-| Ukrainian       | Uzbek        | Swahili            |           |
+| Serbo-Croatian* | Somali       | Spanish            | Swahili   |
+| Swedish         | Tagalog      | Turkish            | Ukrainian |
+| Urdu            | Uzbek        |                    |           |
 
 *Serbo-Croatian includes: Bosnian, Croatian, Montenegrin, Serbian
 

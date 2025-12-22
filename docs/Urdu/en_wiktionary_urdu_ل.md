@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/لوک%20لاج|
+|https://en.wiktionary.org/wiki/لہہ|
+|https://en.wiktionary.org/wiki/لکیر|
+|https://en.wiktionary.org/wiki/لال%20بیگ|
+|https://en.wiktionary.org/wiki/لب|
+|https://en.wiktionary.org/wiki/لندن|
+|https://en.wiktionary.org/wiki/لغت|

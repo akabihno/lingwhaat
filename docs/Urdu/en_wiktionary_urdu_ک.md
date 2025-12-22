@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/کوکا%20کولا|
+|https://en.wiktionary.org/wiki/کپ|
+|https://en.wiktionary.org/wiki/کراچی|
+|https://en.wiktionary.org/wiki/کرکٹ|
+|https://en.wiktionary.org/wiki/کھانگ|
+|https://en.wiktionary.org/wiki/کنیا|
+|https://en.wiktionary.org/wiki/کشی|
+|https://en.wiktionary.org/wiki/کانچ|
+|https://en.wiktionary.org/wiki/کلیدی|
+|https://en.wiktionary.org/wiki/کلیجا|
+|https://en.wiktionary.org/wiki/کرم|
+|https://en.wiktionary.org/wiki/کھیرا|

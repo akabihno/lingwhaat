@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/خپلو|
+|https://en.wiktionary.org/wiki/خستہ|
+|https://en.wiktionary.org/wiki/خارجی|
+|https://en.wiktionary.org/wiki/خوانچہ|
+|https://en.wiktionary.org/wiki/خواب%20گاہ|
+|https://en.wiktionary.org/wiki/خصم|
+|https://en.wiktionary.org/wiki/خیر%20خواہ|
+|https://en.wiktionary.org/wiki/خرچ|
+|https://en.wiktionary.org/wiki/خیابان|
+|https://en.wiktionary.org/wiki/خوب|
+|https://en.wiktionary.org/wiki/خواب|
+|https://en.wiktionary.org/wiki/خلیفہ|
+|https://en.wiktionary.org/wiki/خون|
+|https://en.wiktionary.org/wiki/خاوند|
+|https://en.wiktionary.org/wiki/خط|

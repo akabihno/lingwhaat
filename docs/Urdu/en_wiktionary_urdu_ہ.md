@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ہدایات|
+|https://en.wiktionary.org/wiki/ہمسایہ|
+|https://en.wiktionary.org/wiki/ہندوکش|
+|https://en.wiktionary.org/wiki/ہندسہ|
+|https://en.wiktionary.org/wiki/ہنڈار|
+|https://en.wiktionary.org/wiki/ہاردک|
+|https://en.wiktionary.org/wiki/ہمیشہ|
