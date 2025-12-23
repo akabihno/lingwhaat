@@ -6,7 +6,7 @@ This document contains links to all the IPA (International Phonetic Alphabet) da
 
 Below are links to all articles from which IPA data has been extracted, organized alphabetically by language and then by letter/character:
 
-Class example: [WiktionaryArticlesCategoriesLatvianService](src/Service/WiktionaryArticlesCategoriesService.php)\
+Parser implementation: [WiktionaryArticlesCategoriesService](src/Service/WiktionaryArticlesCategoriesService.php)\
 List of all articles IPA data has been taken from:
 * Afar:
 [a](docs/Afar/en_wiktionary_afar_a.md),
