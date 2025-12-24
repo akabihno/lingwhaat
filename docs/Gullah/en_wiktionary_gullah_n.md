@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/nai|
+|https://en.wiktionary.org/wiki/nekkity|
+|https://en.wiktionary.org/wiki/nakid|
+|https://en.wiktionary.org/wiki/njung|
+|https://en.wiktionary.org/wiki/nuh|
+|https://en.wiktionary.org/wiki/nywes|
+|https://en.wiktionary.org/wiki/nort|
+|https://en.wiktionary.org/wiki/naby|

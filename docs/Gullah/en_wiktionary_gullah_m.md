@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/menga|
+|https://en.wiktionary.org/wiki/min'|
+|https://en.wiktionary.org/wiki/mot|
+|https://en.wiktionary.org/wiki/Mond'y|
+|https://en.wiktionary.org/wiki/me-sef|
+|https://en.wiktionary.org/wiki/me-own|
+|https://en.wiktionary.org/wiki/muh|
+|https://en.wiktionary.org/wiki/me|
+|https://en.wiktionary.org/wiki/murruh|

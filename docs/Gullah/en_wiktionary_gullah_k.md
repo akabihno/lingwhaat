@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/kange|
+|https://en.wiktionary.org/wiki/kandi|
+|https://en.wiktionary.org/wiki/kan|
+|https://en.wiktionary.org/wiki/kambaboli|
+|https://en.wiktionary.org/wiki/kalunga|
+|https://en.wiktionary.org/wiki/kala|
+|https://en.wiktionary.org/wiki/kakatulu|
+|https://en.wiktionary.org/wiki/kafa|

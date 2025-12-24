@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\RateLimiter\RateLimiterFactory;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[OA\Tag(name: 'Language Detection')]
 class LanguageTransliterationDetectionController extends AbstractController
 {
     public function __construct(

@@ -753,6 +753,29 @@ List of all articles IPA data has been taken from:
 [χ](docs/Greek/en_wiktionary_greek_χ.md),
 [ψ](docs/Greek/en_wiktionary_greek_ψ.md),
 [ω](docs/Greek/en_wiktionary_greek_ω.md)
+* Gullah:
+[a](docs/Gullah/en_wiktionary_gullah_a.md),
+[b](docs/Gullah/en_wiktionary_gullah_b.md),
+[c](docs/Gullah/en_wiktionary_gullah_c.md),
+[d](docs/Gullah/en_wiktionary_gullah_d.md),
+[e](docs/Gullah/en_wiktionary_gullah_e.md),
+[f](docs/Gullah/en_wiktionary_gullah_f.md),
+[g](docs/Gullah/en_wiktionary_gullah_g.md),
+[h](docs/Gullah/en_wiktionary_gullah_h.md),
+[i](docs/Gullah/en_wiktionary_gullah_i.md),
+[j](docs/Gullah/en_wiktionary_gullah_j.md),
+[k](docs/Gullah/en_wiktionary_gullah_k.md),
+[l](docs/Gullah/en_wiktionary_gullah_l.md),
+[m](docs/Gullah/en_wiktionary_gullah_m.md),
+[n](docs/Gullah/en_wiktionary_gullah_n.md),
+[o](docs/Gullah/en_wiktionary_gullah_o.md),
+[p](docs/Gullah/en_wiktionary_gullah_p.md),
+[r](docs/Gullah/en_wiktionary_gullah_r.md),
+[s](docs/Gullah/en_wiktionary_gullah_s.md),
+[t](docs/Gullah/en_wiktionary_gullah_t.md),
+[u](docs/Gullah/en_wiktionary_gullah_u.md),
+[w](docs/Gullah/en_wiktionary_gullah_w.md),
+[y](docs/Gullah/en_wiktionary_gullah_y.md)
 * Hausa:
 [a](docs/Hausa/en_wiktionary_hausa_a.md),
 [b](docs/Hausa/en_wiktionary_hausa_b.md),
@@ -2065,4 +2088,4 @@ List of all articles IPA data has been taken from:
 [ه](docs/Uzbek/en_wiktionary_uzbek_ه.md),
 [ۋ](docs/Uzbek/en_wiktionary_uzbek_ۋ.md),
 [ی](docs/Uzbek/en_wiktionary_uzbek_ی.md),
-
+* Vietnamese: see [Vietnamese](docs/Vietnamese/index.md)

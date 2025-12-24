@@ -16,6 +16,7 @@ class ScriptDetectionService
     public const string ARMENIAN_SCRIPT = 'Armenian';
     public const string GEORGIAN_SCRIPT = 'Georgian';
     public const string MONGOLIAN_SCRIPT = 'Mongolian';
+    public const string NOM_SCRIPT = 'Nom';
     public function detect(string $text): string
     {
         $scripts = [
@@ -27,6 +28,9 @@ class ScriptDetectionService
             self::HEBREW_SCRIPT => '/\p{'.self::HEBREW_SCRIPT.'}/u',
             self::ARMENIAN_SCRIPT => '/\p{'.self::ARMENIAN_SCRIPT.'}/u',
             self::MONGOLIAN_SCRIPT => '/\p{'.self::MONGOLIAN_SCRIPT.'}/u',
+
+            // Custom pseudo-script for Chữ Nôm
+            self::NOM_SCRIPT => '/[\x{3400}-\x{4DBF}\x{4E00}-\x{9FFF}\x{F900}-\x{FAFF}\x{20000}-\x{2EBEF}]/u',
         ];
 
         foreach ($scripts as $name => $regex) {
@@ -74,6 +78,7 @@ class ScriptDetectionService
             LanguageMappings::GALICIAN_LANGUAGE_NAME,
             LanguageMappings::HAUSA_LANGUAGE_NAME,
             LanguageMappings::SOMALI_LANGUAGE_NAME,
+            LanguageMappings::VIETNAMESE_LANGUAGE_NAME,
         ];
     }
 
@@ -134,6 +139,11 @@ class ScriptDetectionService
         return [LanguageMappings::MONGOLIAN_LANGUAGE_NAME];
     }
 
+    protected function getNomScriptLanguageNames(): array
+    {
+        return [LanguageMappings::VIETNAMESE_LANGUAGE_NAME];
+    }
+
     protected function getAllScriptLanguages(): array
     {
         return [
@@ -146,6 +156,7 @@ class ScriptDetectionService
             self::GEORGIAN_SCRIPT => $this->getGeorgianScriptLanguageNames(),
             self::HEBREW_SCRIPT => $this->getHebrewScriptLanguageNames(),
             self::MONGOLIAN_SCRIPT => $this->getMongolianScriptLanguageNames(),
+            self::NOM_SCRIPT => $this->getNomScriptLanguageNames(),
         ];
     }
 
@@ -212,6 +223,13 @@ class ScriptDetectionService
         return $allScripts;
     }
 
+    public function getNomScriptTransliterationCandidates(): array
+    {
+        $allScripts = $this->getAllScriptLanguages();
+        unset($allScripts[self::NOM_SCRIPT]);
+        return $allScripts;
+    }
+
     public function getTransliterationCandidatesByScript(string $script): array
     {
         return match ($script) {
@@ -224,6 +242,7 @@ class ScriptDetectionService
             self::GEORGIAN_SCRIPT => $this->getGeorgianScriptTransliterationCandidates(),
             self::HEBREW_SCRIPT => $this->getHebrewScriptTransliterationCandidates(),
             self::MONGOLIAN_SCRIPT => $this->getMongolianScriptTransliterationCandidates(),
+            self::NOM_SCRIPT => $this->getNomScriptTransliterationCandidates(),
             default => [],
         };
     }
@@ -244,6 +263,7 @@ class ScriptDetectionService
             self::GEORGIAN_SCRIPT => [self::GEORGIAN_SCRIPT => $this->getGeorgianScriptLanguageNames()],
             self::HEBREW_SCRIPT => [self::HEBREW_SCRIPT => $this->getHebrewScriptLanguageNames()],
             self::MONGOLIAN_SCRIPT => [self::MONGOLIAN_SCRIPT => $this->getHebrewScriptLanguageNames()],
+            self::NOM_SCRIPT => [self::NOM_SCRIPT => $this->getNomScriptLanguageNames()],
             default => [],
         };
     }

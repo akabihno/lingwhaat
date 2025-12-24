@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/onneet|
+|https://en.wiktionary.org/wiki/onda|
+|https://en.wiktionary.org/wiki/oba|
+|https://en.wiktionary.org/wiki/oll|
+|https://en.wiktionary.org/wiki/oda|
+|https://en.wiktionary.org/wiki/own|
+|https://en.wiktionary.org/wiki/oonuh|
