@@ -102,6 +102,10 @@ class LanguageMappings
     public const string GULLAH_LANGUAGE_NAME = 'Gullah';
     public const string VIETNAMESE_LANGUAGE_CODE = 'vi';
     public const string VIETNAMESE_LANGUAGE_NAME = 'Vietnamese';
+    public const string JAPANESE_LANGUAGE_CODE = 'ja';
+    public const string JAPANESE_LANGUAGE_NAME = 'Japanese';
+    public const string MANDARIN_LANGUAGE_CODE = 'zh';
+    public const string MANDARIN_LANGUAGE_NAME = 'Mandarin';
 
     public static function getLanguageCodes(): array
     {
@@ -154,6 +158,8 @@ class LanguageMappings
             self::URDU_LANGUAGE_CODE,
             self::GULLAH_LANGUAGE_CODE,
             self::VIETNAMESE_LANGUAGE_CODE,
+            self::JAPANESE_LANGUAGE_CODE,
+            self::MANDARIN_LANGUAGE_CODE,
         ];
     }
 
@@ -209,6 +215,8 @@ class LanguageMappings
             'UrduLanguageEntity' => self::URDU_LANGUAGE_CODE,
             'GullahLanguageEntity' => self::GULLAH_LANGUAGE_CODE,
             'VietnameseLanguageEntity' => self::VIETNAMESE_LANGUAGE_CODE,
+            'JapaneseLanguageEntity' => self::JAPANESE_LANGUAGE_CODE,
+            'MandarinLanguageEntity' => self::MANDARIN_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {
@@ -271,6 +279,8 @@ class LanguageMappings
             self::URDU_LANGUAGE_NAME => self::URDU_LANGUAGE_CODE,
             self::GULLAH_LANGUAGE_NAME => self::GULLAH_LANGUAGE_CODE,
             self::VIETNAMESE_LANGUAGE_NAME => self::VIETNAMESE_LANGUAGE_CODE,
+            self::JAPANESE_LANGUAGE_NAME => self::JAPANESE_LANGUAGE_CODE,
+            self::MANDARIN_LANGUAGE_NAME => self::MANDARIN_LANGUAGE_CODE,
         ];
 
         return $map[$languageName] ?? null;
