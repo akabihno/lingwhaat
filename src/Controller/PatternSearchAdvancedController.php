@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Service\Search\PatternSearchService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -9,173 +11,100 @@ use Symfony\Component\Routing\Annotation\Route;
 use Exception;
 use OpenApi\Attributes as OA;
 
-class PatternSearchAdvancedController extends PatternSearchController
+#[OA\Tag(name: 'Search')]
+class PatternSearchAdvancedController extends AbstractController
 {
+    public function __construct(
+        protected PatternSearchService $patternSearchService,
+    ) {
+    }
     #[Route('/api/pattern-search-advanced', name: 'pattern_search_advanced', methods: ['POST'])]
     #[OA\Post(
         path: '/api/pattern-search-advanced',
         description: 'Regular mode searches for words matching pattern constraints. Intersection mode helps solve ciphers by finding words from multiple patterns that share common characters for cross-referencing alphabet mappings.',
-        summary: 'Search for words matching advanced positional patterns or solve cipher/substitution puzzles by finding intersecting words',
-        tags: ['Search']
+        summary: 'Search for words matching advanced positional patterns or solve cipher/substitution puzzles by finding intersecting words'
     )]
     #[OA\RequestBody(
         required: true,
-        content: [
-            new OA\JsonContent(
-                properties: [
-                    new OA\Property(
-                        property: 'samePositions',
-                        description: 'Array of position groups where positions must have the same character (1-indexed)',
-                        type: 'array',
-                        items: new OA\Items(
-                            type: 'array',
-                            items: new OA\Items(type: 'integer'),
-                            example: [1, 3, 6]
-                        ),
-                        example: [[1, 3, 6], [2, 4]]
-                    ),
-                    new OA\Property(
-                        property: 'fixedChars',
-                        description: 'Object mapping positions to required characters (1-indexed)',
-                        type: 'object',
-                        example: ['2' => 'o', '5' => 'x']
-                    ),
-                    new OA\Property(
-                        property: 'exactLength',
-                        description: 'Optional exact word length filter',
-                        type: 'integer',
-                        example: 5,
-                        nullable: true
-                    ),
-                    new OA\Property(
-                        property: 'languageCode',
-                        description: 'Optional language code to filter results (e.g., en, ka, ru)',
-                        type: 'string',
-                        example: 'en',
-                        nullable: true
-                    ),
-                    new OA\Property(
-                        property: 'limit',
-                        description: 'Maximum number of results to return',
-                        type: 'integer',
-                        default: 100,
-                        maximum: 1000,
-                        minimum: 1
-                    ),
-                ],
-                type: 'object',
-                example: [
-                    'samePositions' => [[1, 3, 6]],
-                    'fixedChars' => ['2' => 'o'],
-                    'exactLength' => 7,
-                    'languageCode' => 'en',
-                    'limit' => 100
-                ]
-            ),
-            new OA\JsonContent(
-                properties: [
-                    new OA\Property(
-                        property: 'intersections',
-                        description: 'Array of pattern configurations for cipher-solving. Finds word combinations (one per pattern) from the same language that share at least 3 common characters, helping to map unknown alphabets to real letters.',
-                        type: 'array',
-                        items: new OA\Items(
-                            properties: [
-                                new OA\Property(
-                                    property: 'samePositions',
-                                    description: 'Array of position groups',
-                                    type: 'array',
-                                    items: new OA\Items(type: 'array', items: new OA\Items(type: 'integer'))
-                                ),
-                                new OA\Property(
-                                    property: 'fixedChars',
-                                    description: 'Object mapping positions to required characters',
-                                    type: 'object'
-                                ),
-                                new OA\Property(
-                                    property: 'exactLength',
-                                    description: 'Optional exact word length',
-                                    type: 'integer',
-                                    nullable: true
-                                ),
-                                new OA\Property(
-                                    property: 'languageCode',
-                                    description: 'Optional language code filter',
-                                    type: 'string',
-                                    nullable: true
-                                ),
-                            ],
-                            type: 'object'
-                        )
-                    ),
-                    new OA\Property(
-                        property: 'limit',
-                        description: 'Maximum number of intersection groups to return',
-                        type: 'integer',
-                        default: 100,
-                        maximum: 1000,
-                        minimum: 1
-                    ),
-                ],
-                type: 'object',
-                example: [
-                    'intersections' => [
-                        [
-                            'samePositions' => [[1, 3, 6], [2, 4, 8]],
-                            'fixedChars' => ['2' => 'o'],
-                            'exactLength' => 8
-                        ],
-                        [
-                            'samePositions' => [[1, 8]],
-                            'exactLength' => 7
-                        ]
-                    ],
-                    'limit' => 100
-                ]
-            )
-        ]
-    )]
-    #[OA\Response(
-        response: 200,
-        description: 'Successful pattern search or intersection search. Returns array of words for regular search, or array of intersection groups for intersection search.',
         content: new OA\JsonContent(
-            oneOf: [
-                new OA\Schema(
-                    description: 'Regular pattern search results',
+            properties: [
+                new OA\Property(
+                    property: 'samePositions',
+                    description: 'Array of position groups where positions must have the same character (1-indexed). For regular pattern search only.',
                     type: 'array',
                     items: new OA\Items(
-                        properties: [
-                            new OA\Property(property: 'word', type: 'string', example: 'bobcat'),
-                            new OA\Property(property: 'ipa', type: 'string', example: 'bɑbkæt'),
-                            new OA\Property(property: 'languageCode', type: 'string', example: 'en'),
-                        ],
-                        type: 'object'
-                    )
+                        type: 'array',
+                        items: new OA\Items(type: 'integer')
+                    ),
+                    nullable: true
                 ),
-                new OA\Schema(
-                    description: 'Intersection search results',
+                new OA\Property(
+                    property: 'fixedChars',
+                    description: 'Object mapping positions to required characters (1-indexed). For regular pattern search only.',
+                    type: 'object',
+                    nullable: true
+                ),
+                new OA\Property(
+                    property: 'exactLength',
+                    description: 'Optional exact word length filter',
+                    type: 'integer',
+                    nullable: true
+                ),
+                new OA\Property(
+                    property: 'languageCode',
+                    description: 'Optional language code to filter results (e.g., en, ka, ru)',
+                    type: 'string',
+                    nullable: true
+                ),
+                new OA\Property(
+                    property: 'intersections',
+                    description: 'Array of pattern configurations for cipher-solving. Finds word combinations (one per pattern) from the same language that share at least 3 common characters. Use this OR samePositions/fixedChars, not both.',
                     type: 'array',
                     items: new OA\Items(
                         properties: [
-                            new OA\Property(property: 'languageCode', type: 'string', example: 'en'),
                             new OA\Property(
-                                property: 'words',
+                                property: 'samePositions',
                                 type: 'array',
-                                items: new OA\Items(
-                                    properties: [
-                                        new OA\Property(property: 'word', type: 'string', example: 'parr'),
-                                        new OA\Property(property: 'ipa', type: 'string', example: 'pɑr', nullable: true),
-                                    ],
-                                    type: 'object'
-                                ),
-                                example: [
-                                    ['word' => 'parr', 'ipa' => 'pɑr'],
-                                    ['word' => 'apparently', 'ipa' => 'əˈpærəntli']
-                                ]
+                                items: new OA\Items(type: 'array', items: new OA\Items(type: 'integer'))
+                            ),
+                            new OA\Property(
+                                property: 'fixedChars',
+                                type: 'object'
+                            ),
+                            new OA\Property(
+                                property: 'exactLength',
+                                type: 'integer',
+                                nullable: true
+                            ),
+                            new OA\Property(
+                                property: 'languageCode',
+                                type: 'string',
+                                nullable: true
                             ),
                         ],
                         type: 'object'
-                    )
-                )
+                    ),
+                    nullable: true
+                ),
+                new OA\Property(
+                    property: 'limit',
+                    description: 'Maximum number of results to return',
+                    type: 'integer',
+                    default: 100,
+                    maximum: 1000,
+                    minimum: 1
+                ),
+            ],
+            type: 'object'
+        )
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Successful pattern search or intersection search. For regular search: returns array of word objects. For intersection search: returns array of intersection group objects with languageCode and words array.',
+        content: new OA\JsonContent(
+            type: 'array',
+            example: [
+                ['word' => 'bobcat', 'ipa' => 'bɑbkæt', 'languageCode' => 'en']
             ]
         )
     )]
