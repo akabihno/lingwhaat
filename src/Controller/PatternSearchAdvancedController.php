@@ -123,10 +123,35 @@ class PatternSearchAdvancedController extends AbstractController
     #[OA\Response(
         response: 200,
         description: 'Successful pattern search or intersection search. For regular search: returns array of word objects. For intersection search: returns array of intersection group objects with languageCode and words array.',
-        content: new OA\JsonContent(
-            type: 'array',
-            items: new OA\Items(type: 'object')
-        )
+        content: [
+            'application/json' => new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'object')),
+                examples: [
+                    new OA\Examples(
+                        example: 'Regular Search Result',
+                        summary: 'Regular Pattern Search Result',
+                        value: [
+                            ['word' => 'pattern', 'ipa' => 'ˈpætərn', 'languageCode' => 'en'],
+                            ['word' => 'battery', 'ipa' => 'ˈbætəri', 'languageCode' => 'en']
+                        ]
+                    ),
+                    new OA\Examples(
+                        example: 'Intersection Search Result',
+                        summary: 'Intersection Search Result',
+                        value: [
+                            [
+                                'languageCode' => 'en',
+                                'words' => [
+                                    ['word' => 'pattern', 'ipa' => 'ˈpætərn'],
+                                    ['word' => 'battery', 'ipa' => 'ˈbætəri']
+                                ]
+                            ]
+                        ]
+                    )
+                ]
+            )
+        ]
     )]
     #[OA\Response(
         response: 400,
