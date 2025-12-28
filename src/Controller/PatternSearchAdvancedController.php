@@ -36,24 +36,28 @@ class PatternSearchAdvancedController extends AbstractController
                         type: 'array',
                         items: new OA\Items(type: 'integer')
                     ),
+                    example: [[1, 3, 6], [2, 4]],
                     nullable: true
                 ),
                 new OA\Property(
                     property: 'fixedChars',
                     description: 'Object mapping positions to required characters (1-indexed). For regular pattern search only.',
                     type: 'object',
+                    example: ['2' => 'o', '5' => 'x'],
                     nullable: true
                 ),
                 new OA\Property(
                     property: 'exactLength',
                     description: 'Optional exact word length filter',
                     type: 'integer',
+                    example: 7,
                     nullable: true
                 ),
                 new OA\Property(
                     property: 'languageCode',
                     description: 'Optional language code to filter results (e.g., en, ka, ru)',
                     type: 'string',
+                    example: 'en',
                     nullable: true
                 ),
                 new OA\Property(
@@ -65,37 +69,60 @@ class PatternSearchAdvancedController extends AbstractController
                             new OA\Property(
                                 property: 'samePositions',
                                 type: 'array',
-                                items: new OA\Items(type: 'array', items: new OA\Items(type: 'integer'))
+                                items: new OA\Items(type: 'array', items: new OA\Items(type: 'integer')),
+                                example: [[1, 3, 6], [2, 4, 8]]
                             ),
                             new OA\Property(
                                 property: 'fixedChars',
-                                type: 'object'
+                                type: 'object',
+                                example: ['2' => 'o']
                             ),
                             new OA\Property(
                                 property: 'exactLength',
                                 type: 'integer',
+                                example: 8,
                                 nullable: true
                             ),
                             new OA\Property(
                                 property: 'languageCode',
                                 type: 'string',
+                                example: 'en',
                                 nullable: true
                             ),
                         ],
                         type: 'object'
                     ),
+                    example: [
+                        [
+                            'samePositions' => [[1, 3, 6], [2, 4, 8]],
+                            'fixedChars' => ['2' => 'o'],
+                            'exactLength' => 8
+                        ],
+                        [
+                            'samePositions' => [[1, 7]],
+                            'exactLength' => 7
+                        ]
+                    ],
                     nullable: true
                 ),
                 new OA\Property(
                     property: 'limit',
                     description: 'Maximum number of results to return',
                     type: 'integer',
+                    example: 100,
                     default: 100,
                     maximum: 1000,
                     minimum: 1
                 ),
             ],
-            type: 'object'
+            type: 'object',
+            example: [
+                'samePositions' => [[1, 3, 6]],
+                'fixedChars' => ['2' => 'o'],
+                'exactLength' => 7,
+                'languageCode' => 'en',
+                'limit' => 100
+            ]
         )
     )]
     #[OA\Response(
