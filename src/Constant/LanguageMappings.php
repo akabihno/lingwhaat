@@ -106,6 +106,8 @@ class LanguageMappings
     public const string JAPANESE_LANGUAGE_NAME = 'Japanese';
     public const string MANDARIN_LANGUAGE_CODE = 'zh';
     public const string MANDARIN_LANGUAGE_NAME = 'Mandarin';
+    public const string PALI_LANGUAGE_CODE = 'pi';
+    public const string PALI_LANGUAGE_NAME = 'Pali';
 
     public static function getLanguageCodes(): array
     {
@@ -160,6 +162,7 @@ class LanguageMappings
             self::VIETNAMESE_LANGUAGE_CODE,
             self::JAPANESE_LANGUAGE_CODE,
             self::MANDARIN_LANGUAGE_CODE,
+            self::PALI_LANGUAGE_CODE,
         ];
     }
 
@@ -217,6 +220,7 @@ class LanguageMappings
             'VietnameseLanguageEntity' => self::VIETNAMESE_LANGUAGE_CODE,
             'JapaneseLanguageEntity' => self::JAPANESE_LANGUAGE_CODE,
             'MandarinLanguageEntity' => self::MANDARIN_LANGUAGE_CODE,
+            'PaliLanguageEntity' => self::PALI_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {
@@ -281,6 +285,7 @@ class LanguageMappings
             self::VIETNAMESE_LANGUAGE_NAME => self::VIETNAMESE_LANGUAGE_CODE,
             self::JAPANESE_LANGUAGE_NAME => self::JAPANESE_LANGUAGE_CODE,
             self::MANDARIN_LANGUAGE_NAME => self::MANDARIN_LANGUAGE_CODE,
+            self::PALI_LANGUAGE_NAME => self::PALI_LANGUAGE_CODE,
         ];
 
         return $map[$languageName] ?? null;

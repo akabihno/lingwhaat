@@ -89,6 +89,7 @@ class ScriptDetectionService
             LanguageMappings::HAUSA_LANGUAGE_NAME,
             LanguageMappings::SOMALI_LANGUAGE_NAME,
             LanguageMappings::VIETNAMESE_LANGUAGE_NAME,
+            LanguageMappings::PALI_LANGUAGE_NAME,
         ];
     }
 
@@ -124,7 +125,8 @@ class ScriptDetectionService
     {
         return [
             LanguageMappings::HINDI_LANGUAGE_NAME,
-            LanguageMappings::BENGALI_LANGUAGE_NAME
+            LanguageMappings::BENGALI_LANGUAGE_NAME,
+            LanguageMappings::PALI_LANGUAGE_NAME
         ];
     }
 
