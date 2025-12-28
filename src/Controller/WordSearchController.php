@@ -23,7 +23,6 @@ class WordSearchController extends AbstractController
         path: '/api/search',
         description: 'Searches for the closest matches to a given word (supports fuzzy matching to handle typos or misspellings).',
         summary: 'Find approximate word matches across languages',
-        tags: ['Search'],
         parameters: [
             new OA\Parameter(
                 name: 'word',

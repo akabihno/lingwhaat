@@ -11,113 +11,14 @@ use Symfony\Component\Routing\Annotation\Route;
 use Exception;
 use OpenApi\Attributes as OA;
 
-#[OA\Tag(name: 'Search')]
 class PatternSearchAdvancedController extends AbstractController
 {
     public function __construct(
         protected PatternSearchService $patternSearchService,
     ) {
     }
+
     #[Route('/api/pattern-search-advanced', name: 'pattern_search_advanced', methods: ['POST'])]
-    #[OA\Post(
-        path: '/api/pattern-search-advanced',
-        description: 'Regular mode searches for words matching pattern constraints. Intersection mode helps solve ciphers by finding words from multiple patterns that share common characters for cross-referencing alphabet mappings.',
-        summary: 'Search for words matching advanced positional patterns or solve cipher/substitution puzzles by finding intersecting words'
-    )]
-    #[OA\RequestBody(
-        required: true,
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(
-                    property: 'samePositions',
-                    description: 'Array of position groups where positions must have the same character (1-indexed). For regular pattern search only.',
-                    type: 'array',
-                    items: new OA\Items(
-                        type: 'array',
-                        items: new OA\Items(type: 'integer')
-                    ),
-                    nullable: true
-                ),
-                new OA\Property(
-                    property: 'fixedChars',
-                    description: 'Object mapping positions to required characters (1-indexed). For regular pattern search only.',
-                    type: 'object',
-                    nullable: true
-                ),
-                new OA\Property(
-                    property: 'exactLength',
-                    description: 'Optional exact word length filter',
-                    type: 'integer',
-                    nullable: true
-                ),
-                new OA\Property(
-                    property: 'languageCode',
-                    description: 'Optional language code to filter results (e.g., en, ka, ru)',
-                    type: 'string',
-                    nullable: true
-                ),
-                new OA\Property(
-                    property: 'intersections',
-                    description: 'Array of pattern configurations for cipher-solving. Finds word combinations (one per pattern) from the same language that share at least 3 common characters. Use this OR samePositions/fixedChars, not both.',
-                    type: 'array',
-                    items: new OA\Items(
-                        properties: [
-                            new OA\Property(
-                                property: 'samePositions',
-                                type: 'array',
-                                items: new OA\Items(type: 'array', items: new OA\Items(type: 'integer'))
-                            ),
-                            new OA\Property(
-                                property: 'fixedChars',
-                                type: 'object'
-                            ),
-                            new OA\Property(
-                                property: 'exactLength',
-                                type: 'integer',
-                                nullable: true
-                            ),
-                            new OA\Property(
-                                property: 'languageCode',
-                                type: 'string',
-                                nullable: true
-                            ),
-                        ],
-                        type: 'object'
-                    ),
-                    nullable: true
-                ),
-                new OA\Property(
-                    property: 'limit',
-                    description: 'Maximum number of results to return',
-                    type: 'integer',
-                    default: 100,
-                    maximum: 1000,
-                    minimum: 1
-                ),
-            ],
-            type: 'object'
-        )
-    )]
-    #[OA\Response(
-        response: 200,
-        description: 'Successful pattern search or intersection search. For regular search: returns array of word objects. For intersection search: returns array of intersection group objects with languageCode and words array.',
-        content: new OA\JsonContent(
-            type: 'array',
-            example: [
-                ['word' => 'bobcat', 'ipa' => 'bɑbkæt', 'languageCode' => 'en']
-            ]
-        )
-    )]
-    #[OA\Response(
-        response: 400,
-        description: 'Invalid parameters',
-        content: new OA\JsonContent(
-            properties: [
-                new OA\Property(property: 'error', type: 'string', example: 'Either samePositions or fixedChars must be provided'),
-            ],
-            type: 'object'
-        )
-    )]
     public function search(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

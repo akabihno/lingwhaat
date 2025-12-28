@@ -27,7 +27,6 @@ class LanguageValidationController extends AbstractController
         path: '/api/validate',
         description: 'Analyzes text to determine if it looks like natural language by checking vowel-consonant patterns, cluster formations, and linguistic characteristics.',
         summary: 'Check if text looks like natural language',
-        tags: ['Language Validation'],
         parameters: [
             new OA\Parameter(
                 name: 'text',
