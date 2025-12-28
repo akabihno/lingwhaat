@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/zoncho|
+|https://en.wiktionary.org/wiki/zarapallada|
+|https://en.wiktionary.org/wiki/zreixa|
+|https://en.wiktionary.org/wiki/zarzallar|
+|https://en.wiktionary.org/wiki/zoupada|
+|https://en.wiktionary.org/wiki/zarpador|
+|https://en.wiktionary.org/wiki/zoscadoiro|
+|https://en.wiktionary.org/wiki/zanfoña|
+|https://en.wiktionary.org/wiki/zumegar|
+|https://en.wiktionary.org/wiki/zangro|

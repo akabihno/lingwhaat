@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/warry|
+|https://en.wiktionary.org/wiki/walyable|
+|https://en.wiktionary.org/wiki/wile|
+|https://en.wiktionary.org/wiki/wiles|
+|https://en.wiktionary.org/wiki/wol|
+|https://en.wiktionary.org/wiki/worce|
+|https://en.wiktionary.org/wiki/We'n'sd'y|
+|https://en.wiktionary.org/wiki/weekaday|
+|https://en.wiktionary.org/wiki/we|
+|https://en.wiktionary.org/wiki/wata|

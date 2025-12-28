@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/toment|
+|https://en.wiktionary.org/wiki/tetch|
+|https://en.wiktionary.org/wiki/taday|
+|https://en.wiktionary.org/wiki/tall|
+|https://en.wiktionary.org/wiki/tredja|
+|https://en.wiktionary.org/wiki/traight|
+|https://en.wiktionary.org/wiki/tu'n|
+|https://en.wiktionary.org/wiki/teah|
+|https://en.wiktionary.org/wiki/tority|
+|https://en.wiktionary.org/wiki/tustanagga|
+|https://en.wiktionary.org/wiki/T'ursd'y|
+|https://en.wiktionary.org/wiki/tud|

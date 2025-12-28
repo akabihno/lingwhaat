@@ -1,0 +1,12 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/پروردگار|
+|https://en.wiktionary.org/wiki/پراسیکیوٹر|
+|https://en.wiktionary.org/wiki/پاروتی|
+|https://en.wiktionary.org/wiki/پریم|
+|https://en.wiktionary.org/wiki/پیار|
+|https://en.wiktionary.org/wiki/پاریکھ|
+|https://en.wiktionary.org/wiki/پت%20جھڑ|
+|https://en.wiktionary.org/wiki/پہل%20کرنا|
+|https://en.wiktionary.org/wiki/پناہ|
+|https://en.wiktionary.org/wiki/پاکستان|

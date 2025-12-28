@@ -1,0 +1,9 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/گستاخی|
+|https://en.wiktionary.org/wiki/گھوڑی|
+|https://en.wiktionary.org/wiki/گرگٹ|
+|https://en.wiktionary.org/wiki/گلستان|
+|https://en.wiktionary.org/wiki/گھڑی|
+|https://en.wiktionary.org/wiki/گھی|
+|https://en.wiktionary.org/wiki/گانا|

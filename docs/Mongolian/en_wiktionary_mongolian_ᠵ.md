@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ᠵᠢᠭᠠᠰᠤ|
+|https://en.wiktionary.org/wiki/ᠵᠦ᠋ᠩᠭ᠋ᠠᠷ|
+|https://en.wiktionary.org/wiki/ᠵᠡᠭᠦᠨ|
+|https://en.wiktionary.org/wiki/ᠵ|
+|https://en.wiktionary.org/wiki/ᠵᠣᠨ|
+|https://en.wiktionary.org/wiki/ᠵᠡᠭᠦᠨᠭᠠᠷ|
+|https://en.wiktionary.org/wiki/ᠵᠢᠷᠦᠬᠡ|
+|https://en.wiktionary.org/wiki/ᠵᠠᠭᠤᠨ|

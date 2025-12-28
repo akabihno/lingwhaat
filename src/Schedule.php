@@ -31,7 +31,7 @@ class Schedule implements ScheduleProviderInterface
             $schedule->add(
                 RecurringMessage::every(
                     '5 minutes',
-                    new ParseWiktionaryArticlesMessage($language->getLanguageName(), 300)
+                    new ParseWiktionaryArticlesMessage($language->getLanguageName(), 400)
                 )->withJitter(30)
             );
         }

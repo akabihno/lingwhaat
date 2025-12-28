@@ -55,7 +55,6 @@ class TextDecryptionController extends AbstractController
                 type: 'object'
             )
         ),
-        tags: ['Text Decryption'],
         responses: [
             new OA\Response(
                 response: 200,

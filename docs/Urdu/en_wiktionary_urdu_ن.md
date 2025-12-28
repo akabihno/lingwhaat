@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/نسیم|
+|https://en.wiktionary.org/wiki/نمک%20حلال|
+|https://en.wiktionary.org/wiki/ناامید|
+|https://en.wiktionary.org/wiki/نشریہ|
+|https://en.wiktionary.org/wiki/نقصان|
+|https://en.wiktionary.org/wiki/نژاد|
+|https://en.wiktionary.org/wiki/ناانصافی|
+|https://en.wiktionary.org/wiki/نوازش|
+|https://en.wiktionary.org/wiki/نو|

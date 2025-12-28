@@ -94,3 +94,9 @@ watch -n 1 nvidia-smi
 ## You should see:
 GPU-Util: 70-95%
 Memory-Usage: 2-5 GiB / 23 GiB
+
+# Export database:
+
+export $(grep -v '^#' .env | xargs)
+
+docker exec -i database mysqldump --default-character-set=utf8mb4 --force -u root -p"${MYSQL_ROOT_PASSWORD}" -P "${MYSQL_PORT}" "${MYSQL_DATABASE}" > export.sql

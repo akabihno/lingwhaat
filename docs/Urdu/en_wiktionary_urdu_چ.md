@@ -1,0 +1,11 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/چراغ|
+|https://en.wiktionary.org/wiki/چار%20سو%20بیس|
+|https://en.wiktionary.org/wiki/چلم|
+|https://en.wiktionary.org/wiki/چلمن|
+|https://en.wiktionary.org/wiki/چکر|
+|https://en.wiktionary.org/wiki/چلانا|
+|https://en.wiktionary.org/wiki/چپل|
+|https://en.wiktionary.org/wiki/چمچ|
+|https://en.wiktionary.org/wiki/چاند|

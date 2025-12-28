@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ood|
+|https://en.wiktionary.org/wiki/orgi|
+|https://en.wiktionary.org/wiki/onkod|
+|https://en.wiktionary.org/wiki/ogaan|
+|https://en.wiktionary.org/wiki/ogol|
+|https://en.wiktionary.org/wiki/otismo|
+|https://en.wiktionary.org/wiki/orod|
+|https://en.wiktionary.org/wiki/ogow|
+|https://en.wiktionary.org/wiki/oggolaad|
+|https://en.wiktionary.org/wiki/ooyin|
+|https://en.wiktionary.org/wiki/oday|
+|https://en.wiktionary.org/wiki/oorso|
+|https://en.wiktionary.org/wiki/oktoobar|
+|https://en.wiktionary.org/wiki/O|
+|https://en.wiktionary.org/wiki/oo|

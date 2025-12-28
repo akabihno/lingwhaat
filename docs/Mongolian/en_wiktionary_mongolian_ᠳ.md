@@ -1,0 +1,13 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ᠳ᠋ᠠᠬᠢ|
+|https://en.wiktionary.org/wiki/ᠳᠤᠯᠠᠭᠠᠷᠠᠬᠤ|
+|https://en.wiktionary.org/wiki/ᠳᠠᠯᠠᠢ|
+|https://en.wiktionary.org/wiki/ᠳ᠋ᠤ|
+|https://en.wiktionary.org/wiki/ᠳ᠋ᠢᠶᠠᠩᠬᠤᠸᠠ|
+|https://en.wiktionary.org/wiki/ᠳᠤᠮᠳᠠᠳᠤ%20ᠤᠯᠤᠰ|
+|https://en.wiktionary.org/wiki/ᠳᠠᠭᠠᠷᠢᠯᠲᠠ|
+|https://en.wiktionary.org/wiki/ᠳᠣᠷᠤᠨ%20ᠠ|
+|https://en.wiktionary.org/wiki/ᠳ|
+|https://en.wiktionary.org/wiki/ᠳᠠᠭᠤᠷ|
+|https://en.wiktionary.org/wiki/ᠳᠠᠪᠤᠰᠤ|

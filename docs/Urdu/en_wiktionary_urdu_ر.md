@@ -1,0 +1,10 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/رابطہ|
+|https://en.wiktionary.org/wiki/روچڈیل|
+|https://en.wiktionary.org/wiki/رواں|
+|https://en.wiktionary.org/wiki/روسنا|
+|https://en.wiktionary.org/wiki/رخ|
+|https://en.wiktionary.org/wiki/ریاست|
+|https://en.wiktionary.org/wiki/روغن|
+|https://en.wiktionary.org/wiki/رسول|

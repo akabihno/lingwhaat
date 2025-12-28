@@ -82,6 +82,32 @@ class LanguageMappings
     public const string ICELANDIC_LANGUAGE_NAME = 'Islandic';
     public const string HEBREW_LANGUAGE_CODE = 'he';
     public const string HEBREW_LANGUAGE_NAME = 'Hebrew';
+    public const string HUNGARIAN_LANGUAGE_CODE = 'hu';
+    public const string HUNGARIAN_LANGUAGE_NAME = 'Hungarian';
+    public const string SWAHILI_LANGUAGE_CODE = 'sw';
+    public const string SWAHILI_LANGUAGE_NAME = 'Swahili';
+    public const string KOMI_LANGUAGE_CODE = 'kv';
+    public const string KOMI_LANGUAGE_NAME = 'Komi';
+    public const string MONGOLIAN_LANGUAGE_CODE = 'mn';
+    public const string MONGOLIAN_LANGUAGE_NAME = 'Mongolian';
+    public const string GALICIAN_LANGUAGE_CODE = 'gl';
+    public const string GALICIAN_LANGUAGE_NAME = 'Galician';
+    public const string HAUSA_LANGUAGE_CODE = 'ha';
+    public const string HAUSA_LANGUAGE_NAME = 'Hausa';
+    public const string SOMALI_LANGUAGE_CODE = 'so';
+    public const string SOMALI_LANGUAGE_NAME = 'Somali';
+    public const string URDU_LANGUAGE_CODE = 'ur';
+    public const string URDU_LANGUAGE_NAME = 'Urdu';
+    public const string GULLAH_LANGUAGE_CODE = 'gul';
+    public const string GULLAH_LANGUAGE_NAME = 'Gullah';
+    public const string VIETNAMESE_LANGUAGE_CODE = 'vi';
+    public const string VIETNAMESE_LANGUAGE_NAME = 'Vietnamese';
+    public const string JAPANESE_LANGUAGE_CODE = 'ja';
+    public const string JAPANESE_LANGUAGE_NAME = 'Japanese';
+    public const string MANDARIN_LANGUAGE_CODE = 'zh';
+    public const string MANDARIN_LANGUAGE_NAME = 'Mandarin';
+    public const string PALI_LANGUAGE_CODE = 'pi';
+    public const string PALI_LANGUAGE_NAME = 'Pali';
 
     public static function getLanguageCodes(): array
     {
@@ -124,6 +150,19 @@ class LanguageMappings
             self::DANISH_LANGUAGE_CODE,
             self::ICELANDIC_LANGUAGE_CODE,
             self::HEBREW_LANGUAGE_CODE,
+            self::HUNGARIAN_LANGUAGE_CODE,
+            self::SWAHILI_LANGUAGE_CODE,
+            self::KOMI_LANGUAGE_CODE,
+            self::MONGOLIAN_LANGUAGE_CODE,
+            self::GALICIAN_LANGUAGE_CODE,
+            self::HAUSA_LANGUAGE_CODE,
+            self::SOMALI_LANGUAGE_CODE,
+            self::URDU_LANGUAGE_CODE,
+            self::GULLAH_LANGUAGE_CODE,
+            self::VIETNAMESE_LANGUAGE_CODE,
+            self::JAPANESE_LANGUAGE_CODE,
+            self::MANDARIN_LANGUAGE_CODE,
+            self::PALI_LANGUAGE_CODE,
         ];
     }
 
@@ -169,6 +208,19 @@ class LanguageMappings
             'DanishLanguageEntity' => self::DANISH_LANGUAGE_CODE,
             'IcelandicLanguageEntity' => self::ICELANDIC_LANGUAGE_CODE,
             'HebrewLanguageEntity' => self::HEBREW_LANGUAGE_CODE,
+            'HungarianLanguageEntity' => self::HUNGARIAN_LANGUAGE_CODE,
+            'SwahiliLanguageEntity' => self::SWAHILI_LANGUAGE_CODE,
+            'KomiLanguageEntity' => self::KOMI_LANGUAGE_CODE,
+            'MongolianLanguageEntity' => self::MONGOLIAN_LANGUAGE_CODE,
+            'GalicianLanguageEntity' => self::GALICIAN_LANGUAGE_CODE,
+            'HausaLanguageEntity' => self::HAUSA_LANGUAGE_CODE,
+            'SomaliLanguageEntity' => self::SOMALI_LANGUAGE_CODE,
+            'UrduLanguageEntity' => self::URDU_LANGUAGE_CODE,
+            'GullahLanguageEntity' => self::GULLAH_LANGUAGE_CODE,
+            'VietnameseLanguageEntity' => self::VIETNAMESE_LANGUAGE_CODE,
+            'JapaneseLanguageEntity' => self::JAPANESE_LANGUAGE_CODE,
+            'MandarinLanguageEntity' => self::MANDARIN_LANGUAGE_CODE,
+            'PaliLanguageEntity' => self::PALI_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {
@@ -221,6 +273,19 @@ class LanguageMappings
             self::DANISH_LANGUAGE_NAME => self::DANISH_LANGUAGE_CODE,
             self::ICELANDIC_LANGUAGE_NAME => self::ICELANDIC_LANGUAGE_CODE,
             self::HEBREW_LANGUAGE_NAME => self::HEBREW_LANGUAGE_CODE,
+            self::HUNGARIAN_LANGUAGE_NAME => self::HUNGARIAN_LANGUAGE_CODE,
+            self::SWAHILI_LANGUAGE_NAME => self::SWAHILI_LANGUAGE_CODE,
+            self::KOMI_LANGUAGE_NAME => self::KOMI_LANGUAGE_CODE,
+            self::MONGOLIAN_LANGUAGE_NAME => self::MONGOLIAN_LANGUAGE_CODE,
+            self::GALICIAN_LANGUAGE_NAME => self::GALICIAN_LANGUAGE_CODE,
+            self::HAUSA_LANGUAGE_NAME => self::HAUSA_LANGUAGE_CODE,
+            self::SOMALI_LANGUAGE_NAME => self::SOMALI_LANGUAGE_CODE,
+            self::URDU_LANGUAGE_NAME => self::URDU_LANGUAGE_CODE,
+            self::GULLAH_LANGUAGE_NAME => self::GULLAH_LANGUAGE_CODE,
+            self::VIETNAMESE_LANGUAGE_NAME => self::VIETNAMESE_LANGUAGE_CODE,
+            self::JAPANESE_LANGUAGE_NAME => self::JAPANESE_LANGUAGE_CODE,
+            self::MANDARIN_LANGUAGE_NAME => self::MANDARIN_LANGUAGE_CODE,
+            self::PALI_LANGUAGE_NAME => self::PALI_LANGUAGE_CODE,
         ];
 
         return $map[$languageName] ?? null;

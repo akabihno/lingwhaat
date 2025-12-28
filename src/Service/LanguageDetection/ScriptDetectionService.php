@@ -15,6 +15,11 @@ class ScriptDetectionService
     public const string HEBREW_SCRIPT = 'Hebrew';
     public const string ARMENIAN_SCRIPT = 'Armenian';
     public const string GEORGIAN_SCRIPT = 'Georgian';
+    public const string MONGOLIAN_SCRIPT = 'Mongolian';
+    public const string NOM_SCRIPT = 'Nom';
+    public const string HAN_SCRIPT = 'Han';
+    public const string HIRAGANA_SCRIPT = 'Hiragana';
+    public const string KATAKANA_SCRIPT = 'Katakana';
     public function detect(string $text): string
     {
         $scripts = [
@@ -25,6 +30,17 @@ class ScriptDetectionService
             self::GREEK_SCRIPT => '/\p{'.self::GREEK_SCRIPT.'}/u',
             self::HEBREW_SCRIPT => '/\p{'.self::HEBREW_SCRIPT.'}/u',
             self::ARMENIAN_SCRIPT => '/\p{'.self::ARMENIAN_SCRIPT.'}/u',
+            self::MONGOLIAN_SCRIPT => '/\p{'.self::MONGOLIAN_SCRIPT.'}/u',
+
+            // Japanese scripts (check before Han since Japanese uses Hiragana/Katakana + Kanji)
+            self::HIRAGANA_SCRIPT => '/[\x{3040}-\x{309F}]/u',
+            self::KATAKANA_SCRIPT => '/[\x{30A0}-\x{30FF}]/u',
+
+            // Han/CJK characters (used by Chinese, Japanese Kanji, Vietnamese Chữ Nôm)
+            self::HAN_SCRIPT => '/[\x{3400}-\x{4DBF}\x{4E00}-\x{9FFF}\x{F900}-\x{FAFF}\x{20000}-\x{2EBEF}]/u',
+
+            // Custom pseudo-script for Chữ Nôm (legacy, now covered by HAN_SCRIPT)
+            self::NOM_SCRIPT => '/[\x{3400}-\x{4DBF}\x{4E00}-\x{9FFF}\x{F900}-\x{FAFF}\x{20000}-\x{2EBEF}]/u',
         ];
 
         foreach ($scripts as $name => $regex) {
@@ -67,6 +83,13 @@ class ScriptDetectionService
             LanguageMappings::ICELANDIC_LANGUAGE_NAME,
             LanguageMappings::KAZAKH_LANGUAGE_NAME,
             LanguageMappings::UZBEK_LANGUAGE_NAME,
+            LanguageMappings::HUNGARIAN_LANGUAGE_NAME,
+            LanguageMappings::SWAHILI_LANGUAGE_NAME,
+            LanguageMappings::GALICIAN_LANGUAGE_NAME,
+            LanguageMappings::HAUSA_LANGUAGE_NAME,
+            LanguageMappings::SOMALI_LANGUAGE_NAME,
+            LanguageMappings::VIETNAMESE_LANGUAGE_NAME,
+            LanguageMappings::PALI_LANGUAGE_NAME,
         ];
     }
 
@@ -76,6 +99,7 @@ class ScriptDetectionService
             LanguageMappings::ARABIC_LANGUAGE_NAME,
             LanguageMappings::KAZAKH_LANGUAGE_NAME,
             LanguageMappings::UZBEK_LANGUAGE_NAME,
+            LanguageMappings::URDU_LANGUAGE_NAME,
         ];
     }
 
@@ -91,6 +115,8 @@ class ScriptDetectionService
             LanguageMappings::UKRAINIAN_LANGUAGE_NAME,
             LanguageMappings::KAZAKH_LANGUAGE_NAME,
             LanguageMappings::UZBEK_LANGUAGE_NAME,
+            LanguageMappings::KOMI_LANGUAGE_NAME,
+            LanguageMappings::MONGOLIAN_LANGUAGE_NAME,
         ];
 
     }
@@ -99,7 +125,8 @@ class ScriptDetectionService
     {
         return [
             LanguageMappings::HINDI_LANGUAGE_NAME,
-            LanguageMappings::BENGALI_LANGUAGE_NAME
+            LanguageMappings::BENGALI_LANGUAGE_NAME,
+            LanguageMappings::PALI_LANGUAGE_NAME
         ];
     }
 
@@ -119,6 +146,34 @@ class ScriptDetectionService
         return [LanguageMappings::HEBREW_LANGUAGE_NAME];
     }
 
+    protected function getMongolianScriptLanguageNames(): array
+    {
+        return [LanguageMappings::MONGOLIAN_LANGUAGE_NAME];
+    }
+
+    protected function getNomScriptLanguageNames(): array
+    {
+        return [LanguageMappings::VIETNAMESE_LANGUAGE_NAME];
+    }
+
+    protected function getHanScriptLanguageNames(): array
+    {
+        return [
+            LanguageMappings::MANDARIN_LANGUAGE_NAME,
+            LanguageMappings::VIETNAMESE_LANGUAGE_NAME,
+        ];
+    }
+
+    protected function getHiraganaScriptLanguageNames(): array
+    {
+        return [LanguageMappings::JAPANESE_LANGUAGE_NAME];
+    }
+
+    protected function getKatakanaScriptLanguageNames(): array
+    {
+        return [LanguageMappings::JAPANESE_LANGUAGE_NAME];
+    }
+
     protected function getAllScriptLanguages(): array
     {
         return [
@@ -130,6 +185,11 @@ class ScriptDetectionService
             self::ARMENIAN_SCRIPT => $this->getArmenianScriptLanguageNames(),
             self::GEORGIAN_SCRIPT => $this->getGeorgianScriptLanguageNames(),
             self::HEBREW_SCRIPT => $this->getHebrewScriptLanguageNames(),
+            self::MONGOLIAN_SCRIPT => $this->getMongolianScriptLanguageNames(),
+            self::NOM_SCRIPT => $this->getNomScriptLanguageNames(),
+            self::HAN_SCRIPT => $this->getHanScriptLanguageNames(),
+            self::HIRAGANA_SCRIPT => $this->getHiraganaScriptLanguageNames(),
+            self::KATAKANA_SCRIPT => $this->getKatakanaScriptLanguageNames(),
         ];
     }
 
@@ -189,6 +249,41 @@ class ScriptDetectionService
         return $allScripts;
     }
 
+    public function getMongolianScriptTransliterationCandidates(): array
+    {
+        $allScripts = $this->getAllScriptLanguages();
+        unset($allScripts[self::MONGOLIAN_SCRIPT]);
+        return $allScripts;
+    }
+
+    public function getNomScriptTransliterationCandidates(): array
+    {
+        $allScripts = $this->getAllScriptLanguages();
+        unset($allScripts[self::NOM_SCRIPT]);
+        return $allScripts;
+    }
+
+    public function getHanScriptTransliterationCandidates(): array
+    {
+        $allScripts = $this->getAllScriptLanguages();
+        unset($allScripts[self::HAN_SCRIPT]);
+        return $allScripts;
+    }
+
+    public function getHiraganaScriptTransliterationCandidates(): array
+    {
+        $allScripts = $this->getAllScriptLanguages();
+        unset($allScripts[self::HIRAGANA_SCRIPT]);
+        return $allScripts;
+    }
+
+    public function getKatakanaScriptTransliterationCandidates(): array
+    {
+        $allScripts = $this->getAllScriptLanguages();
+        unset($allScripts[self::KATAKANA_SCRIPT]);
+        return $allScripts;
+    }
+
     public function getTransliterationCandidatesByScript(string $script): array
     {
         return match ($script) {
@@ -200,6 +295,11 @@ class ScriptDetectionService
             self::ARMENIAN_SCRIPT => $this->getArmenianScriptTransliterationCandidates(),
             self::GEORGIAN_SCRIPT => $this->getGeorgianScriptTransliterationCandidates(),
             self::HEBREW_SCRIPT => $this->getHebrewScriptTransliterationCandidates(),
+            self::MONGOLIAN_SCRIPT => $this->getMongolianScriptTransliterationCandidates(),
+            self::NOM_SCRIPT => $this->getNomScriptTransliterationCandidates(),
+            self::HAN_SCRIPT => $this->getHanScriptTransliterationCandidates(),
+            self::HIRAGANA_SCRIPT => $this->getHiraganaScriptTransliterationCandidates(),
+            self::KATAKANA_SCRIPT => $this->getKatakanaScriptTransliterationCandidates(),
             default => [],
         };
     }
@@ -219,6 +319,11 @@ class ScriptDetectionService
             self::ARMENIAN_SCRIPT => [self::ARMENIAN_SCRIPT => $this->getArmenianScriptLanguageNames()],
             self::GEORGIAN_SCRIPT => [self::GEORGIAN_SCRIPT => $this->getGeorgianScriptLanguageNames()],
             self::HEBREW_SCRIPT => [self::HEBREW_SCRIPT => $this->getHebrewScriptLanguageNames()],
+            self::MONGOLIAN_SCRIPT => [self::MONGOLIAN_SCRIPT => $this->getMongolianScriptLanguageNames()],
+            self::NOM_SCRIPT => [self::NOM_SCRIPT => $this->getNomScriptLanguageNames()],
+            self::HAN_SCRIPT => [self::HAN_SCRIPT => $this->getHanScriptLanguageNames()],
+            self::HIRAGANA_SCRIPT => [self::HIRAGANA_SCRIPT => $this->getHiraganaScriptLanguageNames()],
+            self::KATAKANA_SCRIPT => [self::KATAKANA_SCRIPT => $this->getKatakanaScriptLanguageNames()],
             default => [],
         };
     }

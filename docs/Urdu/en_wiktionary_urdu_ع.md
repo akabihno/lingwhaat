@@ -1,0 +1,14 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/عظمت|
+|https://en.wiktionary.org/wiki/عنایت|
+|https://en.wiktionary.org/wiki/عوام|
+|https://en.wiktionary.org/wiki/عہد|
+|https://en.wiktionary.org/wiki/عرف|
+|https://en.wiktionary.org/wiki/علیزہ|
+|https://en.wiktionary.org/wiki/عام%20طور%20پر|
+|https://en.wiktionary.org/wiki/عرق|
+|https://en.wiktionary.org/wiki/عبرانی|
+|https://en.wiktionary.org/wiki/عیسی|
+|https://en.wiktionary.org/wiki/عالی|
+|https://en.wiktionary.org/wiki/عراق|

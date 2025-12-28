@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/ᠭᠠᠵᠠᠷ|
+|https://en.wiktionary.org/wiki/ᠭᠣᠣᠯ|
+|https://en.wiktionary.org/wiki/ᠭᠠᠯ|
+|https://en.wiktionary.org/wiki/ᠭᠡᠷᠭᠡᠢ|
+|https://en.wiktionary.org/wiki/ᠭᠠᠰᠠᠯᠠᠩ%20ᠠᠴᠠ%20ᠨᠥᠭᠴᠢᠭᠰᠡᠨ|
+|https://en.wiktionary.org/wiki/ᠭᠠᠵᠠᠷᠴᠢ|
+|https://en.wiktionary.org/wiki/ᠭᠠᠵᠠᠷᠤᠨ%20ᠵᠢᠷᠤᠭ|
+|https://en.wiktionary.org/wiki/ᠭᠣᠯᠮᠤᠳ|
+|https://en.wiktionary.org/wiki/ᠭᠤᠸ%20ᠠ|
+|https://en.wiktionary.org/wiki/ᠭ|
+|https://en.wiktionary.org/wiki/ᠭᠦᠷᠦᠨ|
+|https://en.wiktionary.org/wiki/ᠭᠠᠩᠰᠠ|
+|https://en.wiktionary.org/wiki/ᠭᠡᠷ|
