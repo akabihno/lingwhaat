@@ -5,7 +5,7 @@ This project aims to detect the language of written text with high speed and acc
 ## Features
 
 - Fast and accurate language detection
-- Support for 48 languages
+- Support for 51 languages
 - IPA-based transliteration system
 - Data sourced from Wiktionary using MediaWiki APIs
 - Docker-based deployment
@@ -20,12 +20,13 @@ This project aims to detect the language of written text with high speed and acc
 | French          | Galician     | Georgian           | German    |
 | Greek           | Gullah       | Hausa              | Hebrew    |
 | Hindi           | Hungarian    | Icelandic          | Italian   |
-| Kazakh          | Komi         | Latin              | Latvian   |
-| Lithuanian      | Middle Dutch | Mongolian          | Norwegian |
-| Old Dutch       | Polish       | Portuguese         | Romanian  |
-| Russian         | Serbo-Croatian* | Somali          | Spanish   |
-| Swahili         | Swedish      | Tagalog            | Turkish   |
-| Ukrainian       | Urdu         | Uzbek              | Vietnamese|
+| Japanese        | Kazakh       | Komi               | Latin     |
+| Latvian         | Lithuanian   | Mandarin           | Middle Dutch |
+| Mongolian       | Norwegian    | Old Dutch          | Pali      |
+| Polish          | Portuguese   | Romanian           | Russian   |
+| Serbo-Croatian* | Somali       | Spanish            | Swahili   |
+| Swedish         | Tagalog      | Turkish            | Ukrainian |
+| Urdu            | Uzbek        | Vietnamese         |           |
 
 *Serbo-Croatian includes: Bosnian, Croatian, Montenegrin, Serbian
 
