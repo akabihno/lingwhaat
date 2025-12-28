@@ -1254,6 +1254,7 @@ List of all articles IPA data has been taken from:
 [ú](docs/Italian/en_wiktionary_italian_ú.md),
 [v](docs/Italian/en_wiktionary_italian_v.md),
 [z](docs/Italian/en_wiktionary_italian_z.md)
+* Japanese: see [Japanese](docs/Japanese/index.md)
 * Kazakh:
 [a](docs/Kazakh/en_wiktionary_kazakh_a.md),
 [ä](docs/Kazakh/en_wiktionary_kazakh_ä.md),
@@ -1455,6 +1456,7 @@ List of all articles IPA data has been taken from:
 [v](docs/Lithuanian/en_wiktionary_lithuanian_v.md),
 [z](docs/Lithuanian/en_wiktionary_lithuanian_z.md),
 [ž](docs/Lithuanian/en_wiktionary_lithuanian_ž.md)
+* Mandarin: see [Mandarin](docs/Mandarin/index.md)
 * Middle Dutch
 [-](docs/MiddleDutch/en_wiktionary_middledutch_-.md),
 [a](docs/MiddleDutch/en_wiktionary_middledutch_a.md),
