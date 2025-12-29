@@ -228,15 +228,13 @@ class PatternSearchService
      */
     private function buildPainlessScript(array $samePositions, array $fixedChars, ?int $exactLength = null): string
     {
-        $conditions = [];
-
         // Get the word field value from keyword field (text fields don't have doc values)
         $script = "if (doc['word.keyword'].size() == 0) { return false; } ";
         $script .= "String word = doc['word.keyword'].value.toLowerCase(); ";
 
         // Check exact length if specified
         if ($exactLength !== null && $exactLength > 0) {
-            $conditions[] = "word.length() == $exactLength";
+            $script .= "if (word.length() != $exactLength) { return false; } ";
         } else {
             // Check minimum length based on position constraints
             $maxPosition = 0;
@@ -254,7 +252,7 @@ class PatternSearchService
             }
 
             if ($maxPosition > 0) {
-                $conditions[] = "word.length() >= $maxPosition";
+                $script .= "if (word.length() < $maxPosition) { return false; } ";
             }
         }
 
@@ -267,10 +265,29 @@ class PatternSearchService
             sort($group);
             $firstPos = $group[0] - 1; // Convert to 0-indexed
 
+            // Check that all positions in the group have the same character
             for ($i = 1; $i < count($group); $i++) {
                 $currentPos = $group[$i] - 1; // Convert to 0-indexed
-                $conditions[] = "word.charAt($firstPos) == word.charAt($currentPos)";
+                $script .= "if (word.charAt($firstPos) != word.charAt($currentPos)) { return false; } ";
             }
+
+            // Store allowed positions for exclusivity checking
+            // We'll check exclusivity after we know what character is at this position
+            $allowedPositions = array_map(fn($p) => $p - 1, $group); // Convert to 0-indexed
+            $positionsList = implode(',', $allowedPositions);
+
+            // Check that this character appears ONLY at these positions
+            $script .= "char c$groupIndex = word.charAt($firstPos); ";
+            $script .= "for (int idx = 0; idx < word.length(); idx++) { ";
+            $script .= "if (word.charAt(idx) == c$groupIndex) { ";
+            $script .= "boolean found = false; ";
+            $script .= "int[] allowed$groupIndex = new int[]{" . $positionsList . "}; ";
+            $script .= "for (int allowedIdx : allowed$groupIndex) { ";
+            $script .= "if (idx == allowedIdx) { found = true; break; } ";
+            $script .= "} ";
+            $script .= "if (!found) { return false; } ";
+            $script .= "} ";
+            $script .= "} ";
         }
 
         // Add fixed character constraints
@@ -280,14 +297,51 @@ class PatternSearchService
             }
             $pos = $position - 1; // Convert to 0-indexed
             $escapedChar = addslashes(strtolower($char));
-            $conditions[] = "word.charAt($pos) == '$escapedChar'";
+            $script .= "if (word.charAt($pos) != '$escapedChar') { return false; } ";
+
+            // Ensure this fixed character appears ONLY at this position
+            $script .= "for (int idx = 0; idx < word.length(); idx++) { ";
+            $script .= "if (idx != $pos && word.charAt(idx) == '$escapedChar') { ";
+            $script .= "return false; ";
+            $script .= "} ";
+            $script .= "} ";
         }
 
-        if (empty($conditions)) {
-            return "return true;";
+        // Additional check: Ensure no character repeats without being fully constrained
+        // For any character that appears multiple times, all positions must be specified
+        // Build a set of all constrained positions
+        $allConstrainedPositions = [];
+        foreach ($samePositions as $group) {
+            foreach ($group as $pos) {
+                $allConstrainedPositions[] = $pos - 1; // 0-indexed
+            }
+        }
+        foreach ($fixedChars as $position => $char) {
+            if ($position >= 1) {
+                $allConstrainedPositions[] = $position - 1; // 0-indexed
+            }
+        }
+        $constrainedPosList = implode(',', $allConstrainedPositions);
+
+        if (!empty($allConstrainedPositions)) {
+            $script .= "int[] constrainedPositions = new int[]{" . $constrainedPosList . "}; ";
+            $script .= "for (int i = 0; i < word.length(); i++) { ";
+            $script .= "char currentChar = word.charAt(i); ";
+            $script .= "int count = 0; ";
+            $script .= "for (int j = 0; j < word.length(); j++) { ";
+            $script .= "if (word.charAt(j) == currentChar) { count++; } ";
+            $script .= "} ";
+            $script .= "if (count > 1) { ";
+            $script .= "boolean isConstrained = false; ";
+            $script .= "for (int cp : constrainedPositions) { ";
+            $script .= "if (i == cp) { isConstrained = true; break; } ";
+            $script .= "} ";
+            $script .= "if (!isConstrained) { return false; } ";
+            $script .= "} ";
+            $script .= "} ";
         }
 
-        $script .= "return " . implode(" && ", $conditions) . ";";
+        $script .= "return true;";
 
         return $script;
     }
