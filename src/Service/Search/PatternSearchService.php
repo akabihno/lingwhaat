@@ -698,13 +698,38 @@ class PatternSearchService
             // languageCode is required for multi-letter searches (enforced in controller)
             $alphabet = ScriptAlphabets::getAlphabetForLanguage($languageCode);
 
-            // Generate all possible letter assignments
-            $this->findLetterAssignments(
+            // OPTIMIZATION: Pre-filter viable letters to reduce search space
+            // Instead of trying all 26^N combinations, find which letters actually have matches
+            $viableLettersPerConstraint = $this->findViableLetters(
                 $letterConstraints,
                 $exactLengths,
                 $languageCode,
                 $notLanguageCodes,
-                $alphabet,
+                $alphabet
+            );
+
+            // If any constraint has no viable letters, return early
+            foreach ($viableLettersPerConstraint as $viableLetters) {
+                if (empty($viableLetters)) {
+                    $this->logger->info('No viable letters found for constraint', [
+                        'service' => '[PatternSearchService]',
+                    ]);
+                    return [];
+                }
+            }
+
+            $this->logger->info('Viable letters found', [
+                'service' => '[PatternSearchService]',
+                'viable_counts' => array_map('count', $viableLettersPerConstraint),
+            ]);
+
+            // Generate letter assignments using only viable letters
+            $this->findLetterAssignmentsOptimized(
+                $letterConstraints,
+                $exactLengths,
+                $languageCode,
+                $notLanguageCodes,
+                $viableLettersPerConstraint,
                 [],
                 0,
                 $allResults,
@@ -747,6 +772,147 @@ class PatternSearchService
             ]);
 
             return [];
+        }
+    }
+
+    /**
+     * Find which letters are actually viable for each constraint by doing quick test queries.
+     * This dramatically reduces the search space.
+     *
+     * @param array $letterConstraints All letter constraints
+     * @param array|null $exactLengths Exact lengths for words
+     * @param string $languageCode Language code
+     * @param array|null $notLanguageCodes Language codes to exclude
+     * @param string $alphabet Alphabet to test
+     * @return array Array of arrays, each containing viable letters for a constraint
+     */
+    private function findViableLetters(
+        array $letterConstraints,
+        ?array $exactLengths,
+        string $languageCode,
+        ?array $notLanguageCodes,
+        string $alphabet
+    ): array {
+        $viableLettersPerConstraint = [];
+
+        foreach ($letterConstraints as $constraintIndex => $constraint) {
+            $viableLetters = [];
+
+            // Test each letter to see if it has ANY matches for this constraint
+            for ($i = 0; $i < mb_strlen($alphabet, 'UTF-8'); $i++) {
+                $letter = mb_substr($alphabet, $i, 1, 'UTF-8');
+
+                // Quick check: does this letter have matches for at least one word position?
+                $hasMatch = false;
+                foreach ($constraint as $wordIndex => $positions) {
+                    if (empty($positions)) {
+                        continue;
+                    }
+
+                    // Build a simple test query for this letter at these positions
+                    $fixedChars = [];
+                    foreach ($positions as $pos) {
+                        $fixedChars[$pos] = $letter;
+                    }
+                    $samePositions = [array_values($positions)];
+                    $exactLength = isset($exactLengths[$wordIndex]) ? $exactLengths[$wordIndex] : null;
+
+                    // Do a quick search with limit 1 to check if ANY words match
+                    $results = $this->findByAdvancedPattern(
+                        $samePositions,
+                        $fixedChars,
+                        $exactLength,
+                        $languageCode,
+                        1, // Just check if at least 1 match exists
+                        $notLanguageCodes
+                    );
+
+                    if (!empty($results)) {
+                        $hasMatch = true;
+                        break; // Found at least one match, this letter is viable
+                    }
+                }
+
+                if ($hasMatch) {
+                    $viableLetters[] = $letter;
+                }
+            }
+
+            $viableLettersPerConstraint[$constraintIndex] = $viableLetters;
+        }
+
+        return $viableLettersPerConstraint;
+    }
+
+    /**
+     * Optimized version that uses pre-filtered viable letters.
+     *
+     * @param array $letterConstraints All letter constraints
+     * @param array|null $exactLengths Exact lengths for words
+     * @param string|null $languageCode Language filter
+     * @param array|null $notLanguageCodes Language codes to exclude
+     * @param array $viableLettersPerConstraint Pre-filtered viable letters for each constraint
+     * @param array $assignedLetters Already assigned letters
+     * @param int $currentIndex Current constraint index
+     * @param array &$results Results array
+     * @param int $limit Result limit
+     */
+    private function findLetterAssignmentsOptimized(
+        array $letterConstraints,
+        ?array $exactLengths,
+        ?string $languageCode,
+        ?array $notLanguageCodes,
+        array $viableLettersPerConstraint,
+        array $assignedLetters,
+        int $currentIndex,
+        array &$results,
+        int $limit
+    ): void {
+        if (count($results) >= $limit) {
+            return;
+        }
+
+        if ($currentIndex >= count($letterConstraints)) {
+            // All letters assigned, now find matching word sequences
+            $this->findSequenceWithLetterAssignments(
+                $assignedLetters,
+                $letterConstraints,
+                $exactLengths,
+                $languageCode,
+                $notLanguageCodes,
+                $results,
+                $limit
+            );
+            return;
+        }
+
+        // Try only viable letters for this constraint
+        $viableLetters = $viableLettersPerConstraint[$currentIndex];
+
+        foreach ($viableLetters as $letter) {
+            // Skip if letter already assigned
+            if (in_array($letter, $assignedLetters)) {
+                continue;
+            }
+
+            $newAssignedLetters = $assignedLetters;
+            $newAssignedLetters[] = $letter;
+
+            $this->findLetterAssignmentsOptimized(
+                $letterConstraints,
+                $exactLengths,
+                $languageCode,
+                $notLanguageCodes,
+                $viableLettersPerConstraint,
+                $newAssignedLetters,
+                $currentIndex + 1,
+                $results,
+                $limit
+            );
+
+            if (count($results) >= $limit) {
+                return;
+            }
         }
     }
 
