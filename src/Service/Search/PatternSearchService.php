@@ -606,6 +606,365 @@ class PatternSearchService
     }
 
     /**
+     * Search for word sequences where multiple letters appear exclusively at given positions across words.
+     * This is useful for solving substitution ciphers where you know multiple letter constraints.
+     *
+     * @param array $letterConstraints Array of position arrays, each representing constraints for one letter
+     *                                 Example: [[[1,4], [3]], [[2], [1,2]]] means:
+     *                                 - First letter at positions 1,4 in word 1 and position 3 in word 2
+     *                                 - Second letter at position 2 in word 1 and positions 1,2 in word 2
+     * @param array|null $exactLengths Optional array of exact lengths for each word in the sequence
+     * @param string|null $languageCode Optional language filter
+     * @param int $limit Maximum number of result groups to return
+     * @return array Array of results grouped by language code, ordered alphabetically
+     */
+    public function findByMultiLetterSequencePattern(
+        array $letterConstraints,
+        ?array $exactLengths = null,
+        ?string $languageCode = null,
+        int $limit = 100
+    ): array {
+        if (empty($letterConstraints)) {
+            return [];
+        }
+
+        try {
+            $this->logger->info('Multi-letter sequence pattern search initiated', [
+                'service' => '[PatternSearchService]',
+                'letter_constraints' => $letterConstraints,
+                'exact_lengths' => $exactLengths,
+                'languageCode' => $languageCode,
+                'limit' => $limit,
+            ]);
+
+            $allResults = [];
+            $alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+            // Generate all possible letter assignments
+            $this->findLetterAssignments(
+                $letterConstraints,
+                $exactLengths,
+                $languageCode,
+                $alphabet,
+                [],
+                0,
+                $allResults,
+                $limit
+            );
+
+            // Group by language code and order
+            $groupedResults = [];
+            foreach ($allResults as $result) {
+                $langCode = $result['languageCode'];
+                if (!isset($groupedResults[$langCode])) {
+                    $groupedResults[$langCode] = [];
+                }
+                $groupedResults[$langCode][] = $result;
+            }
+
+            // Sort by language code
+            ksort($groupedResults);
+
+            // Convert to desired format
+            $finalResults = [];
+            foreach ($groupedResults as $langCode => $sequences) {
+                $finalResults[] = [
+                    'languageCode' => $langCode,
+                    'sequences' => array_slice($sequences, 0, $limit)
+                ];
+            }
+
+            $this->logger->info('Multi-letter sequence pattern search completed', [
+                'service' => '[PatternSearchService]',
+                'result_count' => count($finalResults),
+            ]);
+
+            return $finalResults;
+        } catch (Exception $e) {
+            $this->logger->error('Multi-letter sequence pattern search failed', [
+                'service' => '[PatternSearchService]',
+                'letter_constraints' => $letterConstraints,
+                'error' => $e->getMessage(),
+            ]);
+
+            return [];
+        }
+    }
+
+    /**
+     * Recursively find valid letter assignments for multi-letter constraints.
+     *
+     * @param array $letterConstraints All letter constraints
+     * @param array|null $exactLengths Exact lengths for words
+     * @param string|null $languageCode Language filter
+     * @param string $alphabet Available letters
+     * @param array $assignedLetters Already assigned letters
+     * @param int $currentIndex Current constraint index
+     * @param array &$results Results array
+     * @param int $limit Result limit
+     */
+    private function findLetterAssignments(
+        array $letterConstraints,
+        ?array $exactLengths,
+        ?string $languageCode,
+        string $alphabet,
+        array $assignedLetters,
+        int $currentIndex,
+        array &$results,
+        int $limit
+    ): void {
+        if (count($results) >= $limit) {
+            return;
+        }
+
+        if ($currentIndex >= count($letterConstraints)) {
+            // All letters assigned, now find matching word sequences
+            $this->findSequenceWithLetterAssignments(
+                $assignedLetters,
+                $letterConstraints,
+                $exactLengths,
+                $languageCode,
+                $results,
+                $limit
+            );
+            return;
+        }
+
+        // Try each available letter for this constraint
+        for ($i = 0; $i < strlen($alphabet); $i++) {
+            $letter = $alphabet[$i];
+
+            // Skip if letter already assigned
+            if (in_array($letter, $assignedLetters)) {
+                continue;
+            }
+
+            $newAssignedLetters = $assignedLetters;
+            $newAssignedLetters[] = $letter;
+
+            $this->findLetterAssignments(
+                $letterConstraints,
+                $exactLengths,
+                $languageCode,
+                $alphabet,
+                $newAssignedLetters,
+                $currentIndex + 1,
+                $results,
+                $limit
+            );
+
+            if (count($results) >= $limit) {
+                return;
+            }
+        }
+    }
+
+    /**
+     * Find word sequences that match all assigned letter constraints.
+     *
+     * @param array $assignedLetters Array of letters assigned to each constraint
+     * @param array $letterConstraints Original letter constraints
+     * @param array|null $exactLengths Exact lengths for words
+     * @param string|null $languageCode Language filter
+     * @param array &$results Results array
+     * @param int $limit Result limit
+     */
+    private function findSequenceWithLetterAssignments(
+        array $assignedLetters,
+        array $letterConstraints,
+        ?array $exactLengths,
+        ?string $languageCode,
+        array &$results,
+        int $limit
+    ): void {
+        if (count($results) >= $limit) {
+            return;
+        }
+
+        // Determine number of words in sequence from first constraint
+        $numWords = count($letterConstraints[0]);
+
+        // For each word position, build combined constraints
+        $wordResultsByPosition = [];
+
+        for ($wordIndex = 0; $wordIndex < $numWords; $wordIndex++) {
+            $samePositions = [];
+            $fixedChars = [];
+
+            // Collect constraints from all letters for this word
+            foreach ($letterConstraints as $constraintIndex => $constraint) {
+                if (!isset($constraint[$wordIndex]) || empty($constraint[$wordIndex])) {
+                    continue;
+                }
+
+                $positions = $constraint[$wordIndex];
+                $letter = $assignedLetters[$constraintIndex];
+
+                // Add to samePositions
+                if (count($positions) > 0) {
+                    $samePositions[] = array_values($positions);
+
+                    // Add to fixedChars
+                    foreach ($positions as $pos) {
+                        $fixedChars[$pos] = $letter;
+                    }
+                }
+            }
+
+            // Get exact length if specified for this word
+            $exactLength = isset($exactLengths[$wordIndex]) ? $exactLengths[$wordIndex] : null;
+
+            // Search for words matching this pattern
+            $results_for_word = $this->findByAdvancedPattern(
+                $samePositions,
+                $fixedChars,
+                $exactLength,
+                $languageCode,
+                200
+            );
+
+            if (empty($results_for_word)) {
+                // No words found for this position, can't form sequence
+                return;
+            }
+
+            $wordResultsByPosition[$wordIndex] = $results_for_word;
+        }
+
+        // Combine words to form sequences
+        $sequences = $this->combineMultiLetterSequenceWords($wordResultsByPosition, $assignedLetters, $letterConstraints, $limit);
+
+        foreach ($sequences as $sequence) {
+            if (count($results) >= $limit) {
+                return;
+            }
+            $results[] = $sequence;
+        }
+    }
+
+    /**
+     * Combine words from different positions to form complete multi-letter sequences.
+     *
+     * @param array $wordResultsByPosition Words for each position in the sequence
+     * @param array $assignedLetters Letters assigned to constraints
+     * @param array $letterConstraints Original constraints
+     * @param int $limit Maximum number of sequences to return
+     * @return array Array of combined sequences
+     */
+    private function combineMultiLetterSequenceWords(
+        array $wordResultsByPosition,
+        array $assignedLetters,
+        array $letterConstraints,
+        int $limit
+    ): array {
+        if (empty($wordResultsByPosition)) {
+            return [];
+        }
+
+        $sequences = [];
+        $positionIndices = array_keys($wordResultsByPosition);
+
+        // Start with the first position
+        $firstPosition = $positionIndices[0];
+
+        foreach ($wordResultsByPosition[$firstPosition] as $firstWord) {
+            $this->recursiveMultiLetterSequenceBuild(
+                $wordResultsByPosition,
+                $positionIndices,
+                1,
+                [$firstWord],
+                $sequences,
+                $assignedLetters,
+                $letterConstraints,
+                $limit
+            );
+
+            if (count($sequences) >= $limit) {
+                break;
+            }
+        }
+
+        return array_slice($sequences, 0, $limit);
+    }
+
+    /**
+     * Recursively build multi-letter word sequences.
+     *
+     * @param array $wordResultsByPosition Words for each position
+     * @param array $positionIndices Position indices
+     * @param int $currentIndex Current position in the sequence
+     * @param array $currentSequence Current sequence being built
+     * @param array &$sequences Reference to store completed sequences
+     * @param array $assignedLetters Letters assigned to constraints
+     * @param array $letterConstraints Original constraints
+     * @param int $limit Maximum sequences
+     */
+    private function recursiveMultiLetterSequenceBuild(
+        array $wordResultsByPosition,
+        array $positionIndices,
+        int $currentIndex,
+        array $currentSequence,
+        array &$sequences,
+        array $assignedLetters,
+        array $letterConstraints,
+        int $limit
+    ): void {
+        if (count($sequences) >= $limit) {
+            return;
+        }
+
+        if ($currentIndex >= count($positionIndices)) {
+            // Check if all words are from the same language
+            $languageCode = $currentSequence[0]['languageCode'];
+            $allSameLanguage = true;
+            foreach ($currentSequence as $word) {
+                if ($word['languageCode'] !== $languageCode) {
+                    $allSameLanguage = false;
+                    break;
+                }
+            }
+
+            if ($allSameLanguage) {
+                $sequences[] = [
+                    'languageCode' => $languageCode,
+                    'letters' => $assignedLetters,
+                    'words' => array_map(fn($w) => [
+                        'word' => $w['word'],
+                        'ipa' => $w['ipa'] ?? null
+                    ], $currentSequence)
+                ];
+            }
+            return;
+        }
+
+        $positionIndex = $positionIndices[$currentIndex];
+
+        if (!isset($wordResultsByPosition[$positionIndex])) {
+            return;
+        }
+
+        foreach ($wordResultsByPosition[$positionIndex] as $word) {
+            $newSequence = $currentSequence;
+            $newSequence[] = $word;
+
+            $this->recursiveMultiLetterSequenceBuild(
+                $wordResultsByPosition,
+                $positionIndices,
+                $currentIndex + 1,
+                $newSequence,
+                $sequences,
+                $assignedLetters,
+                $letterConstraints,
+                $limit
+            );
+
+            if (count($sequences) >= $limit) {
+                break;
+            }
+        }
+    }
+
+    /**
      * Search for word sequences where a specific letter appears exclusively at given positions across words.
      *
      * @param array $sequencePositions Array of position arrays for each word in the sequence
