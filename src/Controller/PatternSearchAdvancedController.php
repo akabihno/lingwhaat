@@ -326,7 +326,7 @@ class PatternSearchAdvancedController extends AbstractController
                         ),
                         new OA\Property(
                             property: 'letterConstraints',
-                            description: '[Multi-letter mode] Array of letter constraints, where each constraint is an array of position arrays for one letter across all words. Example: [[[1,4], [3]], [[2], [1,2]]] means first letter at positions [1,4] in word 1 and [3] in word 2, second letter at [2] in word 1 and [1,2] in word 2. Use this OR sequencePositions, not both.',
+                            description: '[Multi-letter mode] Array of letter constraints, where each constraint is an array of position arrays for one letter across all words. Use empty array [] to indicate a letter has no constraint for a particular word. Example: [[[1,4], [3], []], [[2], [1,2], [5]]] means first letter at positions [1,4] in word 1, [3] in word 2, and no constraint in word 3; second letter at [2] in word 1, [1,2] in word 2, and [5] in word 3. Use this OR sequencePositions, not both.',
                             type: 'array',
                             items: new OA\Items(
                                 type: 'array',
@@ -336,7 +336,7 @@ class PatternSearchAdvancedController extends AbstractController
                                 )
                             ),
                             nullable: true,
-                            example: [[[1, 4], [3]], [[2], [1, 2]]]
+                            example: [[[1, 4], [3], []], [[2], [1, 2], [5]]]
                         ),
                         new OA\Property(
                             property: 'exactLengths',
@@ -383,6 +383,19 @@ class PatternSearchAdvancedController extends AbstractController
                                 [[2], [1, 2]]
                             ],
                             'exactLengths' => [4, 3],
+                            'languageCode' => 'en',
+                            'limit' => 100
+                        ]
+                    ),
+                    new OA\Examples(
+                        example: 'Multi Letter with Empty Constraints',
+                        summary: 'Search with different letters appearing in different words',
+                        value: [
+                            'letterConstraints' => [
+                                [[1, 4], [3], [], [2]],
+                                [[2], [1, 2], [5], []]
+                            ],
+                            'exactLengths' => [4, 3, 5, 6],
                             'languageCode' => 'en',
                             'limit' => 100
                         ]
@@ -652,11 +665,9 @@ class PatternSearchAdvancedController extends AbstractController
                     );
                 }
 
+                // Empty array means this letter doesn't appear in this word (no constraint)
                 if (empty($positions)) {
-                    return new JsonResponse(
-                        ['error' => "Position array at letter $letterIndex, word $wordIndex cannot be empty"],
-                        Response::HTTP_BAD_REQUEST
-                    );
+                    continue;
                 }
 
                 foreach ($positions as $position) {

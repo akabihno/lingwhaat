@@ -610,9 +610,10 @@ class PatternSearchService
      * This is useful for solving substitution ciphers where you know multiple letter constraints.
      *
      * @param array $letterConstraints Array of position arrays, each representing constraints for one letter
-     *                                 Example: [[[1,4], [3]], [[2], [1,2]]] means:
-     *                                 - First letter at positions 1,4 in word 1 and position 3 in word 2
-     *                                 - Second letter at position 2 in word 1 and positions 1,2 in word 2
+     *                                 Use empty array [] to indicate no constraint for that word.
+     *                                 Example: [[[1,4], [3], []], [[2], [1,2], [5]]] means:
+     *                                 - First letter at positions 1,4 in word 1, position 3 in word 2, no constraint in word 3
+     *                                 - Second letter at position 2 in word 1, positions 1,2 in word 2, position 5 in word 3
      * @param array|null $exactLengths Optional array of exact lengths for each word in the sequence
      * @param string|null $languageCode Optional language filter
      * @param int $limit Maximum number of result groups to return
