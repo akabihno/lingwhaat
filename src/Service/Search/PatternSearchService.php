@@ -881,7 +881,13 @@ class PatternSearchService
     private function executeMsearchForViableLetters(array $msearchQueries, array $letterMap): array
     {
         try {
-            $response = $this->esClient->request('_msearch', 'POST', $msearchQueries);
+            // Convert array to NDJSON format required by _msearch
+            $ndjson = '';
+            foreach ($msearchQueries as $line) {
+                $ndjson .= json_encode($line) . "\n";
+            }
+
+            $response = $this->esClient->request('_msearch', 'POST', $ndjson);
             $responses = $response->getData()['responses'] ?? [];
 
             $viableLetters = [];
@@ -1200,7 +1206,13 @@ class PatternSearchService
     private function executeMsearchForWordPositions(array $msearchQueries, array $wordQueryMap): array
     {
         try {
-            $response = $this->esClient->request('_msearch', 'POST', $msearchQueries);
+            // Convert array to NDJSON format required by _msearch
+            $ndjson = '';
+            foreach ($msearchQueries as $line) {
+                $ndjson .= json_encode($line) . "\n";
+            }
+
+            $response = $this->esClient->request('_msearch', 'POST', $ndjson);
             $responses = $response->getData()['responses'] ?? [];
 
             $wordResultsByPosition = [];
