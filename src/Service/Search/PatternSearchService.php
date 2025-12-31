@@ -905,15 +905,21 @@ class PatternSearchService
             // We need to convert this to Search objects
             for ($i = 0; $i < count($msearchQueries); $i += 2) {
                 $header = $msearchQueries[$i];
-                $queryBody = $msearchQueries[$i + 1];
+                $searchBody = $msearchQueries[$i + 1];
 
                 // Create a Search object
                 $search = new Search($this->esClient);
                 $search->addIndex($header['index']);
 
-                // Create Query from the query body array
-                $query = Query::create($queryBody);
-                $search->setQuery($query);
+                // Extract the query part and size from the search body
+                if (isset($searchBody['query'])) {
+                    $query = Query::create($searchBody['query']);
+                    $search->setQuery($query);
+                }
+
+                if (isset($searchBody['size'])) {
+                    $search->setOption('size', $searchBody['size']);
+                }
 
                 $multiSearch->addSearch($search);
             }
@@ -1252,15 +1258,21 @@ class PatternSearchService
             // We need to convert this to Search objects
             for ($i = 0; $i < count($msearchQueries); $i += 2) {
                 $header = $msearchQueries[$i];
-                $queryBody = $msearchQueries[$i + 1];
+                $searchBody = $msearchQueries[$i + 1];
 
                 // Create a Search object
                 $search = new Search($this->esClient);
                 $search->addIndex($header['index']);
 
-                // Create Query from the query body array
-                $query = Query::create($queryBody);
-                $search->setQuery($query);
+                // Extract the query part and size from the search body
+                if (isset($searchBody['query'])) {
+                    $query = Query::create($searchBody['query']);
+                    $search->setQuery($query);
+                }
+
+                if (isset($searchBody['size'])) {
+                    $search->setOption('size', $searchBody['size']);
+                }
 
                 $multiSearch->addSearch($search);
             }
