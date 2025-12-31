@@ -3,6 +3,7 @@
 namespace App\Service\Search;
 
 use App\Constant\ScriptAlphabets;
+use App\Service\Cache\RedisCacheService;
 use App\Service\Logging\ElasticsearchLogger;
 use Elastica\Client;
 use Elastica\Query;
@@ -18,6 +19,7 @@ class PatternSearchService
 
     public function __construct(
         protected ElasticsearchLogger $logger,
+        protected RedisCacheService $cache,
     ) {
         $this->esClient = ElasticsearchClientFactory::create();
     }
@@ -778,6 +780,7 @@ class PatternSearchService
     /**
      * Find which letters are actually viable for each constraint by doing quick test queries.
      * This dramatically reduces the search space.
+     * Uses parallel _msearch and Redis caching for optimal performance.
      *
      * @param array $letterConstraints All letter constraints
      * @param array|null $exactLengths Exact lengths for words
@@ -793,23 +796,42 @@ class PatternSearchService
         ?array $notLanguageCodes,
         string $alphabet
     ): array {
+        // Check cache first
+        $cacheKey = $this->cache->generateKey('viable_letters', [
+            'constraints' => $letterConstraints,
+            'lengths' => $exactLengths,
+            'lang' => $languageCode,
+            'not_langs' => $notLanguageCodes,
+            'alphabet' => $alphabet
+        ]);
+
+        $cached = $this->cache->get($cacheKey);
+        if ($cached !== null) {
+            $this->logger->info('Viable letters cache hit', [
+                'service' => '[PatternSearchService]',
+            ]);
+            return $cached;
+        }
+
         $viableLettersPerConstraint = [];
 
         foreach ($letterConstraints as $constraintIndex => $constraint) {
             $viableLetters = [];
 
-            // Test each letter to see if it has ANY matches for this constraint
+            // Build all queries for parallel execution
+            $msearchQueries = [];
+            $letterMap = []; // Map search index to letter
+
             for ($i = 0; $i < mb_strlen($alphabet, 'UTF-8'); $i++) {
                 $letter = mb_substr($alphabet, $i, 1, 'UTF-8');
 
-                // Quick check: does this letter have matches for at least one word position?
-                $hasMatch = false;
+                // Check each word position for this letter
                 foreach ($constraint as $wordIndex => $positions) {
                     if (empty($positions)) {
                         continue;
                     }
 
-                    // Build a simple test query for this letter at these positions
+                    // Build query for this letter at these positions
                     $fixedChars = [];
                     foreach ($positions as $pos) {
                         $fixedChars[$pos] = $letter;
@@ -817,31 +839,115 @@ class PatternSearchService
                     $samePositions = [array_values($positions)];
                     $exactLength = isset($exactLengths[$wordIndex]) ? $exactLengths[$wordIndex] : null;
 
-                    // Do a quick search with limit 1 to check if ANY words match
-                    $results = $this->findByAdvancedPattern(
+                    // Build the query
+                    $query = $this->buildAdvancedPatternQuery(
                         $samePositions,
                         $fixedChars,
                         $exactLength,
                         $languageCode,
-                        1, // Just check if at least 1 match exists
                         $notLanguageCodes
                     );
 
-                    if (!empty($results)) {
-                        $hasMatch = true;
-                        break; // Found at least one match, this letter is viable
-                    }
-                }
+                    $msearchQueries[] = ['index' => $this->indexName];
+                    $msearchQueries[] = array_merge($query->toArray(), ['size' => 1]);
+                    $letterMap[] = ['letter' => $letter, 'wordIndex' => $wordIndex];
 
-                if ($hasMatch) {
-                    $viableLetters[] = $letter;
+                    // Only need to test one word position per letter
+                    break;
                 }
+            }
+
+            // Execute all queries in parallel using _msearch
+            if (!empty($msearchQueries)) {
+                $viableLetters = $this->executeMsearchForViableLetters($msearchQueries, $letterMap);
             }
 
             $viableLettersPerConstraint[$constraintIndex] = $viableLetters;
         }
 
+        // Cache the results for 1 hour
+        $this->cache->set($cacheKey, $viableLettersPerConstraint, 3600);
+
         return $viableLettersPerConstraint;
+    }
+
+    /**
+     * Execute msearch query and extract viable letters from results.
+     *
+     * @param array $msearchQueries Array of msearch query pairs
+     * @param array $letterMap Mapping of result indices to letters
+     * @return array Array of viable letters
+     */
+    private function executeMsearchForViableLetters(array $msearchQueries, array $letterMap): array
+    {
+        try {
+            $response = $this->esClient->request('_msearch', 'POST', $msearchQueries);
+            $responses = $response->getData()['responses'] ?? [];
+
+            $viableLetters = [];
+            foreach ($responses as $index => $resp) {
+                if (isset($resp['hits']['total']['value']) && $resp['hits']['total']['value'] > 0) {
+                    $letter = $letterMap[$index]['letter'];
+                    if (!in_array($letter, $viableLetters)) {
+                        $viableLetters[] = $letter;
+                    }
+                }
+            }
+
+            return $viableLetters;
+        } catch (Exception $e) {
+            $this->logger->error('Msearch for viable letters failed', [
+                'service' => '[PatternSearchService]',
+                'error' => $e->getMessage(),
+            ]);
+            return [];
+        }
+    }
+
+    /**
+     * Build Elasticsearch query for advanced pattern matching.
+     *
+     * @param array $samePositions Position groups
+     * @param array $fixedChars Fixed characters
+     * @param int|null $exactLength Exact length
+     * @param string|null $languageCode Language filter
+     * @param array|null $notLanguageCodes Languages to exclude
+     * @return Query
+     */
+    private function buildAdvancedPatternQuery(
+        array $samePositions,
+        array $fixedChars,
+        ?int $exactLength,
+        ?string $languageCode,
+        ?array $notLanguageCodes
+    ): Query {
+        $scriptData = $this->buildParameterizedScript($samePositions, $fixedChars, $exactLength);
+
+        $script = new Script(
+            $scriptData['source'],
+            $scriptData['params'],
+            'painless'
+        );
+        $scriptQuery = new Query\Script($script);
+
+        $query = new Query\BoolQuery();
+        $query->addFilter($scriptQuery);
+
+        if ($languageCode !== null) {
+            $languageQuery = new Query\Term();
+            $languageQuery->setTerm('languageCode', $languageCode);
+            $query->addMust($languageQuery);
+        }
+
+        if ($notLanguageCodes !== null && !empty($notLanguageCodes)) {
+            foreach ($notLanguageCodes as $excludedLang) {
+                $excludeQuery = new Query\Term();
+                $excludeQuery->setTerm('languageCode', $excludedLang);
+                $query->addMustNot($excludeQuery);
+            }
+        }
+
+        return new Query($query);
     }
 
     /**
@@ -991,6 +1097,7 @@ class PatternSearchService
 
     /**
      * Find word sequences that match all assigned letter constraints.
+     * Uses parallel _msearch for optimal performance.
      *
      * @param array $assignedLetters Array of letters assigned to each constraint
      * @param array $letterConstraints Original letter constraints
@@ -1016,8 +1123,9 @@ class PatternSearchService
         // Determine number of words in sequence from first constraint
         $numWords = count($letterConstraints[0]);
 
-        // For each word position, build combined constraints
-        $wordResultsByPosition = [];
+        // Build all queries for parallel execution
+        $msearchQueries = [];
+        $wordQueryMap = [];
 
         for ($wordIndex = 0; $wordIndex < $numWords; $wordIndex++) {
             $samePositions = [];
@@ -1046,23 +1154,29 @@ class PatternSearchService
             // Get exact length if specified for this word
             $exactLength = isset($exactLengths[$wordIndex]) ? $exactLengths[$wordIndex] : null;
 
-            // Search for words matching this pattern
-            // Use smaller limit to improve performance
-            $results_for_word = $this->findByAdvancedPattern(
+            // Build query
+            $query = $this->buildAdvancedPatternQuery(
                 $samePositions,
                 $fixedChars,
                 $exactLength,
                 $languageCode,
-                50, // Reduced from 200 to 50 for better performance
                 $notLanguageCodes
             );
 
-            if (empty($results_for_word)) {
+            $msearchQueries[] = ['index' => $this->indexName];
+            $msearchQueries[] = array_merge($query->toArray(), ['size' => 50]);
+            $wordQueryMap[] = $wordIndex;
+        }
+
+        // Execute all queries in parallel
+        $wordResultsByPosition = $this->executeMsearchForWordPositions($msearchQueries, $wordQueryMap);
+
+        // Check if all word positions have results
+        for ($wordIndex = 0; $wordIndex < $numWords; $wordIndex++) {
+            if (empty($wordResultsByPosition[$wordIndex])) {
                 // No words found for this position, can't form sequence
                 return;
             }
-
-            $wordResultsByPosition[$wordIndex] = $results_for_word;
         }
 
         // Combine words to form sequences
@@ -1073,6 +1187,39 @@ class PatternSearchService
                 return;
             }
             $results[] = $sequence;
+        }
+    }
+
+    /**
+     * Execute msearch query and extract word results for each position.
+     *
+     * @param array $msearchQueries Array of msearch query pairs
+     * @param array $wordQueryMap Mapping of result indices to word positions
+     * @return array Array of word results by position
+     */
+    private function executeMsearchForWordPositions(array $msearchQueries, array $wordQueryMap): array
+    {
+        try {
+            $response = $this->esClient->request('_msearch', 'POST', $msearchQueries);
+            $responses = $response->getData()['responses'] ?? [];
+
+            $wordResultsByPosition = [];
+            foreach ($responses as $index => $resp) {
+                $wordIndex = $wordQueryMap[$index];
+                $hits = $resp['hits']['hits'] ?? [];
+
+                $wordResultsByPosition[$wordIndex] = array_map(function ($hit) {
+                    return $hit['_source'];
+                }, $hits);
+            }
+
+            return $wordResultsByPosition;
+        } catch (Exception $e) {
+            $this->logger->error('Msearch for word positions failed', [
+                'service' => '[PatternSearchService]',
+                'error' => $e->getMessage(),
+            ]);
+            return [];
         }
     }
 
@@ -1305,6 +1452,7 @@ class PatternSearchService
 
     /**
      * Find word sequences for a specific letter at given positions.
+     * Uses parallel _msearch and Redis caching for optimal performance.
      *
      * @param string $letter The letter to search for
      * @param array $sequencePositions Position arrays for each word
@@ -1322,9 +1470,25 @@ class PatternSearchService
         ?array $notLanguageCodes,
         int $limit
     ): array {
-        $wordResultsByPosition = [];
+        // Check cache first
+        $cacheKey = $this->cache->generateKey('sequence_letter', [
+            'letter' => $letter,
+            'positions' => $sequencePositions,
+            'lengths' => $exactLengths,
+            'lang' => $languageCode,
+            'not_langs' => $notLanguageCodes,
+            'limit' => $limit
+        ]);
 
-        // For each word in the sequence, find words where the letter appears exclusively at specified positions
+        $cached = $this->cache->get($cacheKey);
+        if ($cached !== null) {
+            return $cached;
+        }
+
+        // Build all queries for parallel execution
+        $msearchQueries = [];
+        $wordQueryMap = [];
+
         foreach ($sequencePositions as $wordIndex => $positions) {
             if (empty($positions)) {
                 continue;
@@ -1342,21 +1506,33 @@ class PatternSearchService
             // Get exact length if specified for this word
             $exactLength = isset($exactLengths[$wordIndex]) ? $exactLengths[$wordIndex] : null;
 
-            // Search for words matching this pattern
-            $results = $this->findByAdvancedPattern(
+            // Build query
+            $query = $this->buildAdvancedPatternQuery(
                 $samePositions,
                 $fixedChars,
                 $exactLength,
                 $languageCode,
-                50, // Reduced from 200 to 50 for better performance
                 $notLanguageCodes
             );
 
-            $wordResultsByPosition[$wordIndex] = $results;
+            $msearchQueries[] = ['index' => $this->indexName];
+            $msearchQueries[] = array_merge($query->toArray(), ['size' => 50]);
+            $wordQueryMap[] = $wordIndex;
+        }
+
+        // Execute all queries in parallel
+        $wordResultsByPosition = [];
+        if (!empty($msearchQueries)) {
+            $wordResultsByPosition = $this->executeMsearchForWordPositions($msearchQueries, $wordQueryMap);
         }
 
         // Combine words from each position to form sequences
-        return $this->combineSequenceWords($wordResultsByPosition, $letter, $limit);
+        $sequences = $this->combineSequenceWords($wordResultsByPosition, $letter, $limit);
+
+        // Cache the results for 30 minutes
+        $this->cache->set($cacheKey, $sequences, 1800);
+
+        return $sequences;
     }
 
     /**
