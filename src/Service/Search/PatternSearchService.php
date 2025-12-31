@@ -9,6 +9,8 @@ use Elastica\Client;
 use Elastica\Query;
 use Elastica\Query\Wildcard;
 use Elastica\Script\Script;
+use Elastica\Multi\Search as MultiSearch;
+use Elastica\Search;
 use Exception;
 
 class PatternSearchService
@@ -881,19 +883,31 @@ class PatternSearchService
     private function executeMsearchForViableLetters(array $msearchQueries, array $letterMap): array
     {
         try {
-            // Convert array to NDJSON format required by _msearch
-            $ndjson = '';
-            foreach ($msearchQueries as $line) {
-                $ndjson .= json_encode($line) . "\n";
+            // Use Elastica's Multi\Search for proper msearch handling
+            $multiSearch = new MultiSearch($this->esClient);
+
+            // msearchQueries is an array of alternating headers and bodies
+            // We need to convert this to Search objects
+            for ($i = 0; $i < count($msearchQueries); $i += 2) {
+                $header = $msearchQueries[$i];
+                $queryBody = $msearchQueries[$i + 1];
+
+                // Create a Search object
+                $search = new Search($this->esClient);
+                $search->addIndex($header['index']);
+
+                // Create Query from the query body array
+                $query = Query::create($queryBody);
+                $search->setQuery($query);
+
+                $multiSearch->addSearch($search);
             }
 
-            $response = $this->esClient->msearch(['body' => $ndjson]);
-            $responseData = $response->asArray();
-            $responses = $responseData['responses'] ?? [];
-
+            $resultSets = $multiSearch->search();
             $viableLetters = [];
-            foreach ($responses as $index => $resp) {
-                if (isset($resp['hits']['total']['value']) && $resp['hits']['total']['value'] > 0) {
+
+            foreach ($resultSets as $index => $resultSet) {
+                if ($resultSet->getTotalHits() > 0) {
                     $letter = $letterMap[$index]['letter'];
                     if (!in_array($letter, $viableLetters)) {
                         $viableLetters[] = $letter;
@@ -1207,24 +1221,35 @@ class PatternSearchService
     private function executeMsearchForWordPositions(array $msearchQueries, array $wordQueryMap): array
     {
         try {
-            // Convert array to NDJSON format required by _msearch
-            $ndjson = '';
-            foreach ($msearchQueries as $line) {
-                $ndjson .= json_encode($line) . "\n";
+            // Use Elastica's Multi\Search for proper msearch handling
+            $multiSearch = new MultiSearch($this->esClient);
+
+            // msearchQueries is an array of alternating headers and bodies
+            // We need to convert this to Search objects
+            for ($i = 0; $i < count($msearchQueries); $i += 2) {
+                $header = $msearchQueries[$i];
+                $queryBody = $msearchQueries[$i + 1];
+
+                // Create a Search object
+                $search = new Search($this->esClient);
+                $search->addIndex($header['index']);
+
+                // Create Query from the query body array
+                $query = Query::create($queryBody);
+                $search->setQuery($query);
+
+                $multiSearch->addSearch($search);
             }
 
-            $response = $this->esClient->msearch(['body' => $ndjson]);
-            $responseData = $response->asArray();
-            $responses = $responseData['responses'] ?? [];
-
+            $resultSets = $multiSearch->search();
             $wordResultsByPosition = [];
-            foreach ($responses as $index => $resp) {
-                $wordIndex = $wordQueryMap[$index];
-                $hits = $resp['hits']['hits'] ?? [];
 
-                $wordResultsByPosition[$wordIndex] = array_map(function ($hit) {
-                    return $hit['_source'];
-                }, $hits);
+            foreach ($resultSets as $index => $resultSet) {
+                $wordIndex = $wordQueryMap[$index];
+
+                $wordResultsByPosition[$wordIndex] = array_map(function ($result) {
+                    return $result->getSource();
+                }, $resultSet->getResults());
             }
 
             return $wordResultsByPosition;
