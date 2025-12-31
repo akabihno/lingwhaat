@@ -610,12 +610,15 @@ class PatternSearchService
      *
      * @param array $sequencePositions Array of position arrays for each word in the sequence
      *                                 Example: [[1,4], [3], [9]] means letter at positions 1,4 in word 1, position 3 in word 2, position 9 in word 3
+     * @param array|null $exactLengths Optional array of exact lengths for each word in the sequence
+     *                                 Example: [4, 3, 9] means word 1 must be exactly 4 chars, word 2 must be 3 chars, word 3 must be 9 chars
      * @param string|null $languageCode Optional language filter
      * @param int $limit Maximum number of result groups to return
      * @return array Array of results grouped by language code, ordered alphabetically
      */
     public function findBySequencePattern(
         array $sequencePositions,
+        ?array $exactLengths = null,
         ?string $languageCode = null,
         int $limit = 100
     ): array {
@@ -627,6 +630,7 @@ class PatternSearchService
             $this->logger->info('Sequence pattern search initiated', [
                 'service' => '[PatternSearchService]',
                 'sequence_positions' => $sequencePositions,
+                'exact_lengths' => $exactLengths,
                 'languageCode' => $languageCode,
                 'limit' => $limit,
             ]);
@@ -641,6 +645,7 @@ class PatternSearchService
                 $sequenceWords = $this->findSequenceForLetter(
                     $letter,
                     $sequencePositions,
+                    $exactLengths,
                     $languageCode,
                     $limit
                 );
@@ -701,6 +706,7 @@ class PatternSearchService
      *
      * @param string $letter The letter to search for
      * @param array $sequencePositions Position arrays for each word
+     * @param array|null $exactLengths Optional exact lengths for each word
      * @param string|null $languageCode Optional language filter
      * @param int $limit Maximum results per letter
      * @return array Array of matching sequences
@@ -708,6 +714,7 @@ class PatternSearchService
     private function findSequenceForLetter(
         string $letter,
         array $sequencePositions,
+        ?array $exactLengths,
         ?string $languageCode,
         int $limit
     ): array {
@@ -728,14 +735,14 @@ class PatternSearchService
             // Use samePositions to ensure the letter appears at all specified positions
             $samePositions = [array_values($positions)];
 
-            // Determine the exact length based on the maximum position
-            $maxPos = max($positions);
+            // Get exact length if specified for this word
+            $exactLength = isset($exactLengths[$wordIndex]) ? $exactLengths[$wordIndex] : null;
 
             // Search for words matching this pattern
             $results = $this->findByAdvancedPattern(
                 $samePositions,
                 $fixedChars,
-                null, // Don't force exact length, allow longer words
+                $exactLength,
                 $languageCode,
                 200 // Get more results to combine
             );

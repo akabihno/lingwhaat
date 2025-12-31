@@ -324,6 +324,14 @@ class PatternSearchAdvancedController extends AbstractController
                             example: [[1, 4], [3], [9]]
                         ),
                         new OA\Property(
+                            property: 'exactLengths',
+                            description: 'Optional array of exact lengths for each word in the sequence (1-indexed). Must match the length of sequencePositions if provided.',
+                            type: 'array',
+                            items: new OA\Items(type: 'integer'),
+                            nullable: true,
+                            example: [4, 3, 9]
+                        ),
+                        new OA\Property(
                             property: 'languageCode',
                             description: 'Optional language code to filter results (e.g., en, ka, ru)',
                             type: 'string',
@@ -346,6 +354,7 @@ class PatternSearchAdvancedController extends AbstractController
                         summary: 'Find sequences where a letter appears at specific positions',
                         value: [
                             'sequencePositions' => [[1, 4], [3], [9]],
+                            'exactLengths' => [4, 3, 9],
                             'languageCode' => 'en',
                             'limit' => 100
                         ]
@@ -408,6 +417,7 @@ class PatternSearchAdvancedController extends AbstractController
         }
 
         $sequencePositions = $data['sequencePositions'] ?? null;
+        $exactLengths = $data['exactLengths'] ?? null;
         $languageCode = $data['languageCode'] ?? null;
         $limit = (int) ($data['limit'] ?? 100);
 
@@ -430,6 +440,32 @@ class PatternSearchAdvancedController extends AbstractController
                 ['error' => 'sequencePositions cannot be empty'],
                 Response::HTTP_BAD_REQUEST
             );
+        }
+
+        // Validate exactLengths if provided
+        if ($exactLengths !== null) {
+            if (!is_array($exactLengths)) {
+                return new JsonResponse(
+                    ['error' => 'exactLengths must be an array'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            if (count($exactLengths) !== count($sequencePositions)) {
+                return new JsonResponse(
+                    ['error' => 'exactLengths array length must match sequencePositions array length'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            foreach ($exactLengths as $index => $length) {
+                if (!is_int($length) || $length < 1) {
+                    return new JsonResponse(
+                        ['error' => "exactLength at index $index must be a positive integer"],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+            }
         }
 
         // Validate that each element is an array of positions
@@ -461,6 +497,7 @@ class PatternSearchAdvancedController extends AbstractController
         try {
             $results = $this->patternSearchService->findBySequencePattern(
                 $sequencePositions,
+                $exactLengths,
                 $languageCode,
                 $limit
             );
