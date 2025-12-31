@@ -766,10 +766,15 @@ class PatternSearchAdvancedController extends AbstractController
 
             return new JsonResponse($results, Response::HTTP_OK);
         } catch (Exception $e) {
-            return new JsonResponse(
-                ['error' => 'An error occurred during multi-letter sequence pattern search: ' . $e->getMessage()],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            // Log the full exception for debugging
+            error_log('Multi-letter search error: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+
+            return new JsonResponse([
+                'error' => 'An error occurred during multi-letter sequence pattern search: ' . $e->getMessage(),
+                'type' => get_class($e),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

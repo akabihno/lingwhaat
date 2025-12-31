@@ -702,6 +702,11 @@ class PatternSearchService
             // languageCode is required for multi-letter searches (enforced in controller)
             $alphabet = ScriptAlphabets::getAlphabetForLanguage($languageCode);
 
+            $this->logger->info('Alphabet retrieved', [
+                'service' => '[PatternSearchService]',
+                'alphabet_length' => mb_strlen($alphabet, 'UTF-8'),
+            ]);
+
             // OPTIMIZATION: Pre-filter viable letters to reduce search space
             // Instead of trying all 26^N combinations, find which letters actually have matches
             $viableLettersPerConstraint = $this->findViableLetters(
@@ -711,6 +716,11 @@ class PatternSearchService
                 $notLanguageCodes,
                 $alphabet
             );
+
+            $this->logger->info('Viable letters found', [
+                'service' => '[PatternSearchService]',
+                'viable_counts' => array_map('count', $viableLettersPerConstraint),
+            ]);
 
             // If any constraint has no viable letters, return early
             foreach ($viableLettersPerConstraint as $viableLetters) {
@@ -883,6 +893,11 @@ class PatternSearchService
     private function executeMsearchForViableLetters(array $msearchQueries, array $letterMap): array
     {
         try {
+            $this->logger->info('Starting msearch for viable letters', [
+                'service' => '[PatternSearchService]',
+                'query_count' => count($msearchQueries) / 2,
+            ]);
+
             // Use Elastica's Multi\Search for proper msearch handling
             $multiSearch = new MultiSearch($this->esClient);
 
@@ -903,7 +918,16 @@ class PatternSearchService
                 $multiSearch->addSearch($search);
             }
 
+            $this->logger->info('Executing msearch for viable letters', [
+                'service' => '[PatternSearchService]',
+            ]);
+
             $resultSets = $multiSearch->search();
+
+            $this->logger->info('Msearch completed for viable letters', [
+                'service' => '[PatternSearchService]',
+                'result_count' => count($resultSets),
+            ]);
             $viableLetters = [];
 
             foreach ($resultSets as $index => $resultSet) {
