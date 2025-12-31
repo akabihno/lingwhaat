@@ -604,4 +604,259 @@ class PatternSearchService
 
         return $combinations;
     }
+
+    /**
+     * Search for word sequences where a specific letter appears exclusively at given positions across words.
+     *
+     * @param array $sequencePositions Array of position arrays for each word in the sequence
+     *                                 Example: [[1,4], [3], [9]] means letter at positions 1,4 in word 1, position 3 in word 2, position 9 in word 3
+     * @param string|null $languageCode Optional language filter
+     * @param int $limit Maximum number of result groups to return
+     * @return array Array of results grouped by language code, ordered alphabetically
+     */
+    public function findBySequencePattern(
+        array $sequencePositions,
+        ?string $languageCode = null,
+        int $limit = 100
+    ): array {
+        if (empty($sequencePositions)) {
+            return [];
+        }
+
+        try {
+            $this->logger->info('Sequence pattern search initiated', [
+                'service' => '[PatternSearchService]',
+                'sequence_positions' => $sequencePositions,
+                'languageCode' => $languageCode,
+                'limit' => $limit,
+            ]);
+
+            $allResults = [];
+            $alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+            // Try each letter of the alphabet
+            for ($i = 0; $i < strlen($alphabet); $i++) {
+                $letter = $alphabet[$i];
+
+                $sequenceWords = $this->findSequenceForLetter(
+                    $letter,
+                    $sequencePositions,
+                    $languageCode,
+                    $limit
+                );
+
+                if (!empty($sequenceWords)) {
+                    foreach ($sequenceWords as $result) {
+                        $allResults[] = $result;
+                    }
+                }
+
+                // Stop if we have enough results
+                if (count($allResults) >= $limit) {
+                    break;
+                }
+            }
+
+            // Group by language code and order
+            $groupedResults = [];
+            foreach ($allResults as $result) {
+                $langCode = $result['languageCode'];
+                if (!isset($groupedResults[$langCode])) {
+                    $groupedResults[$langCode] = [];
+                }
+                $groupedResults[$langCode][] = $result;
+            }
+
+            // Sort by language code
+            ksort($groupedResults);
+
+            // Convert to desired format
+            $finalResults = [];
+            foreach ($groupedResults as $langCode => $words) {
+                $finalResults[] = [
+                    'languageCode' => $langCode,
+                    'sequences' => array_slice($words, 0, $limit)
+                ];
+            }
+
+            $this->logger->info('Sequence pattern search completed', [
+                'service' => '[PatternSearchService]',
+                'result_count' => count($finalResults),
+            ]);
+
+            return $finalResults;
+        } catch (Exception $e) {
+            $this->logger->error('Sequence pattern search failed', [
+                'service' => '[PatternSearchService]',
+                'sequence_positions' => $sequencePositions,
+                'error' => $e->getMessage(),
+            ]);
+
+            return [];
+        }
+    }
+
+    /**
+     * Find word sequences for a specific letter at given positions.
+     *
+     * @param string $letter The letter to search for
+     * @param array $sequencePositions Position arrays for each word
+     * @param string|null $languageCode Optional language filter
+     * @param int $limit Maximum results per letter
+     * @return array Array of matching sequences
+     */
+    private function findSequenceForLetter(
+        string $letter,
+        array $sequencePositions,
+        ?string $languageCode,
+        int $limit
+    ): array {
+        $wordResultsByPosition = [];
+
+        // For each word in the sequence, find words where the letter appears exclusively at specified positions
+        foreach ($sequencePositions as $wordIndex => $positions) {
+            if (empty($positions)) {
+                continue;
+            }
+
+            // Build fixedChars for this pattern
+            $fixedChars = [];
+            foreach ($positions as $pos) {
+                $fixedChars[$pos] = $letter;
+            }
+
+            // Use samePositions to ensure the letter appears at all specified positions
+            $samePositions = [array_values($positions)];
+
+            // Determine the exact length based on the maximum position
+            $maxPos = max($positions);
+
+            // Search for words matching this pattern
+            $results = $this->findByAdvancedPattern(
+                $samePositions,
+                $fixedChars,
+                null, // Don't force exact length, allow longer words
+                $languageCode,
+                200 // Get more results to combine
+            );
+
+            $wordResultsByPosition[$wordIndex] = $results;
+        }
+
+        // Combine words from each position to form sequences
+        return $this->combineSequenceWords($wordResultsByPosition, $letter, $limit);
+    }
+
+    /**
+     * Combine words from different positions to form complete sequences.
+     *
+     * @param array $wordResultsByPosition Words for each position in the sequence
+     * @param string $letter The letter being searched
+     * @param int $limit Maximum number of sequences to return
+     * @return array Array of combined sequences
+     */
+    private function combineSequenceWords(array $wordResultsByPosition, string $letter, int $limit): array
+    {
+        if (empty($wordResultsByPosition)) {
+            return [];
+        }
+
+        $sequences = [];
+        $positionIndices = array_keys($wordResultsByPosition);
+
+        // Start with the first position
+        $firstPosition = $positionIndices[0];
+
+        foreach ($wordResultsByPosition[$firstPosition] as $firstWord) {
+            $this->recursiveSequenceBuild(
+                $wordResultsByPosition,
+                $positionIndices,
+                1,
+                [$firstWord],
+                $sequences,
+                $letter,
+                $limit
+            );
+
+            if (count($sequences) >= $limit) {
+                break;
+            }
+        }
+
+        return array_slice($sequences, 0, $limit);
+    }
+
+    /**
+     * Recursively build word sequences.
+     *
+     * @param array $wordResultsByPosition Words for each position
+     * @param array $positionIndices Position indices
+     * @param int $currentIndex Current position in the sequence
+     * @param array $currentSequence Current sequence being built
+     * @param array &$sequences Reference to store completed sequences
+     * @param string $letter The letter being searched
+     * @param int $limit Maximum sequences
+     */
+    private function recursiveSequenceBuild(
+        array $wordResultsByPosition,
+        array $positionIndices,
+        int $currentIndex,
+        array $currentSequence,
+        array &$sequences,
+        string $letter,
+        int $limit
+    ): void {
+        if (count($sequences) >= $limit) {
+            return;
+        }
+
+        if ($currentIndex >= count($positionIndices)) {
+            // Check if all words are from the same language
+            $languageCode = $currentSequence[0]['languageCode'];
+            $allSameLanguage = true;
+            foreach ($currentSequence as $word) {
+                if ($word['languageCode'] !== $languageCode) {
+                    $allSameLanguage = false;
+                    break;
+                }
+            }
+
+            if ($allSameLanguage) {
+                $sequences[] = [
+                    'languageCode' => $languageCode,
+                    'letter' => $letter,
+                    'words' => array_map(fn($w) => [
+                        'word' => $w['word'],
+                        'ipa' => $w['ipa'] ?? null
+                    ], $currentSequence)
+                ];
+            }
+            return;
+        }
+
+        $positionIndex = $positionIndices[$currentIndex];
+
+        if (!isset($wordResultsByPosition[$positionIndex])) {
+            return;
+        }
+
+        foreach ($wordResultsByPosition[$positionIndex] as $word) {
+            $newSequence = $currentSequence;
+            $newSequence[] = $word;
+
+            $this->recursiveSequenceBuild(
+                $wordResultsByPosition,
+                $positionIndices,
+                $currentIndex + 1,
+                $newSequence,
+                $sequences,
+                $letter,
+                $limit
+            );
+
+            if (count($sequences) >= $limit) {
+                break;
+            }
+        }
+    }
 }

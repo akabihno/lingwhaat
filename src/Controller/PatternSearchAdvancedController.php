@@ -65,13 +65,13 @@ class PatternSearchAdvancedController extends AbstractController
                             description: 'Array of pattern configurations for cipher-solving. Finds word combinations (one per pattern) from the same language that share at least 3 common characters. Use this OR samePositions/fixedChars, not both.',
                             type: 'array',
                             items: new OA\Items(
-                                type: 'object',
                                 properties: [
                                     new OA\Property(property: 'samePositions', type: 'array', items: new OA\Items(type: 'array', items: new OA\Items(type: 'integer'))),
                                     new OA\Property(property: 'fixedChars', type: 'object'),
                                     new OA\Property(property: 'exactLength', type: 'integer', nullable: true),
                                     new OA\Property(property: 'languageCode', type: 'string', nullable: true),
-                                ]
+                                ],
+                                type: 'object'
                             ),
                             nullable: true
                         ),
@@ -294,6 +294,181 @@ class PatternSearchAdvancedController extends AbstractController
         } catch (Exception $e) {
             return new JsonResponse(
                 ['error' => 'An error occurred during intersection search: ' . $e->getMessage()],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    #[Route('/api/pattern-search-sequence', name: 'pattern_search_sequence', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/pattern-search-sequence',
+        description: 'Search for word sequences where a specific letter appears exclusively at given positions across multiple words in the same language. For example, [[1,4], [3], [9]] means a letter appears at positions 1,4 in the first word, position 3 in the second word, and position 9 in the third word.',
+        summary: 'Search for word sequences with positional letter patterns across multiple words'
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: [
+            'application/json' => new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(
+                    required: ['sequencePositions', 'limit'],
+                    properties: [
+                        new OA\Property(
+                            property: 'sequencePositions',
+                            description: 'Array of position arrays for each word in the sequence. Each sub-array contains positions (1-indexed) where a specific letter appears exclusively in that word.',
+                            type: 'array',
+                            items: new OA\Items(
+                                type: 'array',
+                                items: new OA\Items(type: 'integer')
+                            ),
+                            example: [[1, 4], [3], [9]]
+                        ),
+                        new OA\Property(
+                            property: 'languageCode',
+                            description: 'Optional language code to filter results (e.g., en, ka, ru)',
+                            type: 'string',
+                            nullable: true
+                        ),
+                        new OA\Property(
+                            property: 'limit',
+                            description: 'Maximum number of results to return',
+                            type: 'integer',
+                            default: 100,
+                            maximum: 1000,
+                            minimum: 1
+                        ),
+                    ],
+                    type: 'object'
+                ),
+                examples: [
+                    new OA\Examples(
+                        example: 'Sequence Pattern Search',
+                        summary: 'Find sequences where a letter appears at specific positions',
+                        value: [
+                            'sequencePositions' => [[1, 4], [3], [9]],
+                            'languageCode' => 'en',
+                            'limit' => 100
+                        ]
+                    )
+                ]
+            )
+        ]
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Successful sequence pattern search. Returns array of result groups ordered by language code.',
+        content: [
+            'application/json' => new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'object')),
+                examples: [
+                    new OA\Examples(
+                        example: 'Sequence Search Result',
+                        summary: 'Sequence Pattern Search Result',
+                        value: [
+                            [
+                                'languageCode' => 'en',
+                                'sequences' => [
+                                    [
+                                        'languageCode' => 'en',
+                                        'letter' => 'a',
+                                        'words' => [
+                                            ['word' => 'that', 'ipa' => 'ðæt'],
+                                            ['word' => 'car', 'ipa' => 'kɑr'],
+                                            ['word' => 'something', 'ipa' => 'ˈsʌmθɪŋ']
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    )
+                ]
+            )
+        ]
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Invalid parameters',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'error', type: 'string', example: 'sequencePositions must be provided and must be an array'),
+            ],
+            type: 'object'
+        )
+    )]
+    public function searchSequence(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return new JsonResponse(
+                ['error' => 'Invalid JSON payload: ' . json_last_error_msg()],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $sequencePositions = $data['sequencePositions'] ?? null;
+        $languageCode = $data['languageCode'] ?? null;
+        $limit = (int) ($data['limit'] ?? 100);
+
+        if ($limit < 1 || $limit > 1000) {
+            return new JsonResponse(
+                ['error' => 'Limit must be between 1 and 1000'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($sequencePositions === null || !is_array($sequencePositions)) {
+            return new JsonResponse(
+                ['error' => 'sequencePositions must be provided and must be an array'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if (empty($sequencePositions)) {
+            return new JsonResponse(
+                ['error' => 'sequencePositions cannot be empty'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // Validate that each element is an array of positions
+        foreach ($sequencePositions as $index => $positions) {
+            if (!is_array($positions)) {
+                return new JsonResponse(
+                    ['error' => "Position array at index $index must be an array"],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            if (empty($positions)) {
+                return new JsonResponse(
+                    ['error' => "Position array at index $index cannot be empty"],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            foreach ($positions as $position) {
+                if (!is_int($position) || $position < 1) {
+                    return new JsonResponse(
+                        ['error' => "All positions must be positive integers (at index $index)"],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+            }
+        }
+
+        try {
+            $results = $this->patternSearchService->findBySequencePattern(
+                $sequencePositions,
+                $languageCode,
+                $limit
+            );
+
+            return new JsonResponse($results, Response::HTTP_OK);
+        } catch (Exception $e) {
+            return new JsonResponse(
+                ['error' => 'An error occurred during sequence pattern search: ' . $e->getMessage()],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
