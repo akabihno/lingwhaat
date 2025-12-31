@@ -326,7 +326,7 @@ class PatternSearchAdvancedController extends AbstractController
                         ),
                         new OA\Property(
                             property: 'letterConstraints',
-                            description: '[Multi-letter mode] Array of letter constraints, where each constraint is an array of position arrays for one letter across all words. Use empty array [] to indicate a letter has no constraint for a particular word. Example: [[[1,4], [3], []], [[2], [1,2], [5]]] means first letter at positions [1,4] in word 1, [3] in word 2, and no constraint in word 3; second letter at [2] in word 1, [1,2] in word 2, and [5] in word 3. Use this OR sequencePositions, not both.',
+                            description: '[Multi-letter mode] Array of letter constraints (max 5), where each constraint is an array of position arrays for one letter across all words. Use empty array [] to indicate a letter has no constraint for a particular word. IMPORTANT: languageCode is required when using letterConstraints for performance reasons. Example: [[[1,4], [3], []], [[2], [1,2], [5]]] means first letter at positions [1,4] in word 1, [3] in word 2, and no constraint in word 3; second letter at [2] in word 1, [1,2] in word 2, and [5] in word 3. Use this OR sequencePositions, not both.',
                             type: 'array',
                             items: new OA\Items(
                                 type: 'array',
@@ -657,6 +657,22 @@ class PatternSearchAdvancedController extends AbstractController
         if (count($letterConstraints) < 1) {
             return new JsonResponse(
                 ['error' => 'At least 1 letter constraint must be provided'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // Require languageCode for multi-letter searches to improve performance
+        if ($languageCode === null) {
+            return new JsonResponse(
+                ['error' => 'languageCode is required for multi-letter searches due to performance constraints'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // Limit number of letter constraints to prevent exponential complexity
+        if (count($letterConstraints) > 5) {
+            return new JsonResponse(
+                ['error' => 'Maximum 5 letter constraints allowed due to performance constraints'],
                 Response::HTTP_BAD_REQUEST
             );
         }

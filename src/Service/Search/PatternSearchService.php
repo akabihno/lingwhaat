@@ -2,6 +2,7 @@
 
 namespace App\Service\Search;
 
+use App\Constant\ScriptAlphabets;
 use App\Service\Logging\ElasticsearchLogger;
 use Elastica\Client;
 use Elastica\Query;
@@ -653,7 +654,10 @@ class PatternSearchService
             ]);
 
             $allResults = [];
-            $alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+            // Get the appropriate alphabet for the language
+            // languageCode is required for multi-letter searches (enforced in controller)
+            $alphabet = ScriptAlphabets::getAlphabetForLanguage($languageCode);
 
             // Generate all possible letter assignments
             $this->findLetterAssignments(
@@ -750,8 +754,9 @@ class PatternSearchService
         }
 
         // Try each available letter for this constraint
-        for ($i = 0; $i < strlen($alphabet); $i++) {
-            $letter = $alphabet[$i];
+        // Use mb_strlen/mb_substr for proper UTF-8 handling (non-Latin scripts)
+        for ($i = 0; $i < mb_strlen($alphabet, 'UTF-8'); $i++) {
+            $letter = mb_substr($alphabet, $i, 1, 'UTF-8');
 
             // Skip if letter already assigned
             if (in_array($letter, $assignedLetters)) {
@@ -837,12 +842,13 @@ class PatternSearchService
             $exactLength = isset($exactLengths[$wordIndex]) ? $exactLengths[$wordIndex] : null;
 
             // Search for words matching this pattern
+            // Use smaller limit to improve performance
             $results_for_word = $this->findByAdvancedPattern(
                 $samePositions,
                 $fixedChars,
                 $exactLength,
                 $languageCode,
-                200,
+                50, // Reduced from 200 to 50 for better performance
                 $notLanguageCodes
             );
 
@@ -1021,11 +1027,16 @@ class PatternSearchService
             ]);
 
             $allResults = [];
-            $alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+            // Get the appropriate alphabet for the language
+            // Use Latin alphabet as fallback if no language specified
+            $alphabet = $languageCode !== null
+                ? ScriptAlphabets::getAlphabetForLanguage($languageCode)
+                : ScriptAlphabets::LATIN_ALPHABET;
 
             // Try each letter of the alphabet
-            for ($i = 0; $i < strlen($alphabet); $i++) {
-                $letter = $alphabet[$i];
+            for ($i = 0; $i < mb_strlen($alphabet, 'UTF-8'); $i++) {
+                $letter = mb_substr($alphabet, $i, 1, 'UTF-8');
 
                 $sequenceWords = $this->findSequenceForLetter(
                     $letter,
@@ -1132,7 +1143,7 @@ class PatternSearchService
                 $fixedChars,
                 $exactLength,
                 $languageCode,
-                200, // Get more results to combine
+                50, // Reduced from 200 to 50 for better performance
                 $notLanguageCodes
             );
 
