@@ -353,6 +353,14 @@ class PatternSearchAdvancedController extends AbstractController
                             nullable: true
                         ),
                         new OA\Property(
+                            property: 'notLanguageCodes',
+                            description: 'Optional array of language codes to exclude from results (e.g., ["ru", "ka"])',
+                            type: 'array',
+                            items: new OA\Items(type: 'string'),
+                            nullable: true,
+                            example: ['ru', 'ka']
+                        ),
+                        new OA\Property(
                             property: 'limit',
                             description: 'Maximum number of results to return',
                             type: 'integer',
@@ -397,6 +405,7 @@ class PatternSearchAdvancedController extends AbstractController
                             ],
                             'exactLengths' => [4, 3, 5, 6],
                             'languageCode' => 'en',
+                            'notLanguageCodes' => ['ru', 'ka'],
                             'limit' => 100
                         ]
                     )
@@ -480,6 +489,7 @@ class PatternSearchAdvancedController extends AbstractController
         $letterConstraints = $data['letterConstraints'] ?? null;
         $exactLengths = $data['exactLengths'] ?? null;
         $languageCode = $data['languageCode'] ?? null;
+        $notLanguageCodes = $data['notLanguageCodes'] ?? null;
         $limit = (int) ($data['limit'] ?? 100);
 
         if ($limit < 1 || $limit > 1000) {
@@ -504,9 +514,28 @@ class PatternSearchAdvancedController extends AbstractController
             );
         }
 
+        // Validate notLanguageCodes if provided
+        if ($notLanguageCodes !== null) {
+            if (!is_array($notLanguageCodes)) {
+                return new JsonResponse(
+                    ['error' => 'notLanguageCodes must be an array'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            foreach ($notLanguageCodes as $code) {
+                if (!is_string($code) || empty($code)) {
+                    return new JsonResponse(
+                        ['error' => 'All language codes in notLanguageCodes must be non-empty strings'],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+            }
+        }
+
         // Handle multi-letter mode
         if ($letterConstraints !== null) {
-            return $this->handleMultiLetterSearch($letterConstraints, $exactLengths, $languageCode, $limit);
+            return $this->handleMultiLetterSearch($letterConstraints, $exactLengths, $languageCode, $notLanguageCodes, $limit);
         }
 
         // Handle single-letter mode (backward compatibility)
@@ -581,7 +610,8 @@ class PatternSearchAdvancedController extends AbstractController
                 $sequencePositions,
                 $exactLengths,
                 $languageCode,
-                $limit
+                $limit,
+                $notLanguageCodes
             );
 
             return new JsonResponse($results, Response::HTTP_OK);
@@ -599,6 +629,7 @@ class PatternSearchAdvancedController extends AbstractController
      * @param array $letterConstraints Array of letter constraints
      * @param array|null $exactLengths Optional exact lengths
      * @param string|null $languageCode Optional language filter
+     * @param array|null $notLanguageCodes Optional language codes to exclude
      * @param int $limit Maximum number of results
      * @return JsonResponse
      */
@@ -606,6 +637,7 @@ class PatternSearchAdvancedController extends AbstractController
         array $letterConstraints,
         ?array $exactLengths,
         ?string $languageCode,
+        ?array $notLanguageCodes,
         int $limit
     ): JsonResponse {
         if (!is_array($letterConstraints)) {
@@ -712,7 +744,8 @@ class PatternSearchAdvancedController extends AbstractController
                 $letterConstraints,
                 $exactLengths,
                 $languageCode,
-                $limit
+                $limit,
+                $notLanguageCodes
             );
 
             return new JsonResponse($results, Response::HTTP_OK);

@@ -151,6 +151,7 @@ class PatternSearchService
      * @param int|null $exactLength Optional exact word length filter
      * @param string|null $languageCode Optional language filter
      * @param int $limit Maximum number of results to return
+     * @param array|null $notLanguageCodes Optional array of language codes to exclude from results
      * @return array Array of matching words with their IPA and language code
      */
     public function findByAdvancedPattern(
@@ -158,7 +159,8 @@ class PatternSearchService
         array $fixedChars = [],
         ?int $exactLength = null,
         ?string $languageCode = null,
-        int $limit = 100
+        int $limit = 100,
+        ?array $notLanguageCodes = null
     ): array {
         if (empty($samePositions) && empty($fixedChars)) {
             return [];
@@ -179,6 +181,14 @@ class PatternSearchService
                 $query->addMust($languageQuery);
             }
 
+            if ($notLanguageCodes !== null && !empty($notLanguageCodes)) {
+                foreach ($notLanguageCodes as $excludedLang) {
+                    $excludeQuery = new Query\Term();
+                    $excludeQuery->setTerm('languageCode', $excludedLang);
+                    $query->addMustNot($excludeQuery);
+                }
+            }
+
             $mainQuery = new Query($query);
             $mainQuery->setSize($limit);
 
@@ -189,6 +199,7 @@ class PatternSearchService
                 'fixed_chars' => $fixedChars,
                 'exact_length' => $exactLength,
                 'languageCode' => $languageCode,
+                'not_language_codes' => $notLanguageCodes,
                 'limit' => $limit,
             ]);
 
@@ -617,13 +628,15 @@ class PatternSearchService
      * @param array|null $exactLengths Optional array of exact lengths for each word in the sequence
      * @param string|null $languageCode Optional language filter
      * @param int $limit Maximum number of result groups to return
+     * @param array|null $notLanguageCodes Optional array of language codes to exclude from results
      * @return array Array of results grouped by language code, ordered alphabetically
      */
     public function findByMultiLetterSequencePattern(
         array $letterConstraints,
         ?array $exactLengths = null,
         ?string $languageCode = null,
-        int $limit = 100
+        int $limit = 100,
+        ?array $notLanguageCodes = null
     ): array {
         if (empty($letterConstraints)) {
             return [];
@@ -635,6 +648,7 @@ class PatternSearchService
                 'letter_constraints' => $letterConstraints,
                 'exact_lengths' => $exactLengths,
                 'languageCode' => $languageCode,
+                'not_language_codes' => $notLanguageCodes,
                 'limit' => $limit,
             ]);
 
@@ -646,6 +660,7 @@ class PatternSearchService
                 $letterConstraints,
                 $exactLengths,
                 $languageCode,
+                $notLanguageCodes,
                 $alphabet,
                 [],
                 0,
@@ -698,6 +713,7 @@ class PatternSearchService
      * @param array $letterConstraints All letter constraints
      * @param array|null $exactLengths Exact lengths for words
      * @param string|null $languageCode Language filter
+     * @param array|null $notLanguageCodes Language codes to exclude
      * @param string $alphabet Available letters
      * @param array $assignedLetters Already assigned letters
      * @param int $currentIndex Current constraint index
@@ -708,6 +724,7 @@ class PatternSearchService
         array $letterConstraints,
         ?array $exactLengths,
         ?string $languageCode,
+        ?array $notLanguageCodes,
         string $alphabet,
         array $assignedLetters,
         int $currentIndex,
@@ -725,6 +742,7 @@ class PatternSearchService
                 $letterConstraints,
                 $exactLengths,
                 $languageCode,
+                $notLanguageCodes,
                 $results,
                 $limit
             );
@@ -747,6 +765,7 @@ class PatternSearchService
                 $letterConstraints,
                 $exactLengths,
                 $languageCode,
+                $notLanguageCodes,
                 $alphabet,
                 $newAssignedLetters,
                 $currentIndex + 1,
@@ -767,6 +786,7 @@ class PatternSearchService
      * @param array $letterConstraints Original letter constraints
      * @param array|null $exactLengths Exact lengths for words
      * @param string|null $languageCode Language filter
+     * @param array|null $notLanguageCodes Language codes to exclude
      * @param array &$results Results array
      * @param int $limit Result limit
      */
@@ -775,6 +795,7 @@ class PatternSearchService
         array $letterConstraints,
         ?array $exactLengths,
         ?string $languageCode,
+        ?array $notLanguageCodes,
         array &$results,
         int $limit
     ): void {
@@ -821,7 +842,8 @@ class PatternSearchService
                 $fixedChars,
                 $exactLength,
                 $languageCode,
-                200
+                200,
+                $notLanguageCodes
             );
 
             if (empty($results_for_word)) {
@@ -974,13 +996,15 @@ class PatternSearchService
      *                                 Example: [4, 3, 9] means word 1 must be exactly 4 chars, word 2 must be 3 chars, word 3 must be 9 chars
      * @param string|null $languageCode Optional language filter
      * @param int $limit Maximum number of result groups to return
+     * @param array|null $notLanguageCodes Optional array of language codes to exclude from results
      * @return array Array of results grouped by language code, ordered alphabetically
      */
     public function findBySequencePattern(
         array $sequencePositions,
         ?array $exactLengths = null,
         ?string $languageCode = null,
-        int $limit = 100
+        int $limit = 100,
+        ?array $notLanguageCodes = null
     ): array {
         if (empty($sequencePositions)) {
             return [];
@@ -992,6 +1016,7 @@ class PatternSearchService
                 'sequence_positions' => $sequencePositions,
                 'exact_lengths' => $exactLengths,
                 'languageCode' => $languageCode,
+                'not_language_codes' => $notLanguageCodes,
                 'limit' => $limit,
             ]);
 
@@ -1007,6 +1032,7 @@ class PatternSearchService
                     $sequencePositions,
                     $exactLengths,
                     $languageCode,
+                    $notLanguageCodes,
                     $limit
                 );
 
@@ -1068,6 +1094,7 @@ class PatternSearchService
      * @param array $sequencePositions Position arrays for each word
      * @param array|null $exactLengths Optional exact lengths for each word
      * @param string|null $languageCode Optional language filter
+     * @param array|null $notLanguageCodes Language codes to exclude
      * @param int $limit Maximum results per letter
      * @return array Array of matching sequences
      */
@@ -1076,6 +1103,7 @@ class PatternSearchService
         array $sequencePositions,
         ?array $exactLengths,
         ?string $languageCode,
+        ?array $notLanguageCodes,
         int $limit
     ): array {
         $wordResultsByPosition = [];
@@ -1104,7 +1132,8 @@ class PatternSearchService
                 $fixedChars,
                 $exactLength,
                 $languageCode,
-                200 // Get more results to combine
+                200, // Get more results to combine
+                $notLanguageCodes
             );
 
             $wordResultsByPosition[$wordIndex] = $results;
