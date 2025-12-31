@@ -168,9 +168,14 @@ class PatternSearchService
         }
 
         try {
-            $scriptSource = $this->buildPainlessScript($samePositions, $fixedChars, $exactLength);
+            // Build parameterized script to avoid script compilation limit
+            $scriptData = $this->buildParameterizedScript($samePositions, $fixedChars, $exactLength);
 
-            $script = new Script($scriptSource, null, 'painless');
+            $script = new Script(
+                $scriptData['source'],
+                $scriptData['params'],
+                'painless'
+            );
             $scriptQuery = new Query\Script($script);
 
             $query = new Query\BoolQuery();
@@ -195,7 +200,7 @@ class PatternSearchService
 
             $this->logger->info('Advanced pattern search initiated', [
                 'service' => '[PatternSearchService]',
-                'script' => $scriptSource,
+                'script_params' => $scriptData['params'],
                 'same_positions' => $samePositions,
                 'fixed_chars' => $fixedChars,
                 'exact_length' => $exactLength,
@@ -212,7 +217,6 @@ class PatternSearchService
 
             $this->logger->info('Advanced pattern search completed', [
                 'service' => '[PatternSearchService]',
-                'script' => $scriptSource,
                 'result_count' => count($result),
             ]);
 
@@ -231,131 +235,166 @@ class PatternSearchService
     }
 
     /**
-     * Builds a Painless script for positional pattern matching.
+     * Builds a parameterized Painless script for positional pattern matching.
+     * Uses parameters instead of inline values to avoid script compilation limit.
      *
      * @param array $samePositions Groups of positions that must contain the same character
      * @param array $fixedChars Fixed characters at specific positions
      * @param int|null $exactLength Optional exact word length
-     * @return string Painless script for Elasticsearch
+     * @return array Array with 'source' and 'params' keys
      */
-    private function buildPainlessScript(array $samePositions, array $fixedChars, ?int $exactLength = null): string
+    private function buildParameterizedScript(array $samePositions, array $fixedChars, ?int $exactLength = null): array
     {
-        // Get the word field value from keyword field (text fields don't have doc values)
-        $script = "if (doc['word.keyword'].size() == 0) { return false; } ";
-        $script .= "String word = doc['word.keyword'].value.toLowerCase(); ";
+        $params = [];
 
-        // Check exact length if specified
-        if ($exactLength !== null && $exactLength > 0) {
-            $script .= "if (word.length() != $exactLength) { return false; } ";
-        } else {
-            // Check minimum length based on position constraints
-            $maxPosition = 0;
-            foreach ($samePositions as $group) {
-                foreach ($group as $position) {
-                    if ($position > $maxPosition) {
-                        $maxPosition = $position;
-                    }
-                }
-            }
-            foreach ($fixedChars as $position => $char) {
-                if ($position > $maxPosition) {
-                    $maxPosition = $position;
-                }
-            }
+        // Prepare parameters
+        $params['exactLength'] = $exactLength;
+        $params['samePositions'] = [];
+        $params['fixedChars'] = [];
 
-            if ($maxPosition > 0) {
-                $script .= "if (word.length() < $maxPosition) { return false; } ";
-            }
-        }
-
-        // Add same position constraints
+        // Convert samePositions to 0-indexed and prepare for parameters
         foreach ($samePositions as $groupIndex => $group) {
-            if (empty($group) || count($group) < 2) {
-                continue;
+            if (!empty($group) && count($group) >= 2) {
+                $params['samePositions'][] = array_map(fn($p) => $p - 1, $group);
             }
-
-            sort($group);
-            $firstPos = $group[0] - 1; // Convert to 0-indexed
-
-            // Check that all positions in the group have the same character
-            for ($i = 1; $i < count($group); $i++) {
-                $currentPos = $group[$i] - 1; // Convert to 0-indexed
-                $script .= "if (word.charAt($firstPos) != word.charAt($currentPos)) { return false; } ";
-            }
-
-            // Store allowed positions for exclusivity checking
-            // We'll check exclusivity after we know what character is at this position
-            $allowedPositions = array_map(fn($p) => $p - 1, $group); // Convert to 0-indexed
-            $positionsList = implode(',', $allowedPositions);
-
-            // Check that this character appears ONLY at these positions
-            $script .= "char c$groupIndex = word.charAt($firstPos); ";
-            $script .= "for (int idx = 0; idx < word.length(); idx++) { ";
-            $script .= "if (word.charAt(idx) == c$groupIndex) { ";
-            $script .= "boolean found = false; ";
-            $script .= "int[] allowed$groupIndex = new int[]{" . $positionsList . "}; ";
-            $script .= "for (int allowedIdx : allowed$groupIndex) { ";
-            $script .= "if (idx == allowedIdx) { found = true; break; } ";
-            $script .= "} ";
-            $script .= "if (!found) { return false; } ";
-            $script .= "} ";
-            $script .= "} ";
         }
 
-        // Add fixed character constraints
+        // Convert fixedChars to 0-indexed and prepare for parameters
         foreach ($fixedChars as $position => $char) {
-            if ($position < 1) {
-                continue;
+            if ($position >= 1) {
+                $params['fixedChars'][] = [
+                    'pos' => $position - 1,
+                    'char' => strtolower($char)
+                ];
             }
-            $pos = $position - 1; // Convert to 0-indexed
-            $escapedChar = addslashes(strtolower($char));
-            $script .= "if (word.charAt($pos) != '$escapedChar') { return false; } ";
-
-            // Ensure this fixed character appears ONLY at this position
-            $script .= "for (int idx = 0; idx < word.length(); idx++) { ";
-            $script .= "if (idx != $pos && word.charAt(idx) == '$escapedChar') { ";
-            $script .= "return false; ";
-            $script .= "} ";
-            $script .= "} ";
         }
 
-        // Additional check: Ensure no character repeats without being fully constrained
-        // For any character that appears multiple times, all positions must be specified
-        // Build a set of all constrained positions
+        // Calculate all constrained positions
         $allConstrainedPositions = [];
         foreach ($samePositions as $group) {
             foreach ($group as $pos) {
-                $allConstrainedPositions[] = $pos - 1; // 0-indexed
+                $allConstrainedPositions[] = $pos - 1;
             }
         }
         foreach ($fixedChars as $position => $char) {
             if ($position >= 1) {
-                $allConstrainedPositions[] = $position - 1; // 0-indexed
+                $allConstrainedPositions[] = $position - 1;
             }
         }
-        $constrainedPosList = implode(',', $allConstrainedPositions);
+        $params['constrainedPositions'] = array_values(array_unique($allConstrainedPositions));
 
-        if (!empty($allConstrainedPositions)) {
-            $script .= "int[] constrainedPositions = new int[]{" . $constrainedPosList . "}; ";
-            $script .= "for (int i = 0; i < word.length(); i++) { ";
-            $script .= "char currentChar = word.charAt(i); ";
-            $script .= "int count = 0; ";
-            $script .= "for (int j = 0; j < word.length(); j++) { ";
-            $script .= "if (word.charAt(j) == currentChar) { count++; } ";
-            $script .= "} ";
-            $script .= "if (count > 1) { ";
-            $script .= "boolean isConstrained = false; ";
-            $script .= "for (int cp : constrainedPositions) { ";
-            $script .= "if (i == cp) { isConstrained = true; break; } ";
-            $script .= "} ";
-            $script .= "if (!isConstrained) { return false; } ";
-            $script .= "} ";
-            $script .= "} ";
+        // Calculate max position for length check
+        $maxPosition = 0;
+        foreach ($samePositions as $group) {
+            foreach ($group as $position) {
+                if ($position > $maxPosition) {
+                    $maxPosition = $position;
+                }
+            }
         }
+        foreach ($fixedChars as $position => $char) {
+            if ($position > $maxPosition) {
+                $maxPosition = $position;
+            }
+        }
+        $params['maxPosition'] = $maxPosition;
 
-        $script .= "return true;";
+        // Build generic parameterized script
+        $script = "
+            if (doc['word.keyword'].size() == 0) { return false; }
+            String word = doc['word.keyword'].value.toLowerCase();
 
-        return $script;
+            // Check exact length if specified
+            if (params.exactLength != null && word.length() != params.exactLength) {
+                return false;
+            }
+
+            // Check minimum length
+            if (params.maxPosition > 0 && word.length() < params.maxPosition) {
+                return false;
+            }
+
+            // Check same position constraints
+            for (int groupIdx = 0; groupIdx < params.samePositions.size(); groupIdx++) {
+                def group = params.samePositions[groupIdx];
+                if (group.size() < 2) continue;
+
+                int firstPos = group[0];
+                char firstChar = word.charAt(firstPos);
+
+                // Check all positions in group have same character
+                for (int i = 1; i < group.size(); i++) {
+                    if (word.charAt(group[i]) != firstChar) {
+                        return false;
+                    }
+                }
+
+                // Check character appears ONLY at these positions
+                for (int idx = 0; idx < word.length(); idx++) {
+                    if (word.charAt(idx) == firstChar) {
+                        boolean found = false;
+                        for (int allowedPos : group) {
+                            if (idx == allowedPos) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) return false;
+                    }
+                }
+            }
+
+            // Check fixed character constraints
+            for (int i = 0; i < params.fixedChars.size(); i++) {
+                def constraint = params.fixedChars[i];
+                int pos = constraint.pos;
+                String charStr = constraint['char'];
+                char expectedChar = charStr.charAt(0);
+
+                if (word.charAt(pos) != expectedChar) {
+                    return false;
+                }
+
+                // Ensure this character appears ONLY at this position
+                for (int idx = 0; idx < word.length(); idx++) {
+                    if (idx != pos && word.charAt(idx) == expectedChar) {
+                        return false;
+                    }
+                }
+            }
+
+            // Check that repeated characters are fully constrained
+            if (params.constrainedPositions.size() > 0) {
+                for (int i = 0; i < word.length(); i++) {
+                    char currentChar = word.charAt(i);
+                    int count = 0;
+                    for (int j = 0; j < word.length(); j++) {
+                        if (word.charAt(j) == currentChar) {
+                            count++;
+                        }
+                    }
+                    if (count > 1) {
+                        boolean isConstrained = false;
+                        for (int cp : params.constrainedPositions) {
+                            if (i == cp) {
+                                isConstrained = true;
+                                break;
+                            }
+                        }
+                        if (!isConstrained) {
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        ";
+
+        return [
+            'source' => $script,
+            'params' => $params
+        ];
     }
 
     /**
