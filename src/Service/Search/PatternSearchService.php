@@ -22,8 +22,9 @@ class PatternSearchService
     public function __construct(
         protected ElasticsearchLogger $logger,
         protected RedisCacheService $cache,
+        Client $esClient,
     ) {
-        $this->esClient = ElasticsearchClientFactory::create();
+        $this->esClient = $esClient;
     }
 
     /**
