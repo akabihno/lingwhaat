@@ -753,7 +753,7 @@ class PatternSearchService
             // Sort by language code
             ksort($groupedResults);
 
-            // Convert to desired format
+            // Convert to the desired format
             $finalResults = [];
             foreach ($groupedResults as $langCode => $sequences) {
                 $finalResults[] = [
@@ -1017,7 +1017,7 @@ class PatternSearchService
         $viableLetters = $viableLettersPerConstraint[$currentIndex];
 
         foreach ($viableLetters as $letter) {
-            // Skip if letter already assigned
+            // Skip if a letter already assigned
             if (in_array($letter, $assignedLetters)) {
                 continue;
             }
@@ -1072,7 +1072,7 @@ class PatternSearchService
         }
 
         if ($currentIndex >= count($letterConstraints)) {
-            // All letters assigned, now find matching word sequences
+            // All letters assigned now find matching word sequences
             $this->findSequenceWithLetterAssignments(
                 $assignedLetters,
                 $letterConstraints,
@@ -1090,7 +1090,7 @@ class PatternSearchService
         for ($i = 0; $i < mb_strlen($alphabet, 'UTF-8'); $i++) {
             $letter = mb_substr($alphabet, $i, 1, 'UTF-8');
 
-            // Skip if letter already assigned
+            // Skip if a letter already assigned
             if (in_array($letter, $assignedLetters)) {
                 continue;
             }
@@ -1141,7 +1141,7 @@ class PatternSearchService
             return;
         }
 
-        // Determine number of words in sequence from first constraint
+        // Determine the number of words in sequence from first constraint
         $numWords = count($letterConstraints[0]);
 
         // Build all queries for parallel execution
@@ -1172,8 +1172,8 @@ class PatternSearchService
                 }
             }
 
-            // Get exact length if specified for this word
-            $exactLength = isset($exactLengths[$wordIndex]) ? $exactLengths[$wordIndex] : null;
+            // Get an exact length if specified for this word
+            $exactLength = $exactLengths[$wordIndex] ?? null;
 
             // Build query
             $query = $this->buildAdvancedPatternQuery(
