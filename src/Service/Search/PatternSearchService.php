@@ -887,8 +887,9 @@ class PatternSearchService
                 $ndjson .= json_encode($line) . "\n";
             }
 
-            $response = $this->esClient->request('_msearch', 'POST', $ndjson);
-            $responses = $response->getData()['responses'] ?? [];
+            $response = $this->esClient->msearch(['body' => $ndjson]);
+            $responseData = $response->asArray();
+            $responses = $responseData['responses'] ?? [];
 
             $viableLetters = [];
             foreach ($responses as $index => $resp) {
@@ -1212,8 +1213,9 @@ class PatternSearchService
                 $ndjson .= json_encode($line) . "\n";
             }
 
-            $response = $this->esClient->request('_msearch', 'POST', $ndjson);
-            $responses = $response->getData()['responses'] ?? [];
+            $response = $this->esClient->msearch(['body' => $ndjson]);
+            $responseData = $response->asArray();
+            $responses = $responseData['responses'] ?? [];
 
             $wordResultsByPosition = [];
             foreach ($responses as $index => $resp) {
@@ -1516,7 +1518,7 @@ class PatternSearchService
             $samePositions = [array_values($positions)];
 
             // Get exact length if specified for this word
-            $exactLength = isset($exactLengths[$wordIndex]) ? $exactLengths[$wordIndex] : null;
+            $exactLength = $exactLengths[$wordIndex] ?? null;
 
             // Build query
             $query = $this->buildAdvancedPatternQuery(
