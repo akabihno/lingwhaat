@@ -865,8 +865,8 @@ class PatternSearchService
 
                 // Extract the query part and size from the search body
                 if (isset($searchBody['bool'])) {
-                    // $searchBody['bool'] already contains the ['bool' => [...]] structure
-                    $search->setQuery($searchBody['bool']);
+                    // $searchBody['bool'] contains the bool query content
+                    $search->setQuery(['bool' => $searchBody['bool']]);
                 }
 
                 if (isset($searchBody['size'])) {
@@ -1145,8 +1145,8 @@ class PatternSearchService
 
                 // Extract the query part and size from the search body
                 if (isset($searchBody['bool'])) {
-                    // $searchBody['bool'] already contains the ['bool' => [...]] structure
-                    $search->setQuery($searchBody['bool']);
+                    // $searchBody['bool'] contains the bool query content
+                    $search->setQuery(['bool' => $searchBody['bool']]);
                 }
 
                 if (isset($searchBody['size'])) {
