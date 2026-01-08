@@ -333,20 +333,6 @@ class PatternSearchService
                         return false;
                     }
                 }
-
-                // Check character appears ONLY at these positions
-                for (int idx = 0; idx < word.length(); idx++) {
-                    if (word.charAt(idx) == firstChar) {
-                        boolean found = false;
-                        for (int allowedPos : group) {
-                            if (idx == allowedPos) {
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (!found) return false;
-                    }
-                }
             }
 
             // Check fixed character constraints
@@ -358,38 +344,6 @@ class PatternSearchService
 
                 if (word.charAt(pos) != expectedChar) {
                     return false;
-                }
-
-                // Ensure this character appears ONLY at this position
-                for (int idx = 0; idx < word.length(); idx++) {
-                    if (idx != pos && word.charAt(idx) == expectedChar) {
-                        return false;
-                    }
-                }
-            }
-
-            // Check that repeated characters are fully constrained
-            if (params.constrainedPositions.size() > 0) {
-                for (int i = 0; i < word.length(); i++) {
-                    char currentChar = word.charAt(i);
-                    int count = 0;
-                    for (int j = 0; j < word.length(); j++) {
-                        if (word.charAt(j) == currentChar) {
-                            count++;
-                        }
-                    }
-                    if (count > 1) {
-                        boolean isConstrained = false;
-                        for (int cp : params.constrainedPositions) {
-                            if (i == cp) {
-                                isConstrained = true;
-                                break;
-                            }
-                        }
-                        if (!isConstrained) {
-                            return false;
-                        }
-                    }
                 }
             }
 
@@ -1516,7 +1470,7 @@ class PatternSearchService
             );
 
             $msearchQueries[] = ['index' => $this->indexName];
-            $msearchQueries[] = array_merge($query->toArray(), ['size' => 50]);
+            $msearchQueries[] = array_merge($query->getQuery()->toArray(), ['size' => 50]);
             $wordQueryMap[] = $wordIndex;
         }
 
