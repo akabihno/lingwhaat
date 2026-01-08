@@ -859,7 +859,7 @@ class PatternSearchService
                     );
 
                     $msearchQueries[] = ['index' => $this->indexName];
-                    $msearchQueries[] = array_merge($query->toArray(), ['size' => 1]);
+                    $msearchQueries[] = array_merge($query->getQuery()->toArray(), ['size' => 1]);
                     $letterMap[] = ['letter' => $letter, 'wordIndex' => $wordIndex];
 
                     // Only need to test one word position per letter
@@ -910,8 +910,8 @@ class PatternSearchService
                 $search->addIndexByName($header['index']);
 
                 // Extract the query part and size from the search body
-                if (isset($searchBody['query'])) {
-                    $query = Query::create($searchBody['query']);
+                if (isset($searchBody['bool'])) {
+                    $query = Query::create(['bool' => $searchBody['bool']]);
                     $search->setQuery($query);
                 }
 
@@ -1140,7 +1140,7 @@ class PatternSearchService
             );
 
             $msearchQueries[] = ['index' => $this->indexName];
-            $msearchQueries[] = array_merge($query->toArray(), ['size' => 50]);
+            $msearchQueries[] = array_merge($query->getQuery()->toArray(), ['size' => 50]);
             $wordQueryMap[] = $wordIndex;
         }
 
@@ -1190,8 +1190,8 @@ class PatternSearchService
                 $search->addIndexByName($header['index']);
 
                 // Extract the query part and size from the search body
-                if (isset($searchBody['query'])) {
-                    $query = Query::create($searchBody['query']);
+                if (isset($searchBody['bool'])) {
+                    $query = Query::create(['bool' => $searchBody['bool']]);
                     $search->setQuery($query);
                 }
 
