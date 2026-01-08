@@ -865,8 +865,8 @@ class PatternSearchService
 
                 // Extract the query part and size from the search body
                 if (isset($searchBody['bool'])) {
-                    $query = Query::create(['bool' => $searchBody['bool']]);
-                    $search->setQuery($query);
+                    // $searchBody['bool'] already contains the ['bool' => [...]] structure
+                    $search->setQuery($searchBody['bool']);
                 }
 
                 if (isset($searchBody['size'])) {
@@ -1145,8 +1145,8 @@ class PatternSearchService
 
                 // Extract the query part and size from the search body
                 if (isset($searchBody['bool'])) {
-                    $query = Query::create(['bool' => $searchBody['bool']]);
-                    $search->setQuery($query);
+                    // $searchBody['bool'] already contains the ['bool' => [...]] structure
+                    $search->setQuery($searchBody['bool']);
                 }
 
                 if (isset($searchBody['size'])) {
