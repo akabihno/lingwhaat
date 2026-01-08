@@ -907,7 +907,7 @@ class PatternSearchService
 
                 // Create a Search object
                 $search = new Search($this->esClient);
-                $search->addIndex($header['index']);
+                $search->addIndexByName($header['index']);
 
                 // Extract the query part and size from the search body
                 if (isset($searchBody['query'])) {
@@ -1187,7 +1187,7 @@ class PatternSearchService
 
                 // Create a Search object
                 $search = new Search($this->esClient);
-                $search->addIndex($header['index']);
+                $search->addIndexByName($header['index']);
 
                 // Extract the query part and size from the search body
                 if (isset($searchBody['query'])) {
