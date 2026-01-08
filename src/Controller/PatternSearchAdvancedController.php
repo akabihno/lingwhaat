@@ -321,8 +321,8 @@ class PatternSearchAdvancedController extends AbstractController
                                 type: 'array',
                                 items: new OA\Items(type: 'integer')
                             ),
-                            nullable: true,
-                            example: [[1, 4], [3], [9]]
+                            example: [[1, 4], [3], [9]],
+                            nullable: true
                         ),
                         new OA\Property(
                             property: 'letterConstraints',
@@ -335,16 +335,16 @@ class PatternSearchAdvancedController extends AbstractController
                                     items: new OA\Items(type: 'integer')
                                 )
                             ),
-                            nullable: true,
-                            example: [[[1, 4], [3], []], [[2], [1, 2], [5]]]
+                            example: [[[1, 4], [3], []], [[2], [1, 2], [5]]],
+                            nullable: true
                         ),
                         new OA\Property(
                             property: 'exactLengths',
                             description: 'Optional array of exact lengths for each word in the sequence (1-indexed). Must match the length of sequencePositions if provided.',
                             type: 'array',
                             items: new OA\Items(type: 'integer'),
-                            nullable: true,
-                            example: [4, 3, 9]
+                            example: [4, 3, 9],
+                            nullable: true
                         ),
                         new OA\Property(
                             property: 'languageCode',
@@ -357,8 +357,8 @@ class PatternSearchAdvancedController extends AbstractController
                             description: 'Optional array of language codes to exclude from results (e.g., ["ru", "ka"])',
                             type: 'array',
                             items: new OA\Items(type: 'string'),
-                            nullable: true,
-                            example: ['ru', 'ka']
+                            example: ['ru', 'ka'],
+                            nullable: true
                         ),
                         new OA\Property(
                             property: 'limit',
@@ -499,7 +499,6 @@ class PatternSearchAdvancedController extends AbstractController
             );
         }
 
-        // Validate that either sequencePositions or letterConstraints is provided, but not both
         if ($sequencePositions === null && $letterConstraints === null) {
             return new JsonResponse(
                 ['error' => 'Either sequencePositions or letterConstraints must be provided'],
@@ -514,7 +513,6 @@ class PatternSearchAdvancedController extends AbstractController
             );
         }
 
-        // Validate notLanguageCodes if provided
         if ($notLanguageCodes !== null) {
             if (!is_array($notLanguageCodes)) {
                 return new JsonResponse(
@@ -533,12 +531,10 @@ class PatternSearchAdvancedController extends AbstractController
             }
         }
 
-        // Handle multi-letter mode
         if ($letterConstraints !== null) {
             return $this->handleMultiLetterSearch($letterConstraints, $exactLengths, $languageCode, $notLanguageCodes, $limit);
         }
 
-        // Handle single-letter mode (backward compatibility)
         if (!is_array($sequencePositions)) {
             return new JsonResponse(
                 ['error' => 'sequencePositions must be an array'],
@@ -553,7 +549,6 @@ class PatternSearchAdvancedController extends AbstractController
             );
         }
 
-        // Validate exactLengths if provided
         if ($exactLengths !== null) {
             if (!is_array($exactLengths)) {
                 return new JsonResponse(
@@ -579,7 +574,6 @@ class PatternSearchAdvancedController extends AbstractController
             }
         }
 
-        // Validate that each element is an array of positions
         foreach ($sequencePositions as $index => $positions) {
             if (!is_array($positions)) {
                 return new JsonResponse(
@@ -640,12 +634,6 @@ class PatternSearchAdvancedController extends AbstractController
         ?array $notLanguageCodes,
         int $limit
     ): JsonResponse {
-        if (!is_array($letterConstraints)) {
-            return new JsonResponse(
-                ['error' => 'letterConstraints must be an array'],
-                Response::HTTP_BAD_REQUEST
-            );
-        }
 
         if (empty($letterConstraints)) {
             return new JsonResponse(
@@ -661,7 +649,6 @@ class PatternSearchAdvancedController extends AbstractController
             );
         }
 
-        // Require languageCode for multi-letter searches to improve performance
         if ($languageCode === null) {
             return new JsonResponse(
                 ['error' => 'languageCode is required for multi-letter searches due to performance constraints'],
@@ -669,7 +656,6 @@ class PatternSearchAdvancedController extends AbstractController
             );
         }
 
-        // Limit number of letter constraints to prevent exponential complexity
         if (count($letterConstraints) > 5) {
             return new JsonResponse(
                 ['error' => 'Maximum 5 letter constraints allowed due to performance constraints'],
@@ -766,7 +752,6 @@ class PatternSearchAdvancedController extends AbstractController
 
             return new JsonResponse($results, Response::HTTP_OK);
         } catch (Exception $e) {
-            // Log the full exception for debugging
             error_log('Multi-letter search error: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
 
             return new JsonResponse([

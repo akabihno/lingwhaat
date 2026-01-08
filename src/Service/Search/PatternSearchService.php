@@ -656,9 +656,7 @@ class PatternSearchService
         }
 
         $withoutFirst = $this->getCombinations($array, $length);
-        $combinations = array_merge($combinations, $withoutFirst);
-
-        return $combinations;
+        return array_merge($combinations, $withoutFirst);
     }
 
     /**
@@ -738,8 +736,7 @@ class PatternSearchService
                 'viable_counts' => array_map('count', $viableLettersPerConstraint),
             ]);
 
-            // Generate letter assignments using only viable letters
-            $this->findLetterAssignmentsOptimized(
+            $this->findLetterAssignments(
                 $letterConstraints,
                 $exactLengths,
                 $languageCode,
@@ -991,7 +988,7 @@ class PatternSearchService
             $query->addMust($languageQuery);
         }
 
-        if ($notLanguageCodes !== null && !empty($notLanguageCodes)) {
+        if (!empty($notLanguageCodes)) {
             foreach ($notLanguageCodes as $excludedLang) {
                 $excludeQuery = new Query\Term();
                 $excludeQuery->setTerm('languageCode', $excludedLang);
@@ -1015,7 +1012,7 @@ class PatternSearchService
      * @param array &$results Results array
      * @param int $limit Result limit
      */
-    private function findLetterAssignmentsOptimized(
+    private function findLetterAssignments(
         array $letterConstraints,
         ?array $exactLengths,
         ?string $languageCode,
@@ -1056,85 +1053,12 @@ class PatternSearchService
             $newAssignedLetters = $assignedLetters;
             $newAssignedLetters[] = $letter;
 
-            $this->findLetterAssignmentsOptimized(
-                $letterConstraints,
-                $exactLengths,
-                $languageCode,
-                $notLanguageCodes,
-                $viableLettersPerConstraint,
-                $newAssignedLetters,
-                $currentIndex + 1,
-                $results,
-                $limit
-            );
-
-            if (count($results) >= $limit) {
-                return;
-            }
-        }
-    }
-
-    /**
-     * Recursively find valid letter assignments for multi-letter constraints.
-     *
-     * @param array $letterConstraints All letter constraints
-     * @param array|null $exactLengths Exact lengths for words
-     * @param string|null $languageCode Language filter
-     * @param array|null $notLanguageCodes Language codes to exclude
-     * @param string $alphabet Available letters
-     * @param array $assignedLetters Already assigned letters
-     * @param int $currentIndex Current constraint index
-     * @param array &$results Results array
-     * @param int $limit Result limit
-     */
-    private function findLetterAssignments(
-        array $letterConstraints,
-        ?array $exactLengths,
-        ?string $languageCode,
-        ?array $notLanguageCodes,
-        string $alphabet,
-        array $assignedLetters,
-        int $currentIndex,
-        array &$results,
-        int $limit
-    ): void {
-        if (count($results) >= $limit) {
-            return;
-        }
-
-        if ($currentIndex >= count($letterConstraints)) {
-            // All letters assigned now find matching word sequences
-            $this->findSequenceWithLetterAssignments(
-                $assignedLetters,
-                $letterConstraints,
-                $exactLengths,
-                $languageCode,
-                $notLanguageCodes,
-                $results,
-                $limit
-            );
-            return;
-        }
-
-        // Try each available letter for this constraint
-        // Use mb_strlen/mb_substr for proper UTF-8 handling (non-Latin scripts)
-        for ($i = 0; $i < mb_strlen($alphabet, 'UTF-8'); $i++) {
-            $letter = mb_substr($alphabet, $i, 1, 'UTF-8');
-
-            // Skip if a letter already assigned
-            if (in_array($letter, $assignedLetters)) {
-                continue;
-            }
-
-            $newAssignedLetters = $assignedLetters;
-            $newAssignedLetters[] = $letter;
-
             $this->findLetterAssignments(
                 $letterConstraints,
                 $exactLengths,
                 $languageCode,
                 $notLanguageCodes,
-                $alphabet,
+                $viableLettersPerConstraint,
                 $newAssignedLetters,
                 $currentIndex + 1,
                 $results,
