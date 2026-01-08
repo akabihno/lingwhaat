@@ -813,7 +813,7 @@ class PatternSearchService
                     );
 
                     $msearchQueries[] = ['index' => $this->indexName];
-                    $msearchQueries[] = array_merge($query->getQuery()->toArray(), ['size' => 1]);
+                    $msearchQueries[] = ['query' => $query->getQuery()->toArray(), 'size' => 1];
                     $letterMap[] = ['letter' => $letter, 'wordIndex' => $wordIndex];
 
                     // Only need to test one word position per letter
@@ -864,9 +864,9 @@ class PatternSearchService
                 $search->addIndexByName($header['index']);
 
                 // Extract the query part and size from the search body
-                if (isset($searchBody['bool'])) {
-                    // $searchBody['bool'] contains the bool query content
-                    $search->setQuery(['bool' => $searchBody['bool']]);
+                if (isset($searchBody['query']['bool'])) {
+                    // $searchBody['query']['bool'] contains the bool query content (filters, must, etc.)
+                    $search->setQuery(['bool' => $searchBody['query']['bool']]);
                 }
 
                 if (isset($searchBody['size'])) {
@@ -1094,7 +1094,7 @@ class PatternSearchService
             );
 
             $msearchQueries[] = ['index' => $this->indexName];
-            $msearchQueries[] = array_merge($query->getQuery()->toArray(), ['size' => 50]);
+            $msearchQueries[] = ['query' => $query->getQuery()->toArray(), 'size' => 50];
             $wordQueryMap[] = $wordIndex;
         }
 
@@ -1144,9 +1144,9 @@ class PatternSearchService
                 $search->addIndexByName($header['index']);
 
                 // Extract the query part and size from the search body
-                if (isset($searchBody['bool'])) {
-                    // $searchBody['bool'] contains the bool query content
-                    $search->setQuery(['bool' => $searchBody['bool']]);
+                if (isset($searchBody['query']['bool'])) {
+                    // $searchBody['query'] is the bool query array (e.g., ['bool' => [...]])
+                    $search->setQuery($searchBody['query']);
                 }
 
                 if (isset($searchBody['size'])) {
@@ -1470,7 +1470,7 @@ class PatternSearchService
             );
 
             $msearchQueries[] = ['index' => $this->indexName];
-            $msearchQueries[] = array_merge($query->getQuery()->toArray(), ['size' => 50]);
+            $msearchQueries[] = ['query' => $query->getQuery()->toArray(), 'size' => 50];
             $wordQueryMap[] = $wordIndex;
         }
 
