@@ -2,15 +2,18 @@
 
 namespace App\Service\Cache;
 
-use Predis\Client;
 use Exception;
+use phpDocumentor\Reflection\Types\Self_;
 use Psr\Log\LoggerInterface;
+use Redis;
 
 class RedisCacheService
 {
-    private ?Client $redis = null;
+    private ?Redis $redis = null;
     private const int DEFAULT_TTL = 3600; // 1 hour default TTL
     private const string KEY_PREFIX = 'pattern_search:';
+    private const string DEFAULT_REDIS_HOST = '127.0.0.1';
+    private const int DEFAULT_REDIS_PORT = 6379;
 
     public function __construct(
         private LoggerInterface $logger,
@@ -20,19 +23,19 @@ class RedisCacheService
             // Parse Redis DSN (e.g., redis://localhost:6379)
             $parsed = parse_url($redisDsn);
 
-            $this->redis = new Client([
-                'scheme' => $parsed['scheme'] ?? 'tcp',
-                'host' => $parsed['host'] ?? '127.0.0.1',
-                'port' => $parsed['port'] ?? 6379,
-            ]);
+            $this->redis = new Redis();
+            $this->redis->connect(
+                $parsed['host'] ?? self::DEFAULT_REDIS_HOST,
+                $parsed['port'] ?? self::DEFAULT_REDIS_PORT
+            );
 
             // Test connection
             $this->redis->ping();
 
             $this->logger->info('Redis cache service initialized', [
                 'service' => '[RedisCacheService]',
-                'host' => $parsed['host'] ?? '127.0.0.1',
-                'port' => $parsed['port'] ?? 6379,
+                'host' => $parsed['host'] ?? self::DEFAULT_REDIS_HOST,
+                'port' => $parsed['port'] ?? self::DEFAULT_REDIS_PORT,
             ]);
         } catch (Exception $e) {
             $this->logger->warning('Redis connection failed, caching disabled', [
@@ -110,7 +113,7 @@ class RedisCacheService
         }
 
         try {
-            $this->redis->del([self::KEY_PREFIX . $key]);
+            $this->redis->del(self::KEY_PREFIX . $key);
             return true;
         } catch (Exception $e) {
             $this->logger->warning('Redis delete failed', [
@@ -147,7 +150,7 @@ class RedisCacheService
         try {
             $keys = $this->redis->keys(self::KEY_PREFIX . '*');
             if (!empty($keys)) {
-                $this->redis->del($keys);
+                $this->redis->del(...$keys);
             }
             return true;
         } catch (Exception $e) {
