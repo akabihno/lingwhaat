@@ -373,29 +373,6 @@ class PatternSearchAdvancedController extends AbstractController
                 ),
                 examples: [
                     new OA\Examples(
-                        example: 'Single Letter Pattern Search',
-                        summary: 'Find sequences where one letter appears at specific positions',
-                        value: [
-                            'sequencePositions' => [[1, 4], [3], [9]],
-                            'exactLengths' => [4, 3, 9],
-                            'languageCode' => 'en',
-                            'limit' => 100
-                        ]
-                    ),
-                    new OA\Examples(
-                        example: 'Multi Letter Pattern Search',
-                        summary: 'Find sequences with multiple letter constraints (for substitution ciphers)',
-                        value: [
-                            'letterConstraints' => [
-                                [[1, 4], [3]],
-                                [[2], [1, 2]]
-                            ],
-                            'exactLengths' => [4, 3],
-                            'languageCode' => 'en',
-                            'limit' => 100
-                        ]
-                    ),
-                    new OA\Examples(
                         example: 'Multi Letter with Empty Constraints',
                         summary: 'Search with different letters appearing in different words',
                         value: [
