@@ -52,7 +52,7 @@ class LetterFrequencyQuery extends AbstractQuery
     {
         $this->connect();
 
-        $languageName = LanguageMappings::getLanguageCodeByName($languageCode, true);
+        $languageName = strtolower(LanguageMappings::getLanguageCodeByName($languageCode, true));
         $tableName = $this->getBaseTable($languageName);
 
         $query = "
