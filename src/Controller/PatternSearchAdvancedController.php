@@ -65,13 +65,13 @@ class PatternSearchAdvancedController extends AbstractController
                             description: 'Array of pattern configurations for cipher-solving. Finds word combinations (one per pattern) from the same language that share at least 3 common characters. Use this OR samePositions/fixedChars, not both.',
                             type: 'array',
                             items: new OA\Items(
-                                type: 'object',
                                 properties: [
                                     new OA\Property(property: 'samePositions', type: 'array', items: new OA\Items(type: 'array', items: new OA\Items(type: 'integer'))),
                                     new OA\Property(property: 'fixedChars', type: 'object'),
                                     new OA\Property(property: 'exactLength', type: 'integer', nullable: true),
                                     new OA\Property(property: 'languageCode', type: 'string', nullable: true),
-                                ]
+                                ],
+                                type: 'object'
                             ),
                             nullable: true
                         ),
@@ -296,6 +296,447 @@ class PatternSearchAdvancedController extends AbstractController
                 ['error' => 'An error occurred during intersection search: ' . $e->getMessage()],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
+        }
+    }
+
+    #[Route('/api/pattern-search-sequence', name: 'pattern_search_sequence', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/pattern-search-sequence',
+        description: 'Search for word sequences where letters appear exclusively at given positions across multiple words in the same language. Supports both single-letter search (sequencePositions) and multi-letter search (letterConstraints) for solving substitution ciphers.',
+        summary: 'Search for word sequences with positional letter patterns across multiple words'
+    )]
+    #[OA\RequestBody(
+        required: true,
+        content: [
+            'application/json' => new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(
+                    required: ['limit'],
+                    properties: [
+                        new OA\Property(
+                            property: 'sequencePositions',
+                            description: '[Single-letter mode] Array of position arrays for each word in the sequence. Each sub-array contains positions (1-indexed) where a specific letter appears exclusively in that word. Use this OR letterConstraints, not both.',
+                            type: 'array',
+                            items: new OA\Items(
+                                type: 'array',
+                                items: new OA\Items(type: 'integer')
+                            ),
+                            example: [[1, 4], [3], [9]],
+                            nullable: true
+                        ),
+                        new OA\Property(
+                            property: 'letterConstraints',
+                            description: '[Multi-letter mode] Array of letter constraints (max 5), where each constraint is an array of position arrays for one letter across all words. Use empty array [] to indicate a letter has no constraint for a particular word. IMPORTANT: languageCode is required when using letterConstraints for performance reasons. Example: [[[1,4], [3], []], [[2], [1,2], [5]]] means first letter at positions [1,4] in word 1, [3] in word 2, and no constraint in word 3; second letter at [2] in word 1, [1,2] in word 2, and [5] in word 3. Use this OR sequencePositions, not both.',
+                            type: 'array',
+                            items: new OA\Items(
+                                type: 'array',
+                                items: new OA\Items(
+                                    type: 'array',
+                                    items: new OA\Items(type: 'integer')
+                                )
+                            ),
+                            example: [[[1, 4], [3], []], [[2], [1, 2], [5]]],
+                            nullable: true
+                        ),
+                        new OA\Property(
+                            property: 'exactLengths',
+                            description: 'Optional array of exact lengths for each word in the sequence (1-indexed). Must match the length of sequencePositions if provided.',
+                            type: 'array',
+                            items: new OA\Items(type: 'integer'),
+                            example: [4, 3, 9],
+                            nullable: true
+                        ),
+                        new OA\Property(
+                            property: 'languageCode',
+                            description: 'Optional language code to filter results (e.g., en, ka, ru)',
+                            type: 'string',
+                            nullable: true
+                        ),
+                        new OA\Property(
+                            property: 'notLanguageCodes',
+                            description: 'Optional array of language codes to exclude from results (e.g., ["ru", "ka"])',
+                            type: 'array',
+                            items: new OA\Items(type: 'string'),
+                            example: ['ru', 'ka'],
+                            nullable: true
+                        ),
+                        new OA\Property(
+                            property: 'limit',
+                            description: 'Maximum number of results to return',
+                            type: 'integer',
+                            default: 100,
+                            maximum: 1000,
+                            minimum: 1
+                        ),
+                    ],
+                    type: 'object'
+                ),
+                examples: [
+                    new OA\Examples(
+                        example: 'Multi Letter with Empty Constraints',
+                        summary: 'Search with different letters appearing in different words',
+                        value: [
+                            'letterConstraints' => [
+                                [[1, 4], [3], [], [2]],
+                                [[2], [1, 2], [5], []]
+                            ],
+                            'exactLengths' => [4, 3, 5, 6],
+                            'languageCode' => 'en',
+                            'notLanguageCodes' => ['ru', 'ka'],
+                            'limit' => 100
+                        ]
+                    )
+                ]
+            )
+        ]
+    )]
+    #[OA\Response(
+        response: 200,
+        description: 'Successful sequence pattern search. Returns array of result groups ordered by language code.',
+        content: [
+            'application/json' => new OA\MediaType(
+                mediaType: 'application/json',
+                schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'object')),
+                examples: [
+                    new OA\Examples(
+                        example: 'Single Letter Search Result',
+                        summary: 'Single Letter Pattern Search Result',
+                        value: [
+                            [
+                                'languageCode' => 'en',
+                                'sequences' => [
+                                    [
+                                        'languageCode' => 'en',
+                                        'letter' => 'a',
+                                        'words' => [
+                                            ['word' => 'that', 'ipa' => 'ðæt'],
+                                            ['word' => 'car', 'ipa' => 'kɑr'],
+                                            ['word' => 'something', 'ipa' => 'ˈsʌmθɪŋ']
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ),
+                    new OA\Examples(
+                        example: 'Multi Letter Search Result',
+                        summary: 'Multi Letter Pattern Search Result',
+                        value: [
+                            [
+                                'languageCode' => 'en',
+                                'sequences' => [
+                                    [
+                                        'languageCode' => 'en',
+                                        'letters' => ['a', 'b'],
+                                        'words' => [
+                                            ['word' => 'that', 'ipa' => 'ðæt'],
+                                            ['word' => 'bat', 'ipa' => 'bæt']
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    )
+                ]
+            )
+        ]
+    )]
+    #[OA\Response(
+        response: 400,
+        description: 'Invalid parameters',
+        content: new OA\JsonContent(
+            properties: [
+                new OA\Property(property: 'error', type: 'string', example: 'sequencePositions must be provided and must be an array'),
+            ],
+            type: 'object'
+        )
+    )]
+    public function searchSequence(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return new JsonResponse(
+                ['error' => 'Invalid JSON payload: ' . json_last_error_msg()],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        $sequencePositions = $data['sequencePositions'] ?? null;
+        $letterConstraints = $data['letterConstraints'] ?? null;
+        $exactLengths = $data['exactLengths'] ?? null;
+        $languageCode = $data['languageCode'] ?? null;
+        $notLanguageCodes = $data['notLanguageCodes'] ?? null;
+        $limit = (int) ($data['limit'] ?? 100);
+
+        if ($limit < 1 || $limit > 1000) {
+            return new JsonResponse(
+                ['error' => 'Limit must be between 1 and 1000'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($sequencePositions === null && $letterConstraints === null) {
+            return new JsonResponse(
+                ['error' => 'Either sequencePositions or letterConstraints must be provided'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($sequencePositions !== null && $letterConstraints !== null) {
+            return new JsonResponse(
+                ['error' => 'Cannot use both sequencePositions and letterConstraints. Use one or the other.'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($notLanguageCodes !== null) {
+            if (!is_array($notLanguageCodes)) {
+                return new JsonResponse(
+                    ['error' => 'notLanguageCodes must be an array'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            foreach ($notLanguageCodes as $code) {
+                if (!is_string($code) || empty($code)) {
+                    return new JsonResponse(
+                        ['error' => 'All language codes in notLanguageCodes must be non-empty strings'],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+            }
+        }
+
+        if ($letterConstraints !== null) {
+            return $this->handleMultiLetterSearch($letterConstraints, $exactLengths, $languageCode, $notLanguageCodes, $limit);
+        }
+
+        if (!is_array($sequencePositions)) {
+            return new JsonResponse(
+                ['error' => 'sequencePositions must be an array'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if (empty($sequencePositions)) {
+            return new JsonResponse(
+                ['error' => 'sequencePositions cannot be empty'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($exactLengths !== null) {
+            if (!is_array($exactLengths)) {
+                return new JsonResponse(
+                    ['error' => 'exactLengths must be an array'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            if (count($exactLengths) !== count($sequencePositions)) {
+                return new JsonResponse(
+                    ['error' => 'exactLengths array length must match sequencePositions array length'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            foreach ($exactLengths as $index => $length) {
+                if (!is_int($length) || $length < 1) {
+                    return new JsonResponse(
+                        ['error' => "exactLength at index $index must be a positive integer"],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+            }
+        }
+
+        foreach ($sequencePositions as $index => $positions) {
+            if (!is_array($positions)) {
+                return new JsonResponse(
+                    ['error' => "Position array at index $index must be an array"],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            if (empty($positions)) {
+                return new JsonResponse(
+                    ['error' => "Position array at index $index cannot be empty"],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            foreach ($positions as $position) {
+                if (!is_int($position) || $position < 1) {
+                    return new JsonResponse(
+                        ['error' => "All positions must be positive integers (at index $index)"],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+            }
+        }
+
+        try {
+            $results = $this->patternSearchService->findBySequencePattern(
+                $sequencePositions,
+                $exactLengths,
+                $languageCode,
+                $limit,
+                $notLanguageCodes
+            );
+
+            return new JsonResponse($results, Response::HTTP_OK);
+        } catch (Exception $e) {
+            return new JsonResponse(
+                ['error' => 'An error occurred during sequence pattern search: ' . $e->getMessage()],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+    }
+
+    /**
+     * Handle multi-letter search request.
+     *
+     * @param array $letterConstraints Array of letter constraints
+     * @param array|null $exactLengths Optional exact lengths
+     * @param string|null $languageCode Optional language filter
+     * @param array|null $notLanguageCodes Optional language codes to exclude
+     * @param int $limit Maximum number of results
+     * @return JsonResponse
+     */
+    private function handleMultiLetterSearch(
+        array $letterConstraints,
+        ?array $exactLengths,
+        ?string $languageCode,
+        ?array $notLanguageCodes,
+        int $limit
+    ): JsonResponse {
+
+        if (empty($letterConstraints)) {
+            return new JsonResponse(
+                ['error' => 'letterConstraints cannot be empty'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if (count($letterConstraints) < 1) {
+            return new JsonResponse(
+                ['error' => 'At least 1 letter constraint must be provided'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if ($languageCode === null) {
+            return new JsonResponse(
+                ['error' => 'languageCode is required for multi-letter searches due to performance constraints'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        if (count($letterConstraints) > 5) {
+            return new JsonResponse(
+                ['error' => 'Maximum 5 letter constraints allowed due to performance constraints'],
+                Response::HTTP_BAD_REQUEST
+            );
+        }
+
+        // Validate structure of letterConstraints
+        $numWords = null;
+        foreach ($letterConstraints as $letterIndex => $constraint) {
+            if (!is_array($constraint)) {
+                return new JsonResponse(
+                    ['error' => "Letter constraint at index $letterIndex must be an array"],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            if (empty($constraint)) {
+                return new JsonResponse(
+                    ['error' => "Letter constraint at index $letterIndex cannot be empty"],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // Check that all constraints have the same number of words
+            if ($numWords === null) {
+                $numWords = count($constraint);
+            } else if (count($constraint) !== $numWords) {
+                return new JsonResponse(
+                    ['error' => "All letter constraints must have the same number of words (expected $numWords, got " . count($constraint) . " at index $letterIndex)"],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            // Validate each word's position array
+            foreach ($constraint as $wordIndex => $positions) {
+                if (!is_array($positions)) {
+                    return new JsonResponse(
+                        ['error' => "Position array at letter $letterIndex, word $wordIndex must be an array"],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+
+                // Empty array means this letter doesn't appear in this word (no constraint)
+                if (empty($positions)) {
+                    continue;
+                }
+
+                foreach ($positions as $position) {
+                    if (!is_int($position) || $position < 1) {
+                        return new JsonResponse(
+                            ['error' => "All positions must be positive integers (at letter $letterIndex, word $wordIndex)"],
+                            Response::HTTP_BAD_REQUEST
+                        );
+                    }
+                }
+            }
+        }
+
+        // Validate exactLengths if provided
+        if ($exactLengths !== null) {
+            if (!is_array($exactLengths)) {
+                return new JsonResponse(
+                    ['error' => 'exactLengths must be an array'],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            if (count($exactLengths) !== $numWords) {
+                return new JsonResponse(
+                    ['error' => "exactLengths array length must match number of words in constraints ($numWords)"],
+                    Response::HTTP_BAD_REQUEST
+                );
+            }
+
+            foreach ($exactLengths as $index => $length) {
+                if (!is_int($length) || $length < 1) {
+                    return new JsonResponse(
+                        ['error' => "exactLength at index $index must be a positive integer"],
+                        Response::HTTP_BAD_REQUEST
+                    );
+                }
+            }
+        }
+
+        try {
+            $results = $this->patternSearchService->findByMultiLetterSequencePattern(
+                $letterConstraints,
+                $exactLengths,
+                $languageCode,
+                $limit,
+                $notLanguageCodes
+            );
+
+            return new JsonResponse($results, Response::HTTP_OK);
+        } catch (Exception $e) {
+            error_log('Multi-letter search error: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
+
+            return new JsonResponse([
+                'error' => 'An error occurred during multi-letter sequence pattern search: ' . $e->getMessage(),
+                'type' => get_class($e),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

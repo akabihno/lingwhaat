@@ -49,3 +49,8 @@ services:
     App\Service\LanguageDetection\LanguageTransliteration\LanguageTransliterationDetectionService:
         arguments:
             $projectDir: '%kernel.project_dir%'
+
+    # Redis cache service configuration
+    App\Service\Cache\RedisCacheService:
+        arguments:
+            $redisDsn: '%env(LOCK_DSN)%'
