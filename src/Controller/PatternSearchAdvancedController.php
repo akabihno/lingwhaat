@@ -408,9 +408,13 @@ class PatternSearchAdvancedController extends AbstractController
                                     [
                                         'languageCode' => 'en',
                                         'letters' => ['a', 'b'],
-                                        'words' => [
+                                        'words1' => [
                                             ['word' => 'that', 'ipa' => 'ðæt'],
-                                            ['word' => 'bat', 'ipa' => 'bæt']
+                                            ['word' => 'than', 'ipa' => 'ðæn']
+                                        ],
+                                        'words2' => [
+                                            ['word' => 'bat', 'ipa' => 'bæt'],
+                                            ['word' => 'bad', 'ipa' => 'bæd']
                                         ]
                                     ]
                                 ]
