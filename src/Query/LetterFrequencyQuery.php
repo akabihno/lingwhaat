@@ -2,6 +2,8 @@
 
 namespace App\Query;
 
+use App\Constant\LanguageMappings;
+
 class LetterFrequencyQuery extends AbstractQuery
 {
     /**
@@ -50,9 +52,9 @@ class LetterFrequencyQuery extends AbstractQuery
     {
         $this->connect();
 
-        $tableName = $this->getBaseTable($languageCode);
+        $languageName = LanguageMappings::getLanguageCodeByName($languageCode, true);
+        $tableName = $this->getBaseTable($languageName);
 
-        // Query to calculate letter frequencies
         $query = "
             SELECT
                 letter,
