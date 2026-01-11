@@ -737,7 +737,8 @@ class PatternSearchService
                 [],
                 0,
                 $allResults,
-                $limit
+                $limit,
+                $constraintOrder
             );
 
             $this->logger->info('Finished letter assignments', [
@@ -1119,7 +1120,8 @@ class PatternSearchService
         array $assignedLetters,
         int $currentIndex,
         array &$results,
-        int $limit
+        int $limit,
+        array $constraintOrder
     ): void {
         // Log first call
         static $firstCall = true;
@@ -1142,8 +1144,16 @@ class PatternSearchService
             return;
         }
 
+        // FAIL FAST OPTIMIZATION: Check if current partial assignment is actually possible
         if ($currentIndex > 0) {
-            if (!$this->isPartialAssignmentPossible($assignedLetters, $letterConstraints, $exactLengths, $languageCode, $notLanguageCodes)) {
+            // Map assigned letters back to their original constraint indices
+            $mappedAssignments = [];
+            foreach ($assignedLetters as $idx => $letter) {
+                $originalIdx = $constraintOrder[$idx];
+                $mappedAssignments[$originalIdx] = $letter;
+            }
+
+            if (!$this->isPartialAssignmentPossible($mappedAssignments, $letterConstraints, $exactLengths, $languageCode, $notLanguageCodes)) {
                 return;
             }
         }
@@ -1208,7 +1218,7 @@ class PatternSearchService
      * Optimized check to see if current partial letter assignments have any matching words.
      */
     private function isPartialAssignmentPossible(
-        array $assignedLetters,
+        array $mappedAssignments, // Now indexed by original constraint ID
         array $letterConstraints,
         ?array $exactLengths,
         ?string $languageCode,
@@ -1217,15 +1227,14 @@ class PatternSearchService
         $numWords = count($letterConstraints[0]);
         $msearchQueries = [];
 
-        // We only need to know if at least one word exists for each position
         for ($wordIndex = 0; $wordIndex < $numWords; $wordIndex++) {
             $samePositions = [];
             $fixedChars = [];
             $hasConstraint = false;
 
-            foreach ($assignedLetters as $constraintIndex => $letter) {
-                if (isset($letterConstraints[$constraintIndex][$wordIndex]) && !empty($letterConstraints[$constraintIndex][$wordIndex])) {
-                    $positions = $letterConstraints[$constraintIndex][$wordIndex];
+            foreach ($mappedAssignments as $originalIdx => $letter) {
+                if (isset($letterConstraints[$originalIdx][$wordIndex]) && !empty($letterConstraints[$originalIdx][$wordIndex])) {
+                    $positions = $letterConstraints[$originalIdx][$wordIndex];
                     $samePositions[] = array_values($positions);
                     foreach ($positions as $pos) {
                         $fixedChars[$pos] = $letter;
