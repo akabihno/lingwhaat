@@ -1205,7 +1205,8 @@ class PatternSearchService
                 $newAssignedLetters,
                 $currentIndex + 1,
                 $results,
-                $limit
+                $limit,
+                $constraintOrder
             );
 
             if (count($results) >= $limit) {
