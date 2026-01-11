@@ -1142,6 +1142,12 @@ class PatternSearchService
             return;
         }
 
+        if ($currentIndex > 0) {
+            if (!$this->isPartialAssignmentPossible($assignedLetters, $letterConstraints, $exactLengths, $languageCode, $notLanguageCodes)) {
+                return;
+            }
+        }
+
         if ($currentIndex >= count($letterConstraints)) {
             // All letters assigned, now find matching word sequences
             static $assignmentTestCount = 0;
@@ -1196,6 +1202,73 @@ class PatternSearchService
                 return;
             }
         }
+    }
+
+    /**
+     * Optimized check to see if current partial letter assignments have any matching words.
+     */
+    private function isPartialAssignmentPossible(
+        array $assignedLetters,
+        array $letterConstraints,
+        ?array $exactLengths,
+        ?string $languageCode,
+        ?array $notLanguageCodes
+    ): bool {
+        $numWords = count($letterConstraints[0]);
+        $msearchQueries = [];
+
+        // We only need to know if at least one word exists for each position
+        for ($wordIndex = 0; $wordIndex < $numWords; $wordIndex++) {
+            $samePositions = [];
+            $fixedChars = [];
+            $hasConstraint = false;
+
+            foreach ($assignedLetters as $constraintIndex => $letter) {
+                if (isset($letterConstraints[$constraintIndex][$wordIndex]) && !empty($letterConstraints[$constraintIndex][$wordIndex])) {
+                    $positions = $letterConstraints[$constraintIndex][$wordIndex];
+                    $samePositions[] = array_values($positions);
+                    foreach ($positions as $pos) {
+                        $fixedChars[$pos] = $letter;
+                    }
+                    $hasConstraint = true;
+                }
+            }
+
+            if (!$hasConstraint) continue;
+
+            $query = $this->buildAdvancedPatternQuery(
+                $samePositions,
+                $fixedChars,
+                $exactLengths[$wordIndex] ?? null,
+                $languageCode,
+                $notLanguageCodes
+            );
+
+            $msearchQueries[] = ['index' => $this->indexName];
+            $msearchQueries[] = ['query' => $query->getQuery()->toArray(), 'size' => 1];
+        }
+
+        if (empty($msearchQueries)) return true;
+
+        $multiSearch = new MultiSearch($this->esClient);
+        for ($i = 0; $i < count($msearchQueries); $i += 2) {
+            $search = new Search($this->esClient);
+            $search->addIndexByName($msearchQueries[$i]['index']);
+            $search->setQuery($msearchQueries[$i+1]['query']);
+            $search->setOption('size', 1);
+            $multiSearch->addSearch($search);
+        }
+
+        try {
+            $resultSets = $multiSearch->search();
+            foreach ($resultSets as $resultSet) {
+                if ($resultSet->getTotalHits() === 0) return false;
+            }
+        } catch (Exception) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
