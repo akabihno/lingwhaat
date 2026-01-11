@@ -1135,45 +1135,27 @@ class PatternSearchService
             $firstCall = false;
         }
 
-        // Log depth
-        if ($currentIndex === 0) {
-            error_log("DEBUG: findLetterAssignments at index 0");
+        $mappedAssignments = [];
+        foreach ($assignedLetters as $posInOrder => $letter) {
+            $originalIdx = $constraintOrder[$posInOrder];
+            $mappedAssignments[$originalIdx] = $letter;
+        }
+
+        // FAIL FAST: Check if current partial assignment is actually possible in the dictionary
+        if ($currentIndex > 0) {
+            if (!$this->isPartialAssignmentPossible($mappedAssignments, $letterConstraints, $exactLengths, $languageCode, $notLanguageCodes)) {
+                return;
+            }
         }
 
         if (count($results) >= $limit) {
             return;
         }
 
-        // FAIL FAST OPTIMIZATION: Check if current partial assignment is actually possible
-        if ($currentIndex > 0) {
-            // Map assigned letters back to their original constraint indices
-            $mappedAssignments = [];
-            foreach ($assignedLetters as $idx => $letter) {
-                $originalIdx = $constraintOrder[$idx];
-                $mappedAssignments[$originalIdx] = $letter;
-            }
-
-            if (!$this->isPartialAssignmentPossible($mappedAssignments, $letterConstraints, $exactLengths, $languageCode, $notLanguageCodes)) {
-                return;
-            }
-        }
-
+        // BASE CASE: All constraints processed
         if ($currentIndex >= count($letterConstraints)) {
-            // All letters assigned, now find matching word sequences
-            static $assignmentTestCount = 0;
-            $assignmentTestCount++;
-
-            if ($assignmentTestCount <= 5 || $assignmentTestCount % 10 === 0) {
-                $this->logger->info('Testing letter assignment OLD ALGO', [
-                    'service' => '[PatternSearchService]',
-                    'test_number' => $assignmentTestCount,
-                    'assigned_letters' => $assignedLetters,
-                    'results_so_far' => count($results),
-                ]);
-            }
-
             $this->findSequenceWithLetterAssignments(
-                $assignedLetters,
+                $mappedAssignments, // Pass the associative array [originalIdx => letter]
                 $letterConstraints,
                 $exactLengths,
                 $languageCode,
@@ -1184,17 +1166,18 @@ class PatternSearchService
             return;
         }
 
-        // Try only viable letters for this constraint
-        $viableLetters = $viableLettersPerConstraint[$currentIndex];
+        // RECURSION: Pick the NEXT constraint from the OPTIMIZED order
+        $targetConstraintIdx = $constraintOrder[$currentIndex];
+        $viableLettersForThisConstraint = $viableLettersPerConstraint[$targetConstraintIdx];
 
-        foreach ($viableLetters as $letter) {
-            // Skip if a letter already assigned
+        foreach ($viableLettersForThisConstraint as $letter) {
+            // Ensure we don't assign the same letter to two different constraints
             if (in_array($letter, $assignedLetters)) {
                 continue;
             }
 
-            $newAssignedLetters = $assignedLetters;
-            $newAssignedLetters[] = $letter;
+            $nextAssignedLetters = $assignedLetters;
+            $nextAssignedLetters[] = $letter;
 
             $this->findLetterAssignments(
                 $letterConstraints,
@@ -1202,7 +1185,7 @@ class PatternSearchService
                 $languageCode,
                 $notLanguageCodes,
                 $viableLettersPerConstraint,
-                $newAssignedLetters,
+                $nextAssignedLetters,
                 $currentIndex + 1,
                 $results,
                 $limit,
@@ -1216,36 +1199,38 @@ class PatternSearchService
     }
 
     /**
-     * Optimized check to see if current partial letter assignments have any matching words.
+     * Corrected check to see if current partial letter assignments have any matching words.
      */
     private function isPartialAssignmentPossible(
-        array $mappedAssignments, // Now indexed by original constraint ID
+        array $mappedAssignments,
         array $letterConstraints,
         ?array $exactLengths,
         ?string $languageCode,
         ?array $notLanguageCodes
     ): bool {
         $numWords = count($letterConstraints[0]);
-        $msearchQueries = [];
+        $multiSearch = new MultiSearch($this->esClient);
+        $hasAnyQueries = false;
 
         for ($wordIndex = 0; $wordIndex < $numWords; $wordIndex++) {
             $samePositions = [];
             $fixedChars = [];
-            $hasConstraint = false;
+            $hasWordConstraint = false;
 
-            foreach ($mappedAssignments as $originalIdx => $letter) {
-                if (isset($letterConstraints[$originalIdx][$wordIndex]) && !empty($letterConstraints[$originalIdx][$wordIndex])) {
-                    $positions = $letterConstraints[$originalIdx][$wordIndex];
+            foreach ($mappedAssignments as $origIdx => $letter) {
+                if (!empty($letterConstraints[$origIdx][$wordIndex])) {
+                    $hasWordConstraint = true;
+                    $positions = $letterConstraints[$origIdx][$wordIndex];
                     $samePositions[] = array_values($positions);
                     foreach ($positions as $pos) {
                         $fixedChars[$pos] = $letter;
                     }
-                    $hasConstraint = true;
                 }
             }
 
-            if (!$hasConstraint) continue;
+            if (!$hasWordConstraint) continue;
 
+            // Build query object directly
             $query = $this->buildAdvancedPatternQuery(
                 $samePositions,
                 $fixedChars,
@@ -1254,31 +1239,29 @@ class PatternSearchService
                 $notLanguageCodes
             );
 
-            $msearchQueries[] = ['index' => $this->indexName];
-            $msearchQueries[] = ['query' => $query->getQuery()->toArray(), 'size' => 1];
-        }
-
-        if (empty($msearchQueries)) return true;
-
-        $multiSearch = new MultiSearch($this->esClient);
-        for ($i = 0; $i < count($msearchQueries); $i += 2) {
             $search = new Search($this->esClient);
-            $search->addIndexByName($msearchQueries[$i]['index']);
-            $search->setQuery($msearchQueries[$i+1]['query']);
+            $search->addIndexByName($this->indexName);
+            $search->setQuery($query->getQuery());
             $search->setOption('size', 1);
+            $search->setOption('terminate_after', 1); // Extra speed: stop immediately
+
             $multiSearch->addSearch($search);
+            $hasAnyQueries = true;
         }
+
+        if (!$hasAnyQueries) return true;
 
         try {
             $resultSets = $multiSearch->search();
             foreach ($resultSets as $resultSet) {
                 if ($resultSet->getTotalHits() === 0) return false;
             }
-        } catch (Exception) {
-            return false;
+            return true;
+        } catch (Exception $e) {
+            // Log error but don't fail the whole search if ES is just grumpy
+            error_log("Fail Fast Query Error: " . $e->getMessage());
+            return true;
         }
-
-        return true;
     }
 
     /**
