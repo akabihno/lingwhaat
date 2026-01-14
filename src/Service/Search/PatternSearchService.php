@@ -3,6 +3,7 @@
 namespace App\Service\Search;
 
 use App\Constant\ScriptAlphabets;
+use App\Repository\LetterFrequencyRepository;
 use App\Service\Cache\RedisCacheService;
 use App\Service\Logging\ElasticsearchLogger;
 use Elastica\Client;
@@ -22,6 +23,7 @@ class PatternSearchService
     public function __construct(
         protected ElasticsearchLogger $logger,
         protected RedisCacheService $cache,
+        protected LetterFrequencyRepository $letterFrequencyRepository,
         Client $esClient,
     ) {
         $this->esClient = $esClient;
@@ -735,7 +737,8 @@ class PatternSearchService
                 [],
                 0,
                 $allResults,
-                $limit
+                $limit,
+                $constraintOrder
             );
 
             $this->logger->info('Finished letter assignments', [
@@ -1065,17 +1068,7 @@ class PatternSearchService
     ): array {
         error_log("DEBUG: sortViableLettersByFrequency INPUT: " . json_encode(array_map('count', $viableLettersPerConstraint)));
 
-        // Russian letter frequency (most common first)
-        // Based on typical Russian text frequency analysis
-        $russianFrequency = [
-            'о' => 10.97, 'е' => 8.45, 'а' => 8.01, 'и' => 7.35, 'н' => 6.70,
-            'т' => 6.26, 'с' => 5.47, 'р' => 4.73, 'в' => 4.54, 'л' => 4.40,
-            'к' => 3.49, 'м' => 3.21, 'д' => 2.98, 'п' => 2.81, 'у' => 2.62,
-            'я' => 2.01, 'ы' => 1.90, 'ь' => 1.74, 'г' => 1.70, 'з' => 1.65,
-            'б' => 1.59, 'ч' => 1.44, 'й' => 1.21, 'х' => 0.97, 'ж' => 0.94,
-            'ш' => 0.73, 'ю' => 0.64, 'ц' => 0.48, 'щ' => 0.36, 'э' => 0.32,
-            'ф' => 0.26, 'ъ' => 0.04, 'ё' => 0.04
-        ];
+        $frequencyMap = $this->letterFrequencyRepository->getFrequencyMapByLanguageCode($languageCode);
 
         // Default frequency for unknown letters
         $defaultFreq = 1.0;
@@ -1085,8 +1078,8 @@ class PatternSearchService
             // Create array of [letter => frequency]
             $letterFrequencies = [];
             foreach ($viableLetters as $letter) {
-                if ($languageCode === 'ru' && isset($russianFrequency[$letter])) {
-                    $letterFrequencies[$letter] = $russianFrequency[$letter];
+                if (isset($frequencyMap[$letter])) {
+                    $letterFrequencies[$letter] = $frequencyMap[$letter];
                 } else {
                     $letterFrequencies[$letter] = $defaultFreq;
                 }
@@ -1103,201 +1096,6 @@ class PatternSearchService
         error_log("DEBUG: sortViableLettersByFrequency OUTPUT keys: " . json_encode(array_keys($sorted)));
 
         return $sorted;
-    }
-
-    /**
-     * Optimized letter assignment that processes constraints in optimal order.
-     *
-     * @param array $letterConstraints All letter constraints
-     * @param array|null $exactLengths Exact lengths for words
-     * @param string|null $languageCode Language filter
-     * @param array|null $notLanguageCodes Language codes to exclude
-     * @param array $viableLettersPerConstraint Pre-filtered viable letters for each constraint
-     * @param array $constraintOrder Optimized order of constraint indices
-     * @param array $assignedLettersByConstraintIndex Letters assigned by original constraint index
-     * @param int $orderIndex Current index in the constraint order
-     * @param array &$results Results array
-     * @param int $limit Result limit
-     */
-    private function findLetterAssignmentsOptimized(
-        array $letterConstraints,
-        ?array $exactLengths,
-        ?string $languageCode,
-        ?array $notLanguageCodes,
-        array $viableLettersPerConstraint,
-        array $constraintOrder,
-        array $assignedLettersByConstraintIndex,
-        int $orderIndex,
-        array &$results,
-        int $limit
-    ): void {
-        if (count($results) >= $limit) {
-            return;
-        }
-
-        if ($orderIndex >= count($constraintOrder)) {
-            // All letters assigned - reorder back to original constraint order
-            $assignedLettersInOrder = [];
-            foreach (array_keys($letterConstraints) as $originalIdx) {
-                $assignedLettersInOrder[] = $assignedLettersByConstraintIndex[$originalIdx];
-            }
-
-            // Log every 10th assignment to monitor progress
-            static $assignmentCount = 0;
-            $assignmentCount++;
-
-            if ($assignmentCount <= 10 || $assignmentCount % 10 === 0) {
-                $this->logger->info('Testing letter assignment', [
-                    'service' => '[PatternSearchService]',
-                    'assignment_number' => $assignmentCount,
-                    'assigned_letters' => $assignedLettersInOrder,
-                    'results_so_far' => count($results),
-                ]);
-            }
-
-            $this->findSequenceWithLetterAssignments(
-                $assignedLettersInOrder,
-                $letterConstraints,
-                $exactLengths,
-                $languageCode,
-                $notLanguageCodes,
-                $results,
-                $limit
-            );
-            return;
-        }
-
-        // Get the constraint index we should process now
-        $constraintIndex = $constraintOrder[$orderIndex];
-        $viableLetters = $viableLettersPerConstraint[$constraintIndex];
-
-        // Log progress every 100 combinations at top level
-        static $combinationCount = 0;
-        if ($orderIndex === 0) {
-            $combinationCount++;
-            if ($combinationCount % 100 === 0) {
-                $this->logger->info('Search progress', [
-                    'service' => '[PatternSearchService]',
-                    'combinations_tested' => $combinationCount,
-                    'results_found' => count($results),
-                ]);
-            }
-        }
-
-        foreach ($viableLetters as $letter) {
-            // Skip if letter already assigned to any constraint
-            if (in_array($letter, $assignedLettersByConstraintIndex)) {
-                continue;
-            }
-
-            // Assign this letter to the current constraint
-            $newAssignedLetters = $assignedLettersByConstraintIndex;
-            $newAssignedLetters[$constraintIndex] = $letter;
-
-            // EARLY PRUNING: Disabled for now as it may cause performance issues
-            // TODO: Re-enable with optimized implementation
-            /* if ($orderIndex > 0 && $orderIndex % 1 === 0) {
-                if (!$this->hasViableWordsForPartialAssignment(
-                    $newAssignedLetters,
-                    $letterConstraints,
-                    $exactLengths,
-                    $languageCode,
-                    $notLanguageCodes
-                )) {
-                    // No viable words for this partial assignment, skip this branch
-                    continue;
-                }
-            } */
-
-            $this->findLetterAssignmentsOptimized(
-                $letterConstraints,
-                $exactLengths,
-                $languageCode,
-                $notLanguageCodes,
-                $viableLettersPerConstraint,
-                $constraintOrder,
-                $newAssignedLetters,
-                $orderIndex + 1,
-                $results,
-                $limit
-            );
-
-            if (count($results) >= $limit) {
-                return;
-            }
-        }
-    }
-
-    /**
-     * Check if a partial letter assignment has any viable words.
-     * Used for early pruning to avoid exploring dead branches.
-     *
-     * @param array $assignedLettersByConstraintIndex Partial letter assignments
-     * @param array $letterConstraints All letter constraints
-     * @param array|null $exactLengths Exact lengths for words
-     * @param string|null $languageCode Language filter
-     * @param array|null $notLanguageCodes Language codes to exclude
-     * @return bool True if at least one word position has matches
-     */
-    private function hasViableWordsForPartialAssignment(
-        array $assignedLettersByConstraintIndex,
-        array $letterConstraints,
-        ?array $exactLengths,
-        ?string $languageCode,
-        ?array $notLanguageCodes
-    ): bool {
-        // Determine number of words from first constraint
-        $numWords = count($letterConstraints[array_key_first($letterConstraints)]);
-
-        // Test a sample word position to see if this assignment could work
-        // We'll test the first word that has constraints from our assigned letters
-        for ($wordIndex = 0; $wordIndex < $numWords; $wordIndex++) {
-            $hasConstraints = false;
-            $samePositions = [];
-            $fixedChars = [];
-
-            // Build constraints for this word using only assigned letters
-            foreach ($assignedLettersByConstraintIndex as $constraintIndex => $letter) {
-                if (!isset($letterConstraints[$constraintIndex][$wordIndex])) {
-                    continue;
-                }
-
-                $positions = $letterConstraints[$constraintIndex][$wordIndex];
-                if (empty($positions)) {
-                    continue;
-                }
-
-                $hasConstraints = true;
-                $samePositions[] = array_values($positions);
-                foreach ($positions as $pos) {
-                    $fixedChars[$pos] = $letter;
-                }
-            }
-
-            // If this word has constraints, test if any words match
-            if ($hasConstraints) {
-                $exactLength = $exactLengths[$wordIndex] ?? null;
-                $results = $this->findByAdvancedPattern(
-                    $samePositions,
-                    $fixedChars,
-                    $exactLength,
-                    $languageCode,
-                    1, // Just need to know if at least 1 exists
-                    $notLanguageCodes
-                );
-
-                if (empty($results)) {
-                    // No words match this partial assignment
-                    return false;
-                }
-
-                // Found at least one match, this assignment is viable
-                return true;
-            }
-        }
-
-        // No words tested, assume viable
-        return true;
     }
 
     /**
@@ -1322,7 +1120,8 @@ class PatternSearchService
         array $assignedLetters,
         int $currentIndex,
         array &$results,
-        int $limit
+        int $limit,
+        array $constraintOrder
     ): void {
         // Log first call
         static $firstCall = true;
@@ -1336,31 +1135,27 @@ class PatternSearchService
             $firstCall = false;
         }
 
-        // Log depth
-        if ($currentIndex === 0) {
-            error_log("DEBUG: findLetterAssignments at index 0");
+        $mappedAssignments = [];
+        foreach ($assignedLetters as $posInOrder => $letter) {
+            $originalIdx = $constraintOrder[$posInOrder];
+            $mappedAssignments[$originalIdx] = $letter;
+        }
+
+        // FAIL FAST: Check if current partial assignment is actually possible in the dictionary
+        if ($currentIndex > 0) {
+            if (!$this->isPartialAssignmentPossible($mappedAssignments, $letterConstraints, $exactLengths, $languageCode, $notLanguageCodes)) {
+                return;
+            }
         }
 
         if (count($results) >= $limit) {
             return;
         }
 
+        // BASE CASE: All constraints processed
         if ($currentIndex >= count($letterConstraints)) {
-            // All letters assigned, now find matching word sequences
-            static $assignmentTestCount = 0;
-            $assignmentTestCount++;
-
-            if ($assignmentTestCount <= 5 || $assignmentTestCount % 10 === 0) {
-                $this->logger->info('Testing letter assignment OLD ALGO', [
-                    'service' => '[PatternSearchService]',
-                    'test_number' => $assignmentTestCount,
-                    'assigned_letters' => $assignedLetters,
-                    'results_so_far' => count($results),
-                ]);
-            }
-
             $this->findSequenceWithLetterAssignments(
-                $assignedLetters,
+                $mappedAssignments, // Pass the associative array [originalIdx => letter]
                 $letterConstraints,
                 $exactLengths,
                 $languageCode,
@@ -1371,17 +1166,18 @@ class PatternSearchService
             return;
         }
 
-        // Try only viable letters for this constraint
-        $viableLetters = $viableLettersPerConstraint[$currentIndex];
+        // RECURSION: Pick the NEXT constraint from the OPTIMIZED order
+        $targetConstraintIdx = $constraintOrder[$currentIndex];
+        $viableLettersForThisConstraint = $viableLettersPerConstraint[$targetConstraintIdx];
 
-        foreach ($viableLetters as $letter) {
-            // Skip if a letter already assigned
+        foreach ($viableLettersForThisConstraint as $letter) {
+            // Ensure we don't assign the same letter to two different constraints
             if (in_array($letter, $assignedLetters)) {
                 continue;
             }
 
-            $newAssignedLetters = $assignedLetters;
-            $newAssignedLetters[] = $letter;
+            $nextAssignedLetters = $assignedLetters;
+            $nextAssignedLetters[] = $letter;
 
             $this->findLetterAssignments(
                 $letterConstraints,
@@ -1389,15 +1185,82 @@ class PatternSearchService
                 $languageCode,
                 $notLanguageCodes,
                 $viableLettersPerConstraint,
-                $newAssignedLetters,
+                $nextAssignedLetters,
                 $currentIndex + 1,
                 $results,
-                $limit
+                $limit,
+                $constraintOrder
             );
 
             if (count($results) >= $limit) {
                 return;
             }
+        }
+    }
+
+    /**
+     * Corrected check to see if current partial letter assignments have any matching words.
+     */
+    private function isPartialAssignmentPossible(
+        array $mappedAssignments,
+        array $letterConstraints,
+        ?array $exactLengths,
+        ?string $languageCode,
+        ?array $notLanguageCodes
+    ): bool {
+        $numWords = count($letterConstraints[0]);
+        $multiSearch = new MultiSearch($this->esClient);
+        $hasAnyQueries = false;
+
+        for ($wordIndex = 0; $wordIndex < $numWords; $wordIndex++) {
+            $samePositions = [];
+            $fixedChars = [];
+            $hasWordConstraint = false;
+
+            foreach ($mappedAssignments as $origIdx => $letter) {
+                if (!empty($letterConstraints[$origIdx][$wordIndex])) {
+                    $hasWordConstraint = true;
+                    $positions = $letterConstraints[$origIdx][$wordIndex];
+                    $samePositions[] = array_values($positions);
+                    foreach ($positions as $pos) {
+                        $fixedChars[$pos] = $letter;
+                    }
+                }
+            }
+
+            if (!$hasWordConstraint) continue;
+
+            // Build query object directly
+            $query = $this->buildAdvancedPatternQuery(
+                $samePositions,
+                $fixedChars,
+                $exactLengths[$wordIndex] ?? null,
+                $languageCode,
+                $notLanguageCodes
+            );
+
+            $search = new Search($this->esClient);
+            $search->addIndexByName($this->indexName);
+            $search->setQuery($query->getQuery());
+            $search->setOption('size', 1);
+            $search->setOption('terminate_after', 1); // Extra speed: stop immediately
+
+            $multiSearch->addSearch($search);
+            $hasAnyQueries = true;
+        }
+
+        if (!$hasAnyQueries) return true;
+
+        try {
+            $resultSets = $multiSearch->search();
+            foreach ($resultSets as $resultSet) {
+                if ($resultSet->getTotalHits() === 0) return false;
+            }
+            return true;
+        } catch (Exception $e) {
+            // Log error but don't fail the whole search if ES is just grumpy
+            error_log("Fail Fast Query Error: " . $e->getMessage());
+            return true;
         }
     }
 
@@ -1559,34 +1422,49 @@ class PatternSearchService
             'word_counts' => array_map('count', $wordResultsByPosition),
         ]);
 
-        // Combine words to form sequences
-        $sequences = $this->combineMultiLetterSequenceWords($wordResultsByPosition, $assignedLetters, $letterConstraints, $limit);
+        // Check if all words are from the same language
+        $languageCode = null;
+        $allSameLanguage = true;
 
-        $this->logger->info('[DEBUG] Sequences combined', [
-            'service' => '[PatternSearchService]',
-            'sequences_count' => count($sequences),
-            'call_number' => $callCount,
-        ]);
-
-        if ($callCount <= 5) {
-            error_log("DEBUG: Combined sequences: " . count($sequences) . " sequences found");
-        }
-
-        if (count($sequences) > 0 && $callCount <= 3) {
-            // Log first sequence as example
-            $firstSeq = $sequences[0];
-            $this->logger->info('[DEBUG] First sequence example', [
-                'service' => '[PatternSearchService]',
-                'sequence' => $firstSeq,
-            ]);
-        }
-
-        foreach ($sequences as $sequence) {
-            if (count($results) >= $limit) {
-                return;
+        foreach ($wordResultsByPosition as $words) {
+            if (!empty($words)) {
+                foreach ($words as $word) {
+                    if ($languageCode === null) {
+                        $languageCode = $word['languageCode'];
+                    } else if ($word['languageCode'] !== $languageCode) {
+                        $allSameLanguage = false;
+                        break 2;
+                    }
+                }
             }
-            $results[] = $sequence;
         }
+
+        if (!$allSameLanguage || $languageCode === null) {
+            $this->logger->info('[DEBUG] Words not all same language, skipping', [
+                'service' => '[PatternSearchService]',
+            ]);
+            return;
+        }
+
+        // Build result with words by position
+        $wordsData = [];
+        foreach ($wordResultsByPosition as $position => $words) {
+            $wordsKey = 'words' . ($position + 1);
+            $wordsData[$wordsKey] = array_slice(
+                array_map(fn($w) => [
+                    'word' => $w['word'],
+                    'ipa' => $w['ipa'] ?? null
+                ], $words),
+                0,
+                $limit
+            );
+        }
+
+        $results[] = [
+            'languageCode' => $languageCode,
+            'letters' => $assignedLetters,
+            ...$wordsData
+        ];
 
         $this->logger->info('[DEBUG] Finished processing assignment', [
             'service' => '[PatternSearchService]',
@@ -1660,51 +1538,6 @@ class PatternSearchService
             ]);
             return [];
         }
-    }
-
-    /**
-     * Combine words from different positions to form complete multi-letter sequences.
-     *
-     * @param array $wordResultsByPosition Words for each position in the sequence
-     * @param array $assignedLetters Letters assigned to constraints
-     * @param array $letterConstraints Original constraints
-     * @param int $limit Maximum number of sequences to return
-     * @return array Array of combined sequences
-     */
-    private function combineMultiLetterSequenceWords(
-        array $wordResultsByPosition,
-        array $assignedLetters,
-        array $letterConstraints,
-        int $limit
-    ): array {
-        if (empty($wordResultsByPosition)) {
-            return [];
-        }
-
-        $sequences = [];
-        $positionIndices = array_keys($wordResultsByPosition);
-
-        // Start with the first position
-        $firstPosition = $positionIndices[0];
-
-        foreach ($wordResultsByPosition[$firstPosition] as $firstWord) {
-            $this->recursiveMultiLetterSequenceBuild(
-                $wordResultsByPosition,
-                $positionIndices,
-                1,
-                [$firstWord],
-                $sequences,
-                $assignedLetters,
-                $letterConstraints,
-                $limit
-            );
-
-            if (count($sequences) >= $limit) {
-                break;
-            }
-        }
-
-        return array_slice($sequences, 0, $limit);
     }
 
     /**
@@ -2085,264 +1918,5 @@ class PatternSearchService
                 break;
             }
         }
-    }
-
-    /**
-     * Find words that intersect across multiple pattern queries.
-     * Returns only words from the same language that can overlap.
-     *
-     * @param array $intersections Array of pattern configurations
-     * @param int $limit Maximum number of result groups to return
-     * @return array Array of intersection groups
-     */
-    public function findIntersections(array $intersections, int $limit = 100): array
-    {
-        if (empty($intersections)) {
-            return [];
-        }
-
-        try {
-            $this->logger->info('Intersection search initiated', [
-                'service' => '[PatternSearchService]',
-                'intersection_count' => count($intersections),
-                'limit' => $limit,
-            ]);
-
-            $patternResults = [];
-            foreach ($intersections as $index => $pattern) {
-                $samePositions = $pattern['samePositions'] ?? [];
-                $fixedChars = $pattern['fixedChars'] ?? [];
-                $exactLength = $pattern['exactLength'] ?? null;
-                $languageCode = $pattern['languageCode'] ?? null;
-
-                $results = $this->findByAdvancedPattern(
-                    $samePositions,
-                    $fixedChars,
-                    $exactLength,
-                    $languageCode,
-                    1000 // Get more results to find intersections
-                );
-
-                $patternResults[$index] = $results;
-            }
-
-            $intersectionGroups = $this->findWordIntersections($patternResults);
-
-            $intersectionGroups = array_slice($intersectionGroups, 0, $limit);
-
-            $this->logger->info('Intersection search completed', [
-                'service' => '[PatternSearchService]',
-                'result_count' => count($intersectionGroups),
-            ]);
-
-            return $intersectionGroups;
-        } catch (Exception $e) {
-            $this->logger->error('Intersection search failed', [
-                'service' => '[PatternSearchService]',
-                'error' => $e->getMessage(),
-            ]);
-
-            return [];
-        }
-    }
-
-    /**
-     * Find intersecting words across multiple result sets.
-     * Words intersect if one can be found within another at relative positions.
-     *
-     * @param array $patternResults Array of result sets from different patterns
-     * @return array Array of intersection groups
-     */
-    private function findWordIntersections(array $patternResults): array
-    {
-        if (count($patternResults) < 2) {
-            return [];
-        }
-
-        $intersectionGroups = [];
-
-        $indices = array_keys($patternResults);
-        $combinations = $this->getCombinations($indices, count($indices));
-
-        foreach ($combinations as $combination) {
-            $wordsByPattern = [];
-            foreach ($combination as $patternIndex) {
-                $wordsByPattern[$patternIndex] = $patternResults[$patternIndex];
-            }
-
-            $this->findIntersectingWordGroups($wordsByPattern, $intersectionGroups);
-        }
-
-        return $intersectionGroups;
-    }
-
-    /**
-     * Find groups of words (one from each pattern) that intersect.
-     *
-     * @param array $wordsByPattern Words grouped by pattern index
-     * @param array &$intersectionGroups Reference to store intersection groups
-     */
-    private function findIntersectingWordGroups(array $wordsByPattern, array &$intersectionGroups): void
-    {
-        $patternIndices = array_keys($wordsByPattern);
-        $firstPatternIndex = $patternIndices[0];
-
-        foreach ($wordsByPattern[$firstPatternIndex] as $firstWord) {
-            $this->recursiveIntersectionSearch(
-                $wordsByPattern,
-                $patternIndices,
-                1,
-                [$firstWord],
-                $intersectionGroups
-            );
-        }
-    }
-
-    /**
-     * Recursively search for intersecting word combinations.
-     *
-     * @param array $wordsByPattern Words grouped by pattern index
-     * @param array $patternIndices All pattern indices
-     * @param int $currentIndex Current index in pattern array
-     * @param array $currentGroup Current group of words being built
-     * @param array &$intersectionGroups Reference to store intersection groups
-     */
-    private function recursiveIntersectionSearch(
-        array $wordsByPattern,
-        array $patternIndices,
-        int $currentIndex,
-        array $currentGroup,
-        array &$intersectionGroups
-    ): void {
-        if ($currentIndex >= count($patternIndices)) {
-            $languageCode = $currentGroup[0]['languageCode'];
-            $allSameLanguage = true;
-            foreach ($currentGroup as $word) {
-                if ($word['languageCode'] !== $languageCode) {
-                    $allSameLanguage = false;
-                    break;
-                }
-            }
-
-            if ($allSameLanguage && $this->doWordsIntersect($currentGroup)) {
-                $intersectionGroups[] = [
-                    'languageCode' => $languageCode,
-                    'words' => array_map(fn($w) => [
-                        'word' => $w['word'],
-                        'ipa' => $w['ipa'] ?? null
-                    ], $currentGroup)
-                ];
-            }
-            return;
-        }
-
-        $patternIndex = $patternIndices[$currentIndex];
-        foreach ($wordsByPattern[$patternIndex] as $word) {
-            $newGroup = $currentGroup;
-            $newGroup[] = $word;
-
-            $intersectsWithAll = true;
-            foreach ($currentGroup as $existingWord) {
-                if (!$this->doTwoWordsIntersect($existingWord['word'], $word['word'])) {
-                    $intersectsWithAll = false;
-                    break;
-                }
-            }
-
-            if ($intersectsWithAll) {
-                $this->recursiveIntersectionSearch(
-                    $wordsByPattern,
-                    $patternIndices,
-                    $currentIndex + 1,
-                    $newGroup,
-                    $intersectionGroups
-                );
-            }
-        }
-    }
-
-    /**
-     * Check if all words in a group intersect with each other.
-     *
-     * @param array $words Array of word objects
-     * @return bool True if all words intersect
-     */
-    private function doWordsIntersect(array $words): bool
-    {
-        if (count($words) < 2) {
-            return true;
-        }
-
-        for ($i = 0; $i < count($words) - 1; $i++) {
-            for ($j = $i + 1; $j < count($words); $j++) {
-                if (!$this->doTwoWordsIntersect($words[$i]['word'], $words[$j]['word'])) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Check if two words intersect (share common characters for cipher-solving).
-     * Words intersect if they share at least minCommonChars distinct characters.
-     * This helps in solving substitution ciphers by cross-referencing character mappings.
-     *
-     * Examples:
-     * - "spear" {s,p,e,a,r} and "fear" {f,e,a,r} share {e,a,r} = 3 chars → intersect
-     * - "spear" {s,p,e,a,r} and "arson" {a,r,s,o,n} share {a,r,s} = 3 chars → intersect
-     * - "abba" {a,b} and "baab" {a,b} share {a,b} = 2 chars → don't intersect (< 3)
-     *
-     * @param string $word1 First word
-     * @param string $word2 Second word
-     * @return bool True if words intersect
-     */
-    private function doTwoWordsIntersect(string $word1, string $word2): bool
-    {
-        $word1Lower = strtolower($word1);
-        $word2Lower = strtolower($word2);
-
-        $chars1 = array_unique(str_split($word1Lower));
-        $chars2 = array_unique(str_split($word2Lower));
-
-        $commonChars = array_intersect($chars1, $chars2);
-
-        return count($commonChars) >= self::MIN_COMMON_CHARS;
-    }
-
-    /**
-     * Get all combinations of array elements.
-     *
-     * @param array $array Input array
-     * @param int $length Length of combinations
-     * @return array Array of combinations
-     */
-    private function getCombinations(array $array, int $length): array
-    {
-        if ($length === 0 || $length > count($array)) {
-            return [];
-        }
-
-        if ($length === 1) {
-            return array_map(fn($item) => [$item], $array);
-        }
-
-        if ($length === count($array)) {
-            return [$array];
-        }
-
-        $combinations = [];
-        $first = array_shift($array);
-
-        $withFirst = $this->getCombinations($array, $length - 1);
-        foreach ($withFirst as $combination) {
-            $combinations[] = array_merge([$first], $combination);
-        }
-
-        $withoutFirst = $this->getCombinations($array, $length);
-        $combinations = array_merge($combinations, $withoutFirst);
-
-        return $combinations;
     }
 }

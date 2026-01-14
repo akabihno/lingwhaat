@@ -232,7 +232,7 @@ class LanguageMappings
         return null;
     }
 
-    public static function getLanguageCodeByName(string $languageName): ?string
+    public static function getLanguageCodeByName(string $languageName, bool $flip = false): ?string
     {
         $map = [
             self::AFRIKAANS_LANGUAGE_NAME => self::AFRIKAANS_LANGUAGE_CODE,
@@ -287,6 +287,10 @@ class LanguageMappings
             self::MANDARIN_LANGUAGE_NAME => self::MANDARIN_LANGUAGE_CODE,
             self::PALI_LANGUAGE_NAME => self::PALI_LANGUAGE_CODE,
         ];
+
+        if ($flip) {
+            return array_flip($map)[$languageName] ?? null;
+        }
 
         return $map[$languageName] ?? null;
     }

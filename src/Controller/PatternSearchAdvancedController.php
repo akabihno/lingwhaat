@@ -399,26 +399,6 @@ class PatternSearchAdvancedController extends AbstractController
                 schema: new OA\Schema(type: 'array', items: new OA\Items(type: 'object')),
                 examples: [
                     new OA\Examples(
-                        example: 'Single Letter Search Result',
-                        summary: 'Single Letter Pattern Search Result',
-                        value: [
-                            [
-                                'languageCode' => 'en',
-                                'sequences' => [
-                                    [
-                                        'languageCode' => 'en',
-                                        'letter' => 'a',
-                                        'words' => [
-                                            ['word' => 'that', 'ipa' => 'ðæt'],
-                                            ['word' => 'car', 'ipa' => 'kɑr'],
-                                            ['word' => 'something', 'ipa' => 'ˈsʌmθɪŋ']
-                                        ]
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ),
-                    new OA\Examples(
                         example: 'Multi Letter Search Result',
                         summary: 'Multi Letter Pattern Search Result',
                         value: [
@@ -428,9 +408,13 @@ class PatternSearchAdvancedController extends AbstractController
                                     [
                                         'languageCode' => 'en',
                                         'letters' => ['a', 'b'],
-                                        'words' => [
+                                        'words1' => [
                                             ['word' => 'that', 'ipa' => 'ðæt'],
-                                            ['word' => 'bat', 'ipa' => 'bæt']
+                                            ['word' => 'than', 'ipa' => 'ðæn']
+                                        ],
+                                        'words2' => [
+                                            ['word' => 'bat', 'ipa' => 'bæt'],
+                                            ['word' => 'bad', 'ipa' => 'bæd']
                                         ]
                                     ]
                                 ]
