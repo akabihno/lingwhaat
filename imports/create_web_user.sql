@@ -1,5 +1,9 @@
 CREATE USER '${MYSQL_WEB_USER}'@'%' IDENTIFIED BY '${MYSQL_WEB_PASSWORD}';
 
+GRANT CREATE,ALTER,INDEX,SELECT,UPDATE ON lingwhaat.* TO '${MYSQL_WEB_USER}'@'%';
+
+GRANT SELECT,INSERT,UPDATE,DELETE ON lingwhaat.doctrine_migration_versions TO '${MYSQL_WEB_USER}'@'%';
+
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_afar_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_afrikaans_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_albanian_language TO '${MYSQL_WEB_USER}'@'%';

@@ -6,7 +6,12 @@ use App\Repository\NorwegianLanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NorwegianLanguageRepository::class)]
-#[ORM\Table(name: "pronunciation_norwegian_language")]
+#[ORM\Table(
+    name: "pronunciation_norwegian_language",
+    indexes: [
+        new ORM\Index(name: 'i_name', columns: ['name']),
+    ]
+)]
 class NorwegianLanguageEntity
 {
     #[ORM\Id]
@@ -17,11 +22,14 @@ class NorwegianLanguageEntity
     #[ORM\Column(length: 256)]
     private string $name;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 255)]
     private string $ipa;
 
-    #[ORM\Column(name: 'ts_created')]
+    #[ORM\Column(name: 'ts_created', length: 255)]
     private string $tsCreated;
+
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $score = 0;
 
     public function getId(): int
     {
@@ -64,6 +72,17 @@ class NorwegianLanguageEntity
     public function setTsCreated(string $tsCreated): NorwegianLanguageEntity
     {
         $this->tsCreated = $tsCreated;
+        return $this;
+    }
+
+    public function getScore(): int
+    {
+        return $this->score;
+    }
+
+    public function setScore(int $score): NorwegianLanguageEntity
+    {
+        $this->score = $score;
         return $this;
     }
 

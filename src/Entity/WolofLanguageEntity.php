@@ -2,17 +2,17 @@
 
 namespace App\Entity;
 
-use App\Repository\SerboCroatianLanguageRepository;
+use App\Repository\WolofLanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SerboCroatianLanguageRepository::class)]
+#[ORM\Entity(repositoryClass: WolofLanguageRepository::class)]
 #[ORM\Table(
-    name: "pronunciation_serbocroatian_language",
+    name: "pronunciation_wolof_language",
     indexes: [
-        new ORM\Index(name: 'i_name', columns: ['name']),
+        new ORM\Index(name: 'idx_name', columns: ['name']),
     ]
 )]
-class SerboCroatianLanguageEntity
+class WolofLanguageEntity
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -27,16 +27,16 @@ class SerboCroatianLanguageEntity
 
     #[ORM\Column(name: 'ts_created', length: 255)]
     private string $tsCreated;
-
+    
     #[ORM\Column(type: 'integer', options: ['default' => 0])]
-    private int $score = 0;
+    private int $score;
 
     public function getId(): int
     {
         return $this->id;
     }
 
-    public function setId(int $id): SerboCroatianLanguageEntity
+    public function setId(int $id): WolofLanguageEntity
     {
         $this->id = $id;
         return $this;
@@ -47,7 +47,7 @@ class SerboCroatianLanguageEntity
         return $this->name;
     }
 
-    public function setName(string $name): SerboCroatianLanguageEntity
+    public function setName(string $name): WolofLanguageEntity
     {
         $this->name = $name;
         return $this;
@@ -58,7 +58,7 @@ class SerboCroatianLanguageEntity
         return $this->ipa;
     }
 
-    public function setIpa(string $ipa): SerboCroatianLanguageEntity
+    public function setIpa(string $ipa): WolofLanguageEntity
     {
         $this->ipa = $ipa;
         return $this;
@@ -69,20 +69,21 @@ class SerboCroatianLanguageEntity
         return $this->tsCreated;
     }
 
-    public function setTsCreated(string $tsCreated): SerboCroatianLanguageEntity
+    public function setTsCreated(string $tsCreated): WolofLanguageEntity
     {
         $this->tsCreated = $tsCreated;
         return $this;
     }
-
+    
     public function getScore(): int
     {
         return $this->score;
     }
 
-    public function setScore(int $score): SerboCroatianLanguageEntity
+    public function setScore(int $score): WolofLanguageEntity
     {
         $this->score = $score;
         return $this;
     }
+
 }
