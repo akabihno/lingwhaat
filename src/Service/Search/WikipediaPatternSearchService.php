@@ -55,6 +55,7 @@ class WikipediaPatternSearchService
         $lengthQuery = new Term();
         $lengthQuery->setTerm('length', $windowSize);
         $bool->addMust($lengthQuery);
+        $bool->setMinimumShouldMatch(1);
 
         $query = new Query($bool);
         $query->setSize($limit);
