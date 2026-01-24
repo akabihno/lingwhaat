@@ -4,23 +4,38 @@ namespace App\Service\Search;
 
 use App\Entity\WikipediaArticleEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use Elastica\Client;
 
 class WikipediaPatternIndexerService
 {
-    private const int WINDOW_SIZE = 100;
     private const int BASE = 101;
     private const int MOD = 1000000007;
+    private const int DEFAULT_WINDOW_SIZE = 100;
+    private const string INDEX_NAME = 'wikipedia_global_patterns';
+
+    private Client $esClient;
 
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly ElasticsearchBulkStreamer $bulk
-    ) {}
+    ) {
+        $this->esClient = ElasticsearchClientFactory::create();
+    }
 
     /**
      * Build a global sliding-window index across ALL Wikipedia articles.
      */
-    public function indexAll(): void
+    public function indexAll(int $windowSize = self::DEFAULT_WINDOW_SIZE): void
     {
+        if ($windowSize <= 0) {
+            throw new \InvalidArgumentException('windowSize must be greater than 0.');
+        }
+
+        $index = $this->esClient->getIndex(self::INDEX_NAME);
+        if ($index->exists()) {
+            $index->delete();
+        }
+
         $repo = $this->em->getRepository(WikipediaArticleEntity::class);
         $articles = $repo->findBy([], ['id' => 'ASC']);
 
@@ -38,11 +53,11 @@ class WikipediaPatternIndexerService
 
                 $window[] = $ch;
 
-                if (count($window) > self::WINDOW_SIZE) {
+                if (count($window) > $windowSize) {
                     array_shift($window);
                 }
 
-                if (count($window) === self::WINDOW_SIZE) {
+                if (count($window) === $windowSize) {
                     $pattern = $this->buildPattern(implode('', $window));
                     $patternHash = $this->patternHash($pattern);
 
@@ -50,12 +65,12 @@ class WikipediaPatternIndexerService
                         'pattern_hash' => $patternHash,
                         'pattern' => implode(',', $pattern),
                         'global_position' => $globalPos,
-                        'length' => self::WINDOW_SIZE,
+                        'length' => $windowSize,
                     ];
 
                     // Send in batches of 5000
                     if (count($batch) >= 5000) {
-                        $this->bulk->sendBatch('wikipedia_global_patterns', $batch);
+                        $this->bulk->sendBatch(self::INDEX_NAME, $batch);
                         $batch = [];
                     }
                 }
@@ -66,7 +81,7 @@ class WikipediaPatternIndexerService
 
         // Flush remaining
         if (!empty($batch)) {
-            $this->bulk->sendBatch('wikipedia_global_patterns', $batch);
+            $this->bulk->sendBatch(self::INDEX_NAME, $batch);
         }
     }
 

@@ -11,7 +11,8 @@ use Elastica\Query\MatchPhrase;
 class WikipediaPatternSearchService
 {
     private Client $esClient;
-    private string $indexName = 'wikipedia_global_patterns';
+    private const string INDEX_NAME = 'wikipedia_global_patterns';
+    private const int DEFAULT_WINDOW_SIZE = 100;
 
     public function __construct()
     {
@@ -21,14 +22,23 @@ class WikipediaPatternSearchService
     /**
      * Search for a cipher pattern in the global concatenated index.
      */
-    public function search(string $cipherText, int $limit = 50): array
+    public function search(string $cipherText, int $limit = 50, int $windowSize = self::DEFAULT_WINDOW_SIZE): array
     {
+        if ($windowSize <= 0) {
+            throw new \InvalidArgumentException('windowSize must be greater than 0.');
+        }
+
         $normalized = $this->normalize($cipherText);
+        $normalizedLength = mb_strlen($normalized);
+        if ($normalizedLength !== $windowSize) {
+            throw new \InvalidArgumentException('Search text length must match the window size.');
+        }
+
         $pattern = $this->buildPattern($normalized);
         $patternStr = implode(',', $pattern);
         $patternHash = $this->patternHash($pattern);
 
-        $index = $this->esClient->getIndex($this->indexName);
+        $index = $this->esClient->getIndex(self::INDEX_NAME);
 
         $bool = new BoolQuery();
 
@@ -41,6 +51,10 @@ class WikipediaPatternSearchService
         $patternQuery = new MatchPhrase();
         $patternQuery->setFieldQuery('pattern', $patternStr);
         $bool->addShould($patternQuery);
+
+        $lengthQuery = new Term();
+        $lengthQuery->setTerm('length', $windowSize);
+        $bool->addMust($lengthQuery);
 
         $query = new Query($bool);
         $query->setSize($limit);
