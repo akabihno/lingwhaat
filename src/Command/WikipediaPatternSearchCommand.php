@@ -57,6 +57,8 @@ class WikipediaPatternSearchCommand extends Command
             foreach ($results as $result) {
                 $io->section('Match');
                 $io->writeln("Global Position: {$result['global_position']}");
+                $io->writeln("Article ID: {$result['article_id']}");
+                $io->writeln("Local Position: {$result['local_position']}");
                 $io->writeln("Length: {$result['length']}");
                 $io->writeln("Pattern Hash: {$result['pattern_hash']}");
                 $io->newLine();

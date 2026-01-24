@@ -77,6 +77,8 @@ class WikipediaPatternSearchService
 
             $formatted[] = [
                 'global_position' => $src['global_position'] ?? null,
+                'article_id' => $src['article_id'] ?? null,
+                'local_position' => $src['local_position'] ?? null,
                 'pattern' => $src['pattern'] ?? null,
                 'length' => $src['length'] ?? null,
                 'pattern_hash' => $src['pattern_hash'] ?? null,

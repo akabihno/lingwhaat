@@ -42,29 +42,37 @@ class WikipediaPatternIndexerService
         $globalPos = 0;
 
         $window = [];
+        $windowMeta = [];
 
         $batch = [];
 
         foreach ($articles as $article) {
             $normalized = $this->normalize($article->getText());
             $chars = preg_split('//u', $normalized, -1, PREG_SPLIT_NO_EMPTY);
+            $localPos = 0;
 
             foreach ($chars as $ch) {
 
                 $window[] = $ch;
+                $windowMeta[] = ['article_id' => $article->getId(), 'local_position' => $localPos];
+                $localPos++;
 
                 if (count($window) > $windowSize) {
                     array_shift($window);
+                    array_shift($windowMeta);
                 }
 
                 if (count($window) === $windowSize) {
                     $pattern = $this->buildPattern(implode('', $window));
                     $patternHash = $this->patternHash($pattern);
+                    $startMeta = $windowMeta[0];
 
                     $batch[] = [
                         'pattern_hash' => $patternHash,
                         'pattern' => implode(',', $pattern),
                         'global_position' => $globalPos,
+                        'article_id' => $startMeta['article_id'],
+                        'local_position' => $startMeta['local_position'],
                         'length' => $windowSize,
                     ];
 
