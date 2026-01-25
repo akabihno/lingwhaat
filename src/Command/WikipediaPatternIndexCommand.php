@@ -42,7 +42,7 @@ class WikipediaPatternIndexCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $windowSize = (int) $input->getOption('window-size');
-        $languageCode = (int) $input->getOption('language-code');
+        $languageCode = (string) $input->getOption('language-code');
 
         $io->info("Indexing Wikipedia canonical patterns for $languageCode with window size $windowSize...");
 
