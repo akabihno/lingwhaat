@@ -3,10 +3,13 @@
 namespace App\Service;
 
 use App\Entity\WikipediaArticleEntity;
+use App\Exception\WikipediaArticleLimitExceededException;
 use Doctrine\ORM\EntityManagerInterface;
 
 class WikipediaPatternParserService extends AbstractWikiParserService
 {
+    private const int ARTICLE_LIMIT = 10000;
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
     )
@@ -21,6 +24,12 @@ class WikipediaPatternParserService extends AbstractWikiParserService
 
         if ($limit <= 0) {
             throw new \InvalidArgumentException('limit must be greater than 0.');
+        }
+
+        $repo = $this->entityManager->getRepository(WikipediaArticleEntity::class);
+        $existingCount = $repo->count(['languageCode' => $languageCode]);
+        if ($existingCount > self::ARTICLE_LIMIT) {
+            throw new WikipediaArticleLimitExceededException($languageCode, $existingCount, self::ARTICLE_LIMIT);
         }
 
         for ($i = 0; $i < $limit; $i++) {
