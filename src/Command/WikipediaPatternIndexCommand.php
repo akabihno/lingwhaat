@@ -27,9 +27,14 @@ class WikipediaPatternIndexCommand extends Command
         $this->addOption(
             'window-size',
             'w',
-            InputOption::VALUE_OPTIONAL,
-            'Pattern window size to index',
-            100
+            InputOption::VALUE_REQUIRED,
+            'Pattern window size to index'
+        )
+        ->addOption(
+            'language-code',
+            '',
+            InputOption::VALUE_REQUIRED,
+            'Language code'
         );
     }
 
@@ -37,11 +42,12 @@ class WikipediaPatternIndexCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $windowSize = (int) $input->getOption('window-size');
+        $languageCode = (int) $input->getOption('language-code');
 
-        $io->info("Indexing Wikipedia canonical patterns with window size $windowSize...");
+        $io->info("Indexing Wikipedia canonical patterns for $languageCode with window size $windowSize...");
 
         try {
-            $this->indexerService->indexAll($windowSize);
+            $this->indexerService->indexAllByLanguageCode($windowSize, $languageCode);
 
             $io->success("Indexed patterns to Elasticsearch!");
 

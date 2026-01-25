@@ -15,6 +15,14 @@ class WikipediaPatternParserService extends AbstractWikiParserService
 
     public function run(string $languageCode, int $limit): array
     {
+        if (!$languageCode) {
+            throw new \InvalidArgumentException('languageCode must be provided.');
+        }
+
+        if ($limit <= 0) {
+            throw new \InvalidArgumentException('limit must be greater than 0.');
+        }
+
         for ($i = 0; $i < $limit; $i++) {
             $randomTitle = $this->wikiGetRandomTitle($languageCode, 'wikipedia');
 

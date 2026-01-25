@@ -4,14 +4,15 @@ namespace App\Service\Search;
 
 use App\Entity\WikipediaArticleEntity;
 use Doctrine\ORM\EntityManagerInterface;
+use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastica\Client;
 
 class WikipediaPatternIndexerService
 {
     private const int BASE = 101;
     private const int MOD = 1000000007;
-    private const int DEFAULT_WINDOW_SIZE = 100;
     private const string INDEX_NAME = 'wikipedia_global_patterns';
+    private const int BATCH_SIZE = 5000;
 
     private Client $esClient;
 
@@ -24,20 +25,29 @@ class WikipediaPatternIndexerService
 
     /**
      * Build a global sliding-window index across ALL Wikipedia articles.
+     * @throws ClientResponseException
      */
-    public function indexAll(int $windowSize = self::DEFAULT_WINDOW_SIZE): void
+    public function indexAllByLanguageCode(int $windowSize, string $languageCode): void
     {
         if ($windowSize <= 0) {
             throw new \InvalidArgumentException('windowSize must be greater than 0.');
         }
 
+        if (!$languageCode) {
+            throw new \InvalidArgumentException('languageCode must be provided.');
+        }
+
         $index = $this->esClient->getIndex(self::INDEX_NAME);
-        if ($index->exists()) {
-            $index->delete();
+        try {
+            if ($index->exists()) {
+                $index->delete();
+            }
+        } catch (\Throwable $e) {
+            throw new ClientResponseException($e->getMessage(), $e->getCode(), $e);
         }
 
         $repo = $this->em->getRepository(WikipediaArticleEntity::class);
-        $articles = $repo->findBy([], ['id' => 'ASC']);
+        $articles = $repo->findBy(['languageCode' => $languageCode], ['id' => 'ASC']);
 
         $globalPos = 0;
 
@@ -76,9 +86,12 @@ class WikipediaPatternIndexerService
                         'length' => $windowSize,
                     ];
 
-                    // Send in batches of 5000
-                    if (count($batch) >= 5000) {
-                        $this->bulk->sendBatch(self::INDEX_NAME, $batch);
+                    if (count($batch) >= self::BATCH_SIZE) {
+                        try {
+                            $this->bulk->sendBatch(self::INDEX_NAME, $batch);
+                        } catch (\Throwable $e) {
+                            throw new ClientResponseException($e->getMessage(), $e->getCode(), $e);
+                        }
                         $batch = [];
                     }
                 }
@@ -87,9 +100,12 @@ class WikipediaPatternIndexerService
             }
         }
 
-        // Flush remaining
         if (!empty($batch)) {
-            $this->bulk->sendBatch(self::INDEX_NAME, $batch);
+            try {
+                $this->bulk->sendBatch(self::INDEX_NAME, $batch);
+            } catch (\Throwable $e) {
+                throw new ClientResponseException($e->getMessage(), $e->getCode(), $e);
+            }
         }
     }
 

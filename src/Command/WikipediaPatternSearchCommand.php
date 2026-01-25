@@ -17,6 +17,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class WikipediaPatternSearchCommand extends Command
 {
+    private const int DEFAULT_RESULT_COUNT = 50;
     public function __construct(
         private readonly WikipediaPatternSearchService $wikipediaPatternSearchService,
     ) {
@@ -27,8 +28,8 @@ class WikipediaPatternSearchCommand extends Command
     {
         $this
             ->addArgument('search-text', InputArgument::REQUIRED, 'Text to search for pattern matches')
-            ->addOption('window-size', 'w', InputOption::VALUE_OPTIONAL, 'Pattern window size', 100)
-            ->addOption('limit', null, InputOption::VALUE_OPTIONAL, 'Maximum number of results', 50);
+            ->addOption('window-size', 'w', InputOption::VALUE_REQUIRED, 'Pattern window size')
+            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Maximum number of results', self::DEFAULT_RESULT_COUNT);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

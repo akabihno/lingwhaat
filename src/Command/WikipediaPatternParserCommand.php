@@ -27,7 +27,7 @@ class WikipediaPatternParserCommand extends Command
     {
         $this
             ->addArgument('languageCode', InputArgument::REQUIRED, 'Wikipedia language code to parse articles from (e.g. en, nl)')
-            ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Limit number of articles to process', 100)
+            ->addOption('limit', 'l', InputOption::VALUE_REQUIRED, 'Limit number of articles to process', 100)
         ;
     }
 

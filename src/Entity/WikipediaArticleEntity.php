@@ -25,9 +25,6 @@ class WikipediaArticleEntity
     #[ORM\Column(name: 'ts_created', length: 255)]
     private string $tsCreated;
 
-    #[ORM\Column(type: 'integer')]
-    private int $processed = 0;
-
 
     public function getId(): int
     {
@@ -81,17 +78,6 @@ class WikipediaArticleEntity
     public function setTsCreated(string $tsCreated): WikipediaArticleEntity
     {
         $this->tsCreated = $tsCreated;
-        return $this;
-    }
-
-    public function getProcessed(): int
-    {
-        return $this->processed;
-    }
-
-    public function setProcessed(int $processed): WikipediaArticleEntity
-    {
-        $this->processed = $processed;
         return $this;
     }
 }
