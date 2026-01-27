@@ -22,7 +22,8 @@ class PatternSearchAdvancedController extends AbstractController
     #[OA\Post(
         path: '/api/pattern-search-advanced',
         description: 'Regular mode searches for words matching pattern constraints. Intersection mode helps solve ciphers by finding words from multiple patterns that share common characters for cross-referencing alphabet mappings.',
-        summary: 'Search for words matching advanced positional patterns or solve cipher/substitution puzzles by finding intersecting words'
+        summary: 'Search for words matching advanced positional patterns or solve cipher/substitution puzzles by finding intersecting words',
+        tags: ['Pattern Search']
     )]
     #[OA\RequestBody(
         required: true,
@@ -303,7 +304,8 @@ class PatternSearchAdvancedController extends AbstractController
     #[OA\Post(
         path: '/api/pattern-search-sequence',
         description: 'Search for word sequences where letters appear exclusively at given positions across multiple words in the same language. Supports both single-letter search (sequencePositions) and multi-letter search (letterConstraints) for solving substitution ciphers.',
-        summary: 'Search for word sequences with positional letter patterns across multiple words'
+        summary: 'Search for word sequences with positional letter patterns across multiple words',
+        tags: ['Pattern Search']
     )]
     #[OA\RequestBody(
         required: true,
