@@ -38,9 +38,6 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      db:
-        condition: service_started
-        required: false
       composer:
         condition: service_completed_successfully
     volumes:
@@ -158,9 +155,6 @@ services:
       - MESSENGER_FAILED_DSN=${MESSENGER_FAILED_DSN}
     network_mode: host
     depends_on:
-      db:
-        condition: service_started
-        required: false
       redis:
         condition: service_started
     volumes:
@@ -192,9 +186,6 @@ services:
       - MESSENGER_FAILED_DSN=${MESSENGER_FAILED_DSN}
     network_mode: host
     depends_on:
-      db:
-        condition: service_started
-        required: false
       redis:
         condition: service_started
     volumes:
