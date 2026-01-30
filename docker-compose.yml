@@ -1,5 +1,6 @@
 services:
   ml:
+    profiles: ["local", "rds"]
     build:
       context: .
       dockerfile: Dockerfile-python
@@ -15,6 +16,7 @@ services:
           memory: 2g
 
   web:
+    profiles: ["local", "rds"]
     build:
       context: .
       dockerfile: Dockerfile-php
@@ -36,12 +38,16 @@ services:
       - "80:80"
       - "443:443"
     depends_on:
-      - db
-      - composer
+      db:
+        condition: service_started
+        required: false
+      composer:
+        condition: service_completed_successfully
     volumes:
       - .:/var/www/html
 
   db:
+    profiles: ["local"]
     image: mysql:8.1.0
     container_name: database
     environment:
@@ -62,6 +68,7 @@ services:
     restart: on-failure
 
   elasticsearch:
+    profiles: ["local", "rds"]
     image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
     container_name: elasticsearch
     environment:
@@ -91,6 +98,7 @@ services:
       retries: 10
 
   kibana:
+    profiles: ["local", "rds"]
     image: docker.elastic.co/kibana/kibana:8.11.0
     container_name: kibana
     ports:
@@ -109,6 +117,7 @@ services:
           memory: 1g
 
   redis:
+    profiles: ["local", "rds"]
     image: redis:7-alpine
     container_name: redis-cache
     ports:
@@ -119,6 +128,7 @@ services:
     restart: on-failure
 
   composer:
+    profiles: ["local", "rds"]
     build:
       context: .
       dockerfile: Dockerfile-composer
@@ -129,6 +139,7 @@ services:
     command: [ "composer", "update" ]
 
   scheduler:
+    profiles: ["local", "rds"]
     build:
       context: .
       dockerfile: Dockerfile-php
@@ -147,8 +158,11 @@ services:
       - MESSENGER_FAILED_DSN=${MESSENGER_FAILED_DSN}
     network_mode: host
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_started
+        required: false
+      redis:
+        condition: service_started
     volumes:
       - .:/var/www/html
     command: php /var/www/html/bin/console messenger:consume scheduler_default -vv
@@ -159,6 +173,7 @@ services:
           memory: 256m
 
   messenger:
+    profiles: ["local", "rds"]
     build:
       context: .
       dockerfile: Dockerfile-php
@@ -177,8 +192,11 @@ services:
       - MESSENGER_FAILED_DSN=${MESSENGER_FAILED_DSN}
     network_mode: host
     depends_on:
-      - db
-      - redis
+      db:
+        condition: service_started
+        required: false
+      redis:
+        condition: service_started
     volumes:
       - .:/var/www/html
     command: php /var/www/html/bin/console messenger:consume async -vv
