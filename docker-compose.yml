@@ -42,6 +42,7 @@ services:
         condition: service_completed_successfully
     volumes:
       - .:/var/www/html
+      - ./ssl-certs:/ssl-certs:ro
 
   db:
     profiles: ["local"]
@@ -159,6 +160,7 @@ services:
         condition: service_started
     volumes:
       - .:/var/www/html
+      - ./ssl-certs:/ssl-certs:ro
     command: php /var/www/html/bin/console messenger:consume scheduler_default -vv
     restart: on-failure
     deploy:
@@ -190,6 +192,7 @@ services:
         condition: service_started
     volumes:
       - .:/var/www/html
+      - ./ssl-certs:/ssl-certs:ro
     command: php /var/www/html/bin/console messenger:consume async -vv
     restart: on-failure
     deploy:
