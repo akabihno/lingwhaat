@@ -34,9 +34,6 @@ services:
     image: php:8.5-apache
     container_name: php-app
     network_mode: host
-    ports:
-      - "80:80"
-      - "443:443"
     depends_on:
       composer:
         condition: service_completed_successfully
@@ -81,9 +78,6 @@ services:
         hard: -1
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
-    ports:
-      - "9200:9200"
-      - "9300:9300"
     restart: on-failure
     deploy:
       resources:
@@ -99,8 +93,6 @@ services:
     profiles: ["local", "rds"]
     image: docker.elastic.co/kibana/kibana:8.11.0
     container_name: kibana
-    ports:
-      - "5601:5601"
     environment:
       - ELASTICSEARCH_HOSTS=http://localhost:9200
       - SERVER_HOST=0.0.0.0
@@ -118,8 +110,6 @@ services:
     profiles: ["local", "rds"]
     image: redis:7-alpine
     container_name: redis-cache
-    ports:
-      - "6379:6379"
     network_mode: host
     volumes:
       - ./redis_data:/data
