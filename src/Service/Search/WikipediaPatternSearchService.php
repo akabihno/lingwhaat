@@ -42,20 +42,14 @@ class WikipediaPatternSearchService
 
         $bool = new BoolQuery();
 
-        // Fast exact hash match
-        $hashQuery = new Term();
-        $hashQuery->setTerm('pattern_hash', $patternHash);
-        $bool->addShould($hashQuery);
-
-        // Fallback exact pattern match
+        // Exact pattern match only
         $patternQuery = new MatchPhrase();
         $patternQuery->setFieldQuery('pattern', $patternStr);
-        $bool->addShould($patternQuery);
+        $bool->addMust($patternQuery);
 
         $lengthQuery = new Term();
         $lengthQuery->setTerm('length', $windowSize);
         $bool->addMust($lengthQuery);
-        $bool->setMinimumShouldMatch(1);
 
         $query = new Query($bool);
         $query->setSize($limit);
