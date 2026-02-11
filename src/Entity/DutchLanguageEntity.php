@@ -6,7 +6,12 @@ use App\Repository\DutchLanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DutchLanguageRepository::class)]
-#[ORM\Table(name: "pronunciation_dutch_language")]
+#[ORM\Table(
+    name: "pronunciation_dutch_language",
+    indexes: [
+        new ORM\Index(name: 'i_name', columns: ['name']),
+    ]
+)]
 class DutchLanguageEntity
 {
     #[ORM\Id]
@@ -17,11 +22,14 @@ class DutchLanguageEntity
     #[ORM\Column(length: 256)]
     private string $name;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 255)]
     private string $ipa;
 
-    #[ORM\Column(name: 'ts_created')]
+    #[ORM\Column(name: 'ts_created', length: 255)]
     private string $tsCreated;
+
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $score = 0;
 
     public function getId(): int
     {
@@ -64,6 +72,17 @@ class DutchLanguageEntity
     public function setTsCreated(string $tsCreated): DutchLanguageEntity
     {
         $this->tsCreated = $tsCreated;
+        return $this;
+    }
+
+    public function getScore(): int
+    {
+        return $this->score;
+    }
+
+    public function setScore(int $score): DutchLanguageEntity
+    {
+        $this->score = $score;
         return $this;
     }
 }

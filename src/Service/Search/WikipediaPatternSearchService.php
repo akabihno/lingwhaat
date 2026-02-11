@@ -1,0 +1,136 @@
+<?php
+
+namespace App\Service\Search;
+
+use Elastica\Client;
+use Elastica\Query;
+use Elastica\Query\BoolQuery;
+use Elastica\Query\Term;
+use Elastica\Query\MatchPhrase;
+
+class WikipediaPatternSearchService
+{
+    private Client $esClient;
+    private const string INDEX_NAME = 'wikipedia_global_patterns';
+    private const int DEFAULT_WINDOW_SIZE = 100;
+
+    public function __construct()
+    {
+        $this->esClient = ElasticsearchClientFactory::create();
+    }
+
+    /**
+     * Search for a cipher pattern in the global concatenated index.
+     */
+    public function search(string $cipherText, int $limit = 50, int $windowSize = self::DEFAULT_WINDOW_SIZE): array
+    {
+        if ($windowSize <= 0) {
+            throw new \InvalidArgumentException('windowSize must be greater than 0.');
+        }
+
+        $normalized = $this->normalize($cipherText);
+        $normalizedLength = mb_strlen($normalized);
+        if ($normalizedLength !== $windowSize) {
+            throw new \InvalidArgumentException('Search text length must match the window size.');
+        }
+
+        $pattern = $this->buildPattern($normalized);
+        $patternStr = implode(',', $pattern);
+        $patternHash = $this->patternHash($pattern);
+
+        $index = $this->esClient->getIndex(self::INDEX_NAME);
+
+        $bool = new BoolQuery();
+
+        // Exact pattern match only
+        $patternQuery = new MatchPhrase();
+        $patternQuery->setFieldQuery('pattern', $patternStr);
+        $bool->addMust($patternQuery);
+
+        $lengthQuery = new Term();
+        $lengthQuery->setTerm('length', $windowSize);
+        $bool->addMust($lengthQuery);
+
+        $query = new Query($bool);
+        $query->setSize($limit);
+        $query->setSort(['global_position' => 'asc']);
+
+        $results = $index->search($query)->getResults();
+
+        return $this->formatResults($results);
+    }
+
+    /**
+     * Format results from the global index.
+     */
+    private function formatResults(array $results): array
+    {
+        $formatted = [];
+
+        foreach ($results as $hit) {
+            $src = $hit->getSource();
+
+            $formatted[] = [
+                'global_position' => $src['global_position'] ?? null,
+                'article_id' => $src['article_id'] ?? null,
+                'local_position' => $src['local_position'] ?? null,
+                'pattern' => $src['pattern'] ?? null,
+                'length' => $src['length'] ?? null,
+                'pattern_hash' => $src['pattern_hash'] ?? null,
+            ];
+        }
+
+        return $formatted;
+    }
+
+    private function normalize(string $s): string
+    {
+        $s = mb_strtolower($s);
+        return preg_replace('/[^\p{L}]+/u', '', $s);
+    }
+
+    private function buildPattern(string $s): array
+    {
+        $map = [];
+        $nextId = 0;
+        $pattern = [];
+
+        foreach (preg_split('//u', $s, -1, PREG_SPLIT_NO_EMPTY) as $ch) {
+            if (!isset($map[$ch])) {
+                $map[$ch] = $nextId++;
+            }
+            $pattern[] = $map[$ch];
+        }
+
+        return $pattern;
+    }
+
+    private function patternHash(array $pattern, int $base = 101, int $mod = 1000000007): int
+    {
+        $m = count($pattern);
+        $hash = 0;
+
+        for ($i = 0; $i < $m; $i++) {
+            $power = $m - 1 - $i;
+            $hash = ($hash + $pattern[$i] * $this->powmod($base, $power, $mod)) % $mod;
+        }
+
+        return $hash;
+    }
+
+    private function powmod(int $base, int $exp, int $mod): int
+    {
+        $result = 1;
+        $base %= $mod;
+
+        while ($exp > 0) {
+            if ($exp & 1) {
+                $result = ($result * $base) % $mod;
+            }
+            $base = ($base * $base) % $mod;
+            $exp >>= 1;
+        }
+
+        return $result;
+    }
+}

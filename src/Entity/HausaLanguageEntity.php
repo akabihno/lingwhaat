@@ -6,7 +6,12 @@ use App\Repository\HausaLanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HausaLanguageRepository::class)]
-#[ORM\Table(name: "pronunciation_hausa_language")]
+#[ORM\Table(
+    name: "pronunciation_hausa_language",
+    indexes: [
+        new ORM\Index(name: 'i_name', columns: ['name']),
+    ]
+)]
 class HausaLanguageEntity
 {
     #[ORM\Id]
@@ -17,11 +22,14 @@ class HausaLanguageEntity
     #[ORM\Column(length: 256)]
     private string $name;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 255)]
     private string $ipa;
 
-    #[ORM\Column(name: 'ts_created')]
+    #[ORM\Column(name: 'ts_created', length: 255)]
     private string $tsCreated;
+
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $score = 0;
 
     public function getId(): int
     {
@@ -64,6 +72,17 @@ class HausaLanguageEntity
     public function setTsCreated(string $tsCreated): HausaLanguageEntity
     {
         $this->tsCreated = $tsCreated;
+        return $this;
+    }
+
+    public function getScore(): int
+    {
+        return $this->score;
+    }
+
+    public function setScore(int $score): HausaLanguageEntity
+    {
+        $this->score = $score;
         return $this;
     }
 

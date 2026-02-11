@@ -3,7 +3,9 @@
 namespace App;
 
 use App\Message\ParseWiktionaryArticlesMessage;
+use App\Message\ParseWikipediaArticlesMessage;
 use App\Repository\LanguageParseScheduleRepository;
+use App\Repository\WikipediaPatternParseScheduleRepository;
 use Symfony\Component\Scheduler\Attribute\AsSchedule;
 use Symfony\Component\Scheduler\RecurringMessage;
 use Symfony\Component\Scheduler\Schedule as SymfonySchedule;
@@ -16,6 +18,7 @@ class Schedule implements ScheduleProviderInterface
     public function __construct(
         private CacheInterface $cache,
         private LanguageParseScheduleRepository $languageParseScheduleRepository,
+        private WikipediaPatternParseScheduleRepository $wikipediaPatternParseScheduleRepository,
     ) {
     }
 
@@ -32,6 +35,17 @@ class Schedule implements ScheduleProviderInterface
                 RecurringMessage::every(
                     '5 minutes',
                     new ParseWiktionaryArticlesMessage($language->getLanguageName(), 400)
+                )->withJitter(30)
+            );
+        }
+
+        $wikipediaLanguages = $this->wikipediaPatternParseScheduleRepository->getAll();
+
+        foreach ($wikipediaLanguages as $language) {
+            $schedule->add(
+                RecurringMessage::every(
+                    '1 minute',
+                    new ParseWikipediaArticlesMessage($language->getLanguageCode())
                 )->withJitter(30)
             );
         }

@@ -21,7 +21,8 @@ class PatternSearchController extends AbstractController
     #[Route('/api/pattern-search', name: 'pattern_search', methods: ['GET'])]
     #[OA\Get(
         path: '/api/pattern-search',
-        summary: 'Search for words matching a pattern with unknown letters'
+        summary: 'Search for words matching a pattern with unknown letters',
+        tags: ['Pattern Search']
     )]
     #[OA\Parameter(
         name: 'pattern',

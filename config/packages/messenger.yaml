@@ -19,3 +19,4 @@ framework:
         routing:
             # Route your custom messages to async transport for actual processing
             'App\Message\ParseWiktionaryArticlesMessage': async
+            'App\Message\ParseWikipediaArticlesMessage': async

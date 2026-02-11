@@ -72,7 +72,12 @@ use App\Repository\\{$languageClass}LanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: {$languageClass}LanguageRepository::class)]
-#[ORM\Table(name: "{$tableName}")]
+#[ORM\Table(
+    name: "{$tableName}",
+    indexes: [
+        new ORM\Index(name: 'idx_name', columns: ['name']),
+    ]
+)]
 class {$languageClass}LanguageEntity
 {
     #[ORM\Id]
@@ -83,11 +88,14 @@ class {$languageClass}LanguageEntity
     #[ORM\Column(length: 256)]
     private string \$name;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 255)]
     private string \$ipa;
 
-    #[ORM\Column(name: 'ts_created')]
+    #[ORM\Column(name: 'ts_created', length: 255)]
     private string \$tsCreated;
+    
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int \$score;
 
     public function getId(): int
     {
@@ -130,6 +138,17 @@ class {$languageClass}LanguageEntity
     public function setTsCreated(string \$tsCreated): {$languageClass}LanguageEntity
     {
         \$this->tsCreated = \$tsCreated;
+        return \$this;
+    }
+    
+    public function getScore(): int
+    {
+        return \$this->score;
+    }
+
+    public function setScore(int \$score): {$languageClass}LanguageEntity
+    {
+        \$this->score = \$score;
         return \$this;
     }
 

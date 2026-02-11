@@ -1,5 +1,11 @@
 CREATE USER '${MYSQL_WEB_USER}'@'%' IDENTIFIED BY '${MYSQL_WEB_PASSWORD}';
 
+GRANT CREATE,ALTER,INDEX,SELECT,UPDATE,REFERENCES ON lingwhaat.* TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.wikipedia_article TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.wikipedia_pattern_parse_schedule TO '${MYSQL_WEB_USER}'@'%';
+
+GRANT SELECT,INSERT,UPDATE,DELETE ON lingwhaat.doctrine_migration_versions TO '${MYSQL_WEB_USER}'@'%';
+
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_afar_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_afrikaans_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_albanian_language TO '${MYSQL_WEB_USER}'@'%';
@@ -11,7 +17,6 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_czech_language TO '${MYSQL
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_dutch_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_english_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_estonian_language TO '${MYSQL_WEB_USER}'@'%';
-GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_esu_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_french_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_georgian_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_german_language TO '${MYSQL_WEB_USER}'@'%';

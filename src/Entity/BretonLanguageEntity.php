@@ -6,7 +6,12 @@ use App\Repository\BretonLanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BretonLanguageRepository::class)]
-#[ORM\Table(name: "pronunciation_breton_language")]
+#[ORM\Table(
+    name: "pronunciation_breton_language",
+    indexes: [
+        new ORM\Index(name: 'i_name', columns: ['name']),
+    ]
+)]
 class BretonLanguageEntity
 {
     #[ORM\Id]
@@ -17,11 +22,14 @@ class BretonLanguageEntity
     #[ORM\Column(length: 256)]
     private string $name;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 255)]
     private string $ipa;
 
-    #[ORM\Column(name: 'ts_created')]
+    #[ORM\Column(name: 'ts_created', length: 255)]
     private string $tsCreated;
+
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $score = 0;
 
     public function getId(): int
     {
@@ -64,6 +72,17 @@ class BretonLanguageEntity
     public function setTsCreated(string $tsCreated): BretonLanguageEntity
     {
         $this->tsCreated = $tsCreated;
+        return $this;
+    }
+
+    public function getScore(): int
+    {
+        return $this->score;
+    }
+
+    public function setScore(int $score): BretonLanguageEntity
+    {
+        $this->score = $score;
         return $this;
     }
 }

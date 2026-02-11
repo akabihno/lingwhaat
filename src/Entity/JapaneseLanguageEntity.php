@@ -6,7 +6,12 @@ use App\Repository\JapaneseLanguageRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: JapaneseLanguageRepository::class)]
-#[ORM\Table(name: "pronunciation_japanese_language")]
+#[ORM\Table(
+    name: "pronunciation_japanese_language",
+    indexes: [
+        new ORM\Index(name: 'i_name', columns: ['name']),
+    ]
+)]
 class JapaneseLanguageEntity
 {
     #[ORM\Id]
@@ -17,11 +22,14 @@ class JapaneseLanguageEntity
     #[ORM\Column(length: 256)]
     private string $name;
 
-    #[ORM\Column]
+    #[ORM\Column(length: 255)]
     private string $ipa;
 
-    #[ORM\Column(name: 'ts_created')]
+    #[ORM\Column(name: 'ts_created', length: 255)]
     private string $tsCreated;
+
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $score = 0;
 
     public function getId(): int
     {
@@ -64,6 +72,17 @@ class JapaneseLanguageEntity
     public function setTsCreated(string $tsCreated): JapaneseLanguageEntity
     {
         $this->tsCreated = $tsCreated;
+        return $this;
+    }
+
+    public function getScore(): int
+    {
+        return $this->score;
+    }
+
+    public function setScore(int $score): JapaneseLanguageEntity
+    {
+        $this->score = $score;
         return $this;
     }
 
