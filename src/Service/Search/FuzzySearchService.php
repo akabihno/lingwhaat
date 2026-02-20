@@ -7,6 +7,7 @@ use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Elastica\Client;
 use Elastica\Query;
+use Elastica\Query\BoolQuery;
 use Elastica\Query\Fuzzy;
 use Elastica\Query\Term;
 
@@ -51,7 +52,7 @@ class FuzzySearchService
         return $result;
     }
 
-    public function findClosestMatches(string $input, int $limit = 5): array
+    public function findClosestMatches(string $input, int $limit = 5, string $languageCode = ''): array
     {
         $fuzzy = new Fuzzy();
         $fuzzy->setParam('word', [
@@ -60,7 +61,19 @@ class FuzzySearchService
             'prefix_length' => 1,
         ]);
 
-        $query = new Query($fuzzy);
+        if (!empty($languageCode)) {
+            $boolQuery = new BoolQuery();
+            $boolQuery->addMust($fuzzy);
+
+            $languageTerm = new Term();
+            $languageTerm->setTerm('languageCode', $languageCode);
+            $boolQuery->addFilter($languageTerm);
+
+            $query = new Query($boolQuery);
+        } else {
+            $query = new Query($fuzzy);
+        }
+
         $query->setSize($limit);
 
         $results = $this->esClient->getIndex($this->indexName)->search($query);
@@ -74,6 +87,7 @@ class FuzzySearchService
                 'type' => 'closest_word',
                 'result' => $result,
                 'input' => $input,
+                'languageCode' => $languageCode,
             ]
         );
 
