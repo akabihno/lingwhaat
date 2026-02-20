@@ -2,7 +2,8 @@
 
 namespace App\Command;
 
-use App\Service\Search\ScoreSetService;
+use App\Service\Search\WordsPopularityScoreSetService;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,10 +11,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class ScoreSetCommand extends Command
+#[AsCommand(
+    name: 'language:set-popularity-score',
+    description: 'Set popularity score for words in specific language',
+)]
+class WordsPopularityScoreSetCommand extends Command
 {
     public function __construct(
-        private readonly ScoreSetService $scoreSetService
+        private readonly WordsPopularityScoreSetService $wordsPopularityScoreSetService
     )
     {
         parent::__construct();
@@ -36,7 +41,7 @@ class ScoreSetCommand extends Command
         }
 
         try {
-
+            $this->wordsPopularityScoreSetService->execute($languageCode);
 
             return Command::SUCCESS;
         } catch (\Exception $e) {

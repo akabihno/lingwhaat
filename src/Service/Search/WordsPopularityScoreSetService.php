@@ -4,7 +4,7 @@ namespace App\Service\Search;
 
 use App\Repository\WikipediaArticleRepository;
 
-class ScoreSetService
+class WordsPopularityScoreSetService
 {
     public function __construct(private WikipediaArticleRepository $wikipediaArticleRepository)
     {
