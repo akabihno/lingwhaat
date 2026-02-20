@@ -42,4 +42,16 @@ abstract class AbstractLanguageRepository extends ServiceEntityRepository
             ->getArrayResult();
     }
 
+    public function incrementScoreByName(string $name, int $increment = 1): void
+    {
+        $this->createQueryBuilder('e')
+            ->update()
+            ->set('e.score', 'e.score + :increment')
+            ->where('e.name = :name')
+            ->setParameter('increment', $increment)
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->execute();
+    }
+
 }
