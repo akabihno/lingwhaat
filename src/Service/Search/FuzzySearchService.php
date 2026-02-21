@@ -37,19 +37,7 @@ class FuzzySearchService
 
         $results = $this->esClient->getIndex($this->indexName)->search($query);
 
-        $result = array_map(fn($r) => $r->getSource(), $results->getResults());
-
-        $this->logger->info(
-            'Fuzzy search completed.',
-            [
-                'service' => '[FuzzySearchService]',
-                'type' => 'exact_word',
-                'result' => $result,
-                'input' => $input,
-            ]
-        );
-
-        return $result;
+        return array_map(fn($r) => $r->getSource(), $results->getResults());
     }
 
     public function findClosestMatches(string $input, int $limit = 5, string $languageCode = ''): array
@@ -78,20 +66,7 @@ class FuzzySearchService
 
         $results = $this->esClient->getIndex($this->indexName)->search($query);
 
-        $result = array_map(fn($r) => $r->getSource(), $results->getResults());
-
-        $this->logger->info(
-            'Fuzzy search completed.',
-            [
-                'service' => '[FuzzySearchService]',
-                'type' => 'closest_word',
-                'result' => $result,
-                'input' => $input,
-                'languageCode' => $languageCode,
-            ]
-        );
-
-        return $result;
+        return array_map(fn($r) => $r->getSource(), $results->getResults());
     }
 
     public function findExactMatchesByIpa(string $ipa, int $limit = 5): array
@@ -104,19 +79,7 @@ class FuzzySearchService
 
         $results = $this->esClient->getIndex($this->indexName)->search($query);
 
-        $result = array_map(fn($r) => $r->getSource(), $results->getResults());
-
-        $this->logger->info(
-            'Fuzzy search completed.',
-            [
-                'service' => '[FuzzySearchService]',
-                'type' => 'exact_ipa',
-                'result' => $result,
-                'input' => $ipa,
-            ]
-        );
-
-        return $result;
+        return array_map(fn($r) => $r->getSource(), $results->getResults());
     }
 
     public function findClosestMatchesByIpa(string $ipa, int $limit = 5): array
@@ -133,18 +96,6 @@ class FuzzySearchService
 
         $results = $this->esClient->getIndex($this->indexName)->search($query);
 
-        $result = array_map(fn($r) => $r->getSource(), $results->getResults());
-
-        $this->logger->info(
-            'Fuzzy search completed.',
-            [
-                'service' => '[FuzzySearchService]',
-                'type' => 'closest_ipa',
-                'result' => $result,
-                'input' => $ipa,
-            ]
-        );
-
-        return $result;
+        return array_map(fn($r) => $r->getSource(), $results->getResults());
     }
 }

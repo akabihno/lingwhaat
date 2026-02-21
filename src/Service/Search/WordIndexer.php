@@ -87,7 +87,8 @@ class WordIndexer
                         ]
                     ],
                     'ipa' => ['type' => 'text'],
-                    'languageCode' => ['type' => 'keyword']
+                    'languageCode' => ['type' => 'keyword'],
+                    'score' => ['type' => 'integer']
                 ]
             ]
         ]);
@@ -108,7 +109,7 @@ class WordIndexer
             $batchSize = self::INDEXING_BATCH_SIZE;
 
             do {
-                $rows = $repository->findAllNamesAndIpa($batchSize, $offset);
+                $rows = $repository->findAllNamesIpaAndScore($batchSize, $offset);
 
                 if (empty($rows)) {
                     break;
@@ -118,8 +119,9 @@ class WordIndexer
                 foreach ($rows as $row) {
                     $docs[] = new Document(null, [
                         'word' => $row['name'],
-                        'ipa' => $row['ipa'],
+                        'ipa' => $row['ipa'] ?? '',
                         'languageCode' => $languageCode,
+                        'score' => $row['score'] ?? 0,
                     ]);
                 }
 

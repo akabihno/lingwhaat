@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 class WordsPopularityScoreSetService
 {
     private const int BATCH_SIZE = 100;
-    private const int FLUSH_EVERY = 500;
+    private const int WORD_LOOKUP_BATCH_SIZE = 100;
 
     public function __construct(
         private readonly WikipediaArticleRepository $wikipediaArticleRepository,
@@ -47,37 +47,55 @@ class WordsPopularityScoreSetService
 
         $processedWords = 0;
         $matchedWords = 0;
-        $updateCount = 0;
 
+        // Collect all words with their counts
+        $wordCounts = [];
         foreach ($articles as $article) {
             $text = $article->getText();
-
             $words = $this->extractWords($text);
 
             foreach ($words as $word) {
                 $processedWords++;
+                $wordCounts[$word] = ($wordCounts[$word] ?? 0) + 1;
+            }
+        }
 
-                $matches = $this->fuzzySearchService->findClosestMatches($word, 1, $languageCode);
+        // Process unique words in batches
+        $uniqueWords = array_keys($wordCounts);
+        $wordBatches = array_chunk($uniqueWords, self::WORD_LOOKUP_BATCH_SIZE);
 
-                if (!empty($matches)) {
-                    $matchedWord = $matches[0]['word'] ?? null;
+        // Cache for word matches to avoid duplicate lookups
+        $wordMatchCache = [];
 
-                    if ($matchedWord) {
-                        $languageRepository->incrementScoreByName($matchedWord);
-                        $matchedWords++;
-                        $updateCount++;
-
-                        if ($updateCount % self::FLUSH_EVERY === 0) {
-                            $this->entityManager->flush();
-                            $this->entityManager->clear();
-                            $this->logger->info("Flushed {$updateCount} updates", [
-                                'languageCode' => $languageCode,
-                                'offset' => $offset
-                            ]);
-                        }
-                    }
+        foreach ($wordBatches as $batchWords) {
+            // Batch lookup in Elasticsearch
+            foreach ($batchWords as $word) {
+                if (!isset($wordMatchCache[$word])) {
+                    $matches = $this->fuzzySearchService->findClosestMatches($word, 1, $languageCode);
+                    $wordMatchCache[$word] = !empty($matches) ? ($matches[0]['word'] ?? null) : null;
                 }
             }
+        }
+
+        // Aggregate score increments per matched word
+        $scoreIncrements = [];
+        foreach ($wordCounts as $word => $count) {
+            $matchedWord = $wordMatchCache[$word] ?? null;
+            if ($matchedWord) {
+                $scoreIncrements[$matchedWord] = ($scoreIncrements[$matchedWord] ?? 0) + $count;
+                $matchedWords += $count;
+            }
+        }
+
+        // Bulk update scores using raw SQL for performance
+        if (!empty($scoreIncrements)) {
+            $this->bulkUpdateScores($languageRepository, $scoreIncrements);
+            $this->logger->info("Bulk updated scores for {$processedWords} words", [
+                'languageCode' => $languageCode,
+                'uniqueWords' => count($uniqueWords),
+                'matchedUniqueWords' => count($scoreIncrements),
+                'offset' => $offset
+            ]);
         }
 
         $this->entityManager->flush();
@@ -94,6 +112,51 @@ class WordsPopularityScoreSetService
         $this->logger->info('[WordsPopularityScoreSetService] Batch processing completed', array_merge(['languageCode' => $languageCode], $stats));
 
         return $stats;
+    }
+
+    /**
+     * Bulk update scores for multiple words using raw SQL
+     *
+     * @param object $languageRepository The language repository
+     * @param array<string, int> $scoreIncrements Map of word names to score increments
+     */
+    private function bulkUpdateScores(object $languageRepository, array $scoreIncrements): void
+    {
+        $connection = $this->entityManager->getConnection();
+        $tableName = $this->entityManager->getClassMetadata(get_class($languageRepository->find(1) ?? new \stdClass()))->getTableName();
+
+        // Build CASE statement for bulk update
+        $caseStatements = [];
+        $params = [];
+        $types = [];
+        $names = [];
+
+        $i = 0;
+        foreach ($scoreIncrements as $name => $increment) {
+            $caseStatements[] = "WHEN name = :name{$i} THEN score + :inc{$i}";
+            $params["name{$i}"] = $name;
+            $params["inc{$i}"] = $increment;
+            $types["name{$i}"] = \PDO::PARAM_STR;
+            $types["inc{$i}"] = \PDO::PARAM_INT;
+            $names[] = ":name{$i}";
+            $i++;
+        }
+
+        if (empty($caseStatements)) {
+            return;
+        }
+
+        $caseString = implode(' ', $caseStatements);
+        $namesString = implode(', ', $names);
+
+        $sql = "UPDATE {$tableName}
+                SET score = CASE
+                    {$caseString}
+                    ELSE score
+                END
+                WHERE name IN ({$namesString})";
+
+        $connection->executeStatement($sql, $params, $types);
     }
 
     /**
