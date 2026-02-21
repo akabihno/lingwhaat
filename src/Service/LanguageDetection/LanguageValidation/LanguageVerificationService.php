@@ -85,16 +85,24 @@ class LanguageVerificationService
         // Search for n-gram matches in Elasticsearch
         $matchResults = $this->searchNgramsWithFuzzy($ngrams, $languageCode, $fuzziness);
 
-        // Calculate coverage
+        // Calculate coverage and collect matched words
         $matchedCharacters = 0;
         $uniqueMatches = [];
+        $matchedWordsSet = [];
 
         foreach ($matchResults as $ngram => $matches) {
             if (!empty($matches)) {
                 $matchedCharacters += mb_strlen($ngram);
                 $uniqueMatches[$ngram] = $matches;
+
+                // Collect all matched words
+                foreach ($matches as $word) {
+                    $matchedWordsSet[$word] = true;
+                }
             }
         }
+
+        $matchedWords = array_keys($matchedWordsSet);
 
         $matchPercentage = $originalLength > 0
             ? round(($matchedCharacters / $originalLength) * 100, 2)
@@ -102,12 +110,14 @@ class LanguageVerificationService
 
         $result = [
             'matchPercentage' => $matchPercentage,
+            'matchedWords' => $matchedWords,
             'details' => [
                 'languageCode' => $languageCode,
                 'textLength' => $originalLength,
                 'matchedCharacters' => $matchedCharacters,
                 'ngramsGenerated' => count($ngrams),
                 'ngramsMatched' => count($uniqueMatches),
+                'matchedWordsCount' => count($matchedWords),
                 'minNgram' => $minNgram,
                 'maxNgram' => $maxNgram,
                 'fuzziness' => $fuzziness,
