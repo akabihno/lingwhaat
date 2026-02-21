@@ -23,8 +23,8 @@ class LanguageVerificationController extends AbstractController
     #[Route('/api/language/verify', name: 'language_verify', methods: ['POST'])]
     #[OA\Post(
         path: '/api/language/verify',
-        description: 'Verifies what percentage of the input text matches a specific language using n-gram analysis and fuzzy matching. Works with obfuscated text (no spaces required). Uses top 2000 words from Elasticsearch index.',
-        summary: 'Verify text language match percentage using n-grams',
+        description: 'Verifies what percentage of the input text matches a specific language by finding words from the language dictionary. Works with obfuscated text (no spaces required). Uses top 2000 most popular words from Elasticsearch index.',
+        summary: 'Verify text language match percentage',
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -34,29 +34,17 @@ class LanguageVerificationController extends AbstractController
                         property: 'text',
                         description: 'Input text to analyze (can be obfuscated without spaces)',
                         type: 'string',
-                        example: 'привётмирэтотекстнарусском'
+                        example: 'Podczas pobytu w Kownie pracował w lokalnym muzeum. W tajemnicy ukończył seminarium i przyjął święcenia kapłańskie 28 maja 1980 potajemnie z rąk bpa Vincentasa Sladkeviciusa.'
                     ),
                     new OA\Property(
                         property: 'languageCode',
                         description: 'Target language code to verify against',
                         type: 'string',
-                        example: 'ru'
-                    ),
-                    new OA\Property(
-                        property: 'minNgram',
-                        description: 'Minimum n-gram length (default: 3)',
-                        type: 'integer',
-                        example: 3
-                    ),
-                    new OA\Property(
-                        property: 'maxNgram',
-                        description: 'Maximum n-gram length (default: 5)',
-                        type: 'integer',
-                        example: 5
+                        example: 'pl'
                     ),
                     new OA\Property(
                         property: 'fuzziness',
-                        description: 'Fuzzy matching fuzziness level 0-2 (default: 1)',
+                        description: 'Fuzzy matching level - maximum edit distance (0=exact only, 1-2=allow typos, default: 1)',
                         type: 'integer',
                         example: 1
                     )
@@ -82,7 +70,7 @@ class LanguageVerificationController extends AbstractController
                             description: 'Array of unique words from the language dictionary that were matched in the text',
                             type: 'array',
                             items: new OA\Items(type: 'string'),
-                            example: ['привет', 'мир', 'это', 'текст', 'на', 'русском']
+                            example: ['w', 'maja', 'z', 'i', 'podczas']
                         ),
                         new OA\Property(
                             property: 'details',
@@ -107,34 +95,16 @@ class LanguageVerificationController extends AbstractController
                                     example: 105
                                 ),
                                 new OA\Property(
-                                    property: 'ngramsGenerated',
-                                    description: 'Total number of n-grams generated from text',
-                                    type: 'integer',
-                                    example: 450
-                                ),
-                                new OA\Property(
-                                    property: 'ngramsMatched',
-                                    description: 'Number of n-grams that matched known words',
-                                    type: 'integer',
-                                    example: 380
-                                ),
-                                new OA\Property(
                                     property: 'matchedWordsCount',
                                     description: 'Number of unique words matched',
                                     type: 'integer',
                                     example: 42
                                 ),
                                 new OA\Property(
-                                    property: 'minNgram',
-                                    description: 'Minimum n-gram length used',
+                                    property: 'topWordsChecked',
+                                    description: 'Number of top words from dictionary that were checked',
                                     type: 'integer',
-                                    example: 3
-                                ),
-                                new OA\Property(
-                                    property: 'maxNgram',
-                                    description: 'Maximum n-gram length used',
-                                    type: 'integer',
-                                    example: 5
+                                    example: 2000
                                 ),
                                 new OA\Property(
                                     property: 'fuzziness',
@@ -171,16 +141,14 @@ class LanguageVerificationController extends AbstractController
 
         $text = $data['text'];
         $languageCode = $data['languageCode'];
-        $minNgram = $data['minNgram'] ?? 3;
-        $maxNgram = $data['maxNgram'] ?? 5;
         $fuzziness = $data['fuzziness'] ?? 1;
 
         try {
             $result = $this->languageVerificationService->verifyLanguage(
                 $text,
                 $languageCode,
-                $minNgram,
-                $maxNgram,
+                3, // minNgram - kept for compatibility but not used
+                5, // maxNgram - kept for compatibility but not used
                 $fuzziness
             );
 

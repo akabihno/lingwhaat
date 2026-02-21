@@ -12,8 +12,8 @@ use Psr\Log\LoggerInterface;
 
 class LanguageVerificationService
 {
-    private const int DEFAULT_MIN_NGRAM = 3;
-    private const int DEFAULT_MAX_NGRAM = 5;
+    private const int TOP_WORDS_LIMIT = 2000;
+    private const int MIN_WORD_LENGTH = 2;
 
     private Client $esClient;
     private string $indexName = 'words_index';
@@ -68,41 +68,47 @@ class LanguageVerificationService
             ];
         }
 
-        // Generate n-grams from text
-        $ngrams = $this->generateNgrams($normalizedText, $minNgram, $maxNgram);
+        // Fetch top words from the language
+        $topWords = $this->fetchTopWords($languageCode);
 
-        if (empty($ngrams)) {
+        if (empty($topWords)) {
+            $this->logger->warning("[LanguageVerificationService] No words found for language: {$languageCode}");
             return [
                 'matchPercentage' => 0,
+                'matchedWords' => [],
                 'details' => [
+                    'error' => 'No words found for language',
                     'textLength' => $originalLength,
                     'matchedCharacters' => 0,
-                    'ngramsGenerated' => 0,
                 ]
             ];
         }
 
-        // Search for n-gram matches in Elasticsearch
-        $matchResults = $this->searchNgramsWithFuzzy($ngrams, $languageCode, $fuzziness);
+        // Find which words from dictionary appear in the text (with fuzzy matching)
+        $matchedWords = [];
+        $matchedPositions = []; // Track covered character positions
 
-        // Calculate coverage and collect matched words
-        $matchedCharacters = 0;
-        $uniqueMatches = [];
-        $matchedWordsSet = [];
+        foreach ($topWords as $word) {
+            $normalizedWord = $this->normalizeText($word);
 
-        foreach ($matchResults as $ngram => $matches) {
-            if (!empty($matches)) {
-                $matchedCharacters += mb_strlen($ngram);
-                $uniqueMatches[$ngram] = $matches;
+            if (mb_strlen($normalizedWord) < self::MIN_WORD_LENGTH) {
+                continue;
+            }
 
-                // Collect all matched words
-                foreach ($matches as $word) {
-                    $matchedWordsSet[$word] = true;
-                }
+            // Try exact match first
+            if ($this->findWordInText($normalizedText, $normalizedWord, $matchedPositions)) {
+                $matchedWords[] = $word;
+                continue;
+            }
+
+            // Try fuzzy match (allow 1-2 character differences)
+            if ($fuzziness > 0 && $this->findWordFuzzy($normalizedText, $normalizedWord, $fuzziness, $matchedPositions)) {
+                $matchedWords[] = $word;
             }
         }
 
-        $matchedWords = array_keys($matchedWordsSet);
+        // Calculate percentage based on covered positions
+        $matchedCharacters = count($matchedPositions);
 
         $matchPercentage = $originalLength > 0
             ? round(($matchedCharacters / $originalLength) * 100, 2)
@@ -115,11 +121,8 @@ class LanguageVerificationService
                 'languageCode' => $languageCode,
                 'textLength' => $originalLength,
                 'matchedCharacters' => $matchedCharacters,
-                'ngramsGenerated' => count($ngrams),
-                'ngramsMatched' => count($uniqueMatches),
                 'matchedWordsCount' => count($matchedWords),
-                'minNgram' => $minNgram,
-                'maxNgram' => $maxNgram,
+                'topWordsChecked' => count($topWords),
                 'fuzziness' => $fuzziness,
             ]
         ];
@@ -130,83 +133,102 @@ class LanguageVerificationService
     }
 
     /**
-     * Generate n-grams from text
+     * Fetch top N words with highest scores from Elasticsearch
      *
-     * @param string $text Normalized text
-     * @param int $minLength Minimum n-gram length
-     * @param int $maxLength Maximum n-gram length
-     * @return array Unique n-grams
+     * @param string $languageCode Target language code
+     * @param int $limit Number of top words to fetch
+     * @return array List of words sorted by score (descending)
      */
-    private function generateNgrams(string $text, int $minLength, int $maxLength): array
+    private function fetchTopWords(string $languageCode, int $limit = self::TOP_WORDS_LIMIT): array
     {
-        $ngrams = [];
-        $textLength = mb_strlen($text);
+        try {
+            $boolQuery = new BoolQuery();
 
-        for ($length = $minLength; $length <= $maxLength; $length++) {
-            for ($i = 0; $i <= $textLength - $length; $i++) {
-                $ngram = mb_substr($text, $i, $length);
-                if (mb_strlen($ngram) === $length) {
-                    $ngrams[$ngram] = true; // Use array key for deduplication
-                }
-            }
+            $languageTerm = new Term();
+            $languageTerm->setTerm('languageCode', $languageCode);
+            $boolQuery->addFilter($languageTerm);
+
+            $query = new Query($boolQuery);
+            $query->setSize($limit);
+            $query->setSort(['score' => ['order' => 'desc']]);
+
+            $results = $this->esClient->getIndex($this->indexName)->search($query);
+
+            return array_map(fn($r) => $r->getSource()['word'] ?? '', $results->getResults());
+        } catch (\Exception $e) {
+            $this->logger->error("[LanguageVerificationService] Error fetching top words: {$e->getMessage()}");
+            return [];
         }
-
-        return array_keys($ngrams);
     }
 
     /**
-     * Search n-grams in Elasticsearch with fuzzy matching
+     * Find exact word matches in text and mark covered positions
      *
-     * @param array $ngrams List of n-grams to search
-     * @param string $languageCode Target language code
-     * @param int $fuzziness Fuzziness level (0-2)
-     * @return array Map of ngram => matched words
+     * @param string $text Normalized text to search in
+     * @param string $word Normalized word to find
+     * @param array $matchedPositions Reference to array tracking covered character positions
+     * @return bool True if word was found
      */
-    private function searchNgramsWithFuzzy(array $ngrams, string $languageCode, int $fuzziness): array
+    private function findWordInText(string $text, string $word, array &$matchedPositions): bool
     {
-        try {
-            $results = [];
+        $wordLength = mb_strlen($word);
+        $found = false;
+        $offset = 0;
 
-            // Batch n-grams to avoid too many queries
-            $batchSize = 50;
-            $ngramBatches = array_chunk($ngrams, $batchSize);
+        while (($pos = mb_strpos($text, $word, $offset)) !== false) {
+            $found = true;
 
-            foreach ($ngramBatches as $batch) {
-                foreach ($batch as $ngram) {
-                    $boolQuery = new BoolQuery();
-
-                    // Use n-gram field with fuzzy matching
-                    $matchQuery = new MatchQuery();
-                    $matchQuery->setFieldQuery('word.ngram', $ngram);
-                    $matchQuery->setFieldFuzziness('word.ngram', $fuzziness);
-
-                    $boolQuery->addShould($matchQuery);
-
-                    // Filter by language
-                    $languageTerm = new Term();
-                    $languageTerm->setTerm('languageCode', $languageCode);
-                    $boolQuery->addFilter($languageTerm);
-
-                    $query = new Query($boolQuery);
-                    $query->setSize(5); // Limit results per n-gram
-                    $query->setSort(['score' => ['order' => 'desc']]);
-
-                    $searchResults = $this->esClient->getIndex($this->indexName)->search($query);
-
-                    if ($searchResults->count() > 0) {
-                        $results[$ngram] = array_map(
-                            fn($r) => $r->getSource()['word'] ?? '',
-                            $searchResults->getResults()
-                        );
-                    }
-                }
+            // Mark all positions covered by this word
+            for ($i = $pos; $i < $pos + $wordLength; $i++) {
+                $matchedPositions[$i] = true;
             }
 
-            return $results;
-        } catch (\Exception $e) {
-            $this->logger->error("[LanguageVerificationService] Error searching n-grams: {$e->getMessage()}");
-            return [];
+            $offset = $pos + 1;
         }
+
+        return $found;
+    }
+
+    /**
+     * Find fuzzy word matches using n-gram similarity
+     *
+     * @param string $text Normalized text to search in
+     * @param string $word Normalized word to find
+     * @param int $fuzziness Maximum edit distance
+     * @param array $matchedPositions Reference to array tracking covered character positions
+     * @return bool True if fuzzy match was found
+     */
+    private function findWordFuzzy(string $text, string $word, int $fuzziness, array &$matchedPositions): bool
+    {
+        $wordLength = mb_strlen($word);
+        $textLength = mb_strlen($text);
+        $found = false;
+
+        // Scan through text with sliding window
+        for ($i = 0; $i <= $textLength - $wordLength + $fuzziness; $i++) {
+            for ($len = max($wordLength - $fuzziness, 1); $len <= $wordLength + $fuzziness; $len++) {
+                if ($i + $len > $textLength) {
+                    continue;
+                }
+
+                $substring = mb_substr($text, $i, $len);
+
+                // Calculate Levenshtein distance
+                if (levenshtein($substring, $word) <= $fuzziness) {
+                    $found = true;
+
+                    // Mark positions as covered
+                    for ($j = $i; $j < $i + $len; $j++) {
+                        $matchedPositions[$j] = true;
+                    }
+
+                    $i += $len - 1; // Skip ahead
+                    break;
+                }
+            }
+        }
+
+        return $found;
     }
 
     /**
