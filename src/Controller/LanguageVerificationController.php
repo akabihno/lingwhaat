@@ -147,8 +147,6 @@ class LanguageVerificationController extends AbstractController
             $result = $this->languageVerificationService->verifyLanguage(
                 $text,
                 $languageCode,
-                3, // minNgram - kept for compatibility but not used
-                5, // maxNgram - kept for compatibility but not used
                 $fuzziness
             );
 

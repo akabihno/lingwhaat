@@ -6,14 +6,14 @@ use Elastica\Client;
 use Elastica\Query;
 use Elastica\Query\BoolQuery;
 use Elastica\Query\Term;
-use Elastica\Query\MatchQuery;
 use App\Service\Search\ElasticsearchClientFactory;
 use Psr\Log\LoggerInterface;
 
 class LanguageVerificationService
 {
     private const int TOP_WORDS_LIMIT = 2000;
-    private const int MIN_WORD_LENGTH = 2;
+    private const int MIN_WORD_LENGTH = 3;
+    private const int MIN_FUZZY_WORD_LENGTH = 5;
 
     private Client $esClient;
     private string $indexName = 'words_index';
@@ -25,20 +25,16 @@ class LanguageVerificationService
     }
 
     /**
-     * Verify what percentage of text matches the target language using n-grams and fuzzy matching
+     * Verify what percentage of text matches the target language using word matching and fuzzy search
      *
      * @param string $text Input text (can be obfuscated without spaces)
      * @param string $languageCode Target language code
-     * @param int $minNgram Minimum n-gram length (default: 3)
-     * @param int $maxNgram Maximum n-gram length (default: 5)
      * @param int $fuzziness Fuzzy matching fuzziness level (0-2, default: 1)
-     * @return array Contains 'matchPercentage' and 'details'
+     * @return array Contains 'matchPercentage', 'matchedWords' and 'details'
      */
     public function verifyLanguage(
         string $text,
         string $languageCode,
-        int $minNgram = self::DEFAULT_MIN_NGRAM,
-        int $maxNgram = self::DEFAULT_MAX_NGRAM,
         int $fuzziness = 1
     ): array
     {
@@ -84,14 +80,18 @@ class LanguageVerificationService
             ];
         }
 
+        // Sort words by length (descending) to match longer words first
+        usort($topWords, fn($a, $b) => mb_strlen($b) - mb_strlen($a));
+
         // Find which words from dictionary appear in the text (with fuzzy matching)
         $matchedWords = [];
         $matchedPositions = []; // Track covered character positions
 
         foreach ($topWords as $word) {
             $normalizedWord = $this->normalizeText($word);
+            $wordLength = mb_strlen($normalizedWord);
 
-            if (mb_strlen($normalizedWord) < self::MIN_WORD_LENGTH) {
+            if ($wordLength < self::MIN_WORD_LENGTH) {
                 continue;
             }
 
@@ -101,9 +101,11 @@ class LanguageVerificationService
                 continue;
             }
 
-            // Try fuzzy match (allow 1-2 character differences)
-            if ($fuzziness > 0 && $this->findWordFuzzy($normalizedText, $normalizedWord, $fuzziness, $matchedPositions)) {
-                $matchedWords[] = $word;
+            // Try fuzzy match only for longer words (reduces false positives)
+            if ($fuzziness > 0 && $wordLength >= self::MIN_FUZZY_WORD_LENGTH) {
+                if ($this->findWordFuzzy($normalizedText, $normalizedWord, $fuzziness, $matchedPositions)) {
+                    $matchedWords[] = $word;
+                }
             }
         }
 
@@ -167,7 +169,7 @@ class LanguageVerificationService
      * @param string $text Normalized text to search in
      * @param string $word Normalized word to find
      * @param array $matchedPositions Reference to array tracking covered character positions
-     * @return bool True if word was found
+     * @return bool True if word was found and covered new positions
      */
     private function findWordInText(string $text, string $word, array &$matchedPositions): bool
     {
@@ -176,11 +178,23 @@ class LanguageVerificationService
         $offset = 0;
 
         while (($pos = mb_strpos($text, $word, $offset)) !== false) {
-            $found = true;
-
-            // Mark all positions covered by this word
+            // Check if this position is already covered
+            $alreadyCovered = true;
             for ($i = $pos; $i < $pos + $wordLength; $i++) {
-                $matchedPositions[$i] = true;
+                if (!isset($matchedPositions[$i])) {
+                    $alreadyCovered = false;
+                    break;
+                }
+            }
+
+            // Only mark as found if it covers new positions
+            if (!$alreadyCovered) {
+                $found = true;
+
+                // Mark all positions covered by this word
+                for ($i = $pos; $i < $pos + $wordLength; $i++) {
+                    $matchedPositions[$i] = true;
+                }
             }
 
             $offset = $pos + 1;
@@ -190,13 +204,13 @@ class LanguageVerificationService
     }
 
     /**
-     * Find fuzzy word matches using n-gram similarity
+     * Find fuzzy word matches using Levenshtein distance
      *
      * @param string $text Normalized text to search in
      * @param string $word Normalized word to find
      * @param int $fuzziness Maximum edit distance
      * @param array $matchedPositions Reference to array tracking covered character positions
-     * @return bool True if fuzzy match was found
+     * @return bool True if fuzzy match was found and covered new positions
      */
     private function findWordFuzzy(string $text, string $word, int $fuzziness, array &$matchedPositions): bool
     {
@@ -206,6 +220,19 @@ class LanguageVerificationService
 
         // Scan through text with sliding window
         for ($i = 0; $i <= $textLength - $wordLength + $fuzziness; $i++) {
+            // Check if this position is already mostly covered
+            $coveredCount = 0;
+            for ($k = $i; $k < min($i + $wordLength, $textLength); $k++) {
+                if (isset($matchedPositions[$k])) {
+                    $coveredCount++;
+                }
+            }
+
+            // Skip if more than half is already covered
+            if ($coveredCount > $wordLength / 2) {
+                continue;
+            }
+
             for ($len = max($wordLength - $fuzziness, 1); $len <= $wordLength + $fuzziness; $len++) {
                 if ($i + $len > $textLength) {
                     continue;
