@@ -72,6 +72,30 @@ class WordIndexer
                         'default' => [
                             'type' => 'standard',
                             'stopwords' => '_none_'
+                        ],
+                        'ngram_analyzer' => [
+                            'type' => 'custom',
+                            'tokenizer' => 'ngram_tokenizer',
+                            'filter' => ['lowercase']
+                        ],
+                        'edge_ngram_analyzer' => [
+                            'type' => 'custom',
+                            'tokenizer' => 'edge_ngram_tokenizer',
+                            'filter' => ['lowercase']
+                        ]
+                    ],
+                    'tokenizer' => [
+                        'ngram_tokenizer' => [
+                            'type' => 'ngram',
+                            'min_gram' => 2,
+                            'max_gram' => 5,
+                            'token_chars' => ['letter', 'digit']
+                        ],
+                        'edge_ngram_tokenizer' => [
+                            'type' => 'edge_ngram',
+                            'min_gram' => 2,
+                            'max_gram' => 10,
+                            'token_chars' => ['letter', 'digit']
                         ]
                     ]
                 ]
@@ -83,6 +107,16 @@ class WordIndexer
                         'fields' => [
                             'keyword' => [
                                 'type' => 'keyword'
+                            ],
+                            'ngram' => [
+                                'type' => 'text',
+                                'analyzer' => 'ngram_analyzer',
+                                'search_analyzer' => 'standard'
+                            ],
+                            'edge_ngram' => [
+                                'type' => 'text',
+                                'analyzer' => 'edge_ngram_analyzer',
+                                'search_analyzer' => 'standard'
                             ]
                         ]
                     ],
