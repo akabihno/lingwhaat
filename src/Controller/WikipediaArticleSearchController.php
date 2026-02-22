@@ -98,7 +98,7 @@ pdeFilmy i seriale w reżyserii Pawła Komorowskiego')
 
         try {
             $match = $this->wikipediaArticleSearchService->get($articleId);
-            return $this->json($match, Response::HTTP_OK);
+            return $this->json([['text' => $match]], Response::HTTP_OK);
         } catch (\Throwable $e) {
             return new JsonResponse(
                 ['error' => 'Search failed', 'details' => $e->getMessage()],
