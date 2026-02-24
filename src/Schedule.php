@@ -61,7 +61,7 @@ class Schedule implements ScheduleProviderInterface
         foreach ($entities as $entity) {
             $schedule->add(
                 RecurringMessage::every(
-                    '5 minutes',
+                    '10 minutes',
                     new WordsPopularityScoreSetMessage(
                         $entity->getLanguageCode(),
                         self::WORDS_POPULARITY_ARTICLE_LIMIT,
