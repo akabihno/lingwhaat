@@ -69,10 +69,6 @@ class Schedule implements ScheduleProviderInterface
                     )
                 )->withJitter(self::JITTER_SECONDS)
             );
-            $this->wordsPopularityScoreSetScheduleRepository->incrementOffsetByLanguageCode(
-                $entity->getLanguageCode(),
-                self::WORDS_POPULARITY_ARTICLE_LIMIT
-            );
         }
 
         return $schedule;

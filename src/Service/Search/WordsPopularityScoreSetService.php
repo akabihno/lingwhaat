@@ -16,6 +16,7 @@ class WordsPopularityScoreSetService
         private readonly WikipediaArticleRepository $wikipediaArticleRepository,
         private readonly FuzzySearchService         $fuzzySearchService,
         private readonly LanguageRepositoryResolver $languageRepositoryResolver,
+        private readonly WordsPopularityScoreSetScheduleRepository $wordsPopularityScoreSetScheduleRepository,
         private readonly EntityManagerInterface     $entityManager,
         private readonly LoggerInterface            $logger,
     ) {
@@ -110,6 +111,8 @@ class WordsPopularityScoreSetService
         ];
 
         $this->logger->info('[WordsPopularityScoreSetService] Batch processing completed', array_merge(['languageCode' => $languageCode], $stats));
+
+        $this->wordsPopularityScoreSetScheduleRepository->incrementOffsetByLanguageCode($languageCode, $limit);
 
         return $stats;
     }
