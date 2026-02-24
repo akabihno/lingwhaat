@@ -3,6 +3,7 @@
 namespace App\Service\Search;
 
 use App\Repository\WikipediaArticleRepository;
+use App\Repository\WordsPopularityScoreSetScheduleRepository;
 use App\Service\LanguageRepositoryResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
