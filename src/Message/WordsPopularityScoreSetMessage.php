@@ -2,12 +2,12 @@
 
 namespace App\Message;
 
-readonly class WordsPopularityScoreSetMessage
+class WordsPopularityScoreSetMessage
 {
     public function __construct(
-        private string $languageCode,
-        private int    $limit,
-        private int    $offset
+        private readonly string $languageCode,
+        private readonly int    $limit,
+        private readonly int $offset
     ) {
     }
 
