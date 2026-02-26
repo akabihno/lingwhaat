@@ -63,6 +63,12 @@ class FuzzySearchService
         }
 
         $query->setSize($limit);
+        // TODO let's see how it goes,
+        // this should affect incorrect language detections
+        $query->setSort([
+            '_score' => ['order' => 'desc'],
+            'score'  => ['order' => 'desc'],
+        ]);
 
         $results = $this->esClient->getIndex($this->indexName)->search($query);
 
