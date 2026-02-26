@@ -2,9 +2,8 @@
 
 namespace App\Service\Cache;
 
+use App\Service\Logging\ElasticsearchLogger;
 use Exception;
-use phpDocumentor\Reflection\Types\Self_;
-use Psr\Log\LoggerInterface;
 use Redis;
 
 class RedisCacheService
@@ -16,8 +15,8 @@ class RedisCacheService
     private const int DEFAULT_REDIS_PORT = 6379;
 
     public function __construct(
-        private LoggerInterface $logger,
-        string $redisDsn
+        private readonly ElasticsearchLogger $logger,
+        string                               $redisDsn
     ) {
         try {
             // Parse Redis DSN (e.g., redis://localhost:6379)

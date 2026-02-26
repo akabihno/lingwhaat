@@ -3,8 +3,8 @@
 namespace App\MessageHandler;
 
 use App\Message\ParseWikipediaArticlesMessage;
+use App\Service\Logging\ElasticsearchLogger;
 use App\Service\WikipediaPatternParserService;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -12,7 +12,7 @@ class ParseWikipediaArticlesMessageHandler
 {
     public function __construct(
         private readonly WikipediaPatternParserService $parserService,
-        private readonly LoggerInterface $logger
+        private readonly ElasticsearchLogger $logger
     ) {
     }
 

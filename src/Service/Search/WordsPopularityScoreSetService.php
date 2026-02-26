@@ -5,8 +5,8 @@ namespace App\Service\Search;
 use App\Repository\WikipediaArticleRepository;
 use App\Repository\WordsPopularityScoreSetScheduleRepository;
 use App\Service\LanguageRepositoryResolver;
+use App\Service\Logging\ElasticsearchLogger;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 
 class WordsPopularityScoreSetService
 {
@@ -19,7 +19,7 @@ class WordsPopularityScoreSetService
         private readonly LanguageRepositoryResolver $languageRepositoryResolver,
         private readonly WordsPopularityScoreSetScheduleRepository $wordsPopularityScoreSetScheduleRepository,
         private readonly EntityManagerInterface     $entityManager,
-        private readonly LoggerInterface            $logger,
+        private readonly ElasticsearchLogger        $logger,
     ) {
     }
 

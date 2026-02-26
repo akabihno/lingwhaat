@@ -2,12 +2,12 @@
 
 namespace App\Service\LanguageDetection\LanguageValidation;
 
+use App\Service\Logging\ElasticsearchLogger;
 use Elastica\Client;
 use Elastica\Query;
 use Elastica\Query\BoolQuery;
 use Elastica\Query\Term;
 use App\Service\Search\ElasticsearchClientFactory;
-use Psr\Log\LoggerInterface;
 
 class LanguageVerificationService
 {
@@ -19,7 +19,7 @@ class LanguageVerificationService
     private string $indexName = 'words_index';
 
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private readonly ElasticsearchLogger $logger,
     ) {
         $this->esClient = ElasticsearchClientFactory::create();
     }

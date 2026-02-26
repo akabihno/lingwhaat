@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Service\LanguageDetection\LanguageValidation\LanguageValidationService;
+use App\Service\Logging\ElasticsearchLogger;
 use OpenApi\Attributes as OA;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ use Symfony\Component\RateLimiter\RateLimiterFactory;
 class LanguageValidationController extends AbstractController
 {
     public function __construct(
-        protected LoggerInterface $logger,
+        protected ElasticsearchLogger $logger,
         protected LanguageValidationService $languageValidationService
     )
     {

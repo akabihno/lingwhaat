@@ -5,14 +5,14 @@ namespace App\Service;
 use App\Constant\LanguageMappings;
 use App\Query\LetterFrequencyQuery;
 use App\Repository\LetterFrequencyRepository;
-use Psr\Log\LoggerInterface;
+use App\Service\Logging\ElasticsearchLogger;
 
 class LetterFrequencyService
 {
     public function __construct(
         private LetterFrequencyQuery $letterFrequencyQuery,
         private LetterFrequencyRepository $letterFrequencyRepository,
-        private LoggerInterface $logger
+        private readonly ElasticsearchLogger $logger
     ) {
     }
 
