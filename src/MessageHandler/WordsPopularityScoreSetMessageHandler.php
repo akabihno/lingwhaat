@@ -32,7 +32,7 @@ class WordsPopularityScoreSetMessageHandler
 
         $this->logger->info(
             sprintf('Starting to parse Wikipedia articles for language: %s (limit: %d, offset %d)', $languageCode, $limit, $offset),
-            ['handler' => 'WordsPopularityScoreSetMessageHandler']
+            ['service' => '[WordsPopularityScoreSetMessageHandler]']
         );
 
         try {
@@ -40,13 +40,13 @@ class WordsPopularityScoreSetMessageHandler
 
             $this->logger->info(
                 sprintf('Successfully completed parsing for language: %s', $languageCode),
-                ['handler' => 'WordsPopularityScoreSetMessageHandler']
+                ['service' => '[WordsPopularityScoreSetMessageHandler]']
             );
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Failed to parse articles for language: %s. Error: %s', $languageCode, $e->getMessage()),
                 [
-                    'handler' => 'WordsPopularityScoreSetMessageHandler',
+                    'service' => '[WordsPopularityScoreSetMessageHandler]',
                     'exception' => $e
                 ]
             );

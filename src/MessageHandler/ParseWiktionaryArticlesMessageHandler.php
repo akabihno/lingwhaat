@@ -23,7 +23,7 @@ class ParseWiktionaryArticlesMessageHandler
 
         $this->logger->info(
             sprintf('Starting to parse Wiktionary articles for language: %s (limit: %d)', $language, $limit),
-            ['handler' => 'ParseWiktionaryArticlesMessageHandler']
+            ['service' => '[ParseWiktionaryArticlesMessageHandler]']
         );
 
         try {
@@ -31,13 +31,13 @@ class ParseWiktionaryArticlesMessageHandler
 
             $this->logger->info(
                 sprintf('Successfully completed parsing for language: %s', $language),
-                ['handler' => 'ParseWiktionaryArticlesMessageHandler']
+                ['service' => '[ParseWiktionaryArticlesMessageHandler]']
             );
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Failed to parse articles for language: %s. Error: %s', $language, $e->getMessage()),
                 [
-                    'handler' => 'ParseWiktionaryArticlesMessageHandler',
+                    'service' => '[ParseWiktionaryArticlesMessageHandler]',
                     'exception' => $e
                 ]
             );

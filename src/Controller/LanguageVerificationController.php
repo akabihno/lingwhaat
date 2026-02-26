@@ -153,7 +153,7 @@ class LanguageVerificationController extends AbstractController
             $this->logger->info(
                 'Language verification request processed',
                 [
-                    'controller' => '[LanguageVerificationController]',
+                    'service' => '[LanguageVerificationController]',
                     'languageCode' => $languageCode,
                     'textLength' => mb_strlen($text),
                     'matchPercentage' => $result['matchPercentage']
@@ -165,7 +165,7 @@ class LanguageVerificationController extends AbstractController
             $this->logger->error(
                 'Language verification failed',
                 [
-                    'controller' => '[LanguageVerificationController]',
+                    'service' => '[LanguageVerificationController]',
                     'error' => $e->getMessage(),
                     'languageCode' => $languageCode
                 ]
