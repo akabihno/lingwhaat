@@ -17,7 +17,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 #[AsSchedule]
 class Schedule implements ScheduleProviderInterface
 {
-    private const int WORDS_POPULARITY_ARTICLE_LIMIT = 10;
+    private const int WORDS_POPULARITY_ARTICLE_LIMIT = 20;
     private const int JITTER_SECONDS = 30;
 
     public function __construct(
