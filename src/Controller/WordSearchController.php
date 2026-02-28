@@ -37,6 +37,13 @@ class WordSearchController extends AbstractController
                 in: 'query',
                 required: false,
                 schema: new OA\Schema(type: 'integer', default: 5, example: 5)
+            ),
+            new OA\Parameter(
+                name: 'languageCode',
+                description: 'Optional language code to filter results (e.g., en, nl, es)',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'string', default: '', example: 'nl')
             )
         ],
         responses: [
@@ -63,6 +70,7 @@ class WordSearchController extends AbstractController
     {
         $word = $request->query->get('word');
         $limit = (int) $request->query->get('limit', 5);
+        $languageCode = $request->query->get('languageCode');
 
         if (empty($word)) {
             return new JsonResponse(
@@ -72,7 +80,7 @@ class WordSearchController extends AbstractController
         }
 
         try {
-            $matches = $this->fuzzySearchService->findClosestMatches($word, $limit);
+            $matches = $this->fuzzySearchService->findClosestMatches($word, $limit, $languageCode);
             return $this->json($matches, Response::HTTP_OK);
         } catch (\Throwable $e) {
             return new JsonResponse(

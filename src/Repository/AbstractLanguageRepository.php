@@ -16,12 +16,13 @@ abstract class AbstractLanguageRepository extends ServiceEntityRepository
         parent::__construct($registry, $entityClass);
     }
 
-    public function findAllNamesAndIpa(int $limit = self::PRONUNCIATION_MAX_RESULTS, int $offset = 0): array
+    public function findAllNamesIpaAndScore(
+        int $limit = self::PRONUNCIATION_MAX_RESULTS,
+        int $offset = 0
+    ): array
     {
         return $this->createQueryBuilder('e')
-            ->select('e.name', 'e.ipa')
-            ->where('e.ipa != :na')
-            ->setParameter('na', 'Not available')
+            ->select('e.name', 'e.ipa', 'e.score')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery()
@@ -40,6 +41,18 @@ abstract class AbstractLanguageRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->getQuery()
             ->getArrayResult();
+    }
+
+    public function incrementScoreByName(string $name, int $increment = 1): void
+    {
+        $this->createQueryBuilder('e')
+            ->update()
+            ->set('e.score', 'e.score + :increment')
+            ->where('e.name = :name')
+            ->setParameter('increment', $increment)
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->execute();
     }
 
 }

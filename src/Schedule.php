@@ -4,8 +4,10 @@ namespace App;
 
 use App\Message\ParseWiktionaryArticlesMessage;
 use App\Message\ParseWikipediaArticlesMessage;
+use App\Message\WordsPopularityScoreSetMessage;
 use App\Repository\LanguageParseScheduleRepository;
 use App\Repository\WikipediaPatternParseScheduleRepository;
+use App\Repository\WordsPopularityScoreSetScheduleRepository;
 use Symfony\Component\Scheduler\Attribute\AsSchedule;
 use Symfony\Component\Scheduler\RecurringMessage;
 use Symfony\Component\Scheduler\Schedule as SymfonySchedule;
@@ -15,10 +17,14 @@ use Symfony\Contracts\Cache\CacheInterface;
 #[AsSchedule]
 class Schedule implements ScheduleProviderInterface
 {
+    private const int WORDS_POPULARITY_ARTICLE_LIMIT = 20;
+    private const int JITTER_SECONDS = 30;
+
     public function __construct(
         private CacheInterface $cache,
         private LanguageParseScheduleRepository $languageParseScheduleRepository,
         private WikipediaPatternParseScheduleRepository $wikipediaPatternParseScheduleRepository,
+        private WordsPopularityScoreSetScheduleRepository $wordsPopularityScoreSetScheduleRepository,
     ) {
     }
 
@@ -35,7 +41,7 @@ class Schedule implements ScheduleProviderInterface
                 RecurringMessage::every(
                     '5 minutes',
                     new ParseWiktionaryArticlesMessage($language->getLanguageName(), 400)
-                )->withJitter(30)
+                )->withJitter(self::JITTER_SECONDS)
             );
         }
 
@@ -46,7 +52,22 @@ class Schedule implements ScheduleProviderInterface
                 RecurringMessage::every(
                     '1 minute',
                     new ParseWikipediaArticlesMessage($language->getLanguageCode())
-                )->withJitter(30)
+                )->withJitter(self::JITTER_SECONDS)
+            );
+        }
+
+        $entities = $this->wordsPopularityScoreSetScheduleRepository->getAll();
+
+        foreach ($entities as $entity) {
+            $schedule->add(
+                RecurringMessage::every(
+                    '10 minutes',
+                    new WordsPopularityScoreSetMessage(
+                        $entity->getLanguageCode(),
+                        self::WORDS_POPULARITY_ARTICLE_LIMIT,
+                        $entity->getOffset()
+                    )
+                )->withJitter(self::JITTER_SECONDS)
             );
         }
 

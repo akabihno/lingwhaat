@@ -20,4 +20,28 @@ class WikipediaArticleRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, WikipediaArticleEntity::class);
     }
+
+    /**
+     * @return WikipediaArticleEntity[]
+     */
+    public function findByLanguageCodePaginated(string $languageCode, int $limit = 100, int $offset = 0): array
+    {
+        return $this->createQueryBuilder('w')
+            ->where('w.languageCode = :languageCode')
+            ->setParameter('languageCode', $languageCode)
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function countByLanguageCode(string $languageCode): int
+    {
+        return (int) $this->createQueryBuilder('w')
+            ->select('COUNT(w.id)')
+            ->where('w.languageCode = :languageCode')
+            ->setParameter('languageCode', $languageCode)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

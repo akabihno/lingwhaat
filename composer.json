@@ -71,7 +71,7 @@
     "twig/twig": "^3.23.0",
     "vlucas/phpdotenv": ">=5.6.3",
     "ext-mbstring": "*",
-    "nelmio/api-doc-bundle": "^5.9.2",
+    "nelmio/api-doc-bundle": "^5.9.4",
     "ruflin/elastica": "^8.2.0",
     "ext-curl": "*",
     "ext-dom": "*",
@@ -79,7 +79,7 @@
     "ext-redis": "*"
   },
   "require-dev": {
-    "symfony/maker-bundle": "^1.65.1"
+    "symfony/maker-bundle": "^1.66.0"
   },
   "scripts": {
     "auto-scripts": {

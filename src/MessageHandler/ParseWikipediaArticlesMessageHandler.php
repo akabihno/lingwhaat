@@ -3,8 +3,8 @@
 namespace App\MessageHandler;
 
 use App\Message\ParseWikipediaArticlesMessage;
+use App\Service\Logging\ElasticsearchLogger;
 use App\Service\WikipediaPatternParserService;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -12,7 +12,7 @@ class ParseWikipediaArticlesMessageHandler
 {
     public function __construct(
         private readonly WikipediaPatternParserService $parserService,
-        private readonly LoggerInterface $logger
+        private readonly ElasticsearchLogger $logger
     ) {
     }
 
@@ -23,7 +23,7 @@ class ParseWikipediaArticlesMessageHandler
 
         $this->logger->info(
             sprintf('Starting to parse Wikipedia articles for language: %s (limit: %d)', $languageCode, $limit),
-            ['handler' => 'ParseWikipediaArticlesMessageHandler']
+            ['service' => '[ParseWikipediaArticlesMessageHandler]']
         );
 
         try {
@@ -31,13 +31,13 @@ class ParseWikipediaArticlesMessageHandler
 
             $this->logger->info(
                 sprintf('Successfully completed parsing for language: %s', $languageCode),
-                ['handler' => 'ParseWikipediaArticlesMessageHandler']
+                ['service' => '[ParseWikipediaArticlesMessageHandler]']
             );
         } catch (\Exception $e) {
             $this->logger->error(
                 sprintf('Failed to parse articles for language: %s. Error: %s', $languageCode, $e->getMessage()),
                 [
-                    'handler' => 'ParseWikipediaArticlesMessageHandler',
+                    'service' => '[ParseWikipediaArticlesMessageHandler]',
                     'exception' => $e,
                 ]
             );
