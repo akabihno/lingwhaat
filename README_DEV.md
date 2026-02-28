@@ -113,3 +113,5 @@ docker compose --profile rds up -d
 
 Docker compose with local DB:
 docker compose --profile local up -d
+
+# Add new language:
