@@ -113,6 +113,8 @@ class LanguageMappings
     public const string PALI_LANGUAGE_NAME = 'Pali';
     public const string FINNISH_LANGUAGE_CODE = 'fi';
     public const string FINNISH_LANGUAGE_NAME = 'Finnish';
+    public const string CATALAN_LANGUAGE_CODE = 'ca';
+    public const string CATALAN_LANGUAGE_NAME = 'Catalan';
 
     public static function getLanguageCodes(): array
     {
@@ -169,6 +171,7 @@ class LanguageMappings
             self::MANDARIN_LANGUAGE_CODE,
             self::PALI_LANGUAGE_CODE,
             self::FINNISH_LANGUAGE_CODE,
+            self::CATALAN_LANGUAGE_CODE,
         ];
     }
 
@@ -228,6 +231,7 @@ class LanguageMappings
             'MandarinLanguageEntity' => self::MANDARIN_LANGUAGE_CODE,
             'PaliLanguageEntity' => self::PALI_LANGUAGE_CODE,
             'FinnishLanguageEntity' => self::FINNISH_LANGUAGE_CODE,
+            'CatalanLanguageEntity' => self::CATALAN_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {
@@ -294,6 +298,7 @@ class LanguageMappings
             self::MANDARIN_LANGUAGE_NAME => self::MANDARIN_LANGUAGE_CODE,
             self::PALI_LANGUAGE_NAME => self::PALI_LANGUAGE_CODE,
             self::FINNISH_LANGUAGE_NAME => self::FINNISH_LANGUAGE_CODE,
+            self::CATALAN_LANGUAGE_NAME => self::CATALAN_LANGUAGE_CODE,
         ];
 
         if ($flip) {
