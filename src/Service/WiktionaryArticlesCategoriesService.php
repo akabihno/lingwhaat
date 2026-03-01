@@ -8,6 +8,7 @@ use Dotenv\Dotenv;
 class WiktionaryArticlesCategoriesService extends AbstractWiktionaryParserService
 {
     const int WIKTIONARY_RESULT_LIMIT = 500;
+    const int INSERT_BUFFER_SIZE = 300;
 
     public function __construct(protected AbstractQuery $abstractQuery)
     {
@@ -30,6 +31,9 @@ class WiktionaryArticlesCategoriesService extends AbstractWiktionaryParserServic
             "cmlimit" => self::WIKTIONARY_RESULT_LIMIT
         ];
 
+        $buffer = [];
+        $bufferSize = self::INSERT_BUFFER_SIZE;
+
         do {
             $url = $this->getWiktionaryBaseApiLink($language) . "?" . http_build_query($params);
 
@@ -41,9 +45,19 @@ class WiktionaryArticlesCategoriesService extends AbstractWiktionaryParserServic
 
             $result = json_decode($output, true);
 
-            foreach($result["query"]["categorymembers"] as $categoryMember) {
-                echo("Processing: ".$categoryMember["title"]."\n");
-                $this->abstractQuery->insertNames(strtolower($language), $categoryMember["title"]);
+            foreach ($result["query"]["categorymembers"] as $categoryMember) {
+                $title = $categoryMember["title"] ?? null;
+                if (!is_string($title) || $title === '') {
+                    continue;
+                }
+
+                echo("Processing: " . $title . "\n");
+                $buffer[] = $title;
+
+                if (count($buffer) >= $bufferSize) {
+                    $this->abstractQuery->bulkInsertNames(strtolower($language), $buffer, $bufferSize);
+                    $buffer = [];
+                }
             }
 
             if (isset($result["continue"])) {
@@ -52,6 +66,10 @@ class WiktionaryArticlesCategoriesService extends AbstractWiktionaryParserServic
                 break;
             }
         } while (true);
+
+        if (!empty($buffer)) {
+            $this->abstractQuery->bulkInsertNames(strtolower($language), $buffer, $bufferSize);
+        }
     }
 
     protected function getCmtitle(string $language): string
