@@ -6,7 +6,7 @@ class ParseWiktionaryArticlesMessage
 {
     public function __construct(
         private readonly string $language,
-        private readonly int $limit = 100
+        private readonly int $limit = 200
     ) {
     }
 
