@@ -3,6 +3,9 @@
 namespace App\Constant;
 
 
+/**
+ * For repository mappings @see: src/Service/LanguageRepositoryResolver.php
+ */
 class LanguageMappings
 {
     public const string LANGUAGE_ENTITY = 'LanguageEntity';
@@ -108,6 +111,8 @@ class LanguageMappings
     public const string MANDARIN_LANGUAGE_NAME = 'Mandarin';
     public const string PALI_LANGUAGE_CODE = 'pi';
     public const string PALI_LANGUAGE_NAME = 'Pali';
+    public const string FINNISH_LANGUAGE_CODE = 'fi';
+    public const string FINNISH_LANGUAGE_NAME = 'Finnish';
 
     public static function getLanguageCodes(): array
     {
@@ -163,6 +168,7 @@ class LanguageMappings
             self::JAPANESE_LANGUAGE_CODE,
             self::MANDARIN_LANGUAGE_CODE,
             self::PALI_LANGUAGE_CODE,
+            self::FINNISH_LANGUAGE_CODE,
         ];
     }
 
@@ -221,6 +227,7 @@ class LanguageMappings
             'JapaneseLanguageEntity' => self::JAPANESE_LANGUAGE_CODE,
             'MandarinLanguageEntity' => self::MANDARIN_LANGUAGE_CODE,
             'PaliLanguageEntity' => self::PALI_LANGUAGE_CODE,
+            'FinnishLanguageEntity' => self::FINNISH_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {
@@ -286,6 +293,7 @@ class LanguageMappings
             self::JAPANESE_LANGUAGE_NAME => self::JAPANESE_LANGUAGE_CODE,
             self::MANDARIN_LANGUAGE_NAME => self::MANDARIN_LANGUAGE_CODE,
             self::PALI_LANGUAGE_NAME => self::PALI_LANGUAGE_CODE,
+            self::FINNISH_LANGUAGE_NAME => self::FINNISH_LANGUAGE_CODE,
         ];
 
         if ($flip) {

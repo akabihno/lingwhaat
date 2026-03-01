@@ -12,6 +12,10 @@ class AbstractQuery
     protected PDO $pdo;
     public function connect(): void
     {
+        if (isset($this->pdo)) {
+            return;
+        }
+
         Dotenv::createImmutable('/var/www/html/')->load();
 
         $dbHost = $_ENV['DB_HOST'];
@@ -23,8 +27,15 @@ class AbstractQuery
         $username = 'root';
 
         try {
-            $this->pdo = new PDO($dsn, $username, $dbPassword);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo = new PDO(
+                $dsn,
+                $username,
+                $dbPassword,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_PERSISTENT => true,
+                ]
+            );
         } catch (PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
         }

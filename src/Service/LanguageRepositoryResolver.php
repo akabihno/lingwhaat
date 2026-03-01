@@ -15,6 +15,7 @@ use App\Repository\DanishLanguageRepository;
 use App\Repository\DutchLanguageRepository;
 use App\Repository\EnglishLanguageRepository;
 use App\Repository\EstonianLanguageRepository;
+use App\Repository\FinnishLanguageRepository;
 use App\Repository\FrenchLanguageRepository;
 use App\Repository\GalicianLanguageRepository;
 use App\Repository\GeorgianLanguageRepository;
@@ -113,6 +114,7 @@ class LanguageRepositoryResolver
         UzbekLanguageRepository $uzRepository,
         VietnameseLanguageRepository $viRepository,
         WolofLanguageRepository $woRepository,
+        FinnishLanguageRepository $fiRepository,
     ) {
         $this->repositoryMap = [
             'af' => $afRepository,
@@ -167,6 +169,7 @@ class LanguageRepositoryResolver
             'uz' => $uzRepository,
             'vi' => $viRepository,
             'wo' => $woRepository,
+            'fi' => $fiRepository,
         ];
     }
 

@@ -115,3 +115,17 @@ Docker compose with local DB:
 docker compose --profile local up -d
 
 # Add new language:
+
+Execute:
+php bin/console make:language finnish
+php bin/console doctrine:migrations:diff
+
+Run migration, e.g.:
+php bin/console doctrine:migrations:execute --up "DoctrineMigrations\\Version20260228134204"
+
+Add record to imports/create_web_user.sql
+
+Update src/Constant/LanguageMappings.php and src/Service/LanguageRepositoryResolver.php
+
+Get list of words for language:
+docker exec -it php-app php utils/get_categories_articles.php finnish
