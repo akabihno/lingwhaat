@@ -129,3 +129,17 @@ Update src/Constant/LanguageMappings.php and src/Service/LanguageRepositoryResol
 
 Get list of words for language:
 docker exec -it php-app php utils/get_categories_articles.php finnish
+
+Parse IPA for each word:
+INSERT INTO lingwhaat.language_parse_schedule SET language_name = 'finnish';
+
+CREATE TABLE `finnish_links` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `name` varchar(256) DEFAULT '',
+    `link` varchar(2048) DEFAULT '',
+    `ts_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1353672 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+Get 100K Wikipedia articles for language:
+INSERT INTO lingwhaat.wikipedia_pattern_parse_schedule SET language_code = 'fi';
