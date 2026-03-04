@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\CatalanLanguageEntity;
 use App\Repository\AbstractLanguageRepository;
 use App\Repository\AfrikaansLanguageRepository;
 use App\Repository\AfarLanguageRepository;
@@ -11,6 +12,7 @@ use App\Repository\ArmenianLanguageRepository;
 use App\Repository\BengaliLanguageRepository;
 use App\Repository\BretonLanguageRepository;
 use App\Repository\BulgarianLanguageRepository;
+use App\Repository\CatalanLanguageRepository;
 use App\Repository\CzechLanguageRepository;
 use App\Repository\DanishLanguageRepository;
 use App\Repository\DutchLanguageRepository;
@@ -117,6 +119,7 @@ class LanguageRepositoryResolver
         WolofLanguageRepository $woRepository,
         FinnishLanguageRepository $fiRepository,
         BulgarianLanguageRepository $bgRepository,
+        CatalanLanguageRepository $caRepository,
     ) {
         $this->repositoryMap = [
             'af' => $afRepository,
@@ -173,6 +176,7 @@ class LanguageRepositoryResolver
             'wo' => $woRepository,
             'fi' => $fiRepository,
             'bg' => $bgRepository,
+            'ca' => $caRepository,
         ];
     }
 
