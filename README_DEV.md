@@ -143,3 +143,10 @@ CREATE TABLE `finnish_links` (
 
 Get 100K Wikipedia articles for language:
 INSERT INTO lingwhaat.wikipedia_pattern_parse_schedule SET language_code = 'fi';
+
+Generate docs for language:
+docker exec -it php-app php utils/generate_docs.php finnish
+docker exec -it php-app php utils/generate_docs.php hebrew true // for languages with right-to-left writing
+
+Or, for paginated:
+docker exec -it php-app php utils/generate_docs_paginated.php vietnamese
