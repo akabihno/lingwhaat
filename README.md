@@ -12,21 +12,22 @@ This project aims to detect the language of written text with high speed and acc
 
 ## Supported Languages
 
-|                 |              |                    |              |
-|-----------------|--------------|--------------------|--------------|
-| Afar            | Afrikaans    | Albanian           | Arabic       |
-| Armenian        | Bengali      | Breton             | Czech        |
-| Danish          | Dutch        | English            | Estonian     |
-| French          | Galician     | Georgian           | German       |
-| Greek           | Gullah       | Hausa              | Hebrew       |
-| Hindi           | Hungarian    | Icelandic          | Italian      |
-| Japanese        | Kazakh       | Komi               | Latin        |
-| Latvian         | Lithuanian   | Mandarin           | Middle Dutch |
-| Mongolian       | Norwegian    | Old Dutch          | Pali         |
-| Polish          | Portuguese   | Romanian           | Russian      |
-| Serbo-Croatian* | Somali       | Spanish            | Swahili      |
-| Swedish         | Tagalog      | Turkish            | Ukrainian    |
-| Urdu            | Uzbek        | Vietnamese         | Finnish      |
+|                 |            |            |              |
+|-----------------|------------|------------|--------------|
+| Afar            | Afrikaans  | Albanian   | Arabic       |
+| Armenian        | Bengali    | Breton     | Czech        |
+| Danish          | Dutch      | English    | Estonian     |
+| French          | Galician   | Georgian   | German       |
+| Greek           | Gullah     | Hausa      | Hebrew       |
+| Hindi           | Hungarian  | Icelandic  | Italian      |
+| Japanese        | Kazakh     | Komi       | Latin        |
+| Latvian         | Lithuanian | Mandarin   | Middle Dutch |
+| Mongolian       | Norwegian  | Old Dutch  | Pali         |
+| Polish          | Portuguese | Romanian   | Russian      |
+| Serbo-Croatian* | Somali     | Spanish    | Swahili      |
+| Swedish         | Tagalog    | Turkish    | Ukrainian    |
+| Urdu            | Uzbek      | Vietnamese | Finnish      |
+| Bulgarian       | Catalan    |            |              |
 
 *Serbo-Croatian includes: Bosnian, Croatian, Montenegrin, Serbian
 
