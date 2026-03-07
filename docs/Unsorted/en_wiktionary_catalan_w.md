@@ -1,0 +1,15 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/web|
+|https://en.wiktionary.org/wiki/wiki|
+|https://en.wiktionary.org/wiki/wigwam|
+|https://en.wiktionary.org/wiki/waterpolo|
+|https://en.wiktionary.org/wiki/wòlof|
+|https://en.wiktionary.org/wiki/waterpolista|
+|https://en.wiktionary.org/wiki/wàttmetre|
+|https://en.wiktionary.org/wiki/wattímetre|
+|https://en.wiktionary.org/wiki/wàter|
+|https://en.wiktionary.org/wiki/wifi|
+|https://en.wiktionary.org/wiki/Westfàlia|
+|https://en.wiktionary.org/wiki/W|
+|https://en.wiktionary.org/wiki/wokisme|
