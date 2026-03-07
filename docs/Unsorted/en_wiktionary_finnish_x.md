@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/X-sukupolvi|
+|https://en.wiktionary.org/wiki/x-akseli|
+|https://en.wiktionary.org/wiki/X-kromosomi|
+|https://en.wiktionary.org/wiki/xylografia|
+|https://en.wiktionary.org/wiki/xerokopio|
+|https://en.wiktionary.org/wiki/X-tehokkuus|
+|https://en.wiktionary.org/wiki/X-bosoni|
+|https://en.wiktionary.org/wiki/X-lentokone|
+|https://en.wiktionary.org/wiki/xuan-paperi|
+|https://en.wiktionary.org/wiki/XA|
+|https://en.wiktionary.org/wiki/xtc|
+|https://en.wiktionary.org/wiki/xiongnu|
+|https://en.wiktionary.org/wiki/XO-kastike|
+|https://en.wiktionary.org/wiki/x-suunta|
+|https://en.wiktionary.org/wiki/ˣ|
