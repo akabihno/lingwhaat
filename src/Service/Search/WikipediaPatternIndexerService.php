@@ -9,6 +9,7 @@ use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastica\Client;
 use Generator;
 use InvalidArgumentException;
+use SplQueue;
 
 class WikipediaPatternIndexerService
 {
@@ -55,8 +56,8 @@ class WikipediaPatternIndexerService
 
         $globalPos = 0;
         $batch = [];
-        $windowChars = [];
-        $windowMeta = [];
+        $windowChars = new SplQueue();
+        $windowMeta = new SplQueue();
         $offset = 0;
 
         do {
@@ -71,22 +72,21 @@ class WikipediaPatternIndexerService
                 $localPos = 0;
 
                 foreach ($this->iterateChars($normalized) as $char) {
-                    $windowChars[] = $char;
-                    $windowMeta[] = [
+                    $windowChars->enqueue($char);
+                    $windowMeta->enqueue([
                         'article_id' => $article['id'],
                         'local_position' => $localPos,
-                    ];
+                    ]);
                     $localPos++;
 
-                    if (count($windowChars) > $windowSize) {
-                        unset($windowChars[0], $windowMeta[0]);
-                        $windowChars = array_values($windowChars);
-                        $windowMeta = array_values($windowMeta);
+                    if ($windowChars->count() > $windowSize) {
+                        $windowChars->dequeue();
+                        $windowMeta->dequeue();
                     }
 
-                    if (count($windowChars) === $windowSize) {
-                        $pattern = $this->buildPatternFromChars($windowChars);
-                        $startMeta = $windowMeta[0];
+                    if ($windowChars->count() === $windowSize) {
+                        $pattern = $this->buildPatternFromChars(iterator_to_array($windowChars, false));
+                        $startMeta = $windowMeta->bottom();
 
                         $batch[] = [
                             'pattern_hash' => $this->patternHash($pattern),
@@ -168,31 +168,13 @@ class WikipediaPatternIndexerService
      */
     private function patternHash(array $pattern): int
     {
-        $m = count($pattern);
         $hash = 0;
 
-        for ($i = 0; $i < $m; $i++) {
-            $power = $m - 1 - $i;
-            $hash = ($hash + $pattern[$i] * $this->powmod(self::BASE, $power)) % self::MOD;
+        foreach ($pattern as $value) {
+            $hash = (($hash * self::BASE) + $value) % self::MOD;
         }
 
         return $hash;
-    }
-
-    private function powmod(int $base, int $exp): int
-    {
-        $result = 1;
-        $base %= self::MOD;
-
-        while ($exp > 0) {
-            if ($exp & 1) {
-                $result = ($result * $base) % self::MOD;
-            }
-            $base = ($base * $base) % self::MOD;
-            $exp >>= 1;
-        }
-
-        return $result;
     }
 
     private function normalize(string $s): string

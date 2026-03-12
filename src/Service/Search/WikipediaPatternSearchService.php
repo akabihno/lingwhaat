@@ -6,13 +6,15 @@ use Elastica\Client;
 use Elastica\Query;
 use Elastica\Query\BoolQuery;
 use Elastica\Query\Term;
-use Elastica\Query\MatchPhrase;
+use InvalidArgumentException;
 
 class WikipediaPatternSearchService
 {
     private Client $esClient;
     private const string INDEX_NAME = 'wikipedia_global_patterns';
     private const int DEFAULT_WINDOW_SIZE = 100;
+    private const int BASE = 101;
+    private const int MOD = 1000000007;
 
     public function __construct()
     {
@@ -25,13 +27,13 @@ class WikipediaPatternSearchService
     public function search(string $cipherText, int $limit = 50, int $windowSize = self::DEFAULT_WINDOW_SIZE): array
     {
         if ($windowSize <= 0) {
-            throw new \InvalidArgumentException('windowSize must be greater than 0.');
+            throw new InvalidArgumentException('windowSize must be greater than 0.');
         }
 
         $normalized = $this->normalize($cipherText);
         $normalizedLength = mb_strlen($normalized);
         if ($normalizedLength !== $windowSize) {
-            throw new \InvalidArgumentException('Search text length must match the window size.');
+            throw new InvalidArgumentException('Search text length must match the window size.');
         }
 
         $pattern = $this->buildPattern($normalized);
@@ -42,14 +44,17 @@ class WikipediaPatternSearchService
 
         $bool = new BoolQuery();
 
-        // Exact pattern match only
-        $patternQuery = new MatchPhrase();
-        $patternQuery->setFieldQuery('pattern', $patternStr);
-        $bool->addMust($patternQuery);
+        $patternHashQuery = new Term();
+        $patternHashQuery->setTerm('pattern_hash', $patternHash);
+        $bool->addFilter($patternHashQuery);
 
         $lengthQuery = new Term();
         $lengthQuery->setTerm('length', $windowSize);
-        $bool->addMust($lengthQuery);
+        $bool->addFilter($lengthQuery);
+
+        $patternQuery = new Term();
+        $patternQuery->setTerm('pattern.keyword', $patternStr);
+        $bool->addFilter($patternQuery);
 
         $query = new Query($bool);
         $query->setSize($limit);
@@ -86,9 +91,12 @@ class WikipediaPatternSearchService
     private function normalize(string $s): string
     {
         $s = mb_strtolower($s);
-        return preg_replace('/[^\p{L}]+/u', '', $s);
+        return preg_replace('/[^\p{L}]+/u', '', $s) ?? '';
     }
 
+    /**
+     * @return array<int, int>
+     */
     private function buildPattern(string $s): array
     {
         $map = [];
@@ -96,41 +104,31 @@ class WikipediaPatternSearchService
         $pattern = [];
 
         foreach (preg_split('//u', $s, -1, PREG_SPLIT_NO_EMPTY) as $ch) {
+            if ($ch === false) {
+                continue;
+            }
+
             if (!isset($map[$ch])) {
                 $map[$ch] = $nextId++;
             }
+
             $pattern[] = $map[$ch];
         }
 
         return $pattern;
     }
 
-    private function patternHash(array $pattern, int $base = 101, int $mod = 1000000007): int
+    /**
+     * @param array<int, int> $pattern
+     */
+    private function patternHash(array $pattern): int
     {
-        $m = count($pattern);
         $hash = 0;
 
-        for ($i = 0; $i < $m; $i++) {
-            $power = $m - 1 - $i;
-            $hash = ($hash + $pattern[$i] * $this->powmod($base, $power, $mod)) % $mod;
+        foreach ($pattern as $value) {
+            $hash = (($hash * self::BASE) + $value) % self::MOD;
         }
 
         return $hash;
-    }
-
-    private function powmod(int $base, int $exp, int $mod): int
-    {
-        $result = 1;
-        $base %= $mod;
-
-        while ($exp > 0) {
-            if ($exp & 1) {
-                $result = ($result * $base) % $mod;
-            }
-            $base = ($base * $base) % $mod;
-            $exp >>= 1;
-        }
-
-        return $result;
     }
 }
