@@ -7,9 +7,7 @@ use App\Repository\WikipediaArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastica\Client;
-use Generator;
 use InvalidArgumentException;
-use SplQueue;
 
 class WikipediaPatternIndexerService
 {
@@ -17,7 +15,7 @@ class WikipediaPatternIndexerService
     private const int MOD = 1000000007;
     private const string INDEX_NAME = 'wikipedia_global_patterns';
     private const int BATCH_SIZE = 5000;
-    private const int ARTICLE_FETCH_BATCH_SIZE = 100;
+    private const int ARTICLE_FETCH_BATCH_SIZE = 500;
 
     private Client $esClient;
 
@@ -56,8 +54,6 @@ class WikipediaPatternIndexerService
 
         $globalPos = 0;
         $batch = [];
-        $windowChars = new SplQueue();
-        $windowMeta = new SplQueue();
         $offset = 0;
 
         do {
@@ -69,41 +65,35 @@ class WikipediaPatternIndexerService
 
             foreach ($articles as $article) {
                 $normalized = $this->normalize($article['text']);
-                $localPos = 0;
+                $chars = $this->splitChars($normalized);
+                $charCount = count($chars);
 
-                foreach ($this->iterateChars($normalized) as $char) {
-                    $windowChars->enqueue($char);
-                    $windowMeta->enqueue([
-                        'article_id' => $article['id'],
-                        'local_position' => $localPos,
-                    ]);
-                    $localPos++;
-
-                    if ($windowChars->count() > $windowSize) {
-                        $windowChars->dequeue();
-                        $windowMeta->dequeue();
-                    }
-
-                    if ($windowChars->count() === $windowSize) {
-                        $pattern = $this->buildPatternFromChars(iterator_to_array($windowChars, false));
-                        $startMeta = $windowMeta->bottom();
-
-                        $batch[] = [
-                            'pattern_hash' => $this->patternHash($pattern),
-                            'pattern' => implode(',', $pattern),
-                            'global_position' => $globalPos,
-                            'article_id' => $startMeta['article_id'],
-                            'local_position' => $startMeta['local_position'],
-                            'length' => $windowSize,
-                        ];
-
-                        if (count($batch) >= self::BATCH_SIZE) {
-                            $this->flushBatch($batch);
-                        }
-                    }
-
-                    $globalPos++;
+                if ($charCount < $windowSize) {
+                    $globalPos += $charCount;
+                    continue;
                 }
+
+                $lastWindowStart = $charCount - $windowSize;
+
+                for ($windowStart = 0; $windowStart <= $lastWindowStart; $windowStart++) {
+                    $windowChars = array_slice($chars, $windowStart, $windowSize);
+                    $pattern = $this->buildPatternFromChars($windowChars);
+
+                    $batch[] = [
+                        'pattern_hash' => $this->patternHash($pattern),
+                        'pattern' => implode(',', $pattern),
+                        'global_position' => $globalPos + $windowStart + $windowSize - 1,
+                        'article_id' => $article['id'],
+                        'local_position' => $windowStart,
+                        'length' => $windowSize,
+                    ];
+
+                    if (count($batch) >= self::BATCH_SIZE) {
+                        $this->flushBatch($batch);
+                    }
+                }
+
+                $globalPos += $charCount;
             }
 
             $offset += count($articles);
@@ -116,15 +106,11 @@ class WikipediaPatternIndexerService
     }
 
     /**
-     * @return Generator<int, string>
+     * @return array<int, string>
      */
-    private function iterateChars(string $text): Generator
+    private function splitChars(string $text): array
     {
-        $length = mb_strlen($text);
-
-        for ($i = 0; $i < $length; $i++) {
-            yield mb_substr($text, $i, 1);
-        }
+        return preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY) ?: [];
     }
 
     /**
