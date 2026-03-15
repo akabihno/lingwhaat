@@ -3,7 +3,6 @@ framework:
         failure_transport: failed
 
         transports:
-            # Using Redis for async transport
             async:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 retry_strategy:
@@ -12,11 +11,8 @@ framework:
                     multiplier: 2
                     max_delay: 0
 
-            # Dedicated transport for getting wikipedia articles
             wikipedia_async:
                 dsn: '%env(MESSENGER_WIKIPEDIA_TRANSPORT_DSN)%'
-                options:
-                    queue_name: wikipedia_async
                 retry_strategy:
                     max_retries: 3
                     delay: 1000
