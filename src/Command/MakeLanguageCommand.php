@@ -11,6 +11,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -81,21 +82,29 @@ class MakeLanguageCommand extends Command
         $this->updateReadme($language);
         $io->success('Updated README.md');
 
-        // 6. Generate migration
+        // 6. Generate migration — capture output to extract the version class name
         $io->section('Generating migration...');
+        $diffOutput = new BufferedOutput();
         $exitCode = $this->getApplication()->find('doctrine:migrations:diff')->run(
             new ArrayInput(['--no-interaction' => true]),
-            $output
+            $diffOutput
         );
+        $diffText = $diffOutput->fetch();
+        $output->write($diffText);
         if ($exitCode !== Command::SUCCESS) {
             $io->error('Migration generation failed.');
             return Command::FAILURE;
         }
+        if (!preg_match('/(DoctrineMigrations\\\\Version\d+)/', $diffText, $matches)) {
+            $io->error('Could not parse migration version from output.');
+            return Command::FAILURE;
+        }
+        $migrationVersion = $matches[1];
 
-        // 7. Run migration
+        // 7. Execute the specific migration directly (migrate is unaware of files created mid-process)
         $io->section('Running migration...');
-        $exitCode = $this->getApplication()->find('doctrine:migrations:migrate')->run(
-            new ArrayInput(['--no-interaction' => true]),
+        $exitCode = $this->getApplication()->find('doctrine:migrations:execute')->run(
+            new ArrayInput(['versions' => [$migrationVersion], '--up' => true, '--no-interaction' => true]),
             $output
         );
         if ($exitCode !== Command::SUCCESS) {
@@ -113,7 +122,7 @@ class MakeLanguageCommand extends Command
         $io->success("Word list fetched for '{$language}'");
 
         // 10. Register language in parse schedule and kick off processing immediately
-        $scheduleEntry = (new LanguageParseScheduleEntity())->setLanguageName(strtolower($language));
+        $scheduleEntry = new LanguageParseScheduleEntity()->setLanguageName(strtolower($language));
         $this->entityManager->persist($scheduleEntry);
         $this->entityManager->flush();
         $this->bus->dispatch(new ParseWiktionaryLanguagesMessage());

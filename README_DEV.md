@@ -117,10 +117,7 @@ docker compose --profile local up -d
 # Add new language:
 
 Execute (creates entity/repository, updates LanguageMappings, runs migration, grants DB access, updates README):
-php bin/console make:language finnish fi
-
-Get list of words for language:
-docker exec -it php-app php utils/get_categories_articles.php finnish
+docker exec -it php-app php bin/console make:language finnish fi
 
 Generate docs for language:
 docker exec -it php-app php utils/generate_docs.php finnish
