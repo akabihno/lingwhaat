@@ -95,11 +95,15 @@ class MakeLanguageCommand extends Command
             $io->error('Migration generation failed.');
             return Command::FAILURE;
         }
-        if (!preg_match('/Version(\d+)\.php/', $diffText, $matches)) {
-            $io->error('Could not parse migration version from output.');
+        if (!preg_match('/Generated new migration class to "([^"]+)"/', $diffText, $matches)) {
+            $io->error('Could not parse migration file path from output.');
             return Command::FAILURE;
         }
-        $migrationVersion = 'DoctrineMigrations\\Version' . $matches[1];
+        $migrationFile = $matches[1];
+        $migrationVersion = 'DoctrineMigrations\\' . basename($migrationFile, '.php');
+
+        // Require the file explicitly — the autoloader was initialised before this file existed
+        require_once $migrationFile;
 
         // 7. Execute the specific migration directly (migrate is unaware of files created mid-process)
         $io->section('Running migration...');
