@@ -141,12 +141,23 @@ CREATE TABLE `finnish_links` (
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1353672 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-Get 100K Wikipedia articles for language:
-INSERT INTO lingwhaat.wikipedia_pattern_parse_schedule SET language_code = 'fi';
-
 Generate docs for language:
 docker exec -it php-app php utils/generate_docs.php finnish
 docker exec -it php-app php utils/generate_docs.php hebrew true // for languages with right-to-left writing
 
 Or, for paginated:
 docker exec -it php-app php utils/generate_docs_paginated.php vietnamese
+
+# Prepare to run search against Wikipedia canonical patterns with sliding window:
+
+Get 100K Wikipedia articles for language:
+INSERT INTO lingwhaat.wikipedia_pattern_parse_schedule SET language_code = 'fi';
+
+Set popularity score for language:
+INSERT INTO lingwhaat.words_popularity_score_set_schedule SET language_code = 'fi';
+
+Create canonical patterns for language:
+docker exec -it php-app php bin/console app:wikipedia-pattern-index --window-size 18 --language-code fi
+
+Reindex all words for all languages:
+docker exec -it php-app php bin/console language:reindex-words

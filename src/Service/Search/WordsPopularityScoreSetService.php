@@ -2,9 +2,9 @@
 
 namespace App\Service\Search;
 
+use App\Constant\LanguageMappings;
 use App\Repository\WikipediaArticleRepository;
 use App\Repository\WordsPopularityScoreSetScheduleRepository;
-use App\Service\LanguageRepositoryResolver;
 use App\Service\Logging\ElasticsearchLogger;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -16,7 +16,6 @@ class WordsPopularityScoreSetService
     public function __construct(
         private readonly WikipediaArticleRepository $wikipediaArticleRepository,
         private readonly FuzzySearchService         $fuzzySearchService,
-        private readonly LanguageRepositoryResolver $languageRepositoryResolver,
         private readonly WordsPopularityScoreSetScheduleRepository $wordsPopularityScoreSetScheduleRepository,
         private readonly EntityManagerInterface     $entityManager,
         private readonly ElasticsearchLogger        $logger,
@@ -33,11 +32,11 @@ class WordsPopularityScoreSetService
      */
     public function execute(string $languageCode, int $limit = self::BATCH_SIZE, int $offset = 0): array
     {
-        $languageRepository = $this->languageRepositoryResolver->getRepository($languageCode);
+        $entityClass = LanguageMappings::getEntityClassByLanguageCode($languageCode);
 
-        if (!$languageRepository) {
-            $this->logger->warning("[WordsPopularityScoreSetService] No repository found for language code: {$languageCode}");
-            return ['processed' => 0, 'matched' => 0, 'error' => 'Repository not found'];
+        if (!$entityClass) {
+            $this->logger->warning("[WordsPopularityScoreSetService] No entity class found for language code: {$languageCode}");
+            return ['processed' => 0, 'matched' => 0, 'error' => 'Entity class not found'];
         }
 
         $articles = $this->wikipediaArticleRepository->findByLanguageCodePaginated($languageCode, $limit, $offset);
@@ -91,7 +90,7 @@ class WordsPopularityScoreSetService
 
         // Bulk update scores using raw SQL for performance
         if (!empty($scoreIncrements)) {
-            $this->bulkUpdateScores($languageRepository, $scoreIncrements);
+            $this->bulkUpdateScores($entityClass, $scoreIncrements);
             $this->logger->info("Bulk updated scores for {$processedWords} words", [
                 'languageCode' => $languageCode,
                 'uniqueWords' => count($uniqueWords),
@@ -121,13 +120,13 @@ class WordsPopularityScoreSetService
     /**
      * Bulk update scores for multiple words using raw SQL
      *
-     * @param object $languageRepository The language repository
+     * @param string $entityClass The language entity FQCN
      * @param array<string, int> $scoreIncrements Map of word names to score increments
      */
-    private function bulkUpdateScores(object $languageRepository, array $scoreIncrements): void
+    private function bulkUpdateScores(string $entityClass, array $scoreIncrements): void
     {
         $connection = $this->entityManager->getConnection();
-        $tableName = $this->entityManager->getClassMetadata(get_class($languageRepository->find(1) ?? new \stdClass()))->getTableName();
+        $tableName = $this->entityManager->getClassMetadata($entityClass)->getTableName();
 
         // Build CASE statement for bulk update
         $caseStatements = [];
