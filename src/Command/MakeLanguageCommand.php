@@ -95,11 +95,11 @@ class MakeLanguageCommand extends Command
             $io->error('Migration generation failed.');
             return Command::FAILURE;
         }
-        if (!preg_match('/(DoctrineMigrations\\\\Version\d+)/', $diffText, $matches)) {
+        if (!preg_match('/Version(\d+)\.php/', $diffText, $matches)) {
             $io->error('Could not parse migration version from output.');
             return Command::FAILURE;
         }
-        $migrationVersion = $matches[1];
+        $migrationVersion = 'DoctrineMigrations\\Version' . $matches[1];
 
         // 7. Execute the specific migration directly (migrate is unaware of files created mid-process)
         $io->section('Running migration...');

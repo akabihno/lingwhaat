@@ -26,4 +26,6 @@ framework:
             'App\Message\ParseWiktionaryArticlesMessage': async
             'App\Message\ParseWiktionaryLanguagesMessage': async
             'App\Message\ParseWikipediaArticlesMessage': wikipedia_async
+            'App\Message\ParseWikipediaLanguagesMessage': wikipedia_async
+            'App\Message\WordsPopularityScoreSetDispatchMessage': async
             'App\Message\WordsPopularityScoreSetMessage': async
