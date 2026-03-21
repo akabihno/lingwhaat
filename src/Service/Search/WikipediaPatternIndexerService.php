@@ -3,9 +3,11 @@
 namespace App\Service\Search;
 
 use App\Entity\WikipediaArticleEntity;
+use App\Repository\WikipediaArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastica\Client;
+use InvalidArgumentException;
 
 class WikipediaPatternIndexerService
 {
@@ -13,6 +15,7 @@ class WikipediaPatternIndexerService
     private const int MOD = 1000000007;
     private const string INDEX_NAME = 'wikipedia_global_patterns';
     private const int BATCH_SIZE = 5000;
+    private const int ARTICLE_FETCH_BATCH_SIZE = 500;
 
     private Client $esClient;
 
@@ -30,11 +33,11 @@ class WikipediaPatternIndexerService
     public function indexAllByLanguageCode(int $windowSize, string $languageCode): void
     {
         if ($windowSize <= 0) {
-            throw new \InvalidArgumentException('windowSize must be greater than 0.');
+            throw new InvalidArgumentException('windowSize must be greater than 0.');
         }
 
-        if (!$languageCode) {
-            throw new \InvalidArgumentException('languageCode must be provided.');
+        if ($languageCode === '') {
+            throw new InvalidArgumentException('languageCode must be provided.');
         }
 
         $index = $this->esClient->getIndex(self::INDEX_NAME);
@@ -46,117 +49,123 @@ class WikipediaPatternIndexerService
             throw new ClientResponseException($e->getMessage(), $e->getCode(), $e);
         }
 
+        /** @var WikipediaArticleRepository $repo */
         $repo = $this->em->getRepository(WikipediaArticleEntity::class);
-        $articles = $repo->findBy(['languageCode' => $languageCode], ['id' => 'ASC']);
 
         $globalPos = 0;
-
-        $window = [];
-        $windowMeta = [];
-
         $batch = [];
+        $offset = 0;
 
-        foreach ($articles as $article) {
-            $normalized = $this->normalize($article->getText());
-            $chars = preg_split('//u', $normalized, -1, PREG_SPLIT_NO_EMPTY);
-            $localPos = 0;
+        do {
+            $articles = $repo->findIdAndTextByLanguageCodePaginated(
+                $languageCode,
+                self::ARTICLE_FETCH_BATCH_SIZE,
+                $offset
+            );
 
-            foreach ($chars as $ch) {
+            foreach ($articles as $article) {
+                $normalized = $this->normalize($article['text']);
+                $chars = $this->splitChars($normalized);
+                $charCount = count($chars);
 
-                $window[] = $ch;
-                $windowMeta[] = ['article_id' => $article->getId(), 'local_position' => $localPos];
-                $localPos++;
-
-                if (count($window) > $windowSize) {
-                    array_shift($window);
-                    array_shift($windowMeta);
+                if ($charCount < $windowSize) {
+                    $globalPos += $charCount;
+                    continue;
                 }
 
-                if (count($window) === $windowSize) {
-                    $pattern = $this->buildPattern(implode('', $window));
-                    $patternHash = $this->patternHash($pattern);
-                    $startMeta = $windowMeta[0];
+                $lastWindowStart = $charCount - $windowSize;
+
+                for ($windowStart = 0; $windowStart <= $lastWindowStart; $windowStart++) {
+                    $windowChars = array_slice($chars, $windowStart, $windowSize);
+                    $pattern = $this->buildPatternFromChars($windowChars);
 
                     $batch[] = [
-                        'pattern_hash' => $patternHash,
+                        'pattern_hash' => $this->patternHash($pattern),
                         'pattern' => implode(',', $pattern),
-                        'global_position' => $globalPos,
-                        'article_id' => $startMeta['article_id'],
-                        'local_position' => $startMeta['local_position'],
+                        'global_position' => $globalPos + $windowStart + $windowSize - 1,
+                        'article_id' => $article['id'],
+                        'local_position' => $windowStart,
                         'length' => $windowSize,
                     ];
 
                     if (count($batch) >= self::BATCH_SIZE) {
-                        try {
-                            $this->bulk->sendBatch(self::INDEX_NAME, $batch);
-                        } catch (\Throwable $e) {
-                            throw new ClientResponseException($e->getMessage(), $e->getCode(), $e);
-                        }
-                        $batch = [];
+                        $this->flushBatch($batch);
                     }
                 }
 
-                $globalPos++;
+                $globalPos += $charCount;
             }
-        }
 
-        if (!empty($batch)) {
-            try {
-                $this->bulk->sendBatch(self::INDEX_NAME, $batch);
-            } catch (\Throwable $e) {
-                throw new ClientResponseException($e->getMessage(), $e->getCode(), $e);
-            }
+            $offset += count($articles);
+            $this->em->clear();
+        } while ($articles !== []);
+
+        if ($batch !== []) {
+            $this->flushBatch($batch);
         }
     }
 
-    private function buildPattern(string $s): array
+    /**
+     * @return array<int, string>
+     */
+    private function splitChars(string $text): array
+    {
+        return preg_split('//u', $text, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+    }
+
+    /**
+     * @param array<int, string> $chars
+     * @return array<int, int>
+     */
+    private function buildPatternFromChars(array $chars): array
     {
         $map = [];
         $nextId = 0;
         $pattern = [];
 
-        foreach (preg_split('//u', $s, -1, PREG_SPLIT_NO_EMPTY) as $ch) {
-            if (!isset($map[$ch])) {
-                $map[$ch] = $nextId++;
+        foreach ($chars as $char) {
+            if (!isset($map[$char])) {
+                $map[$char] = $nextId++;
             }
-            $pattern[] = $map[$ch];
+
+            $pattern[] = $map[$char];
         }
 
         return $pattern;
     }
 
+    /**
+     * @param array<int, array<string, int|string>> $batch
+     * @throws ClientResponseException
+     */
+    private function flushBatch(array &$batch): void
+    {
+        try {
+            $this->bulk->sendBatch(self::INDEX_NAME, $batch);
+        } catch (\Throwable $e) {
+            throw new ClientResponseException($e->getMessage(), $e->getCode(), $e);
+        }
+
+        $batch = [];
+    }
+
+    /**
+     * @param array<int, int> $pattern
+     */
     private function patternHash(array $pattern): int
     {
-        $m = count($pattern);
         $hash = 0;
 
-        for ($i = 0; $i < $m; $i++) {
-            $power = $m - 1 - $i;
-            $hash = ($hash + $pattern[$i] * $this->powmod(self::BASE, $power)) % self::MOD;
+        foreach ($pattern as $value) {
+            $hash = (($hash * self::BASE) + $value) % self::MOD;
         }
 
         return $hash;
     }
 
-    private function powmod(int $base, int $exp): int
-    {
-        $result = 1;
-        $base %= self::MOD;
-
-        while ($exp > 0) {
-            if ($exp & 1) {
-                $result = ($result * $base) % self::MOD;
-            }
-            $base = ($base * $base) % self::MOD;
-            $exp >>= 1;
-        }
-
-        return $result;
-    }
-
     private function normalize(string $s): string
     {
         $s = mb_strtolower($s);
-        return preg_replace('/[^\p{L}]+/u', '', $s);
+        return preg_replace('/[^\p{L}]+/u', '', $s) ?? '';
     }
 }

@@ -113,3 +113,40 @@ docker compose --profile rds up -d
 
 Docker compose with local DB:
 docker compose --profile local up -d
+
+# Add new language:
+
+Execute:
+php bin/console make:language finnish
+php bin/console doctrine:migrations:diff
+
+Run migration, e.g.:
+php bin/console doctrine:migrations:execute --up "DoctrineMigrations\\Version20260228134204"
+
+Add record to imports/create_web_user.sql
+
+Update src/Constant/LanguageMappings.php and src/Service/LanguageRepositoryResolver.php
+
+Get list of words for language:
+docker exec -it php-app php utils/get_categories_articles.php finnish
+
+Parse IPA for each word:
+INSERT INTO lingwhaat.language_parse_schedule SET language_name = 'finnish';
+
+CREATE TABLE `finnish_links` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `name` varchar(256) DEFAULT '',
+    `link` varchar(2048) DEFAULT '',
+    `ts_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1353672 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+Get 100K Wikipedia articles for language:
+INSERT INTO lingwhaat.wikipedia_pattern_parse_schedule SET language_code = 'fi';
+
+Generate docs for language:
+docker exec -it php-app php utils/generate_docs.php finnish
+docker exec -it php-app php utils/generate_docs.php hebrew true // for languages with right-to-left writing
+
+Or, for paginated:
+docker exec -it php-app php utils/generate_docs_paginated.php vietnamese

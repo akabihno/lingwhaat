@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Qatar|
+|https://en.wiktionary.org/wiki/quisling|
+|https://en.wiktionary.org/wiki/Queensland|
+|https://en.wiktionary.org/wiki/Quebec|
+|https://en.wiktionary.org/wiki/quadriga|
+|https://en.wiktionary.org/wiki/qof|
+|https://en.wiktionary.org/wiki/qatarilainen|
+|https://en.wiktionary.org/wiki/quebeciläinen|
+|https://en.wiktionary.org/wiki/Q-kuume|
+|https://en.wiktionary.org/wiki/QAM-modulointi|
+|https://en.wiktionary.org/wiki/queer-teoria|
+|https://en.wiktionary.org/wiki/queenslandinpuukenguru|
+|https://en.wiktionary.org/wiki/quijoottinen|
+|https://en.wiktionary.org/wiki/quiche|
+|https://en.wiktionary.org/wiki/Q|

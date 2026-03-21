@@ -35,6 +35,33 @@ class WikipediaArticleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    /**
+     * @return array<int, array{id:int, text:string}>
+     */
+    public function findIdAndTextByLanguageCodePaginated(
+        string $languageCode,
+        int $limit = 100,
+        int $offset = 0
+    ): array {
+        $rows = $this->createQueryBuilder('w')
+            ->select('w.id AS id, w.text AS text')
+            ->where('w.languageCode = :languageCode')
+            ->setParameter('languageCode', $languageCode)
+            ->orderBy('w.id', 'ASC')
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getArrayResult();
+
+        return array_map(
+            static fn (array $row): array => [
+                'id' => (int) $row['id'],
+                'text' => (string) $row['text'],
+            ],
+            $rows
+        );
+    }
+
     public function countByLanguageCode(string $languageCode): int
     {
         return (int) $this->createQueryBuilder('w')

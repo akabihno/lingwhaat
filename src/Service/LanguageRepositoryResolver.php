@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\CatalanLanguageEntity;
 use App\Repository\AbstractLanguageRepository;
 use App\Repository\AfrikaansLanguageRepository;
 use App\Repository\AfarLanguageRepository;
@@ -10,11 +11,14 @@ use App\Repository\ArabicLanguageRepository;
 use App\Repository\ArmenianLanguageRepository;
 use App\Repository\BengaliLanguageRepository;
 use App\Repository\BretonLanguageRepository;
+use App\Repository\BulgarianLanguageRepository;
+use App\Repository\CatalanLanguageRepository;
 use App\Repository\CzechLanguageRepository;
 use App\Repository\DanishLanguageRepository;
 use App\Repository\DutchLanguageRepository;
 use App\Repository\EnglishLanguageRepository;
 use App\Repository\EstonianLanguageRepository;
+use App\Repository\FinnishLanguageRepository;
 use App\Repository\FrenchLanguageRepository;
 use App\Repository\GalicianLanguageRepository;
 use App\Repository\GeorgianLanguageRepository;
@@ -113,6 +117,9 @@ class LanguageRepositoryResolver
         UzbekLanguageRepository $uzRepository,
         VietnameseLanguageRepository $viRepository,
         WolofLanguageRepository $woRepository,
+        FinnishLanguageRepository $fiRepository,
+        BulgarianLanguageRepository $bgRepository,
+        CatalanLanguageRepository $caRepository,
     ) {
         $this->repositoryMap = [
             'af' => $afRepository,
@@ -167,6 +174,9 @@ class LanguageRepositoryResolver
             'uz' => $uzRepository,
             'vi' => $viRepository,
             'wo' => $woRepository,
+            'fi' => $fiRepository,
+            'bg' => $bgRepository,
+            'ca' => $caRepository,
         ];
     }
 

@@ -12,6 +12,10 @@ class AbstractQuery
     protected PDO $pdo;
     public function connect(): void
     {
+        if (isset($this->pdo)) {
+            return;
+        }
+
         Dotenv::createImmutable('/var/www/html/')->load();
 
         $dbHost = $_ENV['DB_HOST'];
@@ -23,8 +27,15 @@ class AbstractQuery
         $username = 'root';
 
         try {
-            $this->pdo = new PDO($dsn, $username, $dbPassword);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo = new PDO(
+                $dsn,
+                $username,
+                $dbPassword,
+                [
+                    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_PERSISTENT => true,
+                ]
+            );
         } catch (PDOException $e) {
             echo 'Connection failed: ' . $e->getMessage();
         }
@@ -106,16 +117,40 @@ class AbstractQuery
         $stmt->execute($params);
     }
 
-    public function insertNames(string $language, string $name): void
+    public function bulkInsertNames(string $language, array $names, int $chunkSize = 500): void
     {
+        if (empty($names)) {
+            return;
+        }
+
         $this->connect();
-        $query = 'INSERT INTO '.$this->getBaseTable($language).' (name) VALUES (:name)';
 
-        $stmt = $this->pdo->prepare($query);
+        $names = array_values(array_filter(array_map(
+            static fn ($n) => is_string($n) ? trim($n) : '',
+            $names
+        )));
 
-        $stmt->execute([
-            ':name' => $name
-        ]);
+        if (empty($names)) {
+            return;
+        }
+
+        foreach (array_chunk($names, $chunkSize) as $chunk) {
+            $valuePlaceholders = [];
+            $params = [];
+
+            foreach ($chunk as $index => $name) {
+                $nameParam = ":name{$index}";
+                $valuePlaceholders[] = "({$nameParam})";
+                $params[$nameParam] = $name;
+            }
+
+            $valuesClause = implode(', ', $valuePlaceholders);
+
+            $query = "INSERT INTO {$this->getBaseTable($language)} (name) VALUES {$valuesClause}";
+
+            $stmt = $this->pdo->prepare($query);
+            $stmt->execute($params);
+        }
     }
 
     public function getBaseTable(string $language): string

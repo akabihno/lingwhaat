@@ -2,9 +2,10 @@
 
 namespace App\Entity;
 
+use App\Repository\WikipediaArticleRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: WikipediaArticleRepository::class)]
 #[ORM\Table(name: "wikipedia_article")]
 #[ORM\Index(name: 'i_language_code', columns: ['language_code'])]
 class WikipediaArticleEntity

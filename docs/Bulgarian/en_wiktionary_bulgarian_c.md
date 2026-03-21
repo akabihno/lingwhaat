@@ -1,0 +1,17 @@
+|link|
+|----|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20conjunctions|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20adverbs|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20adjectives|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20pronouns|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20particles|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20numerals|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20prepositions|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20interjections|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20phrases|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20determiners|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20morphemes|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20multiword%20terms|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20predicatives|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20verbs|
+|https://en.wiktionary.org/wiki/Category:Bulgarian%20nouns|
