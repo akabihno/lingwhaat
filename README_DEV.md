@@ -122,9 +122,6 @@ php bin/console make:language finnish fi
 Get list of words for language:
 docker exec -it php-app php utils/get_categories_articles.php finnish
 
-Parse IPA for each word:
-INSERT INTO lingwhaat.language_parse_schedule SET language_name = 'finnish';
-
 Generate docs for language:
 docker exec -it php-app php utils/generate_docs.php finnish
 docker exec -it php-app php utils/generate_docs.php hebrew true // for languages with right-to-left writing

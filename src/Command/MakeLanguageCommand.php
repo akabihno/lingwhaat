@@ -2,6 +2,10 @@
 
 namespace App\Command;
 
+use App\Entity\LanguageParseScheduleEntity;
+use App\Message\ParseWiktionaryLanguagesMessage;
+use App\Service\WiktionaryArticlesCategoriesService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -10,6 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsCommand(
     name: 'make:language',
@@ -23,6 +28,9 @@ class MakeLanguageCommand extends Command
         #[Autowire(env: 'MYSQL_DATABASE')] private readonly string $dbName,
         #[Autowire(env: 'MYSQL_ROOT_PASSWORD')] private readonly string $dbRootPassword,
         #[Autowire(env: 'MYSQL_WEB_USER')] private readonly string $dbWebUser,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly MessageBusInterface $bus,
+        private readonly WiktionaryArticlesCategoriesService $categoriesService,
     ) {
         parent::__construct();
     }
@@ -98,6 +106,18 @@ class MakeLanguageCommand extends Command
         // 8. Create links table and grant web user access on the fly
         $this->createLinksTableAndGrant($tableName, $linksTableName);
         $io->success("Granted web user SELECT,INSERT,UPDATE on {$tableName} and {$linksTableName}");
+
+        // 9. Fetch word list from Wiktionary categories
+        $io->section('Fetching word list from Wiktionary...');
+        $this->categoriesService->getArticlesByCategory(strtolower($language));
+        $io->success("Word list fetched for '{$language}'");
+
+        // 10. Register language in parse schedule and kick off processing immediately
+        $scheduleEntry = (new LanguageParseScheduleEntity())->setLanguageName(strtolower($language));
+        $this->entityManager->persist($scheduleEntry);
+        $this->entityManager->flush();
+        $this->bus->dispatch(new ParseWiktionaryLanguagesMessage());
+        $io->success("Registered '{$language}' in language_parse_schedule and dispatched IPA parse");
 
         $io->success("Language '{$language}' ({$code}) added successfully!");
         return Command::SUCCESS;

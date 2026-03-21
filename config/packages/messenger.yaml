@@ -24,5 +24,6 @@ framework:
 
         routing:
             'App\Message\ParseWiktionaryArticlesMessage': async
+            'App\Message\ParseWiktionaryLanguagesMessage': async
             'App\Message\ParseWikipediaArticlesMessage': wikipedia_async
             'App\Message\WordsPopularityScoreSetMessage': async
