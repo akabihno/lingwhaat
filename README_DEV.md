@@ -116,30 +116,14 @@ docker compose --profile local up -d
 
 # Add new language:
 
-Execute:
-php bin/console make:language finnish
-php bin/console doctrine:migrations:diff
-
-Run migration, e.g.:
-php bin/console doctrine:migrations:execute --up "DoctrineMigrations\\Version20260228134204"
-
-Add record to imports/create_web_user.sql
-
-Update src/Constant/LanguageMappings.php and src/Service/LanguageRepositoryResolver.php
+Execute (creates entity/repository, updates LanguageMappings, runs migration, grants DB access, updates README):
+php bin/console make:language finnish fi
 
 Get list of words for language:
 docker exec -it php-app php utils/get_categories_articles.php finnish
 
 Parse IPA for each word:
 INSERT INTO lingwhaat.language_parse_schedule SET language_name = 'finnish';
-
-CREATE TABLE `finnish_links` (
-    `id` int NOT NULL AUTO_INCREMENT,
-    `name` varchar(256) DEFAULT '',
-    `link` varchar(2048) DEFAULT '',
-    `ts_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1353672 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 Generate docs for language:
 docker exec -it php-app php utils/generate_docs.php finnish
