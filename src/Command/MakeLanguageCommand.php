@@ -100,7 +100,7 @@ class MakeLanguageCommand extends Command
             return Command::FAILURE;
         }
         $migrationFile = $matches[1];
-        $migrationVersion = 'DoctrineMigrations\\' . basename($migrationFile, '.php');
+        $migrationVersion = 'DoctrineMigrations\\\\' . basename($migrationFile, '.php');
 
         // Require the file explicitly — the autoloader was initialised before this file existed
         require_once $migrationFile;
