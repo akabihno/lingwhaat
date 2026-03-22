@@ -143,6 +143,7 @@ services:
       - WIKTIONARY_UA_EMAIL=${WIKTIONARY_UA_EMAIL}
       - LOCK_DSN=${LOCK_DSN}
       - MESSENGER_TRANSPORT_DSN=${MESSENGER_TRANSPORT_DSN}
+      - MESSENGER_WIKTIONARY_TRANSPORT_DSN=${MESSENGER_WIKTIONARY_TRANSPORT_DSN}
       - MESSENGER_FAILED_DSN=${MESSENGER_FAILED_DSN}
     network_mode: host
     depends_on:
@@ -177,6 +178,7 @@ services:
       - WIKTIONARY_UA_EMAIL=${WIKTIONARY_UA_EMAIL}
       - LOCK_DSN=${LOCK_DSN}
       - MESSENGER_TRANSPORT_DSN=${MESSENGER_TRANSPORT_DSN}
+      - MESSENGER_WIKTIONARY_TRANSPORT_DSN=${MESSENGER_WIKTIONARY_TRANSPORT_DSN}
       - MESSENGER_FAILED_DSN=${MESSENGER_FAILED_DSN}
     network_mode: host
     depends_on:
@@ -210,7 +212,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
       - WIKTIONARY_UA_EMAIL=${WIKTIONARY_UA_EMAIL}
       - LOCK_DSN=${LOCK_DSN}
-      - MESSENGER_TRANSPORT_DSN=${MESSENGER_TRANSPORT_DSN}
+      - MESSENGER_WIKTIONARY_TRANSPORT_DSN=${MESSENGER_WIKTIONARY_TRANSPORT_DSN}
       - MESSENGER_FAILED_DSN=${MESSENGER_FAILED_DSN}
     network_mode: host
     depends_on:
@@ -221,7 +223,7 @@ services:
     volumes:
       - .:/var/www/html
       - ./ssl-certs:/ssl-certs:ro
-    command: php /var/www/html/bin/console messenger:consume async -vv
+    command: php /var/www/html/bin/console messenger:consume wiktionary_async -vv
     restart: on-failure
     deploy:
       resources:

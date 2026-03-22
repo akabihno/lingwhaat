@@ -11,6 +11,14 @@ framework:
                     multiplier: 2
                     max_delay: 0
 
+            wiktionary_async:
+                dsn: '%env(MESSENGER_WIKTIONARY_TRANSPORT_DSN)%'
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+                    max_delay: 0
+
             wikipedia_async:
                 dsn: '%env(MESSENGER_WIKIPEDIA_TRANSPORT_DSN)%'
                 retry_strategy:
@@ -23,8 +31,8 @@ framework:
                 dsn: '%env(MESSENGER_FAILED_DSN)%'
 
         routing:
-            'App\Message\ParseWiktionaryArticlesMessage': async
-            'App\Message\ParseWiktionaryLanguagesMessage': async
+            'App\Message\ParseWiktionaryArticlesMessage': wiktionary_async
+            'App\Message\ParseWiktionaryLanguagesMessage': wiktionary_async
             'App\Message\ParseWikipediaArticlesMessage': wikipedia_async
             'App\Message\ParseWikipediaLanguagesMessage': wikipedia_async
             'App\Message\WordsPopularityScoreSetDispatchMessage': async
