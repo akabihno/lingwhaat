@@ -66,6 +66,8 @@ class LanguageMappings
     public const string KAZAKH_LANGUAGE_NAME = 'Kazakh';
     public const string KOMI_LANGUAGE_CODE = 'kv';
     public const string KOMI_LANGUAGE_NAME = 'Komi';
+    public const string KOREAN_LANGUAGE_CODE = 'ko';
+    public const string KOREAN_LANGUAGE_NAME = 'Korean';
     public const string LATIN_LANGUAGE_CODE = 'la';
     public const string LATIN_LANGUAGE_NAME = 'Latin';
     public const string LATVIAN_LANGUAGE_CODE = 'lv';
@@ -149,6 +151,7 @@ class LanguageMappings
             self::JAPANESE_LANGUAGE_CODE,
             self::KAZAKH_LANGUAGE_CODE,
             self::KOMI_LANGUAGE_CODE,
+            self::KOREAN_LANGUAGE_CODE,
             self::LATIN_LANGUAGE_CODE,
             self::LATVIAN_LANGUAGE_CODE,
             self::LITHUANIAN_LANGUAGE_CODE,
@@ -209,6 +212,7 @@ class LanguageMappings
             self::JAPANESE_LANGUAGE_CODE => 'App\Entity\JapaneseLanguageEntity',
             self::KAZAKH_LANGUAGE_CODE => 'App\Entity\KazakhLanguageEntity',
             self::KOMI_LANGUAGE_CODE => 'App\Entity\KomiLanguageEntity',
+            self::KOREAN_LANGUAGE_CODE => 'App\\Entity\\KoreanLanguageEntity',
             self::LATIN_LANGUAGE_CODE => 'App\Entity\LatinLanguageEntity',
             self::LATVIAN_LANGUAGE_CODE => 'App\Entity\LatvianLanguageEntity',
             self::LITHUANIAN_LANGUAGE_CODE => 'App\Entity\LithuanianLanguageEntity',
@@ -272,6 +276,7 @@ class LanguageMappings
             'JapaneseLanguageEntity' => self::JAPANESE_LANGUAGE_CODE,
             'KazakhLanguageEntity' => self::KAZAKH_LANGUAGE_CODE,
             'KomiLanguageEntity' => self::KOMI_LANGUAGE_CODE,
+            'KoreanLanguageEntity' => self::KOREAN_LANGUAGE_CODE,
             'LatinLanguageEntity' => self::LATIN_LANGUAGE_CODE,
             'LatvianLanguageEntity' => self::LATVIAN_LANGUAGE_CODE,
             'LithuanianLanguageEntity' => self::LITHUANIAN_LANGUAGE_CODE,
@@ -340,6 +345,7 @@ class LanguageMappings
             self::JAPANESE_LANGUAGE_NAME => self::JAPANESE_LANGUAGE_CODE,
             self::KAZAKH_LANGUAGE_NAME => self::KAZAKH_LANGUAGE_CODE,
             self::KOMI_LANGUAGE_NAME => self::KOMI_LANGUAGE_CODE,
+            self::KOREAN_LANGUAGE_NAME => self::KOREAN_LANGUAGE_CODE,
             self::LATIN_LANGUAGE_NAME => self::LATIN_LANGUAGE_CODE,
             self::LATVIAN_LANGUAGE_NAME => self::LATVIAN_LANGUAGE_CODE,
             self::LITHUANIAN_LANGUAGE_NAME => self::LITHUANIAN_LANGUAGE_CODE,

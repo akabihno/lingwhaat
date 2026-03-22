@@ -65,4 +65,6 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_pali_language TO '${MYSQL_
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_finnish_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_catalan_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_bulgarian_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_korean_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.korean_links TO '${MYSQL_WEB_USER}'@'%';
 FLUSH PRIVILEGES;
