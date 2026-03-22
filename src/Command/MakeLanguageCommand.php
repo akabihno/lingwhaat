@@ -100,18 +100,24 @@ class MakeLanguageCommand extends Command
             return Command::FAILURE;
         }
         $migrationFile = $matches[1];
-        $migrationVersion = 'DoctrineMigrations\\\\' . basename($migrationFile, '.php');
+        $migrationVersion = 'DoctrineMigrations' . '\\' . basename($migrationFile, '.php');
 
-        // Require the file explicitly — the autoloader was initialised before this file existed
-        require_once $migrationFile;
-
-        // 7. Execute the specific migration directly (migrate is unaware of files created mid-process)
+        // 7. Run the migration in a separate process — Doctrine's class registry is built at DI
+        // container init time, so any migration file created mid-process is invisible to the
+        // current process regardless of require_once.
         $io->section('Running migration...');
-        $exitCode = $this->getApplication()->find('doctrine:migrations:execute')->run(
-            new ArrayInput(['versions' => [$migrationVersion], '--up' => true, '--no-interaction' => true]),
-            $output
-        );
-        if ($exitCode !== Command::SUCCESS) {
+        $process = new \Symfony\Component\Process\Process([
+            PHP_BINARY,
+            __DIR__ . '/../../bin/console',
+            'doctrine:migrations:execute',
+            '--up',
+            '--no-interaction',
+            $migrationVersion,
+        ]);
+        $process->run(function ($type, $buffer) use ($output) {
+            $output->write($buffer);
+        });
+        if (!$process->isSuccessful()) {
             $io->error('Migration execution failed.');
             return Command::FAILURE;
         }
@@ -126,7 +132,7 @@ class MakeLanguageCommand extends Command
         $io->success("Word list fetched for '{$language}'");
 
         // 10. Register language in parse schedule and kick off processing immediately
-        $scheduleEntry = new LanguageParseScheduleEntity()->setLanguageName(strtolower($language));
+        $scheduleEntry = (new LanguageParseScheduleEntity())->setLanguageName(strtolower($language));
         $this->entityManager->persist($scheduleEntry);
         $this->entityManager->flush();
         $this->bus->dispatch(new ParseWiktionaryLanguagesMessage());
