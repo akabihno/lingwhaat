@@ -170,7 +170,7 @@ class MakeLanguageCommand extends Command
         // getEntityClassByLanguageCode()
         $content = $this->insertAlphabetically(
             $content,
-            "            self::{$constPrefix}_LANGUAGE_CODE => 'App\\\\Entity\\\\{$language}LanguageEntity',",
+            "            self::{$constPrefix}_LANGUAGE_CODE => 'App\\Entity\\{$language}LanguageEntity',",
             "/^            self::([A-Z_]+)_LANGUAGE_CODE => 'App/m",
             $language,
             true
