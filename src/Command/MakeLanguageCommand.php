@@ -90,13 +90,12 @@ class MakeLanguageCommand extends Command
             $diffOutput
         );
         $diffText = $diffOutput->fetch();
-        $output->write($diffText);
-        if ($exitCode !== Command::SUCCESS) {
-            $io->error('Migration generation failed.');
-            return Command::FAILURE;
-        }
+        $output->write($this->suppressMigrationWarnings($diffText));
         if (!preg_match('/Generated new migration class to "([^"]+)"/', $diffText, $matches)) {
-            $io->error('Could not parse migration file path from output.');
+            $io->error($exitCode !== Command::SUCCESS
+                ? 'Migration generation failed.'
+                : 'Could not parse migration file path from output.'
+            );
             return Command::FAILURE;
         }
         $migrationFile = $matches[1];
@@ -115,7 +114,7 @@ class MakeLanguageCommand extends Command
             $migrationVersion,
         ]);
         $process->run(function ($type, $buffer) use ($output) {
-            $output->write($buffer);
+            $output->write($this->suppressMigrationWarnings($buffer));
         });
         if (!$process->isSuccessful()) {
             $io->error('Migration execution failed.');
@@ -325,6 +324,11 @@ class MakeLanguageCommand extends Command
         $pdo->exec("GRANT SELECT,INSERT,UPDATE ON `{$this->dbName}`.`{$tableName}` TO '{$this->dbWebUser}'@'%'");
         $pdo->exec("GRANT SELECT,INSERT,UPDATE ON `{$this->dbName}`.`{$linksTableName}` TO '{$this->dbWebUser}'@'%'");
         $pdo->exec('FLUSH PRIVILEGES');
+    }
+
+    private function suppressMigrationWarnings(string $output): string
+    {
+        return preg_replace('/^\s*!\s*\[WARNING\][^\n]*previously executed migrations[^\n]*\n?/m', '', $output);
     }
 
     private function generateEntityTemplate(string $languageClass, string $tableName): string
