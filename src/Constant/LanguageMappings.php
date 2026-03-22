@@ -24,6 +24,8 @@ class LanguageMappings
     public const string BRETON_LANGUAGE_NAME = 'Breton';
     public const string BULGARIAN_LANGUAGE_CODE = 'bg';
     public const string BULGARIAN_LANGUAGE_NAME = 'Bulgarian';
+    public const string BURMESE_LANGUAGE_CODE = 'my';
+    public const string BURMESE_LANGUAGE_NAME = 'Burmese';
     public const string CATALAN_LANGUAGE_CODE = 'ca';
     public const string CATALAN_LANGUAGE_NAME = 'Catalan';
     public const string CZECH_LANGUAGE_CODE = 'cs';
@@ -110,6 +112,8 @@ class LanguageMappings
     public const string SWEDISH_LANGUAGE_NAME = 'Swedish';
     public const string TAGALOG_LANGUAGE_CODE = 'tl';
     public const string TAGALOG_LANGUAGE_NAME = 'Tagalog';
+    public const string TELUGU_LANGUAGE_CODE = 'te';
+    public const string TELUGU_LANGUAGE_NAME = 'Telugu';
     public const string TURKISH_LANGUAGE_CODE = 'tr';
     public const string TURKISH_LANGUAGE_NAME = 'Turkish';
     public const string UKRAINIAN_LANGUAGE_CODE = 'uk';
@@ -134,6 +138,7 @@ class LanguageMappings
             self::BENGALI_LANGUAGE_CODE,
             self::BRETON_LANGUAGE_CODE,
             self::BULGARIAN_LANGUAGE_CODE,
+            self::BURMESE_LANGUAGE_CODE,
             self::CATALAN_LANGUAGE_CODE,
             self::CZECH_LANGUAGE_CODE,
             self::DANISH_LANGUAGE_CODE,
@@ -177,6 +182,7 @@ class LanguageMappings
             self::SWAHILI_LANGUAGE_CODE,
             self::SWEDISH_LANGUAGE_CODE,
             self::TAGALOG_LANGUAGE_CODE,
+            self::TELUGU_LANGUAGE_CODE,
             self::TURKISH_LANGUAGE_CODE,
             self::UKRAINIAN_LANGUAGE_CODE,
             self::URDU_LANGUAGE_CODE,
@@ -197,6 +203,7 @@ class LanguageMappings
             self::BENGALI_LANGUAGE_CODE => 'App\Entity\BengaliLanguageEntity',
             self::BRETON_LANGUAGE_CODE => 'App\Entity\BretonLanguageEntity',
             self::BULGARIAN_LANGUAGE_CODE => 'App\Entity\BulgarianLanguageEntity',
+            self::BURMESE_LANGUAGE_CODE => 'App\\Entity\\BurmeseLanguageEntity',
             self::CATALAN_LANGUAGE_CODE => 'App\Entity\CatalanLanguageEntity',
             self::CZECH_LANGUAGE_CODE => 'App\Entity\CzechLanguageEntity',
             self::DANISH_LANGUAGE_CODE => 'App\Entity\DanishLanguageEntity',
@@ -240,6 +247,7 @@ class LanguageMappings
             self::SWAHILI_LANGUAGE_CODE => 'App\Entity\SwahiliLanguageEntity',
             self::SWEDISH_LANGUAGE_CODE => 'App\Entity\SwedishLanguageEntity',
             self::TAGALOG_LANGUAGE_CODE => 'App\Entity\TagalogLanguageEntity',
+            self::TELUGU_LANGUAGE_CODE => 'App\\Entity\\TeluguLanguageEntity',
             self::TURKISH_LANGUAGE_CODE => 'App\Entity\TurkishLanguageEntity',
             self::UKRAINIAN_LANGUAGE_CODE => 'App\Entity\UkrainianLanguageEntity',
             self::URDU_LANGUAGE_CODE => 'App\Entity\UrduLanguageEntity',
@@ -263,6 +271,7 @@ class LanguageMappings
             'BengaliLanguageEntity' => self::BENGALI_LANGUAGE_CODE,
             'BretonLanguageEntity' => self::BRETON_LANGUAGE_CODE,
             'BulgarianLanguageEntity' => self::BULGARIAN_LANGUAGE_CODE,
+            'BurmeseLanguageEntity' => self::BURMESE_LANGUAGE_CODE,
             'CatalanLanguageEntity' => self::CATALAN_LANGUAGE_CODE,
             'CzechLanguageEntity' => self::CZECH_LANGUAGE_CODE,
             'DanishLanguageEntity' => self::DANISH_LANGUAGE_CODE,
@@ -306,6 +315,7 @@ class LanguageMappings
             'SwahiliLanguageEntity' => self::SWAHILI_LANGUAGE_CODE,
             'SwedishLanguageEntity' => self::SWEDISH_LANGUAGE_CODE,
             'TagalogLanguageEntity' => self::TAGALOG_LANGUAGE_CODE,
+            'TeluguLanguageEntity' => self::TELUGU_LANGUAGE_CODE,
             'TurkishLanguageEntity' => self::TURKISH_LANGUAGE_CODE,
             'UkrainianLanguageEntity' => self::UKRAINIAN_LANGUAGE_CODE,
             'UrduLanguageEntity' => self::URDU_LANGUAGE_CODE,
@@ -334,6 +344,7 @@ class LanguageMappings
             self::BENGALI_LANGUAGE_NAME => self::BENGALI_LANGUAGE_CODE,
             self::BRETON_LANGUAGE_NAME => self::BRETON_LANGUAGE_CODE,
             self::BULGARIAN_LANGUAGE_NAME => self::BULGARIAN_LANGUAGE_CODE,
+            self::BURMESE_LANGUAGE_NAME => self::BURMESE_LANGUAGE_CODE,
             self::CATALAN_LANGUAGE_NAME => self::CATALAN_LANGUAGE_CODE,
             self::CZECH_LANGUAGE_NAME => self::CZECH_LANGUAGE_CODE,
             self::DANISH_LANGUAGE_NAME => self::DANISH_LANGUAGE_CODE,
@@ -377,6 +388,7 @@ class LanguageMappings
             self::SWAHILI_LANGUAGE_NAME => self::SWAHILI_LANGUAGE_CODE,
             self::SWEDISH_LANGUAGE_NAME => self::SWEDISH_LANGUAGE_CODE,
             self::TAGALOG_LANGUAGE_NAME => self::TAGALOG_LANGUAGE_CODE,
+            self::TELUGU_LANGUAGE_NAME => self::TELUGU_LANGUAGE_CODE,
             self::TURKISH_LANGUAGE_NAME => self::TURKISH_LANGUAGE_CODE,
             self::UKRAINIAN_LANGUAGE_NAME => self::UKRAINIAN_LANGUAGE_CODE,
             self::URDU_LANGUAGE_NAME => self::URDU_LANGUAGE_CODE,
