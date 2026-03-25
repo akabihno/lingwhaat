@@ -46,15 +46,15 @@
     "doctrine/doctrine-bundle": "^2.18.2",
     "doctrine/doctrine-migrations-bundle": "^3.7.0",
     "doctrine/orm": "^3.6.2",
-    "symfony/config": "^7.4.6",
-    "symfony/console": "^7.4.6",
-    "symfony/dependency-injection": "^7.4.6",
-    "symfony/dotenv": "^7.4.6",
+    "symfony/config": "^7.4.7",
+    "symfony/console": "^7.4.7",
+    "symfony/dependency-injection": "^7.4.7",
+    "symfony/dotenv": "^7.4.7",
     "symfony/flex": "^2.10.0",
-    "symfony/framework-bundle": "^7.4.6",
-    "symfony/http-foundation": "^7.4.6",
-    "symfony/http-kernel": "^7.4.6",
-    "symfony/http-client": "^7.4.6",
+    "symfony/framework-bundle": "^7.4.7",
+    "symfony/http-foundation": "^7.4.7",
+    "symfony/http-kernel": "^7.4.7",
+    "symfony/http-client": "^7.4.7",
     "symfony/routing": "^7.4.6",
     "symfony/runtime": "7.2.*",
     "symfony/twig-bundle": "^7.4.4",
@@ -64,11 +64,11 @@
     "symfony/uid": "^7.4.4",
     "symfony/rate-limiter": "v7.2.0",
     "symfony/lock": "^7.4.6",
-    "symfony/messenger": "^7.4.6",
+    "symfony/messenger": "^7.4.7",
     "symfony/redis-messenger": "^7.4.6",
     "symfony/scheduler": "^7.4.4",
     "symfony/var-exporter": "^7.4.0",
-    "twig/twig": "^3.23.0",
+    "twig/twig": "^3.24.0",
     "vlucas/phpdotenv": ">=5.6.3",
     "ext-mbstring": "*",
     "nelmio/api-doc-bundle": "^5.9.5",
@@ -79,7 +79,7 @@
     "ext-redis": "*"
   },
   "require-dev": {
-    "symfony/maker-bundle": "^1.66.0"
+    "symfony/maker-bundle": "^1.67.0"
   },
   "scripts": {
     "auto-scripts": {

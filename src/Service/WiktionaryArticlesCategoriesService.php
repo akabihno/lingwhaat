@@ -45,6 +45,10 @@ class WiktionaryArticlesCategoriesService extends AbstractWiktionaryParserServic
 
             $result = json_decode($output, true);
 
+            if (!isset($result["query"]["categorymembers"])) {
+                break;
+            }
+
             foreach ($result["query"]["categorymembers"] as $categoryMember) {
                 $title = $categoryMember["title"] ?? null;
                 if (!is_string($title) || $title === '') {

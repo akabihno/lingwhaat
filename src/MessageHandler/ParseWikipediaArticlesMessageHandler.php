@@ -2,6 +2,7 @@
 
 namespace App\MessageHandler;
 
+use App\Exception\WikipediaArticleLimitExceededException;
 use App\Message\ParseWikipediaArticlesMessage;
 use App\Service\Logging\ElasticsearchLogger;
 use App\Service\WikipediaPatternParserService;
@@ -31,6 +32,11 @@ class ParseWikipediaArticlesMessageHandler
 
             $this->logger->info(
                 sprintf('Successfully completed parsing for language: %s', $languageCode),
+                ['service' => '[ParseWikipediaArticlesMessageHandler]']
+            );
+        } catch (WikipediaArticleLimitExceededException $e) {
+            $this->logger->warning(
+                sprintf('Skipping Wikipedia parsing for language: %s. %s', $languageCode, $e->getMessage()),
                 ['service' => '[ParseWikipediaArticlesMessageHandler]']
             );
         } catch (\Exception $e) {
