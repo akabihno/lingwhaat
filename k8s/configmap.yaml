@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lingwhaat-config
+  namespace: lingwhaat
+data:
+  APP_ENV: "prod"
+  APP_DEBUG: "0"
+  DOMAIN: "lingwhaat.com"
+  DB_HOST: "mysql"
+  MYSQL_PORT: "3306"
+  MYSQL_DATABASE: "lingwhaat"
+  RATE_LIMITER_WHITELISTED_IP: "127.0.0.1"
+  ELASTICSEARCH_HOST: "elasticsearch"
+  ELASTICSEARCH_PORT: "9200"
+  LOCK_DSN: "redis://redis:6379"
+  MESSENGER_TRANSPORT_DSN: "redis://redis:6379/messages"
+  MESSENGER_WIKTIONARY_TRANSPORT_DSN: "redis://redis:6379/wiktionary_async"
+  MESSENGER_WIKIPEDIA_TRANSPORT_DSN: "redis://redis:6379/wikipedia_async"
+  MESSENGER_FAILED_DSN: "redis://redis:6379/failed"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+  namespace: lingwhaat
+data:
+  my.cnf: |
+    [mysqld]
+    general_log = on
+    general_log_file = /tmp/mysql.log

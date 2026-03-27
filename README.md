@@ -8,7 +8,7 @@ This project aims to detect the language of written text with high speed and acc
 - Support for 59 languages
 - IPA-based transliteration system
 - Data sourced from Wiktionary using MediaWiki APIs
-- Docker-based deployment
+- Kubernetes-based deployment
 
 ## Supported Languages
 
@@ -47,34 +47,196 @@ For a complete list of all source articles organized by language, see **[WORD_LI
 
 ## Requirements
 
-- Docker
+- k3s cluster (1 server node + agent nodes)
+- kubectl
+- Docker (on the machine used to build and push images)
+## Cluster Setup
+
+### Install k3s
+
+**Prerequisites:**
+edit /boot/firmware/cmdline.txt
+Add to the end of the existing line (do not add a new line):
+
+cgroup_memory=1 cgroup_enable=memory
+                  
+It should look something like:
+console=serial0,115200 console=tty1 root=PARTUUID=... rootfstype=ext4 fsck.repair=yes rootwait cgroup_memory=1 cgroup_enable=memory
+
+**On the server node (first Pi):**
+```bash
+curl -sfL https://get.k3s.io | sh -
+# Get the node token for joining agents
+sudo cat /var/lib/rancher/k3s/server/node-token
+```
+
+**On each agent node (remaining Pis):**
+```bash
+curl -sfL https://get.k3s.io | K3S_URL=https://<server-ip>:6443 K3S_TOKEN=<node-token> sh -
+```
+
+**Copy kubeconfig to your workstation:**
+```bash
+scp <server-ip>:/etc/rancher/k3s/k3s.yaml ~/.kube/config
+# Replace 127.0.0.1 with the server Pi's IP
+sudo sed -i 's/127.0.0.1/192.168.0.197/' ~/.kube/config/k3s.yaml
+```
+
+### Configure the local registry on each node
+
+Allow k3s to pull from the local insecure registry. Run on **every Pi**:
+
+```bash
+sudo mkdir -p /etc/rancher/k3s
+sudo tee /etc/rancher/k3s/registries.yaml > /dev/null <<EOF
+mirrors:
+  "registry.local:30500":
+    endpoint:
+      - "http://<server-ip>:30500"
+EOF
+sudo systemctl restart k3s      # server node
+# or
+sudo systemctl restart k3s-agent  # agent nodes
+```
+
+Also add the registry hostname to `/etc/hosts` on every Pi and on any machine used to build images:
+
+```bash
+echo "<server-ip> registry.local" | sudo tee -a /etc/hosts
+```
 
 ## Installation & Setup
 
-1. **Copy and configure the environment file:**
-   ```bash
-   cp env.dist .env
-   # Edit .env and adjust values for your needs
-   ```
+### 1. Configure secrets
 
-2. **Start Docker containers:**
-   ```bash
-   docker compose up -d
-   ```
+Edit `k8s/secret.yaml` and fill in real values for all credentials before applying.
 
-3. **Load environment variables:**
-   ```bash
-   export $(grep -v '^#' .env | xargs)
-   ```
+### 2. Start the registry
 
-4. **Import database:**
-   ```bash
-   docker exec -i database mysql --default-character-set=utf8mb4 --force -u root -p"${MYSQL_ROOT_PASSWORD}" -P "${MYSQL_PORT}" "${MYSQL_DATABASE}" < imports/import.sql
-   ```
+The registry must be running before you can push images to it:
 
-5. **Create web user:**
-   ```bash
-   envsubst < imports/create_web_user.sql | docker exec -i database mysql --default-character-set=utf8mb4 --force -u root -p"${MYSQL_ROOT_PASSWORD}" -P "${MYSQL_PORT}" "${MYSQL_DATABASE}"
-   ```
+```bash
+kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/registry.yaml
+kubectl rollout status -n lingwhaat deployment/registry
+```
 
-**Note:** The database listens on port 3327 by default. To change this, adjust the port in `my.cnf`.
+### 3. Build and push images
+
+Run on the machine used for building (must have Docker and `registry.local` in `/etc/hosts`):
+
+```bash
+docker build -t registry.local:30500/lingwhaat-php:latest -f Dockerfile-php .
+docker push registry.local:30500/lingwhaat-php:latest
+```
+If you are getting error:
+failed to do request: Head "https://registry.local:30500/v2/lingwhaat-php/blobs/sha256:b66328bafebb08ae7289fb693d3675d30ca74311ce321f3e8cb3701d1f7ed5b2": http: server gave HTTP response to HTTPS client
+
+do:
+sudo nano /etc/docker/daemon.json
+
+Add:
+{
+  "insecure-registries": ["registry.local:30500"]
+}
+
+Then restart Docker and retry:
+
+sudo systemctl restart docker
+docker push registry.local:30500/lingwhaat-php:latest
+
+### 4. Apply remaining manifests
+
+```bash
+kubectl apply -f k8s/
+```
+
+### 5. Run database migrations
+
+```bash
+kubectl exec -n lingwhaat deploy/web -- php bin/console doctrine:migrations:migrate --no-interaction
+```
+
+### Deploying updates
+
+After code changes, rebuild and push the image, then restart the affected deployments:
+
+```bash
+docker build -t registry.local:30500/lingwhaat-php:latest -f Dockerfile-php .
+docker push registry.local:30500/lingwhaat-php:latest
+kubectl rollout restart -n lingwhaat deployment/web deployment/scheduler deployment/messenger deployment/messenger-wiktionary deployment/messenger-wikipedia
+```
+
+## Services
+
+| Service | Type | Port |
+|---|---|---|
+| web (HTTP) | NodePort | 30080 |
+| web (HTTPS) | NodePort | 30443 |
+| redis | ClusterIP | 6379 |
+| elasticsearch | NodePort | 30920 |
+| kibana | NodePort | 30561 |
+| argocd | NodePort | 30808 |
+
+Database is hosted on AWS RDS and accessed via `DATABASE_URL` in `k8s/secret.yaml`.
+
+Elasticsearch and Kibana run in the `lingwhaat` namespace and are accessible internally via `elasticsearch:9200`.
+
+## ArgoCD
+
+### Install
+
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl wait --for=condition=available --timeout=180s -n argocd deployment/argocd-server
+kubectl apply -f k8s/argocd-nodeport.yaml
+```
+
+### Access
+
+Open `https://<pi-ip>:30808` in your browser and accept the self-signed certificate warning.
+
+- **Username:** `admin`
+- **Password:** retrieve with:
+
+```bash
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+```
+
+Change the password after first login via the ArgoCD UI under **User Info → Update Password**.
+
+## Kubernetes Dashboard
+
+### Install
+
+```bash
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+kubectl create serviceaccount dashboard-admin -n kubernetes-dashboard
+kubectl create clusterrolebinding dashboard-admin --clusterrolebinding=cluster-admin --serviceaccount=kubernetes-dashboard:dashboard-admin
+```
+
+### Access
+
+```bash
+kubectl -n kubernetes-dashboard create token dashboard-admin
+kubectl port-forward -n kubernetes-dashboard svc/kubernetes-dashboard 8443:443 --address 0.0.0.0
+```
+
+Open `https://<pi-ip>:8443`, accept the self-signed certificate warning, and paste the token.
+
+## Troubleshooting
+
+**Redeploy after code changes:**
+```bash
+docker build -t registry.local:30500/lingwhaat-php:latest -f Dockerfile-php .
+docker push registry.local:30500/lingwhaat-php:latest
+kubectl apply -f k8s/configmap.yaml
+kubectl rollout restart -n lingwhaat deployment/web deployment/messenger deployment/messenger-wiktionary deployment/messenger-wikipedia deployment/scheduler
+```
+
+**Check pod status:**
+```bash
+kubectl get pods -n lingwhaat
+kubectl logs -n lingwhaat -l app=web --tail=30
+```

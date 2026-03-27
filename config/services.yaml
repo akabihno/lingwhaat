@@ -35,6 +35,10 @@ services:
     Elastica\Client:
       factory: [ 'App\Service\Search\ElasticsearchClientFactory', 'create' ]
 
+    App\Service\Search\ElasticsearchBulkStreamer:
+      arguments:
+        $esHost: 'http://%env(ELASTICSEARCH_HOST)%:%env(ELASTICSEARCH_PORT)%'
+
     App\Service\Logging\ElasticsearchLogger:
       arguments:
         $client: '@Elastica\Client'
