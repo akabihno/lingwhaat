@@ -139,3 +139,5 @@ docker exec -it php-app php bin/console app:wikipedia-pattern-index --window-siz
 
 Reindex all words for all languages:
 docker exec -it php-app php bin/console language:reindex-words
+
+kubectl exec -it -n lingwhaat deploy/web -- php bin/console language:reindex-words
