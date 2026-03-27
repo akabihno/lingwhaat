@@ -1,0 +1,19 @@
+# Exposes ArgoCD server via NodePort after ArgoCD is installed.
+# Install ArgoCD first:
+#   kubectl create namespace argocd
+#   kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+#   kubectl wait --for=condition=available --timeout=120s -n argocd deployment/argocd-server
+apiVersion: v1
+kind: Service
+metadata:
+  name: argocd-server-nodeport
+  namespace: argocd
+spec:
+  selector:
+    app.kubernetes.io/name: argocd-server
+  ports:
+    - name: https
+      port: 443
+      targetPort: 8080
+      nodePort: 30808
+  type: NodePort

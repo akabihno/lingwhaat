@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduler
+  namespace: lingwhaat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scheduler
+  template:
+    metadata:
+      labels:
+        app: scheduler
+    spec:
+      containers:
+        - name: scheduler
+          image: registry.local:30500/lingwhaat-php:latest
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "scheduler_default", "-vv"]
+          envFrom:
+            - configMapRef:
+                name: lingwhaat-config
+            - secretRef:
+                name: lingwhaat-secrets
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "50m"
+            limits:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messenger
+  namespace: lingwhaat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: messenger
+  template:
+    metadata:
+      labels:
+        app: messenger
+    spec:
+      containers:
+        - name: messenger
+          image: registry.local:30500/lingwhaat-php:latest
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "async", "-vv"]
+          envFrom:
+            - configMapRef:
+                name: lingwhaat-config
+            - secretRef:
+                name: lingwhaat-secrets
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messenger-wiktionary
+  namespace: lingwhaat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: messenger-wiktionary
+  template:
+    metadata:
+      labels:
+        app: messenger-wiktionary
+    spec:
+      containers:
+        - name: messenger-wiktionary
+          image: registry.local:30500/lingwhaat-php:latest
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wiktionary_async", "-vv"]
+          envFrom:
+            - configMapRef:
+                name: lingwhaat-config
+            - secretRef:
+                name: lingwhaat-secrets
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messenger-wikipedia
+  namespace: lingwhaat
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: messenger-wikipedia
+  template:
+    metadata:
+      labels:
+        app: messenger-wikipedia
+    spec:
+      containers:
+        - name: messenger-wikipedia
+          image: registry.local:30500/lingwhaat-php:latest
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wikipedia_async", "-vv"]
+          envFrom:
+            - configMapRef:
+                name: lingwhaat-config
+            - secretRef:
+                name: lingwhaat-secrets
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"

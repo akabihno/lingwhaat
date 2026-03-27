@@ -1,0 +1,54 @@
+# After first deploy, run migrations:
+#   kubectl exec -n lingwhaat deploy/web -- php bin/console doctrine:migrations:migrate --no-interaction
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: lingwhaat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+        - name: web
+          image: registry.local:30500/lingwhaat-php:latest
+          ports:
+            - containerPort: 80
+            - containerPort: 443
+          envFrom:
+            - configMapRef:
+                name: lingwhaat-config
+            - secretRef:
+                name: lingwhaat-secrets
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+  namespace: lingwhaat
+spec:
+  selector:
+    app: web
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      nodePort: 30080
+    - name: https
+      port: 443
+      targetPort: 443
+      nodePort: 30443
+  type: NodePort

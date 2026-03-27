@@ -1,6 +1,13 @@
+# Stage 1: Install PHP dependencies
+FROM composer:2 AS vendor
+WORKDIR /app
+COPY composer.json ./
+COPY composer.loc[k] ./
+RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+
+# Stage 2: Final image
 FROM php:8.5-apache
 
-# Install Redis extension (skip if already installed)
 RUN pecl install redis || true
 RUN docker-php-ext-enable redis
 
@@ -15,10 +22,15 @@ RUN echo "PassEnv DOMAIN" >> /etc/apache2/apache2.conf
 COPY 000-default.conf /etc/apache2/sites-available/
 
 RUN mkdir -p /etc/ssl/certs
-COPY ssl-certs/* /etc/ssl/certs
+COPY ssl-certs/* /etc/ssl/certs/
+COPY ssl-certs /ssl-certs
 
 RUN a2ensite 000-default
 
-EXPOSE 80 443
-
 WORKDIR /var/www/html
+
+COPY --from=vendor /app/vendor ./vendor
+COPY . .
+RUN echo "APP_ENV=prod\nAPP_DEBUG=0" > .env
+
+EXPOSE 80 443
