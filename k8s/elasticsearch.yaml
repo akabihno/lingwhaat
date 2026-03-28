@@ -17,7 +17,6 @@ spec:
     spec:
       securityContext:
         fsGroup: 1000
-        runAsUser: 1000
       initContainers:
         - name: increase-vm-max-map-count
           image: busybox
