@@ -95,36 +95,17 @@ watch -n 1 nvidia-smi
 GPU-Util: 70-95%
 Memory-Usage: 2-5 GiB / 23 GiB
 
-# Export database:
-
-export $(grep -v '^#' .env | xargs)
-
-docker exec -i database mysqldump --default-character-set=utf8mb4 --force -u root -p"${MYSQL_ROOT_PASSWORD}" -P "${MYSQL_PORT}" "${MYSQL_DATABASE}" > export.sql
-
-# Migration to RDS:
-
-export $(grep -v '^#' .env | xargs)
-docker exec -i database mysql -h lingwhaat-db.xxxx.us-east-1.rds.amazonaws.com -P 3306 -u root -p'<your_password>' "${MYSQL_DATABASE}" < imports/import.sql
-
-envsubst < imports/create_web_user.sql | docker exec -i database mysql -h lingwhaat-db.xxxx.us-east-1.rds.amazonaws.com -P 3306 -u root -p'<your_password>' "${MYSQL_DATABASE}"
-
-Docker compose with RDS:
-docker compose --profile rds up -d
-
-Docker compose with local DB:
-docker compose --profile local up -d
-
 # Add new language:
 
 Execute (creates entity/repository, updates LanguageMappings, runs migration, grants DB access, updates README):
-docker exec -it php-app php bin/console make:language finnish fi
+kubectl exec -it -n lingwhaat deploy/web -- php bin/console make:language finnish fi
 
 Generate docs for language:
-docker exec -it php-app php utils/generate_docs.php finnish
-docker exec -it php-app php utils/generate_docs.php hebrew true // for languages with right-to-left writing
+kubectl exec -it -n lingwhaat deploy/web -- utils/generate_docs.php finnish
+kubectl exec -it -n lingwhaat deploy/web -- php utils/generate_docs.php hebrew true // for languages with right-to-left writing
 
 Or, for paginated:
-docker exec -it php-app php utils/generate_docs_paginated.php vietnamese
+kubectl exec -it -n lingwhaat deploy/web -- php utils/generate_docs_paginated.php vietnamese
 
 # Prepare to run search against Wikipedia canonical patterns with sliding window:
 
@@ -135,9 +116,11 @@ Set popularity score for language:
 INSERT INTO lingwhaat.words_popularity_score_set_schedule SET language_code = 'fi';
 
 Create canonical patterns for language:
-docker exec -it php-app php bin/console app:wikipedia-pattern-index --window-size 18 --language-code fi
+kubectl exec -it -n lingwhaat deploy/web -- php bin/console app:wikipedia-pattern-index --window-size 18 --language-code fi
 
 Reindex all words for all languages:
-docker exec -it php-app php bin/console language:reindex-words
-
 kubectl exec -it -n lingwhaat deploy/web -- php bin/console language:reindex-words
+
+
+Also note: for future deployments, if a pod gets scheduled back onto raspberrypi and hits ImagePullBackOff, just delete that pod and the scheduler will place it on another    
+  node. You can also add a node preference annotation to the web deployment to avoid raspberrypi for now, if you'd like.
