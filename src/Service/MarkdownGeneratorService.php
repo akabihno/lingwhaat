@@ -44,6 +44,10 @@ class MarkdownGeneratorService
             return false;
         });
 
+        $this->createPaginatedDirectory($language);
+
+        $generatedLinks = [];
+
         foreach ($letters as $letterArr) {
             foreach ($letterArr as $key => $letter) {
                 $query = 'SELECT DISTINCT link FROM lingwhaat.'
@@ -53,6 +57,7 @@ class MarkdownGeneratorService
 
                 if (!empty($links)) {
                     $this->writeFileHeader($language, $letter);
+                    $generatedLinks[] = $this->getLetterLink($language, $letter);
                     $this->echoLetterLineForMarkdown($language, $letter);
 
                     foreach ($links as $linkArr) {
@@ -62,6 +67,10 @@ class MarkdownGeneratorService
                     }
                 }
             }
+        }
+
+        if (!empty($generatedLinks)) {
+            $this->updateWordListsMarkdown($language, $generatedLinks);
         }
     }
 
@@ -159,12 +168,36 @@ class MarkdownGeneratorService
 
     protected function getFileName(string $language, string $letter): string
     {
-        return '/var/www/html/docs/Unsorted/'.self::WIKTIONARY_PREFIX.$language.'_'.$letter.'.md';
+        return '/var/www/html/docs/'.ucfirst($language).'/'.self::WIKTIONARY_PREFIX.$language.'_'.$letter.'.md';
+    }
+
+    protected function getLetterLink(string $language, string $letter): string
+    {
+        return sprintf("[%s](docs/%s/%s%s_%s.md)", $letter, ucfirst($language), self::WIKTIONARY_PREFIX, $language, $letter);
     }
 
     protected function echoLetterLineForMarkdown(string $language, string $letter): void
     {
-        echo sprintf("[%s](docs/%s/%s%s_%s.md),", $letter, ucfirst($language), self::WIKTIONARY_PREFIX, $language, $letter)."\n";
+        echo $this->getLetterLink($language, $letter).",\n";
+    }
+
+    protected function updateWordListsMarkdown(string $language, array $links): void
+    {
+        $path = '/var/www/html/WORD_LISTS.md';
+        $languageTitle = ucfirst($language);
+        $section = "* {$languageTitle}:\n".implode(",\n", $links);
+
+        $content = file_get_contents($path);
+        $pattern = '/\* '.preg_quote($languageTitle, '/').':\n.*?(?=\n\* |\z)/s';
+
+        if (preg_match($pattern, $content)) {
+            $content = preg_replace($pattern, $section, $content);
+        } else {
+            $content .= "\n".$section;
+        }
+
+        file_put_contents($path, $content);
+        echo "Updated WORD_LISTS.md for {$languageTitle}\n";
     }
 
     protected function createPaginatedDirectory(string $language): void

@@ -105,6 +105,32 @@ Also add the registry hostname to `/etc/hosts` on every Pi and on any machine us
 echo "<server-ip> registry.local" | sudo tee -a /etc/hosts
 ```
 
+### Install Longhorn (distributed storage)
+
+Longhorn provides persistent volumes replicated across nodes, so data survives node failures. Required for Elasticsearch indexes and generated docs.
+
+**Prerequisites — run on every node:**
+```bash
+sudo apt-get install -y open-iscsi
+sudo systemctl enable --now iscsid
+```
+
+**Install Longhorn:**
+```bash
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.7.2/deploy/longhorn.yaml
+kubectl -n longhorn-system rollout status deploy/longhorn-manager
+```
+
+**Verify all pods are running:**
+```bash
+kubectl get pods -n longhorn-system
+```
+
+> If the `longhorn-system` namespace gets stuck in `Terminating` after a delete, force-remove its finalizer:
+> ```bash
+> kubectl get namespace longhorn-system -o json | python3 -c "import sys,json; d=json.load(sys.stdin); d=d['items'][0] if d.get('kind')=='List' else d; d['spec']['finalizers']=[]; print(json.dumps(d))" | kubectl replace --raw /api/v1/namespaces/longhorn-system/finalize -f -
+> ```
+
 ## Installation & Setup
 
 ### 1. Configure secrets
