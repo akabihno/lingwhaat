@@ -1,0 +1,18 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: lingwhaat
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/akabihno/lingwhaat
+    targetRevision: main
+    path: k8s
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: lingwhaat
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
