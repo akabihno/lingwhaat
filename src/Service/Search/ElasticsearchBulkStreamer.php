@@ -12,9 +12,9 @@ class ElasticsearchBulkStreamer
 {
     public function __construct(
         protected HttpClientInterface $client,
-        protected string $esHost = 'http://localhost:9200'
-    )
-    {
+        protected string $esHost = 'http://localhost:9200',
+        protected int $timeout = 300,
+    ) {
     }
 
     /**
@@ -35,6 +35,8 @@ class ElasticsearchBulkStreamer
         $response = $this->client->request('POST', "{$this->esHost}/_bulk", [
             'body' => $body,
             'headers' => ['Content-Type' => 'application/x-ndjson'],
+            'timeout' => $this->timeout,
+            'max_duration' => $this->timeout,
         ]);
 
         if ($response->getStatusCode() >= 300) {
