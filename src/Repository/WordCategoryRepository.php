@@ -48,6 +48,19 @@ class WordCategoryRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /**
+     * @return string[]
+     */
+    public function findDistinctLanguageCodes(): array
+    {
+        $rows = $this->createQueryBuilder('wc')
+            ->select('DISTINCT wc.languageCode')
+            ->getQuery()
+            ->getScalarResult();
+
+        return array_column($rows, 'languageCode');
+    }
+
     public function upsert(WordCategoryEntity $entity): WordCategoryEntity
     {
         $em = $this->getEntityManager();
