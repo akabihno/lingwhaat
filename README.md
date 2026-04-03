@@ -185,14 +185,6 @@ kubectl exec -n lingwhaat deploy/web -- php bin/console doctrine:migrations:migr
 
 ### Deploying updates
 
-After code changes, rebuild and push the image, then restart the affected deployments:
-
-```bash
-docker build -t registry.local:30500/lingwhaat-php:latest -f Dockerfile-php .
-docker push registry.local:30500/lingwhaat-php:latest
-kubectl rollout restart -n lingwhaat deployment/web deployment/scheduler deployment/messenger deployment/messenger-wiktionary deployment/messenger-wikipedia
-```
-
 # 1. Build the image on the k3s node (or locally if node is reachable)
 docker build -f Dockerfile-php -t registry.local:30500/lingwhaat-php:latest .
 
