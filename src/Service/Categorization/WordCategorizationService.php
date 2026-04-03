@@ -8,7 +8,7 @@ class WordCategorizationService
 {
     private const CLAUDE_API_URL = 'https://api.anthropic.com/v1/messages';
     private const MODEL = 'claude-opus-4-6';
-    private const MAX_TOKENS = 16384;
+    private const MAX_TOKENS = 8096;
 
     private string $systemPrompt;
 
@@ -51,6 +51,14 @@ class WordCategorizationService
                 ],
             ],
         ]);
+
+        if ($response->getStatusCode() >= 400) {
+            throw new \RuntimeException(sprintf(
+                'Anthropic API error %d: %s',
+                $response->getStatusCode(),
+                $response->getContent(false)
+            ));
+        }
 
         $data = $response->toArray();
         $content = $data['content'][0]['text'] ?? '';

@@ -34,7 +34,7 @@ class CategorizeWordsCommand extends Command
     {
         $this
             ->addArgument('languageCode', InputArgument::REQUIRED, 'Language code to process (e.g. en, de, nl)')
-            ->addOption('batch-size', null, InputOption::VALUE_REQUIRED, 'Words per Claude API call', 20)
+            ->addOption('batch-size', null, InputOption::VALUE_REQUIRED, 'Words per Claude API call', 5)
             ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Max words to process (0 = all)', 0)
             ->addOption('offset', null, InputOption::VALUE_REQUIRED, 'Start from this offset in the word list', 0)
             ->addOption('skip-existing', null, InputOption::VALUE_NONE, 'Skip words that already have category data');
