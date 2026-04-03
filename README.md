@@ -205,12 +205,12 @@ kubectl rollout restart deployment/web -n lingwhaat
 # 4. Watch until ready
 kubectl rollout status deployment/web -n lingwhaat
 
-If you also have new migrations (like the one just added):
+If you also have new migrations:
 
 # 5. Run migrations after the pod is up
 kubectl exec -n lingwhaat deploy/web -- php bin/console doctrine:migrations:migrate --no-interaction
 
-▎ Note: registry.local must resolve to the node's IP. If you're running the build on a separate machine, either add registry.local to /etc/hosts       
+Note: registry.local must resolve to the node's IP. If you're running the build on a separate machine, either add registry.local to /etc/hosts       
 pointing at the k3s node, or substitute the node's IP directly (e.g. 192.168.x.x:30500).
 
 ## Services
