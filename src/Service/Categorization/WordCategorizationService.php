@@ -838,7 +838,7 @@ jargon: 0=general/lay, 1=jargon/field-specific
 pidgin: 0=established/monolingual, 1=pidgin/contact language
 creolized: 0=pidgin/simplified, 1=creolized/nativized
 standardized: 0=non-standard/dialectal, 1=standardized/prescriptive
-elevated: 0=plain/vernacular, 1=elevated/high register
+elevatedRegister: 0=plain/vernacular, 1=elevated/high register
 vulgar: 0=refined/polite, 1=vulgar/crude language
 poetic: 0=prosaic/everyday language, 1=poetic/heightened language
 rhetorical: 0=plain/straightforward, 1=rhetorical/oratorical
@@ -853,7 +853,7 @@ spiral: 0=straight/flat, 1=spiral/helical
 radial: 0=tangential/peripheral, 1=radial/center-outward
 tangential: 0=radial/center-outward, 1=tangential/peripheral
 refractive: 0=non-refractive/straight, 1=refractive/bending light
-reflective: 0=absorptive/non-reflective, 1=reflective/mirror-like
+lightReflective: 0=absorptive/non-reflective, 1=reflective/mirror-like
 absorptive: 0=reflective/non-absorptive, 1=absorptive/light-absorbing
 polarized: 0=unpolarized, 1=polarized/directional light
 diffuse: 0=focused/concentrated, 1=diffuse/scattered light
@@ -1052,12 +1052,12 @@ algorithmic: 0=organic/non-algorithmic, 1=algorithmic/ranked
 curated: 0=uncurated/raw, 1=curated/editorially selected
 crowdsourced: 0=top-down/produced, 1=crowdsourced/user-generated
 ephemeralContent: 0=permanent/archived, 1=ephemeral/disappearing content
-relativistic: 0=Newtonian/classical, 1=relativistic/Einstein
+physicsRelativistic: 0=Newtonian/classical, 1=relativistic/Einstein
 thermodynamic: 0=non-thermodynamic, 1=thermodynamic/heat-related
 electromagnetic: 0=non-electromagnetic, 1=electromagnetic/EM-related
 acoustic: 0=non-acoustic/vibrationless, 1=acoustic/sound-wave
 optical: 0=non-optical/non-light, 1=optical/light-related
-nuclear: 0=non-nuclear/chemical, 1=nuclear/atomic-core
+nuclearPhysics: 0=non-nuclear/chemical, 1=nuclear/atomic-core
 plasma: 0=solid/liquid, 1=plasma/ionized gas
 entropic: 0=low-entropy/ordered, 1=entropic/disordered
 kinetic: 0=potential/static energy, 1=kinetic/motion energy

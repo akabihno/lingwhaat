@@ -1630,7 +1630,7 @@ class WordCategoryData
     /** 0=non-standard/dialectal, 1=standardized/prescriptive */
     public ?float $standardized = null;
     /** 0=plain/vernacular, 1=elevated/high register */
-    public ?float $elevated = null;
+    public ?float $elevatedRegister = null;
     /** 0=refined/polite, 1=vulgar/crude language */
     public ?float $vulgar = null;
     /** 0=prosaic/everyday language, 1=poetic/heightened language */
@@ -1664,7 +1664,7 @@ class WordCategoryData
     /** 0=non-refractive/straight, 1=refractive/bending light */
     public ?float $refractive = null;
     /** 0=absorptive/non-reflective, 1=reflective/mirror-like */
-    public ?float $reflective = null;
+    public ?float $lightReflective = null;
     /** 0=reflective/non-absorptive, 1=absorptive/light-absorbing */
     public ?float $absorptive = null;
     /** 0=unpolarized, 1=polarized/directional light */
@@ -2102,7 +2102,7 @@ class WordCategoryData
 
     // ── Physics ─────────────────────────────────────────────────────────────
     /** 0=Newtonian/classical, 1=relativistic/Einstein */
-    public ?float $relativistic = null;
+    public ?float $physicsRelativistic = null;
     /** 0=non-thermodynamic, 1=thermodynamic/heat-related */
     public ?float $thermodynamic = null;
     /** 0=non-electromagnetic, 1=electromagnetic/EM-related */
@@ -2112,7 +2112,7 @@ class WordCategoryData
     /** 0=non-optical/non-light, 1=optical/light-related */
     public ?float $optical = null;
     /** 0=non-nuclear/chemical, 1=nuclear/atomic-core */
-    public ?float $nuclear = null;
+    public ?float $nuclearPhysics = null;
     /** 0=solid/liquid, 1=plasma/ionized gas */
     public ?float $plasma = null;
     /** 0=low-entropy/ordered, 1=entropic/disordered */
