@@ -62,3 +62,7 @@ services:
     App\EventSubscriber\ApiKeyAuthSubscriber:
         arguments:
             $apiKey: '%env(API_KEY)%'
+
+    App\Service\Categorization\WordCategorizationService:
+        arguments:
+            $anthropicApiKey: '%env(ANTHROPIC_API_KEY)%'
