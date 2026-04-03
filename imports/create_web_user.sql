@@ -4,6 +4,7 @@ GRANT CREATE,ALTER,INDEX,SELECT,UPDATE,REFERENCES ON lingwhaat.* TO '${MYSQL_WEB
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.wikipedia_article TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.wikipedia_pattern_parse_schedule TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.words_popularity_score_set_schedule TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.word_category TO '${MYSQL_WEB_USER}'@'%';
 
 GRANT SELECT,INSERT,UPDATE,DELETE ON lingwhaat.doctrine_migration_versions TO '${MYSQL_WEB_USER}'@'%';
 
