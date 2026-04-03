@@ -213,6 +213,20 @@ kubectl exec -n lingwhaat deploy/web -- php bin/console doctrine:migrations:migr
 Note: registry.local must resolve to the node's IP. If you're running the build on a separate machine, either add registry.local to /etc/hosts       
 pointing at the k3s node, or substitute the node's IP directly (e.g. 192.168.x.x:30500).
 
+### Secrets
+
+# .env file is not used anymore
+
+# Add a secret
+```bash
+kubectl patch secret lingwhaat-secrets -n lingwhaat --type='merge' -p '{"stringData":{"API_KEY":"xxx"}}'
+```
+
+# List (decode) secrets
+```bash
+kubectl get secret lingwhaat-secrets -n lingwhaat -o json | python3 -c "import sys,json,base64; d=json.load(sys.stdin)['data']; [print(f'{k}={base64.b64decode(v).decode()}') for k,v in d.items()]"
+```
+
 ## Services
 
 | Service | Type | Port |
