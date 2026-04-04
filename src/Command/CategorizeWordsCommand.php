@@ -6,6 +6,8 @@ use App\Constant\LanguageMappings;
 use App\Entity\WordCategoryEntity;
 use App\Repository\AbstractLanguageRepository;
 use App\Repository\WordCategoryRepository;
+use App\Service\Categorization\OpenAIWordCategorizationService;
+use App\Service\Categorization\WordCategorizationInterface;
 use App\Service\Categorization\WordCategorizationService;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -18,14 +20,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:categorize-words',
-    description: 'Fetch words for a language and assign semantic category scores via Claude API',
+    description: 'Fetch words for a language and assign semantic category scores via AI API',
 )]
 class CategorizeWordsCommand extends Command
 {
     public function __construct(
         private readonly ManagerRegistry $registry,
         private readonly WordCategoryRepository $wordCategoryRepository,
-        private readonly WordCategorizationService $categorizationService,
+        private readonly WordCategorizationService $anthropicService,
+        private readonly OpenAIWordCategorizationService $openaiService,
     ) {
         parent::__construct();
     }
@@ -34,10 +37,11 @@ class CategorizeWordsCommand extends Command
     {
         $this
             ->addArgument('languageCode', InputArgument::REQUIRED, 'Language code to process (e.g. en, de, nl)')
-            ->addOption('batch-size', null, InputOption::VALUE_REQUIRED, 'Words per Claude API call', 5)
+            ->addOption('batch-size', null, InputOption::VALUE_REQUIRED, 'Words per API call', 5)
             ->addOption('limit', null, InputOption::VALUE_REQUIRED, 'Max words to process (0 = all)', 0)
             ->addOption('offset', null, InputOption::VALUE_REQUIRED, 'Start from this offset in the word list', 0)
-            ->addOption('skip-existing', null, InputOption::VALUE_NONE, 'Skip words that already have category data');
+            ->addOption('skip-existing', null, InputOption::VALUE_NONE, 'Skip words that already have category data')
+            ->addOption('provider', null, InputOption::VALUE_REQUIRED, 'AI provider to use: anthropic or openai', 'anthropic');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -49,6 +53,13 @@ class CategorizeWordsCommand extends Command
         $limit = (int) $input->getOption('limit');
         $offset = (int) $input->getOption('offset');
         $skipExisting = $input->getOption('skip-existing');
+        $provider = strtolower((string) $input->getOption('provider'));
+
+        $service = $this->resolveService($provider);
+        if ($service === null) {
+            $io->error("Unknown provider '$provider'. Use 'anthropic' or 'openai'.");
+            return Command::FAILURE;
+        }
 
         $entityClass = LanguageMappings::getEntityClassByLanguageCode($languageCode);
         if ($entityClass === null) {
@@ -60,7 +71,7 @@ class CategorizeWordsCommand extends Command
         $repository = $this->registry->getRepository($entityClass);
 
         $fetchLimit = $limit > 0 ? $limit : AbstractLanguageRepository::PRONUNCIATION_MAX_RESULTS;
-        $io->info("Fetching up to $fetchLimit words for language '$languageCode' (offset $offset)…");
+        $io->info("Fetching up to $fetchLimit words for language '$languageCode' (offset $offset) using $provider…");
 
         $words = $repository->findAllNamesIpaAndScore($fetchLimit, $offset);
 
@@ -90,7 +101,7 @@ class CategorizeWordsCommand extends Command
             $wordNames = array_column($batch, 'name');
 
             try {
-                $categorized = $this->categorizationService->categorize($wordNames);
+                $categorized = $service->categorize($wordNames);
             } catch (\Throwable $e) {
                 $io->newLine();
                 $io->warning(sprintf('Batch failed: %s — skipping %d words', $e->getMessage(), count($batch)));
@@ -137,5 +148,14 @@ class CategorizeWordsCommand extends Command
         ));
 
         return Command::SUCCESS;
+    }
+
+    private function resolveService(string $provider): ?WordCategorizationInterface
+    {
+        return match ($provider) {
+            'anthropic' => $this->anthropicService,
+            'openai'    => $this->openaiService,
+            default     => null,
+        };
     }
 }

@@ -67,6 +67,10 @@ services:
         arguments:
             $anthropicApiKey: '%env(ANTHROPIC_API_KEY)%'
 
+    App\Service\Categorization\OpenAIWordCategorizationService:
+        arguments:
+            $openaiApiKey: '%env(OPENAI_API_KEY)%'
+
     App\Service\Search\WordCategorySearchService:
         arguments:
             $esHost: 'http://%env(ELASTICSEARCH_HOST)%:%env(ELASTICSEARCH_PORT)%'
