@@ -6,9 +6,9 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class OpenAIWordCategorizationService extends AbstractWordCategorizationService
 {
-    private const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
-    private const MODEL = 'gpt-4o';
-    private const MAX_TOKENS = 16384;
+    private const string OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
+    private const string MODEL = 'gpt-4o-mini';
+    private const int MAX_TOKENS = 16384;
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
