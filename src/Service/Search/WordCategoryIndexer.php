@@ -77,17 +77,28 @@ class WordCategoryIndexer
                 break;
             }
 
-            $docs = array_map(
-                fn(WordCategoryEntity $e) => new Document(
+            $docs = [];
+            foreach ($entities as $e) {
+                $vector = $this->buildVector($e->getCategories());
+                if ($this->isZeroMagnitude($vector)) {
+                    continue;
+                }
+                $docs[] = new Document(
                     self::buildDocId($e->getLanguageCode(), $e->getWord()),
-                    $this->buildDocData($e)
-                ),
-                $entities
-            );
+                    [
+                        'word' => $e->getWord(),
+                        'languageCode' => $e->getLanguageCode(),
+                        'categoryVector' => $vector,
+                        'categoriesCount' => count($e->getCategories()),
+                    ]
+                );
+            }
 
-            $index->addDocuments($docs);
+            if (!empty($docs)) {
+                $index->addDocuments($docs);
+            }
 
-            $total += count($entities);
+            $total += count($docs);
             $offset += self::BATCH_SIZE;
 
             unset($docs, $entities);
@@ -104,6 +115,11 @@ class WordCategoryIndexer
      */
     public function indexEntity(WordCategoryEntity $entity): void
     {
+        $vector = $this->buildVector($entity->getCategories());
+        if ($this->isZeroMagnitude($vector)) {
+            return;
+        }
+
         $index = $this->esClient->getIndex(self::INDEX_NAME);
         $doc = new Document(
             self::buildDocId($entity->getLanguageCode(), $entity->getWord()),
@@ -142,6 +158,16 @@ class WordCategoryIndexer
     public function getClient(): Client
     {
         return $this->esClient;
+    }
+
+    private function isZeroMagnitude(array $vector): bool
+    {
+        foreach ($vector as $v) {
+            if ($v > 0.0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private function buildDocData(WordCategoryEntity $entity): array
