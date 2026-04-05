@@ -71,7 +71,7 @@ class CategorizeWordsCommand extends Command
         $repository = $this->registry->getRepository($entityClass);
 
         $fetchLimit = $limit > 0 ? $limit : AbstractLanguageRepository::PRONUNCIATION_MAX_RESULTS;
-        $io->info("Fetching up to $fetchLimit words for language '$languageCode' (offset $offset) using $provider…");
+        $io->info("Fetching up to $fetchLimit words for language '$languageCode' (offset $offset) using $provider");
 
         $words = $repository->findAllNamesIpaAndScore($fetchLimit, $offset);
 
