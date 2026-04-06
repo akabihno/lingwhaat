@@ -4,6 +4,7 @@ namespace App;
 
 use App\Message\ParseWikipediaLanguagesMessage;
 use App\Message\ParseWiktionaryLanguagesMessage;
+use App\Message\WikipediaPatternIndexDispatchMessage;
 use App\Message\WordsPopularityScoreSetDispatchMessage;
 use Symfony\Component\Scheduler\Attribute\AsSchedule;
 use Symfony\Component\Scheduler\RecurringMessage;
@@ -39,6 +40,11 @@ class Schedule implements ScheduleProviderInterface
 
         $schedule->add(
             RecurringMessage::every('10 minutes', new WordsPopularityScoreSetDispatchMessage())
+                ->withJitter(self::JITTER_SECONDS)
+        );
+
+        $schedule->add(
+            RecurringMessage::every('30 minutes', new WikipediaPatternIndexDispatchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
 
