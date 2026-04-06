@@ -183,38 +183,36 @@ kubectl apply -f k8s/
 kubectl exec -n lingwhaat deploy/web -- php bin/console doctrine:migrations:migrate --no-interaction
 ```
 
-### Deploying updates
+## Deploying updates
 
-# 1. Build the image on the k3s node (or locally if node is reachable)
+### 1. Build the image on the k3s node (or locally if node is reachable)
 docker build -f Dockerfile-php -t registry.local:30500/lingwhaat-php:latest .
 
-# 2. Push to the in-cluster registry
+### 2. Push to the in-cluster registry
 docker push registry.local:30500/lingwhaat-php:latest
 
-# 3. Force a rollout (pulls the new :latest image)
+### 3. Force a rollout (pulls the new :latest image)
 kubectl rollout restart deployment/web -n lingwhaat
 
-# 4. Watch until ready
+### 4. Watch until ready
 kubectl rollout status deployment/web -n lingwhaat
 
 If you also have new migrations:
 
-# 5. Run migrations after the pod is up
+### 5. Run migrations after the pod is up
 kubectl exec -n lingwhaat deploy/web -- php bin/console doctrine:migrations:migrate --no-interaction
 
 Note: registry.local must resolve to the node's IP. If you're running the build on a separate machine, either add registry.local to /etc/hosts       
 pointing at the k3s node, or substitute the node's IP directly (e.g. 192.168.x.x:30500).
 
-### Secrets
+## Secrets
 
-# .env file is not used anymore
-
-# Add a secret
+### Add a secret
 ```bash
 kubectl patch secret lingwhaat-secrets -n lingwhaat --type='merge' -p '{"stringData":{"API_KEY":"xxx"}}'
 ```
 
-# List (decode) secrets
+### List (decode) secrets
 ```bash
 kubectl get secret lingwhaat-secrets -n lingwhaat -o json | python3 -c "import sys,json,base64; d=json.load(sys.stdin)['data']; [print(f'{k}={base64.b64decode(v).decode()}') for k,v in d.items()]"
 ```
