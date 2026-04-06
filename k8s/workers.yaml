@@ -16,7 +16,7 @@ spec:
       containers:
         - name: scheduler
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "scheduler_default", "-vv"]
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "scheduler_default", "--keepalive", "-vv"]
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
@@ -48,7 +48,7 @@ spec:
       containers:
         - name: messenger
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "async", "-vv"]
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "async", "--keepalive", "-vv"]
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
@@ -112,7 +112,7 @@ spec:
       containers:
         - name: messenger-wikipedia
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wikipedia_async", "-vv"]
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wikipedia_async", "--keepalive", "-vv"]
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
