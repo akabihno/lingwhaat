@@ -33,6 +33,13 @@ spec:
             limits:
               memory: "512Mi"
               cpu: "1000m"
+          volumeMounts:
+            - name: docs
+              mountPath: /var/www/html/docs
+      volumes:
+        - name: docs
+          persistentVolumeClaim:
+            claimName: docs-data
 ---
 apiVersion: v1
 kind: Service

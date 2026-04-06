@@ -8,9 +8,11 @@ class ElasticsearchClientFactory
 {
     public static function create(): Client
     {
+        $host = $_ENV['ELASTICSEARCH_HOST'] ?? 'localhost';
+        $port = $_ENV['ELASTICSEARCH_PORT'] ?? 9200;
+
         return new Client([
-            'host' => $_ENV['ELASTICSEARCH_HOST'] ?? 'localhost',
-            'port' => $_ENV['ELASTICSEARCH_PORT'] ?? 9200,
+            'hosts' => ["http://{$host}:{$port}"],
         ]);
     }
 

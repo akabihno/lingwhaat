@@ -105,6 +105,32 @@ Also add the registry hostname to `/etc/hosts` on every Pi and on any machine us
 echo "<server-ip> registry.local" | sudo tee -a /etc/hosts
 ```
 
+### Install Longhorn (distributed storage)
+
+Longhorn provides persistent volumes replicated across nodes, so data survives node failures. Required for Elasticsearch indexes and generated docs.
+
+**Prerequisites — run on every node:**
+```bash
+sudo apt-get install -y open-iscsi
+sudo systemctl enable --now iscsid
+```
+
+**Install Longhorn:**
+```bash
+kubectl apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.7.2/deploy/longhorn.yaml
+kubectl -n longhorn-system rollout status deploy/longhorn-manager
+```
+
+**Verify all pods are running:**
+```bash
+kubectl get pods -n longhorn-system
+```
+
+> If the `longhorn-system` namespace gets stuck in `Terminating` after a delete, force-remove its finalizer:
+> ```bash
+> kubectl get namespace longhorn-system -o json | python3 -c "import sys,json; d=json.load(sys.stdin); d=d['items'][0] if d.get('kind')=='List' else d; d['spec']['finalizers']=[]; print(json.dumps(d))" | kubectl replace --raw /api/v1/namespaces/longhorn-system/finalize -f -
+> ```
+
 ## Installation & Setup
 
 ### 1. Configure secrets
@@ -159,12 +185,38 @@ kubectl exec -n lingwhaat deploy/web -- php bin/console doctrine:migrations:migr
 
 ### Deploying updates
 
-After code changes, rebuild and push the image, then restart the affected deployments:
+# 1. Build the image on the k3s node (or locally if node is reachable)
+docker build -f Dockerfile-php -t registry.local:30500/lingwhaat-php:latest .
 
-```bash
-docker build -t registry.local:30500/lingwhaat-php:latest -f Dockerfile-php .
+# 2. Push to the in-cluster registry
 docker push registry.local:30500/lingwhaat-php:latest
-kubectl rollout restart -n lingwhaat deployment/web deployment/scheduler deployment/messenger deployment/messenger-wiktionary deployment/messenger-wikipedia
+
+# 3. Force a rollout (pulls the new :latest image)
+kubectl rollout restart deployment/web -n lingwhaat
+
+# 4. Watch until ready
+kubectl rollout status deployment/web -n lingwhaat
+
+If you also have new migrations:
+
+# 5. Run migrations after the pod is up
+kubectl exec -n lingwhaat deploy/web -- php bin/console doctrine:migrations:migrate --no-interaction
+
+Note: registry.local must resolve to the node's IP. If you're running the build on a separate machine, either add registry.local to /etc/hosts       
+pointing at the k3s node, or substitute the node's IP directly (e.g. 192.168.x.x:30500).
+
+### Secrets
+
+# .env file is not used anymore
+
+# Add a secret
+```bash
+kubectl patch secret lingwhaat-secrets -n lingwhaat --type='merge' -p '{"stringData":{"API_KEY":"xxx"}}'
+```
+
+# List (decode) secrets
+```bash
+kubectl get secret lingwhaat-secrets -n lingwhaat -o json | python3 -c "import sys,json,base64; d=json.load(sys.stdin)['data']; [print(f'{k}={base64.b64decode(v).decode()}') for k,v in d.items()]"
 ```
 
 ## Services

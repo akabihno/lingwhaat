@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class WikipediaPatternParserService extends AbstractWikiParserService
 {
-    private const int ARTICLE_LIMIT = 100000;
+    private const int ARTICLE_LIMIT = 200000;
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
