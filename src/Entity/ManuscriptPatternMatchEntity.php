@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity\ManuscriptMatch;
+namespace App\Entity;
 
-use App\Repository\ManuscriptMatch\ManuscriptPatternMatchRepository;
+use App\Repository\ManuscriptPatternMatchRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ManuscriptPatternMatchRepository::class)]

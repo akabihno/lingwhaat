@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository\ManuscriptMatch;
+namespace App\Repository;
 
-use App\Entity\ManuscriptMatch\ManuscriptPatternMatchEntity;
+use App\Entity\ManuscriptPatternMatchEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Dotenv\Dotenv;
@@ -23,7 +23,7 @@ class ManuscriptPatternMatchRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return \App\Entity\ManuscriptMatch\ManuscriptPatternMatchEntity[]
+     * @return \App\Entity\ManuscriptPatternMatchEntity[]
      */
     public function findBySourceId(int $sourceId): array
     {

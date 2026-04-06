@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository\ManuscriptMatch;
+namespace App\Repository;
 
-use App\Entity\ManuscriptMatch\ManuscriptPatternMatchResultEntity;
+use App\Entity\ManuscriptPatternMatchResultEntity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Dotenv\Dotenv;

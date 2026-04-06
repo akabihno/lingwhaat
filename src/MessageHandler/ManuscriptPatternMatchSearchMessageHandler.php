@@ -2,11 +2,11 @@
 
 namespace App\MessageHandler;
 
-use App\Entity\ManuscriptMatch\ManuscriptPatternMatchResultEntity;
+use App\Entity\ManuscriptPatternMatchResultEntity;
 use App\Message\ManuscriptPatternMatchSearchMessage;
-use App\Repository\ManuscriptMatch\ManuscriptPatternMatchRepository;
-use App\Repository\ManuscriptMatch\ManuscriptPatternMatchResultRepository;
-use App\Repository\ManuscriptMatch\ManuscriptPatternMatchScheduleRepository;
+use App\Repository\ManuscriptPatternMatchRepository;
+use App\Repository\ManuscriptPatternMatchResultRepository;
+use App\Repository\ManuscriptPatternMatchScheduleRepository;
 use App\Service\Search\WikipediaPatternSearchService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
