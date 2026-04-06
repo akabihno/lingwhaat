@@ -80,7 +80,7 @@ spec:
       containers:
         - name: messenger-wiktionary
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wiktionary_async", "-vv"]
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wiktionary_async", "--keepalive", "-vv"]
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
