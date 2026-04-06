@@ -37,3 +37,5 @@ framework:
             'App\Message\ParseWikipediaLanguagesMessage': wikipedia_async
             'App\Message\WordsPopularityScoreSetDispatchMessage': async
             'App\Message\WordsPopularityScoreSetMessage': async
+            'App\Message\WikipediaPatternIndexDispatchMessage': wikipedia_async
+            'App\Message\ManuscriptPatternMatchSearchMessage': async
