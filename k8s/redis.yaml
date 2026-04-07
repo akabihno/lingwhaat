@@ -28,6 +28,7 @@ spec:
       containers:
         - name: redis
           image: redis:7-alpine
+          command: ["redis-server", "--maxmemory", "768mb", "--maxmemory-policy", "noeviction"]
           ports:
             - containerPort: 6379
           volumeMounts:
@@ -35,10 +36,10 @@ spec:
               mountPath: /data
           resources:
             requests:
-              memory: "64Mi"
+              memory: "256Mi"
               cpu: "50m"
             limits:
-              memory: "256Mi"
+              memory: "1Gi"
               cpu: "250m"
       volumes:
         - name: redis-data
