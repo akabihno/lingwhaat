@@ -66,14 +66,15 @@ class WikipediaPatternIndexerService
             throw new ClientResponseException($e->getMessage(), $e->getCode(), $e);
         }
 
-        $this->doIndex($windowSize, $languageCode, null);
+        $this->doIndex($windowSize, $languageCode, null, 0);
     }
 
     /**
-     * Index up to $articleLimit articles for a language into an existing index (no deletion).
+     * Index up to $articleLimit articles for a language starting from $startOffset into an existing index (no deletion).
+     * Returns the number of articles actually fetched (< $articleLimit means end of data, caller should reset offset).
      * @throws ClientResponseException
      */
-    public function indexBatchByLanguageCode(int $windowSize, string $languageCode, int $articleLimit): void
+    public function indexBatchByLanguageCode(int $windowSize, string $languageCode, int $articleLimit, int $startOffset = 0): int
     {
         if ($windowSize <= 0) {
             throw new InvalidArgumentException('windowSize must be greater than 0.');
@@ -83,20 +84,20 @@ class WikipediaPatternIndexerService
             throw new InvalidArgumentException('languageCode must be provided.');
         }
 
-        $this->doIndex($windowSize, $languageCode, $articleLimit);
+        return $this->doIndex($windowSize, $languageCode, $articleLimit, $startOffset);
     }
 
     /**
      * @throws ClientResponseException
      */
-    private function doIndex(int $windowSize, string $languageCode, ?int $articleLimit): void
+    private function doIndex(int $windowSize, string $languageCode, ?int $articleLimit, int $startOffset = 0): int
     {
         /** @var WikipediaArticleRepository $repo */
         $repo = $this->em->getRepository(WikipediaArticleEntity::class);
 
         $globalPos = 0;
         $batch = [];
-        $offset = 0;
+        $offset = $startOffset;
         $totalArticlesProcessed = 0;
 
         do {
@@ -156,6 +157,8 @@ class WikipediaPatternIndexerService
         if ($batch !== []) {
             $this->flushBatch($batch);
         }
+
+        return $totalArticlesProcessed;
     }
 
     /**
