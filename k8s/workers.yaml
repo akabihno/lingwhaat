@@ -100,7 +100,7 @@ metadata:
   name: messenger-wikipedia
   namespace: lingwhaat
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: messenger-wikipedia
