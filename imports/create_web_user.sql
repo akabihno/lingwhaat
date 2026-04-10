@@ -1,6 +1,7 @@
 CREATE USER '${MYSQL_WEB_USER}'@'%' IDENTIFIED BY '${MYSQL_WEB_PASSWORD}';
 
 GRANT CREATE,ALTER,INDEX,SELECT,UPDATE,REFERENCES ON lingwhaat.* TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE,DELETE ON lingwhaat.messenger_messages TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.wikipedia_article TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.wikipedia_pattern_parse_schedule TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.words_popularity_score_set_schedule TO '${MYSQL_WEB_USER}'@'%';
