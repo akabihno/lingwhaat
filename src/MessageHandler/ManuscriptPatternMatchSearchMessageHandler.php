@@ -28,14 +28,13 @@ class ManuscriptPatternMatchSearchMessageHandler
 
             foreach ($matches as $match) {
                 $normalized = $this->normalize($match->getSourceData());
-                $windowSize = mb_strlen($normalized);
 
-                if ($windowSize === 0) {
+                if (mb_strlen($normalized) !== WikipediaPatternSearchService::DEFAULT_WINDOW_SIZE) {
                     continue;
                 }
 
                 try {
-                    $results = $this->searchService->search($match->getSourceData(), 50, $windowSize);
+                    $results = $this->searchService->search($match->getSourceData(), 50);
                 } catch (\InvalidArgumentException) {
                     continue;
                 }

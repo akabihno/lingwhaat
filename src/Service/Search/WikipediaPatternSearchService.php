@@ -12,7 +12,7 @@ class WikipediaPatternSearchService
 {
     private Client $esClient;
     private const string INDEX_NAME = 'wikipedia_global_patterns';
-    private const int DEFAULT_WINDOW_SIZE = 18;
+    public const int DEFAULT_WINDOW_SIZE = 18;
     private const int BASE = 101;
     private const int MOD = 1000000007;
 
