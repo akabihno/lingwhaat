@@ -5,30 +5,35 @@ framework:
         transports:
             async:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    auto_setup: true
                 retry_strategy:
                     max_retries: 3
                     delay: 1000
                     multiplier: 2
-                    max_delay: 0
 
             wiktionary_async:
                 dsn: '%env(MESSENGER_WIKTIONARY_TRANSPORT_DSN)%'
+                options:
+                    auto_setup: true
                 retry_strategy:
                     max_retries: 3
                     delay: 1000
                     multiplier: 2
-                    max_delay: 0
 
             wikipedia_async:
                 dsn: '%env(MESSENGER_WIKIPEDIA_TRANSPORT_DSN)%'
+                options:
+                    auto_setup: true
                 retry_strategy:
                     max_retries: 3
                     delay: 1000
                     multiplier: 2
-                    max_delay: 0
 
             failed:
                 dsn: '%env(MESSENGER_FAILED_DSN)%'
+                options:
+                    auto_setup: true
 
         routing:
             'App\Message\ParseWiktionaryArticlesMessage': wiktionary_async
