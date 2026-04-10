@@ -44,7 +44,7 @@ class Schedule implements ScheduleProviderInterface
         );
 
         $schedule->add(
-            RecurringMessage::every('30 minutes', new WikipediaPatternIndexDispatchMessage())
+            RecurringMessage::every('10 minutes', new WikipediaPatternIndexDispatchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
 
