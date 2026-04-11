@@ -29,7 +29,7 @@ class WikipediaPatternParserService extends AbstractWikiParserService
         $repo = $this->entityManager->getRepository(WikipediaArticleEntity::class);
         $existingCount = $repo->count(['languageCode' => $languageCode]);
         if ($existingCount > self::ARTICLE_LIMIT) {
-            exit("Wikipedia article limit exceeded for language: $languageCode");
+            throw new WikipediaArticleLimitExceededException($languageCode, $existingCount, self::ARTICLE_LIMIT);
         }
 
         for ($i = 0; $i < $limit; $i++) {
