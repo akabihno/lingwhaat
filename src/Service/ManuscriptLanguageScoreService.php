@@ -35,29 +35,25 @@ class ManuscriptLanguageScoreService
             return ['language_code' => null, 'language_score' => 0.0];
         }
 
-        $match = $this->matchRepository->find($result->getMatchId());
-        if ($match === null) {
-            return ['language_code' => null, 'language_score' => 0.0];
-        }
-
-        $cipherWindow = $this->normalize($match->getSourceData());
-
-        // Concatenate all manuscript windows for this schedule entry
+        // Concatenate all manuscript windows for this schedule entry to build the full cipher text
         $allMatches = $this->matchRepository->findBySourceId($result->getSourceId());
         $fullCipherText = implode('', array_map(
             fn($m) => $this->normalize($m->getSourceData()),
             $allMatches
         ));
+        $fullCipherChars = preg_split('//u', $fullCipherText, -1, PREG_SPLIT_NO_EMPTY) ?: [];
 
         $bestScore = 0.0;
         $bestLanguage = null;
 
         foreach ($hits as $hit) {
+            // cipher_window is stored per-hit by the search handler
+            $cipherWindow = $hit['cipher_window'] ?? '';
             $articleId = (int)($hit['article_id'] ?? 0);
             $localPosition = (int)($hit['local_position'] ?? 0);
             $length = (int)($hit['length'] ?? 0);
 
-            if ($articleId <= 0 || $length <= 0) {
+            if ($articleId <= 0 || $length <= 0 || mb_strlen($cipherWindow) !== $length) {
                 continue;
             }
 
@@ -69,11 +65,11 @@ class ManuscriptLanguageScoreService
             $normalizedArticle = $this->normalize($article->getText());
             $wikiWindow = mb_substr($normalizedArticle, $localPosition, $length);
 
-            if (mb_strlen($wikiWindow) !== $length || mb_strlen($cipherWindow) !== $length) {
+            if (mb_strlen($wikiWindow) !== $length) {
                 continue;
             }
 
-            // Build cipher→plaintext mapping from the matched window
+            // Build cipher→plaintext mapping from this window's match
             $mapping = [];
             for ($i = 0; $i < $length; $i++) {
                 $cipherChar = mb_substr($cipherWindow, $i, 1);
@@ -82,8 +78,7 @@ class ManuscriptLanguageScoreService
             }
 
             // Apply mapping to the full manuscript cipher text
-            $chars = preg_split('//u', $fullCipherText, -1, PREG_SPLIT_NO_EMPTY) ?: [];
-            $translated = implode('', array_map(fn($ch) => $mapping[$ch] ?? $ch, $chars));
+            $translated = implode('', array_map(fn($ch) => $mapping[$ch] ?? $ch, $fullCipherChars));
 
             $languageCode = $article->getLanguageCode();
             $verification = $this->verificationService->verifyLanguage($translated, $languageCode, 1);

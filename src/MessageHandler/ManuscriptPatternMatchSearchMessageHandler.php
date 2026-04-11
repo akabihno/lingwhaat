@@ -2,7 +2,6 @@
 
 namespace App\MessageHandler;
 
-use App\Entity\ManuscriptPatternMatchResultEntity;
 use App\Message\ManuscriptPatternMatchSearchMessage;
 use App\Repository\ManuscriptPatternMatchRepository;
 use App\Repository\ManuscriptPatternMatchResultRepository;
@@ -15,6 +14,8 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 class ManuscriptPatternMatchSearchMessageHandler
 {
     private const string LOG_SERVICE = '[ManuscriptPatternMatchSearchMessageHandler]';
+    private const int RESULTS_PER_WINDOW = 5;
+    private const int MAX_TOTAL_HITS = 200;
 
     public function __construct(
         private readonly ManuscriptPatternMatchScheduleRepository $scheduleRepository,
@@ -40,29 +41,48 @@ class ManuscriptPatternMatchSearchMessageHandler
 
             foreach ($matches as $match) {
                 $normalized = $this->normalize($match->getSourceData());
-                $normalizedLength = mb_strlen($normalized);
+                $textLength = mb_strlen($normalized);
+                $windowSize = WikipediaPatternSearchService::DEFAULT_WINDOW_SIZE;
 
-                if ($normalizedLength !== WikipediaPatternSearchService::DEFAULT_WINDOW_SIZE) {
-                    $this->logger->info(sprintf('Skipping match id=%d: normalized length %d != window size %d', $match->getId(), $normalizedLength, WikipediaPatternSearchService::DEFAULT_WINDOW_SIZE), [
+                if ($textLength < $windowSize) {
+                    $this->logger->info(sprintf('Skipping match id=%d: normalized length %d < window size %d', $match->getId(), $textLength, $windowSize), [
                         'service' => self::LOG_SERVICE,
                     ]);
                     continue;
                 }
 
-                try {
-                    $results = $this->searchService->search($match->getSourceData(), 50);
-                } catch (\InvalidArgumentException $e) {
-                    $this->logger->warning(sprintf('Search failed for match id=%d: %s', $match->getId(), $e->getMessage()), [
-                        'service' => self::LOG_SERVICE,
-                    ]);
-                    continue;
+                $allHits = [];
+                $windowCount = $textLength - $windowSize + 1;
+
+                for ($pos = 0; $pos <= $textLength - $windowSize; $pos++) {
+                    $window = mb_substr($normalized, $pos, $windowSize);
+
+                    try {
+                        $windowHits = $this->searchService->search($window, self::RESULTS_PER_WINDOW);
+                    } catch (\InvalidArgumentException) {
+                        continue;
+                    }
+
+                    foreach ($windowHits as $hit) {
+                        $hit['cipher_position'] = $pos;
+                        $hit['cipher_window'] = $window;
+                        $allHits[] = $hit;
+                    }
+
+                    if (count($allHits) >= self::MAX_TOTAL_HITS) {
+                        break;
+                    }
                 }
 
-                $this->logger->info(sprintf('Match id=%d: found %d results', $match->getId(), count($results)), [
+                $this->logger->info(sprintf('Match id=%d: found %d hits across %d windows', $match->getId(), count($allHits), $windowCount), [
                     'service' => self::LOG_SERVICE,
                 ]);
 
-                $this->resultRepository->upsert($match->getId(), $schedule->getId(), json_encode($results, JSON_THROW_ON_ERROR));
+                if (empty($allHits)) {
+                    continue;
+                }
+
+                $this->resultRepository->upsert($match->getId(), $schedule->getId(), json_encode($allHits, JSON_THROW_ON_ERROR));
             }
         }
 
