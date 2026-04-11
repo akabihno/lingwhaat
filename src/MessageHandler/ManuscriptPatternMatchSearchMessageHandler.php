@@ -62,7 +62,7 @@ class ManuscriptPatternMatchSearchMessageHandler
                     'service' => self::LOG_SERVICE,
                 ]);
 
-                $this->resultRepository->upsert($match->getId(), json_encode($results, JSON_THROW_ON_ERROR));
+                $this->resultRepository->upsert($match->getId(), $schedule->getId(), json_encode($results, JSON_THROW_ON_ERROR));
             }
         }
 

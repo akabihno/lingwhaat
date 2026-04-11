@@ -53,3 +53,5 @@ framework:
             'App\Message\WordsPopularityScoreSetDispatchMessage': async
             'App\Message\WordsPopularityScoreSetMessage': async
             'App\Message\ManuscriptPatternMatchSearchMessage': async
+            'App\Message\ManuscriptLanguageScoreDispatchMessage': async
+            'App\Message\ManuscriptLanguageScoreMessage': async
