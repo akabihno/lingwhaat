@@ -31,10 +31,9 @@ framework:
                     multiplier: 2
 
             wikipedia_pattern_index_async:
-                dsn: '%env(MESSENGER_WIKIPEDIA_TRANSPORT_DSN)%'
+                dsn: '%env(MESSENGER_WIKIPEDIA_PATTERN_INDEX_TRANSPORT_DSN)%'
                 options:
                     auto_setup: true
-                    queue_name: wikipedia_pattern_index_async
                 retry_strategy:
                     max_retries: 3
                     delay: 1000
