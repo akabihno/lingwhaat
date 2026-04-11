@@ -27,7 +27,7 @@ class WordsPopularityScoreSetMessageHandler
         $offset = $message->getOffset();
 
         if ($offset > self::PROCESSING_LIMIT) {
-            throw new \RuntimeException('The limit of articles is reached for ' . $languageCode);
+            exit("Processing limit exceeded for language: $languageCode");
         }
 
         $this->logger->info(
