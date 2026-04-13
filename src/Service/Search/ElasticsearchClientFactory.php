@@ -6,14 +6,10 @@ use Elastica\Client;
 
 class ElasticsearchClientFactory
 {
-    public static function create(): Client
+    public static function create(string $esHost): Client
     {
-        $host = $_ENV['ELASTICSEARCH_HOST'] ?? 'localhost';
-        $port = $_ENV['ELASTICSEARCH_PORT'] ?? 9200;
-
         return new Client([
-            'hosts' => ["http://{$host}:{$port}"],
+            'hosts' => [$esHost],
         ]);
     }
-
 }
