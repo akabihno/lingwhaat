@@ -16,9 +16,9 @@ class WikipediaPatternSearchService
     private const int BASE = 101;
     private const int MOD = 1000000007;
 
-    public function __construct()
+    public function __construct(Client $esClient)
     {
-        $this->esClient = ElasticsearchClientFactory::create();
+        $this->esClient = $esClient;
     }
 
     /**

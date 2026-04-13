@@ -21,9 +21,10 @@ class WikipediaPatternIndexerService
 
     public function __construct(
         private readonly EntityManagerInterface $em,
-        private readonly ElasticsearchBulkStreamer $bulk
+        private readonly ElasticsearchBulkStreamer $bulk,
+        Client $esClient,
     ) {
-        $this->esClient = ElasticsearchClientFactory::create();
+        $this->esClient = $esClient;
     }
 
     /**
