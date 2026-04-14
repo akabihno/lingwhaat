@@ -15,7 +15,7 @@ class ManuscriptPatternMatchSearchMessageHandler
 {
     private const string LOG_SERVICE = '[ManuscriptPatternMatchSearchMessageHandler]';
     private const int RESULTS_PER_WINDOW = 5;
-    private const int MAX_TOTAL_HITS = 200;
+    private const int MAX_TOTAL_HITS = 400;
 
     public function __construct(
         private readonly ManuscriptPatternMatchScheduleRepository $scheduleRepository,
