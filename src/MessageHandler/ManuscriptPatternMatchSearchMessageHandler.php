@@ -82,7 +82,12 @@ class ManuscriptPatternMatchSearchMessageHandler
                     continue;
                 }
 
-                $this->resultRepository->upsert($match->getId(), $schedule->getId(), json_encode($allHits, JSON_THROW_ON_ERROR));
+                try {
+                    $this->resultRepository->upsert($match->getId(), $schedule->getId(), json_encode($allHits, JSON_THROW_ON_ERROR));
+                    $this->logger->info(sprintf('Match id=%d: upsert complete', $match->getId()), ['service' => self::LOG_SERVICE]);
+                } catch (\Throwable $e) {
+                    $this->logger->error(sprintf('Match id=%d: upsert failed: %s', $match->getId(), $e->getMessage()), ['service' => self::LOG_SERVICE]);
+                }
             }
         }
 
