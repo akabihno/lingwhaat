@@ -25,9 +25,10 @@ class ManuscriptLanguageScoreDispatchMessageHandler
     {
         $unscored = $this->resultRepository->findUnscored();
 
-        $this->logger->info(sprintf('Dispatching language score for %d unscored results', count($unscored)), [
-            'service' => self::LOG_SERVICE,
-        ]);
+        $unscored
+            |> count(...)
+            |> (fn($x) => sprintf('Dispatching language score for %d unscored results', $x))
+            |> (fn($x) => $this->logger->info($x, ['service' => self::LOG_SERVICE,]));
 
         foreach ($unscored as $result) {
             $this->bus->dispatch(new ManuscriptLanguageScoreMessage($result->getId()));
