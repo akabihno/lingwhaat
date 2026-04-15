@@ -15,19 +15,25 @@ class ManuscriptPatternMatchResultRepository extends ServiceEntityRepository
 
     public function upsert(int $matchId, int $sourceId, string $results): void
     {
-        $entity = $this->findOneBy(['matchId' => $matchId]);
+        $conn = $this->getEntityManager()->getConnection();
+        $now = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
 
-        if ($entity === null) {
-            $entity = (new ManuscriptPatternMatchResultEntity())
-                ->setMatchId($matchId)
-                ->setSourceId($sourceId);
+        $existing = $conn->fetchOne(
+            'SELECT id FROM manuscript_pattern_match_result WHERE match_id = ?',
+            [$matchId]
+        );
+
+        if ($existing === false) {
+            $conn->executeStatement(
+                'INSERT INTO manuscript_pattern_match_result (match_id, source_id, results, ts_created) VALUES (?, ?, ?, ?)',
+                [$matchId, $sourceId, $results, $now]
+            );
+        } else {
+            $conn->executeStatement(
+                'UPDATE manuscript_pattern_match_result SET source_id = ?, results = ?, ts_created = ? WHERE match_id = ?',
+                [$sourceId, $results, $now, $matchId]
+            );
         }
-
-        $entity->setResults($results)
-            ->setTsCreated((new \DateTimeImmutable())->format('Y-m-d H:i:s'));
-
-        $this->getEntityManager()->persist($entity);
-        $this->getEntityManager()->flush();
     }
 
     /**
