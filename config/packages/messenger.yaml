@@ -55,3 +55,7 @@ framework:
             'App\Message\ManuscriptPatternMatchSearchMessage': async
             'App\Message\ManuscriptLanguageScoreDispatchMessage': async
             'App\Message\ManuscriptLanguageScoreMessage': async
+            'App\Message\ManuscriptAlphabetDecodeDispatchMessage': async
+            'App\Message\ManuscriptAlphabetDecodeMessage': async
+            'App\Message\ManuscriptAlphabetDecodeScoreDispatchMessage': async
+            'App\Message\ManuscriptAlphabetDecodeScoreMessage': async
