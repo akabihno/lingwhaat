@@ -18,10 +18,10 @@ class TextDecryptionService
 
     public function __construct(
         protected LanguageNormalizationService $normalizationService,
-        protected LanguageValidationService $languageValidationService
-    )
-    {
-        $this->esClient = ElasticsearchClientFactory::create();
+        protected LanguageValidationService $languageValidationService,
+        Client $esClient,
+    ) {
+        $this->esClient = $esClient;
     }
 
     /**

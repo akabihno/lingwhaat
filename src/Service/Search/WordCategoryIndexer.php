@@ -20,8 +20,9 @@ class WordCategoryIndexer
 
     public function __construct(
         private readonly WordCategoryRepository $repository,
+        Client $esClient,
     ) {
-        $this->esClient = ElasticsearchClientFactory::create();
+        $this->esClient = $esClient;
 
         if (empty(self::$fieldNames)) {
             self::$fieldNames = WordCategoryData::getFieldNames();

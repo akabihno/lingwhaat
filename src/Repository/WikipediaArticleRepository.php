@@ -71,4 +71,17 @@ class WikipediaArticleRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    /**
+     * @return string[]
+     */
+    public function getDistinctLanguageCodes(): array
+    {
+        $rows = $this->createQueryBuilder('w')
+            ->select('DISTINCT w.languageCode')
+            ->getQuery()
+            ->getScalarResult();
+
+        return array_column($rows, 'languageCode');
+    }
 }

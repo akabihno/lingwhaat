@@ -16,7 +16,7 @@ spec:
       containers:
         - name: scheduler
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "scheduler_default", "-vv"]
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "scheduler_default", "--keepalive", "--memory-limit=200M", "-vv"]
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
@@ -48,7 +48,7 @@ spec:
       containers:
         - name: messenger
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "async", "-vv"]
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "async", "--keepalive", "--memory-limit=400M", "-vv"]
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
@@ -80,7 +80,7 @@ spec:
       containers:
         - name: messenger-wiktionary
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wiktionary_async", "-vv"]
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wiktionary_async", "--keepalive", "--memory-limit=400M", "-vv"]
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
@@ -100,7 +100,7 @@ metadata:
   name: messenger-wikipedia
   namespace: lingwhaat
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
       app: messenger-wikipedia
@@ -112,7 +112,7 @@ spec:
       containers:
         - name: messenger-wikipedia
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wikipedia_async", "-vv"]
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wikipedia_async", "--keepalive", "--memory-limit=400M", "-vv"]
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
@@ -124,4 +124,36 @@ spec:
               cpu: "100m"
             limits:
               memory: "512Mi"
+              cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messenger-wikipedia-pattern-index
+  namespace: lingwhaat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: messenger-wikipedia-pattern-index
+  template:
+    metadata:
+      labels:
+        app: messenger-wikipedia-pattern-index
+    spec:
+      containers:
+        - name: messenger-wikipedia-pattern-index
+          image: registry.local:30500/lingwhaat-php:latest
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wikipedia_pattern_index_async", "--keepalive", "--memory-limit=600M", "-vv"]
+          envFrom:
+            - configMapRef:
+                name: lingwhaat-config
+            - secretRef:
+                name: lingwhaat-secrets
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "768Mi"
               cpu: "500m"

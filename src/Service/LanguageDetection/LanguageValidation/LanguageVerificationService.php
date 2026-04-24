@@ -7,7 +7,6 @@ use Elastica\Client;
 use Elastica\Query;
 use Elastica\Query\BoolQuery;
 use Elastica\Query\Term;
-use App\Service\Search\ElasticsearchClientFactory;
 
 class LanguageVerificationService
 {
@@ -20,8 +19,9 @@ class LanguageVerificationService
 
     public function __construct(
         private readonly ElasticsearchLogger $logger,
+        Client $esClient,
     ) {
-        $this->esClient = ElasticsearchClientFactory::create();
+        $this->esClient = $esClient;
     }
 
     /**

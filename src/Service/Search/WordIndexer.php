@@ -23,10 +23,10 @@ class WordIndexer
 
     public function __construct(
         private ManagerRegistry $em,
-        private ElasticsearchBulkStreamer $elasticsearchBulkStreamer
-    )
-    {
-        $this->esClient = ElasticsearchClientFactory::create();
+        private ElasticsearchBulkStreamer $elasticsearchBulkStreamer,
+        Client $esClient,
+    ) {
+        $this->esClient = $esClient;
     }
 
     private function getAllLanguageEntities(): array

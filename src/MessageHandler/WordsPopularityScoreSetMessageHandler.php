@@ -6,6 +6,7 @@ use App\Message\WordsPopularityScoreSetMessage;
 use App\Service\Logging\ElasticsearchLogger;
 use App\Service\Search\WordsPopularityScoreSetService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 
 #[AsMessageHandler]
 class WordsPopularityScoreSetMessageHandler
@@ -27,7 +28,7 @@ class WordsPopularityScoreSetMessageHandler
         $offset = $message->getOffset();
 
         if ($offset > self::PROCESSING_LIMIT) {
-            throw new \RuntimeException('The limit of articles is reached for ' . $languageCode);
+            throw new UnrecoverableMessageHandlingException('The limit of articles is reached for ' . $languageCode);
         }
 
         $this->logger->info(

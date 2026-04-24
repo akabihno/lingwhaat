@@ -18,9 +18,9 @@ class FuzzySearchService
 
     public function __construct(
         protected ElasticsearchLogger $logger,
-    )
-    {
-        $this->esClient = ElasticsearchClientFactory::create();
+        Client $esClient,
+    ) {
+        $this->esClient = $esClient;
     }
 
     /**

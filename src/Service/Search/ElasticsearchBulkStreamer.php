@@ -39,8 +39,17 @@ class ElasticsearchBulkStreamer
             'max_duration' => $this->timeout,
         ]);
 
+        $content = $response->getContent(false);
+
         if ($response->getStatusCode() >= 300) {
-            throw new \RuntimeException('Bulk indexing failed: ' . $response->getContent(false));
+            throw new \RuntimeException('Bulk indexing failed: ' . $content);
+        }
+
+        $decoded = json_decode($content, true);
+        if (!empty($decoded['errors'])) {
+            $failures = array_filter($decoded['items'] ?? [], fn($item) => isset($item['index']['error']));
+            $first = reset($failures);
+            throw new \RuntimeException('Bulk indexing errors: ' . json_encode($first['index']['error'] ?? $failures));
         }
     }
 
