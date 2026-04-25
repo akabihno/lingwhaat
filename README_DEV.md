@@ -124,3 +124,7 @@ kubectl exec -it -n lingwhaat deploy/web -- php bin/console language:reindex-wor
 
 Also note: for future deployments, if a pod gets scheduled back onto raspberrypi and hits ImagePullBackOff, just delete that pod and the scheduler will place it on another    
   node. You can also add a node preference annotation to the web deployment to avoid raspberrypi for now, if you'd like.
+
+
+Schedule manuscript alphabet decoding:
+kubectl exec -it -n lingwhaat deploy/web -- php bin/console app:manuscript-alphabet-decode --language-code=en --window-size=18

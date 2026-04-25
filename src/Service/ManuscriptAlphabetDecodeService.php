@@ -16,9 +16,9 @@ class ManuscriptAlphabetDecodeService
     private const int MAX_WORD_LENGTH = 9;
     private const int MIN_WORDS_IN_SPLIT = 2;
     private const int MAX_WORDS_IN_SPLIT = 4;
-    private const int MAX_NEW_UNIQUE_CHARS = 4;
+    private const int MAX_NEW_UNIQUE_CHARS = 16;
     private const int CACHE_TTL = 3600;
-    private const int MAX_WINDOW_POSITIONS = 20;
+    private const int MAX_WINDOW_POSITIONS = 80;
 
     /** @var array<int, list<list<int>>> */
     private array $splitCache = [];
