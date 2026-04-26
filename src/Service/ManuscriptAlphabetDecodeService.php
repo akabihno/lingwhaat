@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Constant\ScriptAlphabets;
 use App\Entity\ManuscriptPatternMatchEntity;
+use App\Repository\LetterFrequencyRepository;
 use App\Repository\ManuscriptAlphabetDecodeResultRepository;
 use App\Service\Cache\RedisCacheService;
 use App\Service\LanguageDetection\LanguageValidation\LanguageValidationService;
@@ -16,15 +17,21 @@ class ManuscriptAlphabetDecodeService
     private const int MAX_WORD_LENGTH = 9;
     private const int MIN_WORDS_IN_SPLIT = 2;
     private const int MAX_WORDS_IN_SPLIT = 4;
-    private const int MAX_NEW_UNIQUE_CHARS = 16;
+    /**
+     * Hard cap on combinations tried per word per split.
+     * With frequency-guided ordering, the first combination IS the classic frequency-analysis
+     * mapping, so valid decryptions surface immediately. The cap prevents spending hours on
+     * windows that have no valid solution.
+     */
+    private const int MAX_COMBINATIONS_PER_WORD = 10000;
     private const int CACHE_TTL = 3600;
     private const int MAX_WINDOW_POSITIONS = 80;
-
     /** @var array<int, list<list<int>>> */
     private array $splitCache = [];
 
     public function __construct(
         private readonly ManuscriptAlphabetDecodeResultRepository $resultRepository,
+        private readonly LetterFrequencyRepository $letterFrequencyRepository,
         private readonly LanguageValidationService $languageValidationService,
         private readonly FuzzySearchService $fuzzySearchService,
         private readonly RedisCacheService $cacheService,
@@ -40,10 +47,21 @@ class ManuscriptAlphabetDecodeService
             return 0;
         }
 
+        // Sort language alphabet chars by frequency descending so the generator yields
+        // the classical frequency-analysis mapping as its very first combination.
+        $langFreqMap = $this->letterFrequencyRepository->getFrequencyMapByLanguageCode($languageCode);
         $alphabet = ScriptAlphabets::getAlphabetForLanguage($languageCode);
         $alphabetChars = mb_str_split($alphabet);
-        $splits = $this->generateWordSplits($windowSize);
+        usort($alphabetChars, static fn($a, $b) => ($langFreqMap[$b] ?? 0.0) <=> ($langFreqMap[$a] ?? 0.0));
 
+        // Cipher char frequencies: most-frequent cipher char will be assigned the
+        // most-frequent language char first.
+        $cipherFreqs = array_count_values(mb_str_split($normalized));
+
+        // Script-specific vowel chars for the cheap pre-filter in backtrack().
+        $vowelChars = mb_str_split(ScriptAlphabets::getVowelsForLanguage($languageCode));
+
+        $splits = $this->generateWordSplits($windowSize);
         $maxPos = min($textLength - $windowSize, self::MAX_WINDOW_POSITIONS - 1);
         $savedCount = 0;
 
@@ -53,7 +71,8 @@ class ManuscriptAlphabetDecodeService
             foreach ($splits as $wordLengths) {
                 $savedCount += $this->backtrack(
                     $match, $languageCode, $window, $pos,
-                    $wordLengths, $alphabetChars, [], 0, 0, [], []
+                    $wordLengths, $alphabetChars, $cipherFreqs, $vowelChars,
+                    [], 0, 0, [], []
                 );
             }
         }
@@ -68,6 +87,8 @@ class ManuscriptAlphabetDecodeService
         int $windowPos,
         array $wordLengths,
         array $alphabetChars,
+        array $cipherFreqs,
+        array $vowelChars,
         array $mapping,
         int $wordIndex,
         int $charPos,
@@ -98,37 +119,54 @@ class ManuscriptAlphabetDecodeService
         }
         $newChars = array_keys($newChars);
 
-        if (count($newChars) > self::MAX_NEW_UNIQUE_CHARS) {
-            return 0;
-        }
+        // Order new cipher chars by frequency descending so the most informative char
+        // is assigned first. This makes the generator's first output the frequency-
+        // analysis candidate (most-common-cipher → most-common-language).
+        usort($newChars, static fn($a, $b) => ($cipherFreqs[$b] ?? 0) <=> ($cipherFreqs[$a] ?? 0));
 
-        // Bijective mapping: exclude already-used target chars
+        // Bijective: available targets are language chars not yet used, still in frequency order.
         $available = array_values(array_diff($alphabetChars, array_values($mapping)));
 
         $saved = 0;
-        foreach ($this->generateAssignments($newChars, $available) as $assignment) {
-            $newMapping = array_merge($mapping, $assignment);
-            $candidate = implode('', array_map(fn($c) => $newMapping[$c], $cipherChars));
+        $tried = 0;
 
+        foreach ($this->generateAssignments($newChars, $available) as $assignment) {
+            if (++$tried > self::MAX_COMBINATIONS_PER_WORD) {
+                break;
+            }
+
+            $newMapping = array_merge($mapping, $assignment);
+            $candidate = implode('', array_map(static fn($c) => $newMapping[$c], $cipherChars));
+
+            // Cheap pre-filter: a word with no vowels for this script cannot be natural.
+            // Works for any script — no I/O cost.
+            if (!$this->hasVowel($candidate, $vowelChars)) {
+                continue;
+            }
+
+            // analyze() is pure PHP — no I/O. Pass language code so it uses the
+            // correct script-specific vowel set internally as well.
+            $validation = $this->languageValidationService->analyze($candidate, $languageCode);
+            if (!$validation['isNatural']) {
+                continue;
+            }
+
+            // Redis is only consulted for the rare case: passed analyze but previously
+            // failed search. This keeps Redis latency out of the hot path.
             $cacheKey = $this->buildCacheKey($languageCode, $cipherWord, $newMapping, $cipherChars);
             if ($this->cacheService->get($cacheKey) !== null) {
                 continue;
             }
 
-            $validation = $this->languageValidationService->analyze($candidate);
-            if (!$validation['isNatural']) {
-                $this->cacheService->set($cacheKey, 1, self::CACHE_TTL);
-                continue;
-            }
-
             $searchResults = $this->fuzzySearchService->findClosestMatches($candidate, 5, $languageCode);
             if (empty($searchResults)) {
+                $this->cacheService->set($cacheKey, 1, self::CACHE_TTL);
                 continue;
             }
 
             $saved += $this->backtrack(
                 $match, $languageCode, $window, $windowPos,
-                $wordLengths, $alphabetChars, $newMapping,
+                $wordLengths, $alphabetChars, $cipherFreqs, $vowelChars, $newMapping,
                 $wordIndex + 1, $charPos + $wordLen,
                 [...$decodedWords, $candidate],
                 [...$wordMatches, [$candidate => $searchResults]],
@@ -139,7 +177,9 @@ class ManuscriptAlphabetDecodeService
     }
 
     /**
-     * Yields all bijective assignments of $chars to distinct elements from $alphabet.
+     * Yields bijective assignments of $chars → distinct elements of $alphabet,
+     * in the order that $alphabet was provided (frequency-descending from decode()).
+     * The first yielded value is therefore the frequency-analysis mapping.
      *
      * @param list<string> $chars
      * @param list<string> $alphabet
@@ -163,6 +203,16 @@ class ManuscriptAlphabetDecodeService
                 yield [$first => $target] + $sub;
             }
         }
+    }
+
+    private function hasVowel(string $word, array $vowelChars): bool
+    {
+        foreach (mb_str_split($word) as $char) {
+            if (in_array($char, $vowelChars, true)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function buildCacheKey(string $languageCode, string $cipherWord, array $mapping, array $cipherChars): string
