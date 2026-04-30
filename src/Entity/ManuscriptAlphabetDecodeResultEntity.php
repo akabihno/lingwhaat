@@ -7,9 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ManuscriptAlphabetDecodeResultRepository::class)]
 #[ORM\Table(name: "manuscript_alphabet_decode_result")]
-#[ORM\Index(columns: ["language_score"], name: "idx_decode_unscored")]
+#[ORM\Index(columns: ["openai_status", "priority_hint"], name: "idx_decode_processing")]
 class ManuscriptAlphabetDecodeResultEntity
 {
+    public const string STATUS_OK = 'ok';
+    public const string STATUS_NO_MATCH = 'no_match';
+    public const string STATUS_ERROR = 'error';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -28,16 +32,19 @@ class ManuscriptAlphabetDecodeResultEntity
     private string $wordLengths;
 
     #[ORM\Column(type: "text")]
-    private string $decodedPhrase;
+    private string $cipherWords;
+
+    #[ORM\Column(type: "text")]
+    private string $wordCandidates;
 
     #[ORM\Column(type: "text", nullable: true)]
-    private ?string $wordMatches = null;
+    private ?string $selectedPhrase = null;
 
-    #[ORM\Column(type: "float", nullable: true)]
-    private ?float $languageScore = null;
+    #[ORM\Column(type: "string", length: 16, nullable: true)]
+    private ?string $openaiStatus = null;
 
-    #[ORM\Column(type: "string", length: 8, nullable: true)]
-    private ?string $scoredLanguageCode = null;
+    #[ORM\Column(type: "float", options: ["default" => 0])]
+    private float $priorityHint = 0.0;
 
     #[ORM\Column(name: "ts_created", type: "string", length: 255)]
     private string $tsCreated;
@@ -91,47 +98,58 @@ class ManuscriptAlphabetDecodeResultEntity
         return $this;
     }
 
-    public function getDecodedPhrase(): string
+    public function getCipherWords(): string
     {
-        return $this->decodedPhrase;
+        return $this->cipherWords;
     }
 
-    public function setDecodedPhrase(string $decodedPhrase): self
+    public function setCipherWords(string $cipherWords): self
     {
-        $this->decodedPhrase = $decodedPhrase;
+        $this->cipherWords = $cipherWords;
         return $this;
     }
 
-    public function getWordMatches(): ?string
+    public function getWordCandidates(): string
     {
-        return $this->wordMatches;
+        return $this->wordCandidates;
     }
 
-    public function setWordMatches(?string $wordMatches): self
+    public function setWordCandidates(string $wordCandidates): self
     {
-        $this->wordMatches = $wordMatches;
+        $this->wordCandidates = $wordCandidates;
         return $this;
     }
 
-    public function getLanguageScore(): ?float
+    public function getSelectedPhrase(): ?string
     {
-        return $this->languageScore;
+        return $this->selectedPhrase;
     }
 
-    public function setLanguageScore(?float $languageScore): self
+    public function setSelectedPhrase(?string $selectedPhrase): self
     {
-        $this->languageScore = $languageScore;
+        $this->selectedPhrase = $selectedPhrase;
         return $this;
     }
 
-    public function getScoredLanguageCode(): ?string
+    public function getOpenaiStatus(): ?string
     {
-        return $this->scoredLanguageCode;
+        return $this->openaiStatus;
     }
 
-    public function setScoredLanguageCode(?string $scoredLanguageCode): self
+    public function setOpenaiStatus(?string $openaiStatus): self
     {
-        $this->scoredLanguageCode = $scoredLanguageCode;
+        $this->openaiStatus = $openaiStatus;
+        return $this;
+    }
+
+    public function getPriorityHint(): float
+    {
+        return $this->priorityHint;
+    }
+
+    public function setPriorityHint(float $priorityHint): self
+    {
+        $this->priorityHint = $priorityHint;
         return $this;
     }
 

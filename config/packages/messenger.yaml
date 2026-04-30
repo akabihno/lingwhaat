@@ -57,5 +57,5 @@ framework:
             'App\Message\ManuscriptLanguageScoreMessage': async
             'App\Message\ManuscriptAlphabetDecodeDispatchMessage': async
             'App\Message\ManuscriptAlphabetDecodeMessage': async
-            'App\Message\ManuscriptAlphabetDecodeScoreDispatchMessage': async
-            'App\Message\ManuscriptAlphabetDecodeScoreMessage': async
+            'App\Message\ManuscriptAlphabetDecodeSelectionDispatchMessage': async
+            'App\Message\ManuscriptAlphabetDecodeSelectionMessage': async

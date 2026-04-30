@@ -2,7 +2,7 @@
 
 namespace App\Message;
 
-class ManuscriptAlphabetDecodeScoreMessage
+class ManuscriptAlphabetDecodeSelectionMessage
 {
     public function __construct(
         private readonly int $resultId,

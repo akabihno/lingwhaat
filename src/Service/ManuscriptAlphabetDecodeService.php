@@ -2,12 +2,9 @@
 
 namespace App\Service;
 
-use App\Constant\ScriptAlphabets;
 use App\Entity\ManuscriptPatternMatchEntity;
-use App\Repository\LetterFrequencyRepository;
 use App\Repository\ManuscriptAlphabetDecodeResultRepository;
-use App\Service\Cache\RedisCacheService;
-use App\Service\LanguageDetection\LanguageValidation\LanguageValidationService;
+use App\Service\Search\CanonicalPattern;
 use App\Service\Search\FuzzySearchService;
 
 class ManuscriptAlphabetDecodeService
@@ -17,24 +14,15 @@ class ManuscriptAlphabetDecodeService
     private const int MAX_WORD_LENGTH = 9;
     private const int MIN_WORDS_IN_SPLIT = 2;
     private const int MAX_WORDS_IN_SPLIT = 4;
-    /**
-     * Hard cap on combinations tried per word per split.
-     * With frequency-guided ordering, the first combination IS the classic frequency-analysis
-     * mapping, so valid decryptions surface immediately. The cap prevents spending hours on
-     * windows that have no valid solution.
-     */
-    private const int MAX_COMBINATIONS_PER_WORD = 10000;
-    private const int CACHE_TTL = 3600;
     private const int MAX_WINDOW_POSITIONS = 80;
+    private const int CANDIDATES_PER_SLOT = 30;
+
     /** @var array<int, list<list<int>>> */
     private array $splitCache = [];
 
     public function __construct(
         private readonly ManuscriptAlphabetDecodeResultRepository $resultRepository,
-        private readonly LetterFrequencyRepository $letterFrequencyRepository,
-        private readonly LanguageValidationService $languageValidationService,
         private readonly FuzzySearchService $fuzzySearchService,
-        private readonly RedisCacheService $cacheService,
     ) {
     }
 
@@ -47,180 +35,87 @@ class ManuscriptAlphabetDecodeService
             return 0;
         }
 
-        // Sort language alphabet chars by frequency descending so the generator yields
-        // the classical frequency-analysis mapping as its very first combination.
-        $langFreqMap = $this->letterFrequencyRepository->getFrequencyMapByLanguageCode($languageCode);
-        $alphabet = ScriptAlphabets::getAlphabetForLanguage($languageCode);
-        $alphabetChars = mb_str_split($alphabet);
-        usort($alphabetChars, static fn($a, $b) => ($langFreqMap[$b] ?? 0.0) <=> ($langFreqMap[$a] ?? 0.0));
-
-        // Cipher char frequencies: most-frequent cipher char will be assigned the
-        // most-frequent language char first.
-        $cipherFreqs = array_count_values(mb_str_split($normalized));
-
-        // Script-specific vowel chars for the cheap pre-filter in backtrack().
-        $vowelChars = mb_str_split(ScriptAlphabets::getVowelsForLanguage($languageCode));
-
         $splits = $this->generateWordSplits($windowSize);
         $maxPos = min($textLength - $windowSize, self::MAX_WINDOW_POSITIONS - 1);
+        $patternCache = [];
         $savedCount = 0;
 
         for ($pos = 0; $pos <= $maxPos; $pos++) {
             $window = mb_substr($normalized, $pos, $windowSize);
 
             foreach ($splits as $wordLengths) {
-                $savedCount += $this->backtrack(
-                    $match, $languageCode, $window, $pos,
-                    $wordLengths, $alphabetChars, $cipherFreqs, $vowelChars,
-                    [], 0, 0, [], []
+                $row = $this->buildRow($window, $wordLengths, $languageCode, $patternCache);
+                if ($row === null) {
+                    continue;
+                }
+
+                $this->resultRepository->insert(
+                    $match->getId(),
+                    $languageCode,
+                    $pos,
+                    implode(',', $wordLengths),
+                    $row['cipherWords'],
+                    $row['wordCandidates'],
+                    $row['priorityHint'],
                 );
+                $savedCount++;
             }
         }
 
         return $savedCount;
     }
 
-    private function backtrack(
-        ManuscriptPatternMatchEntity $match,
-        string $languageCode,
-        string $window,
-        int $windowPos,
-        array $wordLengths,
-        array $alphabetChars,
-        array $cipherFreqs,
-        array $vowelChars,
-        array $mapping,
-        int $wordIndex,
-        int $charPos,
-        array $decodedWords,
-        array $wordMatches,
-    ): int {
-        if ($wordIndex >= count($wordLengths)) {
-            $this->resultRepository->insert(
-                $match->getId(),
-                $languageCode,
-                $windowPos,
-                implode(',', $wordLengths),
-                implode(' ', $decodedWords),
-                json_encode($wordMatches, JSON_THROW_ON_ERROR),
-            );
-            return 1;
-        }
-
-        $wordLen = $wordLengths[$wordIndex];
-        $cipherWord = mb_substr($window, $charPos, $wordLen);
-        $cipherChars = mb_str_split($cipherWord);
-
-        $newChars = [];
-        foreach ($cipherChars as $c) {
-            if (!isset($mapping[$c])) {
-                $newChars[$c] = true;
-            }
-        }
-        $newChars = array_keys($newChars);
-
-        // Order new cipher chars by frequency descending so the most informative char
-        // is assigned first. This makes the generator's first output the frequency-
-        // analysis candidate (most-common-cipher → most-common-language).
-        usort($newChars, static fn($a, $b) => ($cipherFreqs[$b] ?? 0) <=> ($cipherFreqs[$a] ?? 0));
-
-        // Bijective: available targets are language chars not yet used, still in frequency order.
-        $available = array_values(array_diff($alphabetChars, array_values($mapping)));
-
-        $saved = 0;
-        $tried = 0;
-
-        foreach ($this->generateAssignments($newChars, $available) as $assignment) {
-            if (++$tried > self::MAX_COMBINATIONS_PER_WORD) {
-                break;
-            }
-
-            $newMapping = array_merge($mapping, $assignment);
-            $candidate = implode('', array_map(static fn($c) => $newMapping[$c], $cipherChars));
-
-            // Cheap pre-filter: a word with no vowels for this script cannot be natural.
-            // Works for any script — no I/O cost.
-            if (!$this->hasVowel($candidate, $vowelChars)) {
-                continue;
-            }
-
-            // analyze() is pure PHP — no I/O. Pass language code so it uses the
-            // correct script-specific vowel set internally as well.
-            $validation = $this->languageValidationService->analyze($candidate, $languageCode);
-            if (!$validation['isNatural']) {
-                continue;
-            }
-
-            // Redis is only consulted for the rare case: passed analyze but previously
-            // failed search. This keeps Redis latency out of the hot path.
-            $cacheKey = $this->buildCacheKey($languageCode, $cipherWord, $newMapping, $cipherChars);
-            if ($this->cacheService->get($cacheKey) !== null) {
-                continue;
-            }
-
-            $searchResults = $this->fuzzySearchService->findClosestMatches($candidate, 5, $languageCode);
-            if (empty($searchResults)) {
-                $this->cacheService->set($cacheKey, 1, self::CACHE_TTL);
-                continue;
-            }
-
-            $saved += $this->backtrack(
-                $match, $languageCode, $window, $windowPos,
-                $wordLengths, $alphabetChars, $cipherFreqs, $vowelChars, $newMapping,
-                $wordIndex + 1, $charPos + $wordLen,
-                [...$decodedWords, $candidate],
-                [...$wordMatches, [$candidate => $searchResults]],
-            );
-        }
-
-        return $saved;
-    }
-
     /**
-     * Yields bijective assignments of $chars → distinct elements of $alphabet,
-     * in the order that $alphabet was provided (frequency-descending from decode()).
-     * The first yielded value is therefore the frequency-analysis mapping.
-     *
-     * @param list<string> $chars
-     * @param list<string> $alphabet
-     * @return \Generator<array<string, string>>
+     * @param array<string, list<array<string, mixed>>> $patternCache
+     * @return array{cipherWords: string, wordCandidates: string, priorityHint: float}|null
      */
-    private function generateAssignments(array $chars, array $alphabet): \Generator
+    private function buildRow(string $window, array $wordLengths, string $languageCode, array &$patternCache): ?array
     {
-        if (empty($chars)) {
-            yield [];
-            return;
-        }
+        $cipherWords = [];
+        $candidatesPerSlot = [];
+        $topScoreSum = 0.0;
 
-        $first = $chars[0];
-        $rest = array_slice($chars, 1);
+        $charPos = 0;
+        foreach ($wordLengths as $wordLen) {
+            $cipherWord = mb_substr($window, $charPos, $wordLen);
+            $cipherWords[] = $cipherWord;
+            $charPos += $wordLen;
 
-        foreach ($alphabet as $i => $target) {
-            $remaining = $alphabet;
-            unset($remaining[$i]);
+            $pattern = CanonicalPattern::fromString($cipherWord);
+            $cacheKey = $languageCode . '|' . $pattern;
 
-            foreach ($this->generateAssignments($rest, array_values($remaining)) as $sub) {
-                yield [$first => $target] + $sub;
+            if (!isset($patternCache[$cacheKey])) {
+                $patternCache[$cacheKey] = $this->fuzzySearchService->findByPattern(
+                    $pattern,
+                    $languageCode,
+                    self::CANDIDATES_PER_SLOT,
+                );
             }
-        }
-    }
 
-    private function hasVowel(string $word, array $vowelChars): bool
-    {
-        foreach (mb_str_split($word) as $char) {
-            if (in_array($char, $vowelChars, true)) {
-                return true;
+            $hits = $patternCache[$cacheKey];
+            if (empty($hits)) {
+                return null;
             }
-        }
-        return false;
-    }
 
-    private function buildCacheKey(string $languageCode, string $cipherWord, array $mapping, array $cipherChars): string
-    {
-        $unique = array_unique($cipherChars);
-        $relevantMap = array_intersect_key($mapping, array_flip($unique));
-        ksort($relevantMap);
-        return "alpha_decode_bad:{$languageCode}:{$cipherWord}:" . md5(serialize($relevantMap));
+            $words = [];
+            $topScore = 0;
+            foreach ($hits as $hit) {
+                $words[] = (string) ($hit['word'] ?? '');
+                $score = (int) ($hit['score'] ?? 0);
+                if ($score > $topScore) {
+                    $topScore = $score;
+                }
+            }
+
+            $candidatesPerSlot[] = $words;
+            $topScoreSum += $topScore;
+        }
+
+        return [
+            'cipherWords' => implode(' ', $cipherWords),
+            'wordCandidates' => json_encode($candidatesPerSlot, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
+            'priorityHint' => count($candidatesPerSlot) > 0 ? $topScoreSum / count($candidatesPerSlot) : 0.0,
+        ];
     }
 
     private function generateWordSplits(int $total): array

@@ -125,7 +125,9 @@ class WordIndexer
                     ],
                     'ipa' => ['type' => 'text'],
                     'languageCode' => ['type' => 'keyword'],
-                    'score' => ['type' => 'integer']
+                    'score' => ['type' => 'integer'],
+                    'pattern' => ['type' => 'keyword'],
+                    'wordLength' => ['type' => 'integer']
                 ]
             ]
         ]);
@@ -154,11 +156,14 @@ class WordIndexer
 
                 $docs = [];
                 foreach ($rows as $row) {
+                    $name = (string) $row['name'];
                     $docs[] = new Document(null, [
-                        'word' => $row['name'],
+                        'word' => $name,
                         'ipa' => $row['ipa'] ?? '',
                         'languageCode' => $languageCode,
                         'score' => $row['score'] ?? 0,
+                        'pattern' => CanonicalPattern::fromString(mb_strtolower($name)),
+                        'wordLength' => mb_strlen($name),
                     ]);
                 }
 

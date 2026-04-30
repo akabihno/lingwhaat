@@ -73,6 +73,10 @@ services:
         arguments:
             $openaiApiKey: '%env(OPENAI_API_KEY)%'
 
+    App\Service\ManuscriptAlphabetDecodeSelectionService:
+        arguments:
+            $openaiApiKey: '%env(OPENAI_API_KEY)%'
+
     App\Service\Search\WordCategorySearchService:
         arguments:
             $esHost: 'http://%env(ELASTICSEARCH_HOST)%:%env(ELASTICSEARCH_PORT)%'
