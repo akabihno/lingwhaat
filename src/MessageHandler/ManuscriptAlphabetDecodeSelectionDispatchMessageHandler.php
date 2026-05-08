@@ -13,7 +13,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class ManuscriptAlphabetDecodeSelectionDispatchMessageHandler
 {
     private const string LOG_SERVICE = '[ManuscriptAlphabetDecodeSelectionDispatchMessageHandler]';
-    private const int BUDGET_PER_RUN = 50;
+    private const int BUDGET_PER_RUN = 100;
 
     public function __construct(
         private readonly ManuscriptAlphabetDecodeResultRepository $resultRepository,
@@ -26,10 +26,10 @@ class ManuscriptAlphabetDecodeSelectionDispatchMessageHandler
     {
         $unprocessed = $this->resultRepository->findUnprocessed(self::BUDGET_PER_RUN);
 
-        $this->logger->info(
-            sprintf('Dispatching OpenAI selection for %d decode results (budget=%d)', count($unprocessed), self::BUDGET_PER_RUN),
-            ['service' => self::LOG_SERVICE]
-        );
+        $unprocessed
+            |> count(...)
+            |> (fn($x) => sprintf('Dispatching OpenAI selection for %d decode results (budget=%d)', $x, self::BUDGET_PER_RUN))
+            |> (fn($x) => $this->logger->info($x, ['service' => self::LOG_SERVICE]));
 
         foreach ($unprocessed as $result) {
             $this->bus->dispatch(new ManuscriptAlphabetDecodeSelectionMessage($result->getId()));
