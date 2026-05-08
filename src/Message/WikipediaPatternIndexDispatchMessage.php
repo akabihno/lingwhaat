@@ -6,7 +6,7 @@ class WikipediaPatternIndexDispatchMessage
 {
     public function __construct(
         private readonly int $windowSize = 18,
-        private readonly int $articleLimit = 20,
+        private readonly int $articleLimit = 5,
     ) {
     }
 

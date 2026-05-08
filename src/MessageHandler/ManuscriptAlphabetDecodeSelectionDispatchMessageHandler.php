@@ -13,7 +13,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class ManuscriptAlphabetDecodeSelectionDispatchMessageHandler
 {
     private const string LOG_SERVICE = '[ManuscriptAlphabetDecodeSelectionDispatchMessageHandler]';
-    private const int BUDGET_PER_RUN = 100;
+    private const int BUDGET_PER_RUN = 150;
 
     public function __construct(
         private readonly ManuscriptAlphabetDecodeResultRepository $resultRepository,
