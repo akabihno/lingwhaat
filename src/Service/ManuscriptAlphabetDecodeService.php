@@ -130,48 +130,56 @@ class ManuscriptAlphabetDecodeService
      */
     private function filterConsistentCandidates(array $cipherWords, array $candidatesPerSlot): ?array
     {
-        $changed = true;
-        while ($changed) {
-            $changed = false;
-            foreach ($cipherWords as $i => $cipherWord) {
-                $filtered = [];
-                foreach ($candidatesPerSlot[$i] as $word) {
-                    $mapping = $this->computeMapping($cipherWord, $word);
-                    if ($mapping === null) {
-                        continue;
-                    }
-                    $compatible = true;
-                    foreach ($cipherWords as $j => $otherCipherWord) {
-                        if ($i === $j) {
-                            continue;
-                        }
-                        $hasPartner = false;
-                        foreach ($candidatesPerSlot[$j] as $otherWord) {
-                            $otherMapping = $this->computeMapping($otherCipherWord, $otherWord);
-                            if ($otherMapping !== null && $this->areMappingsCompatible($mapping, $otherMapping)) {
-                                $hasPartner = true;
-                                break;
-                            }
-                        }
-                        if (!$hasPartner) {
-                            $compatible = false;
-                            break;
-                        }
-                    }
-                    if ($compatible) {
-                        $filtered[] = $word;
-                    }
-                }
-                if (count($filtered) !== count($candidatesPerSlot[$i])) {
-                    $changed = true;
-                    $candidatesPerSlot[$i] = $filtered;
-                }
-                if ($filtered === []) {
-                    return null;
-                }
+        $slotCount = count($cipherWords);
+        $validFlags = array_fill(0, $slotCount, []);
+
+        $this->dfsMarkValid($cipherWords, $candidatesPerSlot, 0, [], [], $validFlags);
+
+        $result = [];
+        foreach ($candidatesPerSlot as $i => $words) {
+            $filtered = array_values(array_filter($words, fn($_, $idx) => isset($validFlags[$i][$idx]), ARRAY_FILTER_USE_BOTH));
+            if ($filtered === []) {
+                return null;
+            }
+            $result[] = $filtered;
+        }
+        return $result;
+    }
+
+    /**
+     * @param list<string> $cipherWords
+     * @param list<list<string>> $candidatesPerSlot
+     * @param array<string, string> $mapping
+     * @param array<int, int> $chosen
+     * @param array<int, array<int, true>> $validFlags
+     */
+    private function dfsMarkValid(
+        array $cipherWords,
+        array $candidatesPerSlot,
+        int $slot,
+        array $mapping,
+        array $chosen,
+        array &$validFlags,
+    ): bool {
+        if ($slot === count($cipherWords)) {
+            foreach ($chosen as $s => $idx) {
+                $validFlags[$s][$idx] = true;
+            }
+            return true;
+        }
+
+        $anyFound = false;
+        foreach ($candidatesPerSlot[$slot] as $idx => $word) {
+            $wordMapping = $this->computeMapping($cipherWords[$slot], $word);
+            if ($wordMapping === null || !$this->areMappingsCompatible($mapping, $wordMapping)) {
+                continue;
+            }
+            $chosen[$slot] = $idx;
+            if ($this->dfsMarkValid($cipherWords, $candidatesPerSlot, $slot + 1, $mapping + $wordMapping, $chosen, $validFlags)) {
+                $anyFound = true;
             }
         }
-        return $candidatesPerSlot;
+        return $anyFound;
     }
 
     /** @return array<string, string>|null */
