@@ -111,11 +111,100 @@ class ManuscriptAlphabetDecodeService
             $topScoreSum += $topScore;
         }
 
+        $candidatesPerSlot = $this->filterConsistentCandidates($cipherWords, $candidatesPerSlot);
+        if ($candidatesPerSlot === null) {
+            return null;
+        }
+
         return [
             'cipherWords' => implode(' ', $cipherWords),
             'wordCandidates' => json_encode($candidatesPerSlot, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE),
             'priorityHint' => count($candidatesPerSlot) > 0 ? $topScoreSum / count($candidatesPerSlot) : 0.0,
         ];
+    }
+
+    /**
+     * @param list<string> $cipherWords
+     * @param list<list<string>> $candidatesPerSlot
+     * @return list<list<string>>|null
+     */
+    private function filterConsistentCandidates(array $cipherWords, array $candidatesPerSlot): ?array
+    {
+        $changed = true;
+        while ($changed) {
+            $changed = false;
+            foreach ($cipherWords as $i => $cipherWord) {
+                $filtered = [];
+                foreach ($candidatesPerSlot[$i] as $word) {
+                    $mapping = $this->computeMapping($cipherWord, $word);
+                    if ($mapping === null) {
+                        continue;
+                    }
+                    $compatible = true;
+                    foreach ($cipherWords as $j => $otherCipherWord) {
+                        if ($i === $j) {
+                            continue;
+                        }
+                        $hasPartner = false;
+                        foreach ($candidatesPerSlot[$j] as $otherWord) {
+                            $otherMapping = $this->computeMapping($otherCipherWord, $otherWord);
+                            if ($otherMapping !== null && $this->areMappingsCompatible($mapping, $otherMapping)) {
+                                $hasPartner = true;
+                                break;
+                            }
+                        }
+                        if (!$hasPartner) {
+                            $compatible = false;
+                            break;
+                        }
+                    }
+                    if ($compatible) {
+                        $filtered[] = $word;
+                    }
+                }
+                if (count($filtered) !== count($candidatesPerSlot[$i])) {
+                    $changed = true;
+                    $candidatesPerSlot[$i] = $filtered;
+                }
+                if ($filtered === []) {
+                    return null;
+                }
+            }
+        }
+        return $candidatesPerSlot;
+    }
+
+    /** @return array<string, string>|null */
+    private function computeMapping(string $cipherWord, string $targetWord): ?array
+    {
+        $cipherChars = str_split($cipherWord);
+        $targetChars = mb_str_split($targetWord);
+        if (count($cipherChars) !== count($targetChars)) {
+            return null;
+        }
+        $mapping = [];
+        foreach ($cipherChars as $i => $c) {
+            $t = $targetChars[$i];
+            if (isset($mapping[$c]) && $mapping[$c] !== $t) {
+                return null;
+            }
+            $mapping[$c] = $t;
+        }
+        return $mapping;
+    }
+
+    /**
+     * @param array<string, string> $m1
+     * @param array<string, string> $m2
+     */
+    private function areMappingsCompatible(array $m1, array $m2): bool
+    {
+        foreach ($m1 as $cipher => $target) {
+            if (isset($m2[$cipher]) && $m2[$cipher] !== $target) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private function generateWordSplits(int $total): array

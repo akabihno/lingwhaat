@@ -27,7 +27,7 @@ class ManuscriptAlphabetDecodeSelectionService
             return ['status' => ManuscriptAlphabetDecodeResultEntity::STATUS_NO_MATCH, 'selected_phrase' => null];
         }
 
-        $userPrompt = $this->buildUserPrompt($candidates, $result->getLanguageCode(), $result->getCipherWords());
+        $userPrompt = $this->buildUserPrompt($candidates, $result->getLanguageCode());
 
         try {
             $response = $this->httpClient->request('POST', self::OPENAI_API_URL, [
@@ -70,13 +70,11 @@ class ManuscriptAlphabetDecodeSelectionService
     /**
      * @param array<int, array<int, string>> $candidates
      */
-    private function buildUserPrompt(array $candidates, string $languageCode, string $cipherWords): string
+    private function buildUserPrompt(array $candidates, string $languageCode): string
     {
-        $cipherWordList = explode(' ', trim($cipherWords));
-        $lines = ["Language: {$languageCode}", "Cipher words: {$cipherWords}", 'Slot candidates (slot index: cipher_word -> candidates):'];
+        $lines = ["Language: {$languageCode}", 'Slot candidates:'];
         foreach ($candidates as $i => $words) {
-            $cipher = $cipherWordList[$i] ?? "slot{$i}";
-            $lines[] = sprintf('  slot %d (%s): %s', $i, $cipher, implode(', ', $words));
+            $lines[] = sprintf('  slot %d: %s', $i, implode(', ', $words));
         }
         return implode("\n", $lines);
     }
@@ -84,18 +82,9 @@ class ManuscriptAlphabetDecodeSelectionService
     private function buildSystemPrompt(): string
     {
         return <<<'PROMPT'
-You are decoding a manuscript fragment encrypted with a simple letter-substitution cipher. The user gives you:
-- The cipher words (the encrypted text)
-- Slot-by-slot candidates: each slot lists real words in the target language whose letter-pattern matches the cipher word at that position
+You are decoding a manuscript fragment. The user gives you slot-by-slot candidates: each slot lists real words in the target language whose letter-pattern matches a cipher word at that position.
 
-CRITICAL CONSTRAINT — substitution consistency:
-Each cipher letter maps to exactly one target-language letter throughout the entire phrase. If cipher letter X maps to target letter Y in one word, every occurrence of X across ALL selected words must also map to Y. Candidates that violate this constraint must be rejected.
-
-To verify: for every pair of slots, check all cipher letters they share. The corresponding target letters at those positions must be identical across both selected words.
-
-Example: cipher words "mfun kgomp" — letter "m" appears at position 0 in both words. If slot 0 selects a word starting with "ה", then slot 1 must also select a word starting with "ה". A slot-1 word starting with "ת" would be inconsistent and must not be chosen.
-
-After enforcing consistency, among all consistent combinations pick the one that forms the most natural and grammatical phrase in the given language. If no consistent combination forms a meaningful phrase, return null.
+Pick exactly one word per slot so that, joined with spaces, they form the most natural and grammatical phrase in the given language. If no combination forms a meaningful phrase, return null.
 
 Respond with ONLY a JSON object:
   {"selection": ["word_for_slot_0", "word_for_slot_1", ...]}
