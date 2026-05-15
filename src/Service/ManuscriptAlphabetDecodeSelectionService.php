@@ -27,6 +27,7 @@ class ManuscriptAlphabetDecodeSelectionService
             return ['status' => ManuscriptAlphabetDecodeResultEntity::STATUS_NO_MATCH, 'selected_phrase' => null];
         }
 
+        $cipherWords = $result->getCipherWords();
         $userPrompt = $this->buildUserPrompt($candidates, $result->getLanguageCode());
 
         try {
@@ -55,7 +56,7 @@ class ManuscriptAlphabetDecodeSelectionService
         }
 
         $content = (string) ($data['choices'][0]['message']['content'] ?? '');
-        $selection = $this->parseSelection($content, $candidates);
+        $selection = $this->parseSelection($content, $candidates, $cipherWords);
 
         if ($selection === null) {
             return ['status' => ManuscriptAlphabetDecodeResultEntity::STATUS_NO_MATCH, 'selected_phrase' => null];
@@ -99,7 +100,7 @@ PROMPT;
      * @param array<int, array<int, string>> $candidates
      * @return array<int, string>|null
      */
-    private function parseSelection(string $content, array $candidates): ?array
+    private function parseSelection(string $content, array $candidates, string $cipherWords): ?array
     {
         if (preg_match('/```(?:json)?\s*(\{[\s\S]*?\})\s*```/s', $content, $m)) {
             $json = $m[1];
@@ -131,6 +132,35 @@ PROMPT;
             $result[] = $word;
         }
 
+        $cipherWordList = explode(' ', trim($cipherWords));
+        if (!$this->hasConsistentMapping($result, $cipherWordList)) {
+            return null;
+        }
+
         return $result;
+    }
+
+    /**
+     * @param array<int, string> $selection
+     * @param array<int, string> $cipherWordList
+     */
+    private function hasConsistentMapping(array $selection, array $cipherWordList): bool
+    {
+        $mapping = [];
+        foreach ($selection as $i => $word) {
+            $cipherChars = str_split($cipherWordList[$i] ?? '');
+            $targetChars = mb_str_split($word);
+            if (count($cipherChars) !== count($targetChars)) {
+                return false;
+            }
+            foreach ($cipherChars as $j => $cipherChar) {
+                $targetChar = $targetChars[$j];
+                if (isset($mapping[$cipherChar]) && $mapping[$cipherChar] !== $targetChar) {
+                    return false;
+                }
+                $mapping[$cipherChar] = $targetChar;
+            }
+        }
+        return true;
     }
 }
