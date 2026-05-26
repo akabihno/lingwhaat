@@ -1,0 +1,48 @@
+# Run as a one-off Job so the heavy in-memory pattern counting doesn't share
+# the web pod's memory cgroup. Edit args (--language-code, --window-size,
+# --top-n, --max-counters) before applying; the Job name embeds the language
+# so re-runs for different languages don't collide.
+#
+#   kubectl apply -f k8s/canonical-pattern-stats-job.yaml
+#   kubectl logs -n lingwhaat -f job/canonical-pattern-stats-en
+#   kubectl delete -f k8s/canonical-pattern-stats-job.yaml   # when done
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: canonical-pattern-stats-en
+  namespace: lingwhaat
+spec:
+  backoffLimit: 1
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      labels:
+        app: canonical-pattern-stats
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: stats
+          image: registry.local:30500/lingwhaat-php:latest
+          command:
+            - php
+            - -d
+            - memory_limit=1500M
+            - /var/www/html/bin/console
+            - app:canonical-pattern-stats
+            - --language-code=en
+            - --window-size=18
+            - --top-n=50
+            - --max-counters=50000
+            - -vv
+          envFrom:
+            - configMapRef:
+                name: lingwhaat-config
+            - secretRef:
+                name: lingwhaat-secrets
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "2000m"

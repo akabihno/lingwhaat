@@ -12,6 +12,8 @@ class CanonicalPatternStatsService
     private const int ARTICLE_FETCH_BATCH_SIZE = 500;
     private const int MANUSCRIPT_FETCH_BATCH_SIZE = 500;
 
+    public const int DEFAULT_MAX_COUNTERS = 50_000;
+
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly ManuscriptPatternMatchRepository $manuscriptRepository,
@@ -20,11 +22,14 @@ class CanonicalPatternStatsService
 
     /**
      * Stream all Wikipedia articles for a language, count canonical patterns of the given window size,
-     * return the top-N descending by count.
+     * return the top-N descending by count. Uses a bounded counter set (Misra-Gries) so memory stays
+     * proportional to $maxCounters regardless of corpus size; any pattern occurring more often than
+     * (stream_length / ($maxCounters + 1)) is guaranteed to be in the result, which comfortably covers
+     * the top-50 heavy hitters for any natural language.
      *
      * @return array<int, array{pattern:string, count:int}>
      */
-    public function topPatternsForLanguage(string $languageCode, int $windowSize, int $topN): array
+    public function topPatternsForLanguage(string $languageCode, int $windowSize, int $topN, int $maxCounters = self::DEFAULT_MAX_COUNTERS): array
     {
         /** @var WikipediaArticleRepository $repo */
         $repo = $this->em->getRepository(WikipediaArticleEntity::class);
@@ -40,7 +45,7 @@ class CanonicalPatternStatsService
             );
 
             foreach ($articles as $article) {
-                $this->accumulateCounts($article['text'], $windowSize, $counts);
+                $this->accumulateCounts($article['text'], $windowSize, $counts, $maxCounters);
             }
 
             $offset += count($articles);
@@ -56,7 +61,7 @@ class CanonicalPatternStatsService
      *
      * @return array<int, array{pattern:string, count:int}>
      */
-    public function topPatternsForManuscriptSource(int $sourceId, int $windowSize, int $topN): array
+    public function topPatternsForManuscriptSource(int $sourceId, int $windowSize, int $topN, int $maxCounters = self::DEFAULT_MAX_COUNTERS): array
     {
         $counts = [];
         $offset = 0;
@@ -69,7 +74,7 @@ class CanonicalPatternStatsService
             );
 
             foreach ($rows as $row) {
-                $this->accumulateCounts($row['sourceData'], $windowSize, $counts);
+                $this->accumulateCounts($row['sourceData'], $windowSize, $counts, $maxCounters);
             }
 
             $offset += count($rows);
@@ -82,7 +87,7 @@ class CanonicalPatternStatsService
     /**
      * @param array<string,int> $counts
      */
-    private function accumulateCounts(string $text, int $windowSize, array &$counts): void
+    private function accumulateCounts(string $text, int $windowSize, array &$counts, int $maxCounters): void
     {
         $normalized = $this->normalize($text);
         $chars = preg_split('//u', $normalized, -1, PREG_SPLIT_NO_EMPTY) ?: [];
@@ -99,8 +104,23 @@ class CanonicalPatternStatsService
 
             if (isset($counts[$pattern])) {
                 $counts[$pattern]++;
-            } else {
+                continue;
+            }
+
+            if (count($counts) < $maxCounters) {
                 $counts[$pattern] = 1;
+                continue;
+            }
+
+            // Misra-Gries decrement step: when the counter set is full, subtract 1 from every
+            // counter and drop the zeros. The new pattern is effectively "consumed" by this
+            // decrement and not stored. Heavy hitters survive, transient noise is evicted.
+            foreach ($counts as $key => $value) {
+                if ($value <= 1) {
+                    unset($counts[$key]);
+                } else {
+                    $counts[$key] = $value - 1;
+                }
             }
         }
     }

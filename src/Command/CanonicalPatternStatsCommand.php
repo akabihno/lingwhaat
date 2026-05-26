@@ -54,6 +54,13 @@ class CanonicalPatternStatsCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'How many top patterns to record per series',
                 self::DEFAULT_TOP_N,
+            )
+            ->addOption(
+                'max-counters',
+                'm',
+                InputOption::VALUE_OPTIONAL,
+                'Misra-Gries counter cap. Higher = more accurate top-N counts, more RAM. Default keeps memory well under 256 MiB.',
+                CanonicalPatternStatsService::DEFAULT_MAX_COUNTERS,
             );
     }
 
@@ -79,8 +86,14 @@ class CanonicalPatternStatsCommand extends Command
             return Command::FAILURE;
         }
 
-        $io->section(sprintf('Wikipedia (language=%s, window=%d, top=%d)', $languageCode, $windowSize, $topN));
-        $wikipediaTop = $this->stats->topPatternsForLanguage($languageCode, $windowSize, $topN);
+        $maxCounters = (int) $input->getOption('max-counters');
+        if ($maxCounters < $topN * 10) {
+            $io->error(sprintf('--max-counters (%d) must be at least 10x --top-n (%d) for reliable heavy-hitter recovery.', $maxCounters, $topN));
+            return Command::FAILURE;
+        }
+
+        $io->section(sprintf('Wikipedia (language=%s, window=%d, top=%d, max_counters=%d)', $languageCode, $windowSize, $topN, $maxCounters));
+        $wikipediaTop = $this->stats->topPatternsForLanguage($languageCode, $windowSize, $topN, $maxCounters);
         $io->writeln(sprintf('  collected %d patterns', count($wikipediaTop)));
         $this->pushPriorityGauge(
             self::GAUGE_WIKIPEDIA,
@@ -94,7 +107,7 @@ class CanonicalPatternStatsCommand extends Command
         $io->section(sprintf('Manuscript sources: %d distinct source_ids', count($sourceIds)));
 
         foreach ($sourceIds as $sourceId) {
-            $top = $this->stats->topPatternsForManuscriptSource($sourceId, $windowSize, $topN);
+            $top = $this->stats->topPatternsForManuscriptSource($sourceId, $windowSize, $topN, $maxCounters);
             $io->writeln(sprintf('  source_id=%d -> %d patterns', $sourceId, count($top)));
             $this->pushPriorityGauge(
                 self::GAUGE_MANUSCRIPT,
