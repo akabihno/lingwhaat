@@ -1,0 +1,214 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-data
+  namespace: lingwhaat
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-provisioning
+  namespace: lingwhaat
+data:
+  datasource.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus:9090
+        isDefault: true
+        editable: true
+  dashboards.yaml: |
+    apiVersion: 1
+    providers:
+      - name: 'Lingwhaat'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        updateIntervalSeconds: 30
+        allowUiUpdates: true
+        options:
+          path: /var/lib/grafana/dashboards
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboards
+  namespace: lingwhaat
+data:
+  canonical_patterns.json: |
+    {
+      "annotations": {"list": []},
+      "editable": true,
+      "fiscalYearStartMonth": 0,
+      "graphTooltip": 0,
+      "id": null,
+      "links": [],
+      "panels": [
+        {
+          "type": "barchart",
+          "title": "Wikipedia canonical pattern counts by priority",
+          "description": "Counts of the top-N canonical patterns for each language. Priority N is the most common, 1 the least common (within the top N).",
+          "gridPos": {"h": 10, "w": 24, "x": 0, "y": 0},
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "targets": [
+            {
+              "expr": "lingwhaat_canonical_pattern_wikipedia_count",
+              "legendFormat": "{{language}} (w={{window}})",
+              "refId": "A",
+              "format": "table",
+              "instant": true
+            }
+          ],
+          "options": {
+            "orientation": "vertical",
+            "xField": "priority",
+            "legend": {"showLegend": true, "displayMode": "list", "placement": "bottom"}
+          },
+          "fieldConfig": {
+            "defaults": {"custom": {"axisLabel": "count"}},
+            "overrides": []
+          }
+        },
+        {
+          "type": "barchart",
+          "title": "Manuscript canonical pattern counts by priority",
+          "description": "Counts of the top-N canonical patterns for each manuscript source_id. Compare shape against the language above to gauge similarity.",
+          "gridPos": {"h": 10, "w": 24, "x": 0, "y": 10},
+          "datasource": {"type": "prometheus", "uid": "prometheus"},
+          "targets": [
+            {
+              "expr": "lingwhaat_canonical_pattern_manuscript_count",
+              "legendFormat": "source {{source_id}} (w={{window}})",
+              "refId": "A",
+              "format": "table",
+              "instant": true
+            }
+          ],
+          "options": {
+            "orientation": "vertical",
+            "xField": "priority",
+            "legend": {"showLegend": true, "displayMode": "list", "placement": "bottom"}
+          },
+          "fieldConfig": {
+            "defaults": {"custom": {"axisLabel": "count"}},
+            "overrides": []
+          }
+        }
+      ],
+      "schemaVersion": 39,
+      "tags": ["lingwhaat", "canonical-pattern"],
+      "templating": {"list": []},
+      "time": {"from": "now-1h", "to": "now"},
+      "timepicker": {},
+      "timezone": "",
+      "title": "Canonical Pattern Stats",
+      "uid": "canonical-patterns",
+      "version": 1,
+      "weekStart": ""
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  namespace: lingwhaat
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: raspberrypi
+      securityContext:
+        fsGroup: 472
+      containers:
+        - name: grafana
+          image: grafana/grafana:11.3.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: GF_SECURITY_ADMIN_USER
+              value: "admin"
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: "admin"
+            - name: GF_USERS_ALLOW_SIGN_UP
+              value: "false"
+            - name: GF_SERVER_HTTP_PORT
+              value: "3000"
+          volumeMounts:
+            - name: provisioning-datasources
+              mountPath: /etc/grafana/provisioning/datasources/datasource.yaml
+              subPath: datasource.yaml
+            - name: provisioning-dashboards
+              mountPath: /etc/grafana/provisioning/dashboards/dashboards.yaml
+              subPath: dashboards.yaml
+            - name: dashboards
+              mountPath: /var/lib/grafana/dashboards
+            - name: data
+              mountPath: /var/lib/grafana
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+      volumes:
+        - name: provisioning-datasources
+          configMap:
+            name: grafana-provisioning
+            items:
+              - key: datasource.yaml
+                path: datasource.yaml
+        - name: provisioning-dashboards
+          configMap:
+            name: grafana-provisioning
+            items:
+              - key: dashboards.yaml
+                path: dashboards.yaml
+        - name: dashboards
+          configMap:
+            name: grafana-dashboards
+        - name: data
+          persistentVolumeClaim:
+            claimName: grafana-data
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: lingwhaat
+spec:
+  selector:
+    app: grafana
+  ports:
+    - name: http
+      port: 3000
+      targetPort: 3000
+      nodePort: 30300
+  type: NodePort
