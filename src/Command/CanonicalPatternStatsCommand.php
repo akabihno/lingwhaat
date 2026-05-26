@@ -61,6 +61,13 @@ class CanonicalPatternStatsCommand extends Command
                 InputOption::VALUE_OPTIONAL,
                 'Misra-Gries counter cap. Higher = more accurate top-N counts, more RAM. Default keeps memory well under 256 MiB.',
                 CanonicalPatternStatsService::DEFAULT_MAX_COUNTERS,
+            )
+            ->addOption(
+                'article-limit',
+                'a',
+                InputOption::VALUE_OPTIONAL,
+                'Cap on Wikipedia articles to process (smoke-test knob; omit or 0 to process everything).',
+                0,
             );
     }
 
@@ -92,9 +99,39 @@ class CanonicalPatternStatsCommand extends Command
             return Command::FAILURE;
         }
 
-        $io->section(sprintf('Wikipedia (language=%s, window=%d, top=%d, max_counters=%d)', $languageCode, $windowSize, $topN, $maxCounters));
-        $wikipediaTop = $this->stats->topPatternsForLanguage($languageCode, $windowSize, $topN, $maxCounters);
-        $io->writeln(sprintf('  collected %d patterns', count($wikipediaTop)));
+        $articleLimitOpt = (int) $input->getOption('article-limit');
+        $articleLimit = $articleLimitOpt > 0 ? $articleLimitOpt : null;
+
+        $started = microtime(true);
+        $io->section(sprintf(
+            'Wikipedia (language=%s, window=%d, top=%d, max_counters=%d, article_limit=%s)',
+            $languageCode,
+            $windowSize,
+            $topN,
+            $maxCounters,
+            $articleLimit === null ? 'all' : (string) $articleLimit,
+        ));
+
+        $progress = function (int $processed, int $counters) use ($io, $started): void {
+            $elapsed = max(microtime(true) - $started, 0.001);
+            $io->writeln(sprintf(
+                '  [%6.1fs] processed=%d counters=%d mem=%s',
+                $elapsed,
+                $processed,
+                $counters,
+                $this->formatBytes(memory_get_usage(true)),
+            ));
+        };
+
+        $wikipediaTop = $this->stats->topPatternsForLanguage(
+            $languageCode,
+            $windowSize,
+            $topN,
+            $maxCounters,
+            $articleLimit,
+            $progress,
+        );
+        $io->writeln(sprintf('  -> top %d patterns collected', count($wikipediaTop)));
         $this->pushPriorityGauge(
             self::GAUGE_WIKIPEDIA,
             'Counts of the top-N canonical patterns observed in Wikipedia articles for a language. priority=N is the most common.',
@@ -102,12 +139,30 @@ class CanonicalPatternStatsCommand extends Command
             ['language' => $languageCode, 'window' => (string) $windowSize],
             $wikipediaTop,
         );
+        $io->writeln('  -> Wikipedia metrics written to Prometheus storage');
 
         $sourceIds = $this->manuscriptRepository->findDistinctSourceIds();
         $io->section(sprintf('Manuscript sources: %d distinct source_ids', count($sourceIds)));
 
         foreach ($sourceIds as $sourceId) {
-            $top = $this->stats->topPatternsForManuscriptSource($sourceId, $windowSize, $topN, $maxCounters);
+            $sourceStarted = microtime(true);
+            $sourceProgress = function (int $processed, int $counters) use ($io, $sourceStarted, $sourceId): void {
+                $elapsed = max(microtime(true) - $sourceStarted, 0.001);
+                $io->writeln(sprintf(
+                    '  [src=%d %5.1fs] rows=%d counters=%d',
+                    $sourceId,
+                    $elapsed,
+                    $processed,
+                    $counters,
+                ));
+            };
+            $top = $this->stats->topPatternsForManuscriptSource(
+                $sourceId,
+                $windowSize,
+                $topN,
+                $maxCounters,
+                $sourceProgress,
+            );
             $io->writeln(sprintf('  source_id=%d -> %d patterns', $sourceId, count($top)));
             $this->pushPriorityGauge(
                 self::GAUGE_MANUSCRIPT,
@@ -119,12 +174,25 @@ class CanonicalPatternStatsCommand extends Command
         }
 
         $io->success(sprintf(
-            'Wrote %d Wikipedia + %d manuscript series to Prometheus storage. Visit /metrics on the web container.',
+            'Wrote %d Wikipedia + %d manuscript series to Prometheus storage in %.1fs.',
             count($wikipediaTop),
-            array_sum(array_map(static fn () => 1, $sourceIds)),
+            count($sourceIds),
+            microtime(true) - $started,
         ));
 
         return Command::SUCCESS;
+    }
+
+    private function formatBytes(int $bytes): string
+    {
+        $units = ['B', 'KiB', 'MiB', 'GiB'];
+        $i = 0;
+        $value = (float) $bytes;
+        while ($value >= 1024 && $i < count($units) - 1) {
+            $value /= 1024;
+            $i++;
+        }
+        return sprintf('%.1f%s', $value, $units[$i]);
     }
 
     /**

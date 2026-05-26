@@ -33,6 +33,8 @@ spec:
             - --window-size=18
             - --top-n=50
             - --max-counters=50000
+            # Smoke test first; remove this flag (or set to 0) to process the whole corpus.
+            - --article-limit=500
             - -vv
           envFrom:
             - configMapRef:

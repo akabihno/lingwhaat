@@ -29,18 +29,34 @@ class CanonicalPatternStatsService
      *
      * @return array<int, array{pattern:string, count:int}>
      */
-    public function topPatternsForLanguage(string $languageCode, int $windowSize, int $topN, int $maxCounters = self::DEFAULT_MAX_COUNTERS): array
-    {
+    public function topPatternsForLanguage(
+        string $languageCode,
+        int $windowSize,
+        int $topN,
+        int $maxCounters = self::DEFAULT_MAX_COUNTERS,
+        ?int $articleLimit = null,
+        ?\Closure $onProgress = null,
+    ): array {
         /** @var WikipediaArticleRepository $repo */
         $repo = $this->em->getRepository(WikipediaArticleEntity::class);
 
         $counts = [];
         $offset = 0;
+        $totalProcessed = 0;
 
         do {
+            $fetchLimit = self::ARTICLE_FETCH_BATCH_SIZE;
+            if ($articleLimit !== null) {
+                $remaining = $articleLimit - $totalProcessed;
+                if ($remaining <= 0) {
+                    break;
+                }
+                $fetchLimit = min($fetchLimit, $remaining);
+            }
+
             $articles = $repo->findIdAndTextByLanguageCodePaginated(
                 $languageCode,
-                self::ARTICLE_FETCH_BATCH_SIZE,
+                $fetchLimit,
                 $offset,
             );
 
@@ -49,7 +65,12 @@ class CanonicalPatternStatsService
             }
 
             $offset += count($articles);
+            $totalProcessed += count($articles);
             $this->em->clear();
+
+            if ($onProgress !== null) {
+                $onProgress($totalProcessed, count($counts));
+            }
         } while ($articles !== []);
 
         return $this->topN($counts, $topN);
@@ -61,10 +82,16 @@ class CanonicalPatternStatsService
      *
      * @return array<int, array{pattern:string, count:int}>
      */
-    public function topPatternsForManuscriptSource(int $sourceId, int $windowSize, int $topN, int $maxCounters = self::DEFAULT_MAX_COUNTERS): array
-    {
+    public function topPatternsForManuscriptSource(
+        int $sourceId,
+        int $windowSize,
+        int $topN,
+        int $maxCounters = self::DEFAULT_MAX_COUNTERS,
+        ?\Closure $onProgress = null,
+    ): array {
         $counts = [];
         $offset = 0;
+        $totalProcessed = 0;
 
         do {
             $rows = $this->manuscriptRepository->findSourceDataBySourceIdPaginated(
@@ -78,7 +105,12 @@ class CanonicalPatternStatsService
             }
 
             $offset += count($rows);
+            $totalProcessed += count($rows);
             $this->em->clear();
+
+            if ($onProgress !== null) {
+                $onProgress($totalProcessed, count($counts));
+            }
         } while ($rows !== []);
 
         return $this->topN($counts, $topN);
