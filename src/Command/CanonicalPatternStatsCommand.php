@@ -14,15 +14,15 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:canonical-pattern-stats',
-    description: 'Compute top canonical patterns for a language (Wikipedia) and each manuscript source_id, push counts to Prometheus.',
+    description: 'Compute the canonical-pattern overlap between a language (Wikipedia) and each manuscript source_id, push to Prometheus.',
 )]
 class CanonicalPatternStatsCommand extends Command
 {
     private const int DEFAULT_WINDOW_SIZE = 18;
     private const int DEFAULT_TOP_N = 50;
 
-    private const string GAUGE_WIKIPEDIA = 'canonical_pattern_wikipedia_count';
-    private const string GAUGE_MANUSCRIPT = 'canonical_pattern_manuscript_count';
+    private const string GAUGE_OVERLAP_WIKI = 'canonical_pattern_overlap_wikipedia_count';
+    private const string GAUGE_OVERLAP_MANUSCRIPT = 'canonical_pattern_overlap_manuscript_count';
 
     public function __construct(
         private readonly CanonicalPatternStatsService $stats,
@@ -35,40 +35,11 @@ class CanonicalPatternStatsCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption(
-                'language-code',
-                'l',
-                InputOption::VALUE_REQUIRED,
-                'Target language code (e.g. en, fr, ru) for the Wikipedia side.',
-            )
-            ->addOption(
-                'window-size',
-                'w',
-                InputOption::VALUE_OPTIONAL,
-                'Sliding window size in characters',
-                self::DEFAULT_WINDOW_SIZE,
-            )
-            ->addOption(
-                'top-n',
-                't',
-                InputOption::VALUE_OPTIONAL,
-                'How many top patterns to record per series',
-                self::DEFAULT_TOP_N,
-            )
-            ->addOption(
-                'max-counters',
-                'm',
-                InputOption::VALUE_OPTIONAL,
-                'Misra-Gries counter cap. Higher = more accurate top-N counts, more RAM. Default keeps memory well under 256 MiB.',
-                CanonicalPatternStatsService::DEFAULT_MAX_COUNTERS,
-            )
-            ->addOption(
-                'article-limit',
-                'a',
-                InputOption::VALUE_OPTIONAL,
-                'Cap on Wikipedia articles to process (smoke-test knob; omit or 0 to process everything).',
-                0,
-            );
+            ->addOption('language-code', 'l', InputOption::VALUE_REQUIRED, 'Wikipedia language code to compare against (e.g. en, fr, ru).')
+            ->addOption('window-size', 'w', InputOption::VALUE_OPTIONAL, 'Sliding window size in characters', self::DEFAULT_WINDOW_SIZE)
+            ->addOption('top-n', 't', InputOption::VALUE_OPTIONAL, 'Top-N most common patterns to consider on each side', self::DEFAULT_TOP_N)
+            ->addOption('max-counters', 'm', InputOption::VALUE_OPTIONAL, 'Misra-Gries counter cap (higher = more accurate, more RAM).', CanonicalPatternStatsService::DEFAULT_MAX_COUNTERS)
+            ->addOption('article-limit', 'a', InputOption::VALUE_OPTIONAL, 'Cap on Wikipedia articles to process (smoke-test knob; 0 = all)', 0);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -103,6 +74,11 @@ class CanonicalPatternStatsCommand extends Command
         $articleLimit = $articleLimitOpt > 0 ? $articleLimitOpt : null;
 
         $started = microtime(true);
+
+        // Each run fully replaces the overlap metrics — wipe stale series from previous runs first.
+        $io->writeln('Wiping previous canonical-pattern metrics from Redis...');
+        $this->metrics->wipe();
+
         $io->section(sprintf(
             'Wikipedia (language=%s, window=%d, top=%d, max_counters=%d, article_limit=%s)',
             $languageCode,
@@ -131,19 +107,29 @@ class CanonicalPatternStatsCommand extends Command
             $articleLimit,
             $progress,
         );
-        $io->writeln(sprintf('  -> top %d patterns collected', count($wikipediaTop)));
-        $this->pushPriorityGauge(
-            self::GAUGE_WIKIPEDIA,
-            'Counts of the top-N canonical patterns observed in Wikipedia articles for a language. priority=N is the most common.',
-            ['language', 'window', 'priority'],
-            ['language' => $languageCode, 'window' => (string) $windowSize],
-            $wikipediaTop,
-        );
-        $io->writeln('  -> Wikipedia metrics written to Prometheus storage');
+        $io->writeln(sprintf('  -> top %d Wikipedia patterns collected', count($wikipediaTop)));
+
+        $wikiCountByPattern = [];
+        foreach ($wikipediaTop as $entry) {
+            $wikiCountByPattern[$entry['pattern']] = (int) $entry['count'];
+        }
 
         $sourceIds = $this->manuscriptRepository->findDistinctSourceIds();
         $io->section(sprintf('Manuscript sources: %d distinct source_ids', count($sourceIds)));
 
+        $labelNames = ['language', 'source_id', 'window', 'pattern'];
+        $wikiGauge = $this->metrics->gauge(
+            self::GAUGE_OVERLAP_WIKI,
+            'Wikipedia occurrence count for canonical patterns that are shared between language=$language top-N and the manuscript source_id top-N.',
+            $labelNames,
+        );
+        $manuscriptGauge = $this->metrics->gauge(
+            self::GAUGE_OVERLAP_MANUSCRIPT,
+            'Manuscript occurrence count for canonical patterns that are shared between language=$language top-N and the manuscript source_id top-N.',
+            $labelNames,
+        );
+
+        $totalSharedSeries = 0;
         foreach ($sourceIds as $sourceId) {
             $sourceStarted = microtime(true);
             $sourceProgress = function (int $processed, int $counters) use ($io, $sourceStarted, $sourceId): void {
@@ -156,6 +142,7 @@ class CanonicalPatternStatsCommand extends Command
                     $counters,
                 ));
             };
+
             $top = $this->stats->topPatternsForManuscriptSource(
                 $sourceId,
                 $windowSize,
@@ -163,20 +150,36 @@ class CanonicalPatternStatsCommand extends Command
                 $maxCounters,
                 $sourceProgress,
             );
-            $io->writeln(sprintf('  source_id=%d -> %d patterns', $sourceId, count($top)));
-            $this->pushPriorityGauge(
-                self::GAUGE_MANUSCRIPT,
-                'Counts of the top-N canonical patterns observed in manuscript_pattern_match.source_data per source_id. priority=N is the most common.',
-                ['source_id', 'window', 'priority'],
-                ['source_id' => (string) $sourceId, 'window' => (string) $windowSize],
-                $top,
-            );
+
+            $shared = 0;
+            foreach ($top as $entry) {
+                $pattern = (string) $entry['pattern'];
+                if (!isset($wikiCountByPattern[$pattern])) {
+                    continue;
+                }
+
+                $labels = [
+                    $languageCode,
+                    (string) $sourceId,
+                    (string) $windowSize,
+                    $pattern,
+                ];
+
+                $wikiGauge->set((float) $wikiCountByPattern[$pattern], $labels);
+                $manuscriptGauge->set((float) $entry['count'], $labels);
+
+                $shared++;
+            }
+
+            $totalSharedSeries += $shared;
+            $io->writeln(sprintf('  source_id=%d -> %d shared patterns with %s top-%d', $sourceId, $shared, $languageCode, $topN));
         }
 
         $io->success(sprintf(
-            'Wrote %d Wikipedia + %d manuscript series to Prometheus storage in %.1fs.',
-            count($wikipediaTop),
+            'Wrote %d shared-pattern series (across %d manuscript sources) for language=%s in %.1fs.',
+            $totalSharedSeries,
             count($sourceIds),
+            $languageCode,
             microtime(true) - $started,
         ));
 
@@ -193,36 +196,5 @@ class CanonicalPatternStatsCommand extends Command
             $i++;
         }
         return sprintf('%.1f%s', $value, $units[$i]);
-    }
-
-    /**
-     * @param array<string>                                 $labelNames Including 'priority' as the last label.
-     * @param array<string,string>                          $baseLabels Common labels for this series (e.g. language=en).
-     * @param array<int, array{pattern:string, count:int}>  $top
-     */
-    private function pushPriorityGauge(
-        string $metric,
-        string $help,
-        array $labelNames,
-        array $baseLabels,
-        array $top,
-    ): void {
-        $gauge = $this->metrics->gauge($metric, $help, $labelNames);
-        $totalRanks = count($top);
-
-        foreach ($top as $rank => $entry) {
-            // rank 0 = most common in $top => priority = totalRanks; last item => priority = 1
-            $priority = $totalRanks - $rank;
-
-            $labels = $baseLabels;
-            $labels['priority'] = (string) $priority;
-
-            $ordered = [];
-            foreach ($labelNames as $name) {
-                $ordered[] = (string) ($labels[$name] ?? '');
-            }
-
-            $gauge->set((float) $entry['count'], $ordered);
-        }
     }
 }

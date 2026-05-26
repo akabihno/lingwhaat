@@ -40,6 +40,16 @@ class PrometheusMetricsService
         return $this->registry->getOrRegisterGauge(self::NAMESPACE, $name, $help, $labelNames);
     }
 
+    /**
+     * Clears every metric stored under our Redis prefix. Use this when the metric set is fully
+     * replaced on each run (the canonical-pattern overlap, for example), so stale label
+     * combinations from previous runs don't keep getting scraped.
+     */
+    public function wipe(): void
+    {
+        $this->registry->wipeStorage();
+    }
+
     public function render(): string
     {
         $renderer = new RenderTextFormat();
