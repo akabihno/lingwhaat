@@ -1,0 +1,74 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "type": "barchart",
+      "title": "Wikipedia canonical pattern counts by priority",
+      "description": "Counts of the top-N canonical patterns for each language. Priority N is the most common, 1 the least common (within the top N).",
+      "gridPos": {"h": 10, "w": 24, "x": 0, "y": 0},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {
+          "expr": "canonical_pattern_wikipedia_count",
+          "legendFormat": "{{language}} (w={{window}})",
+          "refId": "A",
+          "format": "table",
+          "instant": true
+        }
+      ],
+      "options": {
+        "orientation": "vertical",
+        "xField": "priority",
+        "legend": {"showLegend": true, "displayMode": "list", "placement": "bottom"}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {"axisLabel": "count"}
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "barchart",
+      "title": "Manuscript canonical pattern counts by priority",
+      "description": "Counts of the top-N canonical patterns for each manuscript source_id. Compare shape against the language above to gauge similarity.",
+      "gridPos": {"h": 10, "w": 24, "x": 0, "y": 10},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {
+          "expr": "canonical_pattern_manuscript_count",
+          "legendFormat": "source {{source_id}} (w={{window}})",
+          "refId": "A",
+          "format": "table",
+          "instant": true
+        }
+      ],
+      "options": {
+        "orientation": "vertical",
+        "xField": "priority",
+        "legend": {"showLegend": true, "displayMode": "list", "placement": "bottom"}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {"axisLabel": "count"}
+        },
+        "overrides": []
+      }
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["lingwhaat", "canonical-pattern"],
+  "templating": {"list": []},
+  "time": {"from": "now-1h", "to": "now"},
+  "timepicker": {},
+  "timezone": "",
+  "title": "Canonical Pattern Stats",
+  "uid": "canonical-patterns",
+  "version": 1,
+  "weekStart": ""
+}

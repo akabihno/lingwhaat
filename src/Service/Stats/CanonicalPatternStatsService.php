@@ -1,0 +1,149 @@
+<?php
+
+namespace App\Service\Stats;
+
+use App\Entity\WikipediaArticleEntity;
+use App\Repository\ManuscriptPatternMatchRepository;
+use App\Repository\WikipediaArticleRepository;
+use Doctrine\ORM\EntityManagerInterface;
+
+class CanonicalPatternStatsService
+{
+    private const int ARTICLE_FETCH_BATCH_SIZE = 500;
+    private const int MANUSCRIPT_FETCH_BATCH_SIZE = 500;
+
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly ManuscriptPatternMatchRepository $manuscriptRepository,
+    ) {
+    }
+
+    /**
+     * Stream all Wikipedia articles for a language, count canonical patterns of the given window size,
+     * return the top-N descending by count.
+     *
+     * @return array<int, array{pattern:string, count:int}>
+     */
+    public function topPatternsForLanguage(string $languageCode, int $windowSize, int $topN): array
+    {
+        /** @var WikipediaArticleRepository $repo */
+        $repo = $this->em->getRepository(WikipediaArticleEntity::class);
+
+        $counts = [];
+        $offset = 0;
+
+        do {
+            $articles = $repo->findIdAndTextByLanguageCodePaginated(
+                $languageCode,
+                self::ARTICLE_FETCH_BATCH_SIZE,
+                $offset,
+            );
+
+            foreach ($articles as $article) {
+                $this->accumulateCounts($article['text'], $windowSize, $counts);
+            }
+
+            $offset += count($articles);
+            $this->em->clear();
+        } while ($articles !== []);
+
+        return $this->topN($counts, $topN);
+    }
+
+    /**
+     * Stream all manuscript_pattern_match rows for a source_id, count canonical patterns of the given
+     * window size, return the top-N descending by count.
+     *
+     * @return array<int, array{pattern:string, count:int}>
+     */
+    public function topPatternsForManuscriptSource(int $sourceId, int $windowSize, int $topN): array
+    {
+        $counts = [];
+        $offset = 0;
+
+        do {
+            $rows = $this->manuscriptRepository->findSourceDataBySourceIdPaginated(
+                $sourceId,
+                self::MANUSCRIPT_FETCH_BATCH_SIZE,
+                $offset,
+            );
+
+            foreach ($rows as $row) {
+                $this->accumulateCounts($row['sourceData'], $windowSize, $counts);
+            }
+
+            $offset += count($rows);
+            $this->em->clear();
+        } while ($rows !== []);
+
+        return $this->topN($counts, $topN);
+    }
+
+    /**
+     * @param array<string,int> $counts
+     */
+    private function accumulateCounts(string $text, int $windowSize, array &$counts): void
+    {
+        $normalized = $this->normalize($text);
+        $chars = preg_split('//u', $normalized, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $charCount = count($chars);
+
+        if ($charCount < $windowSize) {
+            return;
+        }
+
+        $lastWindowStart = $charCount - $windowSize;
+        for ($start = 0; $start <= $lastWindowStart; $start++) {
+            $window = array_slice($chars, $start, $windowSize);
+            $pattern = $this->buildPattern($window);
+
+            if (isset($counts[$pattern])) {
+                $counts[$pattern]++;
+            } else {
+                $counts[$pattern] = 1;
+            }
+        }
+    }
+
+    /**
+     * @param array<int,string> $chars
+     */
+    private function buildPattern(array $chars): string
+    {
+        $map = [];
+        $nextId = 0;
+        $pattern = [];
+
+        foreach ($chars as $char) {
+            if (!isset($map[$char])) {
+                $map[$char] = $nextId++;
+            }
+            $pattern[] = $map[$char];
+        }
+
+        return implode(',', $pattern);
+    }
+
+    /**
+     * @param array<string,int> $counts
+     * @return array<int, array{pattern:string, count:int}>
+     */
+    private function topN(array $counts, int $topN): array
+    {
+        arsort($counts, SORT_NUMERIC);
+        $top = array_slice($counts, 0, $topN, true);
+
+        $result = [];
+        foreach ($top as $pattern => $count) {
+            $result[] = ['pattern' => $pattern, 'count' => $count];
+        }
+
+        return $result;
+    }
+
+    private function normalize(string $s): string
+    {
+        $s = mb_strtolower($s);
+        return preg_replace('/[^\p{L}]+/u', '', $s) ?? '';
+    }
+}

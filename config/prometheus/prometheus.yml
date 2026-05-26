@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 30s
+  scrape_timeout: 15s
+  evaluation_interval: 30s
+
+scrape_configs:
+  - job_name: 'lingwhaat-php'
+    metrics_path: /metrics
+    static_configs:
+      - targets: ['localhost:80']
+        labels:
+          service: 'lingwhaat'
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
