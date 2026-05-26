@@ -25,12 +25,18 @@ class ManuscriptPatternMatchResultRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return ManuscriptPatternMatchResultEntity[]
+     * Returns rows that the scheduled scorer should process.
+     *
+     * Canonical-pattern-overlap rows (produced by app:canonical-pattern-stats) are excluded:
+     * their results payload uses a different shape than the ES-hit JSON the scorer expects,
+     * so running the scorer on them would mark them as scored=0.0 and bury them forever.
      */
     public function findUnscored(): array
     {
         return $this->createQueryBuilder('r')
             ->where('r.languageScore IS NULL')
+            ->andWhere('r.results NOT LIKE :overlapPrefix')
+            ->setParameter('overlapPrefix', '{"detector":"canonical_pattern_overlap"%')
             ->getQuery()
             ->getResult();
     }

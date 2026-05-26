@@ -3,6 +3,8 @@
 namespace App\Command;
 
 use App\Repository\ManuscriptPatternMatchRepository;
+use App\Repository\ManuscriptPatternMatchResultRepository;
+use App\Service\Logging\ElasticsearchLogger;
 use App\Service\Metrics\PrometheusMetricsService;
 use App\Service\Stats\CanonicalPatternStatsService;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -27,7 +29,9 @@ class CanonicalPatternStatsCommand extends Command
     public function __construct(
         private readonly CanonicalPatternStatsService $stats,
         private readonly ManuscriptPatternMatchRepository $manuscriptRepository,
+        private readonly ManuscriptPatternMatchResultRepository $resultRepository,
         private readonly PrometheusMetricsService $metrics,
+        private readonly ElasticsearchLogger $esLogger,
     ) {
         parent::__construct();
     }
@@ -130,6 +134,7 @@ class CanonicalPatternStatsCommand extends Command
         );
 
         $totalSharedSeries = 0;
+        $totalPersistedMatches = 0;
         foreach ($sourceIds as $sourceId) {
             $sourceStarted = microtime(true);
             $sourceProgress = function (int $processed, int $counters) use ($io, $sourceStarted, $sourceId): void {
@@ -143,43 +148,99 @@ class CanonicalPatternStatsCommand extends Command
                 ));
             };
 
-            $top = $this->stats->topPatternsForManuscriptSource(
+            $analysis = $this->stats->analyzeManuscriptSource(
                 $sourceId,
                 $windowSize,
                 $topN,
                 $maxCounters,
+                $wikiCountByPattern,
                 $sourceProgress,
             );
+            $top = $analysis['top'];
+            $overlapsByMatch = $analysis['overlapsByMatch'];
 
-            $shared = 0;
+            // Final shared = manuscript top-N ∩ wiki top-N
+            $sharedPatterns = [];
             foreach ($top as $entry) {
                 $pattern = (string) $entry['pattern'];
                 if (!isset($wikiCountByPattern[$pattern])) {
                     continue;
                 }
+                $sharedPatterns[$pattern] = (int) $entry['count'];
 
-                $labels = [
-                    $languageCode,
-                    (string) $sourceId,
-                    (string) $windowSize,
-                    $pattern,
-                ];
-
+                $labels = [$languageCode, (string) $sourceId, (string) $windowSize, $pattern];
                 $wikiGauge->set((float) $wikiCountByPattern[$pattern], $labels);
                 $manuscriptGauge->set((float) $entry['count'], $labels);
-
-                $shared++;
             }
 
-            $totalSharedSeries += $shared;
-            $io->writeln(sprintf('  source_id=%d -> %d shared patterns with %s top-%d', $sourceId, $shared, $languageCode, $topN));
+            $totalSharedSeries += count($sharedPatterns);
+
+            // Persist each match that contains at least one final-shared pattern, then ES-log it.
+            $persistedForSource = 0;
+            foreach ($overlapsByMatch as $matchId => $matchOverlaps) {
+                $filtered = [];
+                foreach ($matchOverlaps as $overlap) {
+                    $pattern = $overlap['pattern'];
+                    if (!isset($sharedPatterns[$pattern])) {
+                        continue;
+                    }
+                    $filtered[] = [
+                        'pattern' => $pattern,
+                        'position' => $overlap['position'],
+                        'wiki_count' => $overlap['wiki_count'],
+                        'manuscript_count' => $sharedPatterns[$pattern],
+                    ];
+                }
+                if ($filtered === []) {
+                    continue;
+                }
+
+                $payload = [
+                    'detector' => 'canonical_pattern_overlap',
+                    'language_code' => $languageCode,
+                    'window_size' => $windowSize,
+                    'top_n' => $topN,
+                    'overlaps' => $filtered,
+                ];
+                $json = json_encode($payload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE);
+
+                // language_score is intentionally left NULL so the scheduled scoring job's
+                // findUnscored() picks up this row. language_code is also left NULL since the
+                // scorer determines and writes it; the language being compared is preserved
+                // inside the results JSON under "language_code".
+                $this->resultRepository->insert($matchId, $sourceId, $json);
+
+                $this->esLogger->info('Canonical pattern overlap detected', [
+                    'event' => 'canonical_pattern_overlap',
+                    'match_id' => $matchId,
+                    'source_id' => $sourceId,
+                    'language_code' => $languageCode,
+                    'window_size' => $windowSize,
+                    'top_n' => $topN,
+                    'shared_pattern_count' => count($filtered),
+                    'patterns' => array_column($filtered, 'pattern'),
+                ]);
+
+                $persistedForSource++;
+            }
+            $totalPersistedMatches += $persistedForSource;
+
+            $io->writeln(sprintf(
+                '  source_id=%d -> %d shared patterns / %d match rows persisted (lang=%s top-%d)',
+                $sourceId,
+                count($sharedPatterns),
+                $persistedForSource,
+                $languageCode,
+                $topN,
+            ));
         }
 
         $io->success(sprintf(
-            'Wrote %d shared-pattern series (across %d manuscript sources) for language=%s in %.1fs.',
-            $totalSharedSeries,
-            count($sourceIds),
+            'language=%s: %d shared-pattern series, %d match-rows persisted, %d sources in %.1fs.',
             $languageCode,
+            $totalSharedSeries,
+            $totalPersistedMatches,
+            count($sourceIds),
             microtime(true) - $started,
         ));
 

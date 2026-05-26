@@ -89,9 +89,36 @@ class CanonicalPatternStatsService
         int $maxCounters = self::DEFAULT_MAX_COUNTERS,
         ?\Closure $onProgress = null,
     ): array {
+        $result = $this->analyzeManuscriptSource($sourceId, $windowSize, $topN, $maxCounters, [], $onProgress);
+        return $result['top'];
+    }
+
+    /**
+     * Stream manuscript rows for a source_id in a single pass:
+     *  - update Misra-Gries counters → returns top-N
+     *  - whenever a window's canonical pattern matches one of $patternsOfInterest (typically the
+     *    Wikipedia top-N for the language being compared), record one entry per (match_id, pattern)
+     *    capturing the first position seen in that match.
+     *
+     * @param array<string, int> $patternsOfInterest pattern => wiki_count
+     * @return array{
+     *   top: array<int, array{pattern:string, count:int}>,
+     *   overlapsByMatch: array<int, array<int, array{pattern:string, position:int, wiki_count:int}>>
+     * }
+     */
+    public function analyzeManuscriptSource(
+        int $sourceId,
+        int $windowSize,
+        int $topN,
+        int $maxCounters,
+        array $patternsOfInterest,
+        ?\Closure $onProgress = null,
+    ): array {
         $counts = [];
+        $overlapsByMatch = [];
         $offset = 0;
         $totalProcessed = 0;
+        $trackOverlaps = $patternsOfInterest !== [];
 
         do {
             $rows = $this->manuscriptRepository->findSourceDataBySourceIdPaginated(
@@ -101,7 +128,17 @@ class CanonicalPatternStatsService
             );
 
             foreach ($rows as $row) {
-                $this->accumulateCounts($row['sourceData'], $windowSize, $counts, $maxCounters);
+                $matchId = (int) $row['id'];
+                $sourceText = (string) $row['sourceData'];
+                $this->scanRow(
+                    $matchId,
+                    $sourceText,
+                    $windowSize,
+                    $maxCounters,
+                    $counts,
+                    $trackOverlaps ? $patternsOfInterest : null,
+                    $overlapsByMatch,
+                );
             }
 
             $offset += count($rows);
@@ -113,7 +150,66 @@ class CanonicalPatternStatsService
             }
         } while ($rows !== []);
 
-        return $this->topN($counts, $topN);
+        return [
+            'top' => $this->topN($counts, $topN),
+            'overlapsByMatch' => $overlapsByMatch,
+        ];
+    }
+
+    /**
+     * @param array<string,int>                                                       $counts
+     * @param array<string,int>|null                                                  $patternsOfInterest
+     * @param array<int, array<int, array{pattern:string, position:int, wiki_count:int}>> $overlapsByMatch
+     */
+    private function scanRow(
+        int $matchId,
+        string $text,
+        int $windowSize,
+        int $maxCounters,
+        array &$counts,
+        ?array $patternsOfInterest,
+        array &$overlapsByMatch,
+    ): void {
+        $normalized = $this->normalize($text);
+        $chars = preg_split('//u', $normalized, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $charCount = count($chars);
+
+        if ($charCount < $windowSize) {
+            return;
+        }
+
+        $seenForThisMatch = [];
+        $lastWindowStart = $charCount - $windowSize;
+        for ($start = 0; $start <= $lastWindowStart; $start++) {
+            $window = array_slice($chars, $start, $windowSize);
+            $pattern = $this->buildPattern($window);
+
+            if (isset($counts[$pattern])) {
+                $counts[$pattern]++;
+            } elseif (count($counts) < $maxCounters) {
+                $counts[$pattern] = 1;
+            } else {
+                foreach ($counts as $key => $value) {
+                    if ($value <= 1) {
+                        unset($counts[$key]);
+                    } else {
+                        $counts[$key] = $value - 1;
+                    }
+                }
+            }
+
+            if ($patternsOfInterest !== null
+                && isset($patternsOfInterest[$pattern])
+                && !isset($seenForThisMatch[$pattern])
+            ) {
+                $seenForThisMatch[$pattern] = true;
+                $overlapsByMatch[$matchId][] = [
+                    'pattern' => $pattern,
+                    'position' => $start,
+                    'wiki_count' => $patternsOfInterest[$pattern],
+                ];
+            }
+        }
     }
 
     /**
