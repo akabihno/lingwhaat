@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Message\ManuscriptAlphabetDecodeSelectionDispatchMessage;
 use App\Message\ManuscriptLanguageScoreDispatchMessage;
 use App\Message\ParseWikipediaLanguagesMessage;
 use App\Message\ParseWiktionaryLanguagesMessage;
@@ -51,6 +52,11 @@ class Schedule implements ScheduleProviderInterface
 
         $schedule->add(
             RecurringMessage::every('5 minutes', new ManuscriptLanguageScoreDispatchMessage())
+                ->withJitter(self::JITTER_SECONDS)
+        );
+
+        $schedule->add(
+            RecurringMessage::every('5 minutes', new ManuscriptAlphabetDecodeSelectionDispatchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
 

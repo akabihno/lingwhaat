@@ -10,6 +10,7 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_pattern_match_result TO '${MY
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_pattern_match TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_pattern_match_schedule TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.word_category TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_alphabet_decode_result TO '${MYSQL_WEB_USER}'@'%';
 
 GRANT SELECT,INSERT,UPDATE,DELETE ON lingwhaat.doctrine_migration_versions TO '${MYSQL_WEB_USER}'@'%';
 

@@ -88,6 +88,32 @@ class FuzzySearchService
         return array_map(fn($r) => $r->getSource(), $results->getResults());
     }
 
+    /**
+     * @return array<int, array<string, mixed>>
+     */
+    public function findByPattern(string $pattern, string $languageCode, int $limit = 30): array
+    {
+        $boolQuery = new BoolQuery();
+
+        $patternTerm = new Term();
+        $patternTerm->setTerm('pattern', $pattern);
+        $boolQuery->addFilter($patternTerm);
+
+        $languageTerm = new Term();
+        $languageTerm->setTerm('languageCode', $languageCode);
+        $boolQuery->addFilter($languageTerm);
+
+        $query = new Query($boolQuery);
+        $query->setSize($limit);
+        $query->setSort([
+            'score' => ['order' => 'desc'],
+        ]);
+
+        $results = $this->esClient->getIndex($this->indexName)->search($query);
+
+        return array_map(fn($r) => $r->getSource(), $results->getResults());
+    }
+
     public function findClosestMatchesByIpa(string $ipa, int $limit = 5): array
     {
         $fuzzy = new Fuzzy();

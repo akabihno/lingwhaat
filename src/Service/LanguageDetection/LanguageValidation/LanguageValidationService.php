@@ -2,25 +2,25 @@
 
 namespace App\Service\LanguageDetection\LanguageValidation;
 
+use App\Constant\ScriptAlphabets;
 use App\Service\Logging\ElasticsearchLogger;
 
 class LanguageValidationService
 {
-    private const string VOWELS = 'aeiouAEIOU';
-    private const string CONSONANTS = 'bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ';
-    private const float MIN_VOWEL_RATIO = 0.20;  // At least 20% vowels
-    private const float MAX_VOWEL_RATIO = 0.60;  // At most 60% vowels
-    private const float OPTIMAL_VOWEL_RATIO = 0.40; // Ideal around 40%
-
     public function __construct(protected ElasticsearchLogger $logger)
     {
     }
 
     /**
-     * Analyzes text and returns a score from 0 to 100
-     * Higher score means more natural-looking text
+     * Analyzes text and returns a naturalness score from 0 to 100.
+     *
+     * When $languageCode is provided the vowel set and all scoring thresholds
+     * are taken from ScriptAlphabets, making analysis correct for every
+     * supported script (Cyrillic, Georgian, Arabic, etc.).
+     * Without a language code the method falls back to ASCII-Latin behaviour
+     * so existing callers (e.g. /api/validate) are unaffected.
      */
-    public function analyze(string $text): array
+    public function analyze(string $text, ?string $languageCode = null): array
     {
         $text = trim($text);
 
@@ -28,25 +28,39 @@ class LanguageValidationService
             return [
                 'score' => 0,
                 'isNatural' => false,
-                'details' => ['error' => 'Empty text']
+                'details' => ['error' => 'Empty text'],
             ];
         }
 
-        $letters = preg_replace('/[^a-zA-Z]/', '', $text);
+        // Unicode-safe letter extraction — works for any script.
+        preg_match_all('/\p{L}/u', $text, $matches);
+        $letters = implode('', $matches[0] ?? []);
 
-        if (strlen($letters) < 3) {
+        if (mb_strlen($letters) < 3) {
             return [
                 'score' => 0,
                 'isNatural' => false,
-                'details' => ['error' => 'Not enough letters to analyze']
+                'details' => ['error' => 'Not enough letters to analyze'],
             ];
         }
 
+        $vowelChars  = mb_str_split(
+            $languageCode !== null
+                ? ScriptAlphabets::getVowelsForLanguage($languageCode)
+                : 'aeiouAEIOU'
+        );
+        $thresholds  = $languageCode !== null
+            ? ScriptAlphabets::getThresholdsForLanguage($languageCode)
+            : ScriptAlphabets::SCRIPT_THRESHOLDS[ScriptAlphabets::LATIN_ALPHABET];
+
+        $vowelCount = $this->countInSet($letters, $vowelChars);
+        $totalLetters = mb_strlen($letters);
+
         $scores = [
-            'vowelRatio' => $this->scoreVowelRatio($letters),
-            'consonantClusters' => $this->scoreConsonantClusters($letters),
-            'vowelClusters' => $this->scoreVowelClusters($letters),
-            'alternationPattern' => $this->scoreAlternation($letters)
+            'vowelRatio'         => $this->scoreVowelRatio($letters, $vowelChars, $thresholds),
+            'consonantClusters'  => $this->scoreConsonantClusters($letters, $vowelChars, $thresholds),
+            'vowelClusters'      => $this->scoreVowelClusters($letters, $vowelChars, $thresholds),
+            'alternationPattern' => $this->scoreAlternation($letters, $vowelChars, $thresholds),
         ];
 
         $totalScore = (
@@ -56,162 +70,121 @@ class LanguageValidationService
             $scores['alternationPattern'] * 0.15
         );
 
-        $this->logger->info(
-            'Completed validation',
-            [
-                'input' => $text,
-                'service' => '[LanguageValidationService]',
-                'isNatural' => $totalScore >= 60,
-                'score' => round($totalScore, 2)
-            ]
-        );
+        $this->logger->info('Completed validation', [
+            'input'     => $text,
+            'service'   => '[LanguageValidationService]',
+            'isNatural' => $totalScore >= 60,
+            'score'     => round($totalScore, 2),
+        ]);
 
         return [
-            'score' => round($totalScore, 2),
+            'score'     => round($totalScore, 2),
             'isNatural' => $totalScore >= 60,
-            'details' => array_merge($scores, [
-                'vowelCount' => $this->countVowels($letters),
-                'consonantCount' => $this->countConsonants($letters),
-                'totalLetters' => strlen($letters)
-            ])
+            'details'   => array_merge($scores, [
+                'vowelCount'    => $vowelCount,
+                'consonantCount' => $totalLetters - $vowelCount,
+                'totalLetters'  => $totalLetters,
+            ]),
         ];
     }
 
-    /**
-     * Score based on vowel to consonant ratio
-     */
-    private function scoreVowelRatio(string $letters): float
+    private function scoreVowelRatio(string $letters, array $vowelChars, array $t): float
     {
-        $total = strlen($letters);
-        $vowelCount = $this->countVowels($letters);
-        $ratio = $vowelCount / $total;
+        $total = mb_strlen($letters);
+        $ratio = $this->countInSet($letters, $vowelChars) / $total;
 
-        if ($ratio < self::MIN_VOWEL_RATIO || $ratio > self::MAX_VOWEL_RATIO) {
+        if ($ratio < $t['min_vowel_ratio'] || $ratio > $t['max_vowel_ratio']) {
             $deviation = min(
-                abs($ratio - self::MIN_VOWEL_RATIO),
-                abs($ratio - self::MAX_VOWEL_RATIO)
+                abs($ratio - $t['min_vowel_ratio']),
+                abs($ratio - $t['max_vowel_ratio'])
             );
-            return max(0, 100 - ($deviation * 300));
+            return max(0.0, 100.0 - ($deviation * 300));
         }
 
-        $deviation = abs($ratio - self::OPTIMAL_VOWEL_RATIO);
-        return max(70, 100 - ($deviation * 200));
+        return max(70.0, 100.0 - (abs($ratio - $t['optimal_vowel_ratio']) * 200));
     }
 
-    /**
-     * Score based on consonant cluster lengths
-     */
-    private function scoreConsonantClusters(string $letters): float
+    private function scoreConsonantClusters(string $letters, array $vowelChars, array $t): float
     {
-        $maxCluster = $this->getMaxClusterLength($letters, self::CONSONANTS);
+        $max = $this->getMaxClusterLength($letters, $vowelChars, false);
+        $n   = $t['max_consonant_cluster'];
 
-        if ($maxCluster <= 3) {
-            return 100;
-        } elseif ($maxCluster <= 4) {
-            return 80;
-        } elseif ($maxCluster <= 5) {
-            return 50;
-        } elseif ($maxCluster <= 6) {
-            return 30;
-        } else {
-            return max(0, 100 - ($maxCluster * 10));
-        }
+        if ($max <= $n)     return 100.0;
+        if ($max <= $n + 1) return 80.0;
+        if ($max <= $n + 2) return 50.0;
+        if ($max <= $n + 3) return 30.0;
+        return max(0.0, 100.0 - ($max * 10));
     }
 
-    /**
-     * Score based on vowel cluster lengths
-     */
-    private function scoreVowelClusters(string $letters): float
+    private function scoreVowelClusters(string $letters, array $vowelChars, array $t): float
     {
-        $maxCluster = $this->getMaxClusterLength($letters, self::VOWELS);
+        $max = $this->getMaxClusterLength($letters, $vowelChars, true);
+        $n   = $t['max_vowel_cluster'];
 
-        if ($maxCluster <= 2) {
-            return 100;
-        } elseif ($maxCluster <= 3) {
-            return 85;
-        } elseif ($maxCluster <= 4) {
-            return 60;
-        } else {
-            return max(0, 100 - ($maxCluster * 15));
-        }
+        if ($max <= $n)     return 100.0;
+        if ($max <= $n + 1) return 85.0;
+        if ($max <= $n + 2) return 60.0;
+        return max(0.0, 100.0 - ($max * 15));
     }
 
-    /**
-     * Score based on vowel-consonant alternation pattern
-     */
-    private function scoreAlternation(string $letters): float
+    private function scoreAlternation(string $letters, array $vowelChars, array $t): float
     {
         $alternations = 0;
-        $prevType = null;
+        $prevType     = null;
 
-        for ($i = 0; $i < strlen($letters); $i++) {
-            $currentType = $this->isVowel($letters[$i]) ? 'v' : 'c';
-
+        foreach (mb_str_split($letters) as $char) {
+            $currentType = in_array($char, $vowelChars, true) ? 'v' : 'c';
             if ($prevType !== null && $prevType !== $currentType) {
                 $alternations++;
             }
-
             $prevType = $currentType;
         }
 
-        $maxPossibleAlternations = strlen($letters) - 1;
-        if ($maxPossibleAlternations === 0) {
-            return 50;
+        $maxPossible = mb_strlen($letters) - 1;
+        if ($maxPossible === 0) {
+            return 50.0;
         }
 
-        $alternationRate = $alternations / $maxPossibleAlternations;
+        $rate = $alternations / $maxPossible;
 
-        if ($alternationRate >= 0.50 && $alternationRate <= 0.85) {
-            return 100;
-        } elseif ($alternationRate >= 0.35) {
-            return 75;
-        } else {
-            return max(0, $alternationRate * 150);
+        if ($rate >= $t['alternation_ideal_min'] && $rate <= $t['alternation_ideal_max']) {
+            return 100.0;
         }
+        if ($rate >= $t['alternation_good_min']) {
+            return 75.0;
+        }
+        return max(0.0, $rate * 150);
+    }
+
+    private function countInSet(string $letters, array $charSet): int
+    {
+        $count = 0;
+        foreach (mb_str_split($letters) as $char) {
+            if (in_array($char, $charSet, true)) {
+                $count++;
+            }
+        }
+        return $count;
     }
 
     /**
-     * Count vowels in string
+     * Returns the longest run of vowels ($forVowels = true) or consonants ($forVowels = false).
      */
-    private function countVowels(string $text): int
+    private function getMaxClusterLength(string $letters, array $vowelChars, bool $forVowels): int
     {
-        return strlen(preg_replace('/[^' . self::VOWELS . ']/', '', $text));
-    }
+        $max     = 0;
+        $current = 0;
 
-    /**
-     * Count consonants in string
-     */
-    private function countConsonants(string $text): int
-    {
-        return strlen(preg_replace('/[^' . self::CONSONANTS . ']/', '', $text));
-    }
-
-    /**
-     * Check if character is a vowel
-     */
-    private function isVowel(string $char): bool
-    {
-        return strpos(self::VOWELS, $char) !== false;
-    }
-
-    /**
-     * Get maximum cluster length for given character set
-     */
-    private function getMaxClusterLength(string $letters, string $charset): int
-    {
-        $maxCluster = 0;
-        $currentCluster = 0;
-
-        for ($i = 0; $i < strlen($letters); $i++) {
-            if (str_contains($charset, $letters[$i])) {
-                $currentCluster++;
-                $maxCluster = max($maxCluster, $currentCluster);
+        foreach (mb_str_split($letters) as $char) {
+            if (in_array($char, $vowelChars, true) === $forVowels) {
+                if (++$current > $max) {
+                    $max = $current;
+                }
             } else {
-                $currentCluster = 0;
+                $current = 0;
             }
         }
 
-        return $maxCluster;
+        return $max;
     }
-
 }

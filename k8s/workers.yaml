@@ -157,3 +157,35 @@ spec:
             limits:
               memory: "768Mi"
               cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: messenger-selection
+  namespace: lingwhaat
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: messenger-selection
+  template:
+    metadata:
+      labels:
+        app: messenger-selection
+    spec:
+      containers:
+        - name: messenger-selection
+          image: registry.local:30500/lingwhaat-php:latest
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "selection_async", "--keepalive", "--memory-limit=400M", "-vv"]
+          envFrom:
+            - configMapRef:
+                name: lingwhaat-config
+            - secretRef:
+                name: lingwhaat-secrets
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
