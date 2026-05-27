@@ -2,13 +2,12 @@
 
 namespace App\MessageHandler;
 
-use App\Entity\WikipediaPatternIndexOffsetEntity;
-use App\Message\ManuscriptPatternMatchSearchMessage;
 use App\Message\WikipediaPatternIndexDispatchMessage;
+use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaArticleRepository;
-use App\Repository\WikipediaPatternIndexOffsetRepository;
 use App\Service\Logging\ElasticsearchLogger;
 use App\Service\Search\WikipediaPatternIndexerService;
+use App\Service\WikipediaPatternIndexEpochCoordinator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -20,7 +19,7 @@ class WikipediaPatternIndexDispatchMessageHandler
     public function __construct(
         private readonly WikipediaPatternIndexerService $indexerService,
         private readonly WikipediaArticleRepository $articleRepository,
-        private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
+        private readonly WikipediaPatternIndexEpochCoordinator $coordinator,
         private readonly MessageBusInterface $bus,
         private readonly ElasticsearchLogger $logger,
     ) {
@@ -34,51 +33,33 @@ class WikipediaPatternIndexDispatchMessageHandler
             'articleLimit' => $message->getArticleLimit(),
         ]);
 
+        $languageCodes = $this->articleRepository->getDistinctLanguageCodes();
+
+        if (!$this->coordinator->tryStartEpoch(count($languageCodes))) {
+            $this->logger->info('Previous Wikipedia pattern index epoch still in progress — skipping this tick', [
+                'service' => self::LOG_SERVICE,
+            ]);
+            return;
+        }
+
+        // Now safe to nuke: lock held, no other epoch can be running.
         $this->indexerService->deleteIndex();
         $this->logger->info('Deleted existing index', ['service' => self::LOG_SERVICE]);
 
-        $languageCodes = $this->articleRepository->getDistinctLanguageCodes();
-        $this->logger->info(sprintf('Found %d language codes to index', count($languageCodes)), [
+        $this->logger->info(sprintf('Fanning out indexing for %d languages', count($languageCodes)), [
             'service' => self::LOG_SERVICE,
             'languageCodes' => $languageCodes,
         ]);
 
         foreach ($languageCodes as $languageCode) {
-            // Read offset values before indexing — em->clear() inside the indexer will detach any
-            // entity loaded here, so we only capture scalar values and re-fetch after indexing.
-            $existing = $this->offsetRepository->findByLanguageCode($languageCode);
-            $startOffset = ($existing !== null && $existing->getWindowSize() === $message->getWindowSize())
-                ? $existing->getCurrentOffset()
-                : 0;
-
-            $this->logger->info(sprintf('Indexing language: %s (offset: %d)', $languageCode, $startOffset), [
-                'service' => self::LOG_SERVICE,
-            ]);
-
-            $articlesProcessed = $this->indexerService->indexBatchByLanguageCode(
-                $message->getWindowSize(),
+            $this->bus->dispatch(new WikipediaPatternIndexLanguageMessage(
                 $languageCode,
+                $message->getWindowSize(),
                 $message->getArticleLimit(),
-                $startOffset
-            );
-
-            // Fewer articles than requested → end of data, wrap offset to 0
-            $newOffset = $articlesProcessed < $message->getArticleLimit()
-                ? 0
-                : $startOffset + $articlesProcessed;
-
-            // Re-fetch after em->clear() was called internally by the indexer
-            $offsetEntity = $this->offsetRepository->findByLanguageCode($languageCode)
-                ?? (new WikipediaPatternIndexOffsetEntity())->setLanguageCode($languageCode);
-            $offsetEntity->setCurrentOffset($newOffset)->setWindowSize($message->getWindowSize());
-            $this->offsetRepository->save($offsetEntity);
-
-            $this->logger->info(sprintf('Indexed %d articles for %s, new offset: %d', $articlesProcessed, $languageCode, $newOffset), [
-                'service' => self::LOG_SERVICE,
-            ]);
+            ));
         }
 
-        $this->logger->info('Dispatching ManuscriptPatternMatchSearchMessage', ['service' => self::LOG_SERVICE]);
-        $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage());
+        // ManuscriptPatternMatchSearchMessage is dispatched by the last per-language handler
+        // to finish — see WikipediaPatternIndexLanguageMessageHandler.
     }
 }

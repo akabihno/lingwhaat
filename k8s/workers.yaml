@@ -36,7 +36,7 @@ metadata:
   name: messenger
   namespace: lingwhaat
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: messenger
@@ -132,7 +132,7 @@ metadata:
   name: messenger-wikipedia-pattern-index
   namespace: lingwhaat
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: messenger-wikipedia-pattern-index
