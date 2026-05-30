@@ -48,7 +48,7 @@ spec:
       containers:
         - name: messenger
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "async", "--keepalive", "--memory-limit=400M", "-vv"]
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "async", "--keepalive", "--memory-limit=400M", "--sleep=0.2", "-vv"]
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
@@ -144,7 +144,7 @@ spec:
       containers:
         - name: messenger-wikipedia-pattern-index
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wikipedia_pattern_index_async", "--keepalive", "--memory-limit=600M", "-vv"]
+          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wikipedia_pattern_index_async", "--keepalive", "--memory-limit=600M", "--sleep=0.2", "-vv"]
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
