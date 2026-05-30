@@ -7,6 +7,10 @@ framework:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
                     auto_setup: true
+                    # 200ms idle poll instead of the 1000ms default — measurable end-to-end
+                    # latency drop for chained dispatches; ~5x more SELECTs against
+                    # messenger_messages when idle (still ~40/s with 8 workers).
+                    sleep: 200
                 retry_strategy:
                     max_retries: 3
                     delay: 1000
@@ -34,6 +38,7 @@ framework:
                 dsn: '%env(MESSENGER_WIKIPEDIA_PATTERN_INDEX_TRANSPORT_DSN)%'
                 options:
                     auto_setup: true
+                    sleep: 200
                 retry_strategy:
                     max_retries: 3
                     delay: 1000

@@ -9,6 +9,28 @@ use App\Service\LanguageDetection\LanguageValidation\LanguageVerificationService
 
 class ManuscriptLanguageScoreService
 {
+    private const int CIPHER_CACHE_LIMIT = 16;
+    private const int ARTICLE_CACHE_LIMIT = 256;
+
+    /**
+     * Per-worker memo of the concatenated, normalized, char-split cipher text per sourceId.
+     * Building this list dominates score() runtime for any source with many match rows;
+     * caching it survives across every message this worker handles until --memory-limit
+     * recycles the process.
+     *
+     * @var array<int, list<string>>
+     */
+    private array $cipherCharsCache = [];
+
+    /**
+     * Per-worker memo of normalized Wikipedia article text and its language code per articleId.
+     * null cached for missing articles to short-circuit repeat lookups. Hot articles
+     * (very common patterns) appear in many results and benefit most.
+     *
+     * @var array<int, array{text: string, languageCode: string}|null>
+     */
+    private array $articleTextCache = [];
+
     public function __construct(
         private readonly ManuscriptPatternMatchRepository $matchRepository,
         private readonly WikipediaArticleRepository $articleRepository,
@@ -35,13 +57,7 @@ class ManuscriptLanguageScoreService
             return ['language_code' => null, 'language_score' => 0.0];
         }
 
-        // Concatenate all manuscript windows for this schedule entry to build the full cipher text
-        $allMatches = $this->matchRepository->findBySourceId($result->getSourceId());
-        $fullCipherText = implode('', array_map(
-            fn($m) => $this->normalize($m->getSourceData()),
-            $allMatches
-        ));
-        $fullCipherChars = preg_split('//u', $fullCipherText, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $fullCipherChars = $this->getCipherChars($result->getSourceId());
 
         $bestScore = 0.0;
         $bestLanguage = null;
@@ -57,13 +73,12 @@ class ManuscriptLanguageScoreService
                 continue;
             }
 
-            $article = $this->articleRepository->find($articleId);
-            if ($article === null) {
+            $cachedArticle = $this->getArticleCacheEntry($articleId);
+            if ($cachedArticle === null) {
                 continue;
             }
 
-            $normalizedArticle = $this->normalize($article->getText());
-            $wikiWindow = mb_substr($normalizedArticle, $localPosition, $length);
+            $wikiWindow = mb_substr($cachedArticle['text'], $localPosition, $length);
 
             if (mb_strlen($wikiWindow) !== $length) {
                 continue;
@@ -80,7 +95,7 @@ class ManuscriptLanguageScoreService
             // Apply mapping to the full manuscript cipher text
             $translated = implode('', array_map(fn($ch) => $mapping[$ch] ?? $ch, $fullCipherChars));
 
-            $languageCode = $article->getLanguageCode();
+            $languageCode = $cachedArticle['languageCode'];
             $verification = $this->verificationService->verifyLanguage($translated, $languageCode, 1);
             $score = (float)($verification['matchPercentage'] ?? 0.0);
 
@@ -91,6 +106,61 @@ class ManuscriptLanguageScoreService
         }
 
         return ['language_code' => $bestLanguage, 'language_score' => $bestScore];
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function getCipherChars(int $sourceId): array
+    {
+        if (isset($this->cipherCharsCache[$sourceId])) {
+            return $this->cipherCharsCache[$sourceId];
+        }
+
+        $allMatches = $this->matchRepository->findBySourceId($sourceId);
+        $fullCipherText = implode('', array_map(
+            fn($m) => $this->normalize($m->getSourceData()),
+            $allMatches,
+        ));
+        $chars = preg_split('//u', $fullCipherText, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        if (count($this->cipherCharsCache) >= self::CIPHER_CACHE_LIMIT) {
+            $oldest = array_key_first($this->cipherCharsCache);
+            if ($oldest !== null) {
+                unset($this->cipherCharsCache[$oldest]);
+            }
+        }
+        $this->cipherCharsCache[$sourceId] = $chars;
+
+        return $chars;
+    }
+
+    /**
+     * @return array{text: string, languageCode: string}|null
+     */
+    private function getArticleCacheEntry(int $articleId): ?array
+    {
+        if (array_key_exists($articleId, $this->articleTextCache)) {
+            return $this->articleTextCache[$articleId];
+        }
+
+        $article = $this->articleRepository->find($articleId);
+        $entry = $article === null
+            ? null
+            : [
+                'text' => $this->normalize($article->getText()),
+                'languageCode' => (string) $article->getLanguageCode(),
+            ];
+
+        if (count($this->articleTextCache) >= self::ARTICLE_CACHE_LIMIT) {
+            $oldest = array_key_first($this->articleTextCache);
+            if ($oldest !== null) {
+                unset($this->articleTextCache[$oldest]);
+            }
+        }
+        $this->articleTextCache[$articleId] = $entry;
+
+        return $entry;
     }
 
     private function normalize(string $s): string
