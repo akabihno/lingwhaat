@@ -169,7 +169,7 @@ metadata:
   name: messenger-wikipedia
   namespace: lingwhaat
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: messenger-wikipedia
@@ -183,19 +183,37 @@ spec:
       containers:
         - name: messenger-wikipedia
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wikipedia_async", "--keepalive", "--memory-limit=400M", "-vv"]
+          command: ["/bin/bash", "/wrapper/wrapper.sh"]
+          env:
+            - name: MESSENGER_TRANSPORT_NAME
+              value: wikipedia_async
+            - name: WORKER_CONCURRENCY
+              value: "2"
+            - name: WORKER_MEMORY_LIMIT
+              value: 400M
+            - name: WORKER_SLEEP
+              value: "0.2"
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
             - secretRef:
                 name: lingwhaat-secrets
+          volumeMounts:
+            - name: wrapper
+              mountPath: /wrapper
+              readOnly: true
           resources:
             requests:
-              memory: "128Mi"
+              memory: "256Mi"
               cpu: "100m"
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "1Gi"
+              cpu: "1000m"
+      volumes:
+        - name: wrapper
+          configMap:
+            name: worker-wrapper
+            defaultMode: 0555
 ---
 apiVersion: apps/v1
 kind: Deployment
