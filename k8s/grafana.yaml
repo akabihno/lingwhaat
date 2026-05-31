@@ -201,7 +201,7 @@ spec:
         app: grafana
     spec:
       nodeSelector:
-        kubernetes.io/hostname: raspberrypi
+        kubernetes.io/hostname: ubuntu-desktop
       securityContext:
         fsGroup: 472
       containers:

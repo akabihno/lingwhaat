@@ -25,6 +25,8 @@ spec:
       labels:
         app: redis
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: ubuntu-desktop
       containers:
         - name: redis
           image: redis:7-alpine

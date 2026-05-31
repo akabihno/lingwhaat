@@ -58,6 +58,8 @@ spec:
       labels:
         app: scheduler
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: raspberrypi
       containers:
         - name: scheduler
           image: registry.local:30500/lingwhaat-php:latest
@@ -90,6 +92,8 @@ spec:
       labels:
         app: messenger
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: raspberrypi
       containers:
         - name: messenger
           image: registry.local:30500/lingwhaat-php:latest
@@ -115,7 +119,7 @@ spec:
           resources:
             requests:
               memory: "256Mi"
-              cpu: "200m"
+              cpu: "100m"
             limits:
               memory: "1Gi"
               cpu: "1000m"
@@ -140,6 +144,8 @@ spec:
       labels:
         app: messenger-wiktionary
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: raspberrypi
       containers:
         - name: messenger-wiktionary
           image: registry.local:30500/lingwhaat-php:latest
@@ -172,6 +178,8 @@ spec:
       labels:
         app: messenger-wikipedia
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: raspberrypi
       containers:
         - name: messenger-wikipedia
           image: registry.local:30500/lingwhaat-php:latest
@@ -204,6 +212,8 @@ spec:
       labels:
         app: messenger-wikipedia-pattern-index
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: raspberrypi
       containers:
         - name: messenger-wikipedia-pattern-index
           image: registry.local:30500/lingwhaat-php:latest
@@ -229,7 +239,7 @@ spec:
           resources:
             requests:
               memory: "384Mi"
-              cpu: "300m"
+              cpu: "200m"
             limits:
               memory: "1500Mi"
               cpu: "1000m"
@@ -254,6 +264,8 @@ spec:
       labels:
         app: messenger-selection
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: raspberrypi
       containers:
         - name: messenger-selection
           image: registry.local:30500/lingwhaat-php:latest

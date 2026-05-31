@@ -55,7 +55,7 @@ spec:
         app: prometheus
     spec:
       nodeSelector:
-        kubernetes.io/hostname: raspberrypi
+        kubernetes.io/hostname: ubuntu-desktop
       securityContext:
         fsGroup: 65534
       containers:
