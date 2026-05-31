@@ -1,3 +1,48 @@
+# Wrapper script that runs N copies of `messenger:consume` inside one pod.
+# - Forwards SIGTERM so workers shut down between messages (no mid-handler KILL).
+# - Exits non-zero if any child worker dies, so kubelet restarts the whole pod
+#   instead of leaving it half-staffed and invisible to k8s health checks.
+# - All knobs come from env so the same script serves every transport.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: worker-wrapper
+  namespace: lingwhaat
+data:
+  wrapper.sh: |
+    #!/bin/bash
+    set -u
+
+    TRANSPORT="${MESSENGER_TRANSPORT_NAME:?MESSENGER_TRANSPORT_NAME is required}"
+    CONCURRENCY="${WORKER_CONCURRENCY:-2}"
+    MEMORY_LIMIT="${WORKER_MEMORY_LIMIT:-400M}"
+    SLEEP="${WORKER_SLEEP:-0.2}"
+
+    declare -a PIDS=()
+
+    shutdown() {
+      echo "[wrapper] SIGTERM received; forwarding to ${#PIDS[@]} workers"
+      kill -TERM "${PIDS[@]}" 2>/dev/null || true
+      wait || true
+      exit 0
+    }
+    trap shutdown TERM INT
+
+    for i in $(seq 1 "$CONCURRENCY"); do
+      echo "[wrapper] starting worker $i/$CONCURRENCY for transport=$TRANSPORT"
+      php /var/www/html/bin/console messenger:consume "$TRANSPORT" \
+        --keepalive --memory-limit="$MEMORY_LIMIT" --sleep="$SLEEP" -vv &
+      PIDS+=($!)
+    done
+
+    # Wait for the first child to exit. If anyone dies for any reason we tear the
+    # pod down so k8s restarts it; otherwise a single-worker pod silently degrades.
+    wait -n "${PIDS[@]}" || true
+    echo "[wrapper] a worker exited unexpectedly; terminating siblings"
+    kill -TERM "${PIDS[@]}" 2>/dev/null || true
+    wait || true
+    exit 1
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -48,19 +93,37 @@ spec:
       containers:
         - name: messenger
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "async", "--keepalive", "--memory-limit=400M", "--sleep=0.2", "-vv"]
+          command: ["/bin/bash", "/wrapper/wrapper.sh"]
+          env:
+            - name: MESSENGER_TRANSPORT_NAME
+              value: async
+            - name: WORKER_CONCURRENCY
+              value: "2"
+            - name: WORKER_MEMORY_LIMIT
+              value: 400M
+            - name: WORKER_SLEEP
+              value: "0.2"
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
             - secretRef:
                 name: lingwhaat-secrets
+          volumeMounts:
+            - name: wrapper
+              mountPath: /wrapper
+              readOnly: true
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: "256Mi"
+              cpu: "200m"
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "1Gi"
+              cpu: "1000m"
+      volumes:
+        - name: wrapper
+          configMap:
+            name: worker-wrapper
+            defaultMode: 0555
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -144,19 +207,37 @@ spec:
       containers:
         - name: messenger-wikipedia-pattern-index
           image: registry.local:30500/lingwhaat-php:latest
-          command: ["php", "/var/www/html/bin/console", "messenger:consume", "wikipedia_pattern_index_async", "--keepalive", "--memory-limit=600M", "--sleep=0.2", "-vv"]
+          command: ["/bin/bash", "/wrapper/wrapper.sh"]
+          env:
+            - name: MESSENGER_TRANSPORT_NAME
+              value: wikipedia_pattern_index_async
+            - name: WORKER_CONCURRENCY
+              value: "2"
+            - name: WORKER_MEMORY_LIMIT
+              value: 600M
+            - name: WORKER_SLEEP
+              value: "0.2"
           envFrom:
             - configMapRef:
                 name: lingwhaat-config
             - secretRef:
                 name: lingwhaat-secrets
+          volumeMounts:
+            - name: wrapper
+              mountPath: /wrapper
+              readOnly: true
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "200m"
+              memory: "384Mi"
+              cpu: "300m"
             limits:
-              memory: "768Mi"
-              cpu: "500m"
+              memory: "1500Mi"
+              cpu: "1000m"
+      volumes:
+        - name: wrapper
+          configMap:
+            name: worker-wrapper
+            defaultMode: 0555
 ---
 apiVersion: apps/v1
 kind: Deployment
