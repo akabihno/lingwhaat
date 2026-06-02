@@ -6,7 +6,6 @@ use App\Message\WordsPopularityScoreSetMessage;
 use App\Service\Logging\ElasticsearchLogger;
 use App\Service\Search\WordsPopularityScoreSetService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 
 #[AsMessageHandler]
 class WordsPopularityScoreSetMessageHandler
@@ -28,7 +27,14 @@ class WordsPopularityScoreSetMessageHandler
         $offset = $message->getOffset();
 
         if ($offset > self::PROCESSING_LIMIT) {
-            throw new UnrecoverableMessageHandlingException('The limit of articles is reached for ' . $languageCode);
+            // Not a failure — just "no more work for this language this cycle". ACK and return
+            // so the message is DELETEd instead of INSERTed into the failed queue (which under
+            // heavy load contends with normal polling and times out on lock wait).
+            $this->logger->info(
+                sprintf('Processing limit reached for %s at offset %d; skipping', $languageCode, $offset),
+                ['service' => '[WordsPopularityScoreSetMessageHandler]']
+            );
+            return;
         }
 
         $this->logger->info(
