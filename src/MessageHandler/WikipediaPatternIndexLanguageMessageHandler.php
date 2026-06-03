@@ -8,7 +8,7 @@ use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaPatternIndexOffsetRepository;
 use App\Service\Logging\ElasticsearchLogger;
 use App\Service\Search\WikipediaPatternIndexerService;
-use App\Service\WikipediaPatternIndexEpochCoordinator;
+use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -16,11 +16,16 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class WikipediaPatternIndexLanguageMessageHandler
 {
     private const string LOG_SERVICE = '[WikipediaPatternIndexLanguageMessageHandler]';
+    private const string LOCK_RESOURCE_PREFIX = 'wikipedia-pattern-index-language:';
+    // Safety net for stuck epochs. Set generously above the worst-case duration of indexing a
+    // single language; if a worker dies holding the lock, the next tick this many seconds later
+    // will be able to acquire it. Released explicitly on normal completion.
+    private const int LOCK_TTL_SECONDS = 1800;
 
     public function __construct(
         private readonly WikipediaPatternIndexerService $indexerService,
         private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
-        private readonly WikipediaPatternIndexEpochCoordinator $coordinator,
+        private readonly LockFactory $lockFactory,
         private readonly MessageBusInterface $bus,
         private readonly ElasticsearchLogger $logger,
     ) {
@@ -32,6 +37,20 @@ class WikipediaPatternIndexLanguageMessageHandler
         $windowSize = $message->getWindowSize();
         $articleLimit = $message->getArticleLimit();
 
+        $lock = $this->lockFactory->createLock(
+            self::LOCK_RESOURCE_PREFIX . $languageCode,
+            self::LOCK_TTL_SECONDS,
+            false,
+        );
+
+        if (!$lock->acquire()) {
+            $this->logger->info(sprintf('Previous indexing for %s still in flight — skipping', $languageCode), [
+                'service' => self::LOG_SERVICE,
+                'languageCode' => $languageCode,
+            ]);
+            return;
+        }
+
         try {
             $existing = $this->offsetRepository->findByLanguageCode($languageCode);
             $startOffset = ($existing !== null && $existing->getWindowSize() === $windowSize)
@@ -42,6 +61,10 @@ class WikipediaPatternIndexLanguageMessageHandler
                 'service' => self::LOG_SERVICE,
             ]);
 
+            // Nuke the per-language index before this cycle's run. Original "delete-on-every-cycle"
+            // behaviour from the global dispatcher is preserved per-language here.
+            $this->indexerService->deleteIndexForLanguage($languageCode);
+
             $articlesProcessed = $this->indexerService->indexBatchByLanguageCode(
                 $windowSize,
                 $languageCode,
@@ -49,12 +72,10 @@ class WikipediaPatternIndexLanguageMessageHandler
                 $startOffset,
             );
 
-            // Fewer articles than requested → end of data, wrap offset to 0
             $newOffset = $articlesProcessed < $articleLimit
                 ? 0
                 : $startOffset + $articlesProcessed;
 
-            // Re-fetch after em->clear() was called internally by the indexer
             $offsetEntity = $this->offsetRepository->findByLanguageCode($languageCode)
                 ?? (new WikipediaPatternIndexOffsetEntity())->setLanguageCode($languageCode);
             $offsetEntity->setCurrentOffset($newOffset)->setWindowSize($windowSize);
@@ -63,19 +84,12 @@ class WikipediaPatternIndexLanguageMessageHandler
             $this->logger->info(sprintf('Indexed %d articles for %s, new offset: %d', $articlesProcessed, $languageCode, $newOffset), [
                 'service' => self::LOG_SERVICE,
             ]);
-        } finally {
-            // Record completion regardless of success so a single failing language doesn't strand
-            // the epoch forever. The lock TTL is the final safety net.
-            $allDone = $this->coordinator->recordLanguageCompletion($languageCode);
 
-            if ($allDone && $this->coordinator->tryMarkSearchDispatched()) {
-                $this->logger->info('All languages indexed — dispatching ManuscriptPatternMatchSearchMessage', [
-                    'service' => self::LOG_SERVICE,
-                    'languageCode' => $languageCode,
-                ]);
-                $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage());
-                $this->coordinator->endEpoch();
-            }
+            // Trigger the manuscript search for this language now that its index is fresh.
+            // Other languages run their own search independently when they complete.
+            $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage($languageCode));
+        } finally {
+            $lock->release();
         }
     }
 }

@@ -11,7 +11,7 @@ use InvalidArgumentException;
 class WikipediaPatternSearchService
 {
     private Client $esClient;
-    private const string INDEX_NAME = 'wikipedia_global_patterns';
+    private const string INDEX_NAME_PREFIX = 'wikipedia_global_patterns';
     public const int DEFAULT_WINDOW_SIZE = 18;
     private const int BASE = 101;
     private const int MOD = 1000000007;
@@ -22,9 +22,11 @@ class WikipediaPatternSearchService
     }
 
     /**
-     * Search for a cipher pattern in the global concatenated index.
+     * Search for a cipher pattern in a Wikipedia patterns index.
+     * If $languageCode is provided, searches the per-language index; otherwise searches across all
+     * per-language indices via `wikipedia_global_patterns_*` (Elastica multi-index syntax).
      */
-    public function search(string $cipherText, int $limit = 50, int $windowSize = self::DEFAULT_WINDOW_SIZE): array
+    public function search(string $cipherText, int $limit = 50, int $windowSize = self::DEFAULT_WINDOW_SIZE, ?string $languageCode = null): array
     {
         if ($windowSize <= 0) {
             throw new InvalidArgumentException('windowSize must be greater than 0.');
@@ -40,7 +42,10 @@ class WikipediaPatternSearchService
         $patternStr = implode(',', $pattern);
         $patternHash = $this->patternHash($pattern);
 
-        $index = $this->esClient->getIndex(self::INDEX_NAME);
+        $indexName = $languageCode === null
+            ? self::INDEX_NAME_PREFIX . '_*'
+            : self::INDEX_NAME_PREFIX . '_' . $languageCode;
+        $index = $this->esClient->getIndex($indexName);
 
         $bool = new BoolQuery();
 
@@ -66,7 +71,8 @@ class WikipediaPatternSearchService
     }
 
     /**
-     * Format results from the global index.
+     * Format results from the per-language indices. Each hit carries the language code derived
+     * from its source index name so callers don't have to look it up via article_id.
      */
     private function formatResults(array $results): array
     {
@@ -82,10 +88,20 @@ class WikipediaPatternSearchService
                 'pattern' => $src['pattern'] ?? null,
                 'length' => $src['length'] ?? null,
                 'pattern_hash' => $src['pattern_hash'] ?? null,
+                'language_code' => self::languageCodeFromIndexName((string) $hit->getIndex()),
             ];
         }
 
         return $formatted;
+    }
+
+    private static function languageCodeFromIndexName(string $indexName): ?string
+    {
+        $prefix = self::INDEX_NAME_PREFIX . '_';
+        if (!str_starts_with($indexName, $prefix)) {
+            return null;
+        }
+        return substr($indexName, strlen($prefix)) ?: null;
     }
 
     private function normalize(string $s): string

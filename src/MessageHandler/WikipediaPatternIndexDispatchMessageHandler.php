@@ -5,9 +5,8 @@ namespace App\MessageHandler;
 use App\Message\WikipediaPatternIndexDispatchMessage;
 use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaArticleRepository;
+use App\Repository\WikipediaPatternIndexOffsetRepository;
 use App\Service\Logging\ElasticsearchLogger;
-use App\Service\Search\WikipediaPatternIndexerService;
-use App\Service\WikipediaPatternIndexEpochCoordinator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -17,9 +16,8 @@ class WikipediaPatternIndexDispatchMessageHandler
     private const string LOG_SERVICE = '[WikipediaPatternIndexDispatchMessageHandler]';
 
     public function __construct(
-        private readonly WikipediaPatternIndexerService $indexerService,
         private readonly WikipediaArticleRepository $articleRepository,
-        private readonly WikipediaPatternIndexEpochCoordinator $coordinator,
+        private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
         private readonly MessageBusInterface $bus,
         private readonly ElasticsearchLogger $logger,
     ) {
@@ -34,19 +32,17 @@ class WikipediaPatternIndexDispatchMessageHandler
         ]);
 
         $languageCodes = $this->articleRepository->getDistinctLanguageCodes();
+        $offsetsByLanguage = $this->offsetRepository->getOffsetsByLanguageCode();
 
-        if (!$this->coordinator->tryStartEpoch(count($languageCodes))) {
-            $this->logger->info('Previous Wikipedia pattern index epoch still in progress — skipping this tick', [
-                'service' => self::LOG_SERVICE,
-            ]);
-            return;
-        }
+        // Sort least-processed first: languages never indexed (no offset row) get offset=0 and
+        // sort to the top. Tie-break alphabetically for determinism.
+        usort($languageCodes, function (string $a, string $b) use ($offsetsByLanguage): int {
+            $oa = $offsetsByLanguage[$a] ?? 0;
+            $ob = $offsetsByLanguage[$b] ?? 0;
+            return $oa === $ob ? strcmp($a, $b) : $oa <=> $ob;
+        });
 
-        // Now safe to nuke: lock held, no other epoch can be running.
-        $this->indexerService->deleteIndex();
-        $this->logger->info('Deleted existing index', ['service' => self::LOG_SERVICE]);
-
-        $this->logger->info(sprintf('Fanning out indexing for %d languages', count($languageCodes)), [
+        $this->logger->info(sprintf('Fanning out indexing for %d languages (lowest-offset first)', count($languageCodes)), [
             'service' => self::LOG_SERVICE,
             'languageCodes' => $languageCodes,
         ]);
@@ -59,7 +55,8 @@ class WikipediaPatternIndexDispatchMessageHandler
             ));
         }
 
-        // ManuscriptPatternMatchSearchMessage is dispatched by the last per-language handler
-        // to finish — see WikipediaPatternIndexLanguageMessageHandler.
+        // No central search dispatch here. Each WikipediaPatternIndexLanguageMessageHandler that
+        // actually does work (i.e. acquires its per-language lock) dispatches its own
+        // ManuscriptPatternMatchSearchMessage with that language code attached.
     }
 }

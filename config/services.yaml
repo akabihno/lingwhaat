@@ -65,10 +65,6 @@ services:
         arguments:
             $redisDsn: '%env(LOCK_DSN)%'
 
-    App\Service\WikipediaPatternIndexEpochCoordinator:
-        arguments:
-            $redisDsn: '%env(LOCK_DSN)%'
-
     App\EventSubscriber\ApiKeyAuthSubscriber:
         arguments:
             $apiKey: '%env(API_KEY)%'

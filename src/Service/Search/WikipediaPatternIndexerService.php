@@ -13,9 +13,14 @@ class WikipediaPatternIndexerService
 {
     private const int BASE = 101;
     private const int MOD = 1000000007;
-    private const string INDEX_NAME = 'wikipedia_global_patterns';
+    private const string INDEX_NAME_PREFIX = 'wikipedia_global_patterns';
     private const int BATCH_SIZE = 5000;
     private const int ARTICLE_FETCH_BATCH_SIZE = 500;
+
+    public static function indexNameFor(string $languageCode): string
+    {
+        return self::INDEX_NAME_PREFIX . '_' . $languageCode;
+    }
 
     private Client $esClient;
 
@@ -28,12 +33,16 @@ class WikipediaPatternIndexerService
     }
 
     /**
-     * Delete the global patterns index if it exists.
+     * Delete the per-language patterns index if it exists.
      * @throws ClientResponseException
      */
-    public function deleteIndex(): void
+    public function deleteIndexForLanguage(string $languageCode): void
     {
-        $index = $this->esClient->getIndex(self::INDEX_NAME);
+        if ($languageCode === '') {
+            throw new InvalidArgumentException('languageCode must be provided.');
+        }
+
+        $index = $this->esClient->getIndex(self::indexNameFor($languageCode));
         try {
             if ($index->exists()) {
                 $index->delete();
@@ -44,8 +53,8 @@ class WikipediaPatternIndexerService
     }
 
     /**
-     * Build a global sliding-window index across ALL Wikipedia articles for a language.
-     * Deletes and recreates the entire index.
+     * Build a sliding-window index across ALL Wikipedia articles for a language.
+     * Deletes and recreates the per-language index.
      * @throws ClientResponseException
      */
     public function indexAllByLanguageCode(int $windowSize, string $languageCode): void
@@ -58,15 +67,7 @@ class WikipediaPatternIndexerService
             throw new InvalidArgumentException('languageCode must be provided.');
         }
 
-        $index = $this->esClient->getIndex(self::INDEX_NAME);
-        try {
-            if ($index->exists()) {
-                $index->delete();
-            }
-        } catch (\Throwable $e) {
-            throw new ClientResponseException($e->getMessage(), $e->getCode(), $e);
-        }
-
+        $this->deleteIndexForLanguage($languageCode);
         $this->doIndex($windowSize, $languageCode, null, 0);
     }
 
@@ -143,7 +144,7 @@ class WikipediaPatternIndexerService
                     ];
 
                     if (count($batch) >= self::BATCH_SIZE) {
-                        $this->flushBatch($batch);
+                        $this->flushBatch($batch, $languageCode);
                     }
                 }
 
@@ -156,7 +157,7 @@ class WikipediaPatternIndexerService
         } while ($articles !== []);
 
         if ($batch !== []) {
-            $this->flushBatch($batch);
+            $this->flushBatch($batch, $languageCode);
         }
 
         return $totalArticlesProcessed;
@@ -195,10 +196,10 @@ class WikipediaPatternIndexerService
      * @param array<int, array<string, int|string>> $batch
      * @throws ClientResponseException
      */
-    private function flushBatch(array &$batch): void
+    private function flushBatch(array &$batch, string $languageCode): void
     {
         try {
-            $this->bulk->sendBatch(self::INDEX_NAME, $batch);
+            $this->bulk->sendBatch(self::indexNameFor($languageCode), $batch);
         } catch (\Throwable $e) {
             throw new ClientResponseException($e->getMessage(), $e->getCode(), $e);
         }
