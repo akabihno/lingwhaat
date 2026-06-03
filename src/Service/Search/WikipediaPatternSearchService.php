@@ -2,6 +2,8 @@
 
 namespace App\Service\Search;
 
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Elastica\Client;
 use Elastica\Query;
 use Elastica\Query\BoolQuery;
@@ -65,7 +67,19 @@ class WikipediaPatternSearchService
         $query->setSize($limit);
         $query->setSort(['global_position' => 'asc']);
 
-        $results = $index->search($query)->getResults();
+        try {
+            $results = $index->search($query)->getResults();
+        } catch (ClientResponseException | ServerResponseException $e) {
+            // Index is being modified concurrently (the per-language indexing handler nukes and
+            // recreates wikipedia_global_patterns_<lang>). Possible races we silently absorb here:
+            //   - 404 index_not_found_exception: index was deleted between dispatch and search.
+            //   - 400 No mapping found: index exists but is empty, fields not yet mapped.
+            //   - 503 no_shard_available_action_exception: shards still initializing/relocating.
+            // All three are transient and resolve once the in-flight indexing cycle completes.
+            // Returning no hits lets the search message succeed; the next scheduled search for
+            // this language will see a stable index.
+            return [];
+        }
 
         return $this->formatResults($results);
     }
