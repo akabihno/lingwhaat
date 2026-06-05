@@ -86,8 +86,19 @@ class WikipediaPatternIndexLanguageMessageHandler
             ]);
 
             // Trigger the manuscript search for this language now that its index is fresh.
-            // Other languages run their own search independently when they complete.
-            $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage($languageCode));
+            // Wrapped in try-catch: the dispatch uses the `async` DoctrineTransport which can
+            // share the DBAL connection with this consumer's transport. If the connection is in
+            // a bad state (e.g. due to the --keepalive signal firing mid-query), the INSERT
+            // fails. Logging and continuing preserves the indexing work; the scheduler's
+            // periodic ManuscriptPatternMatchSearchMessage covers the fallback.
+            try {
+                $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage($languageCode));
+            } catch (\Throwable $e) {
+                $this->logger->warning(sprintf('Failed to dispatch ManuscriptPatternMatchSearchMessage for %s: %s', $languageCode, $e->getMessage()), [
+                    'service' => self::LOG_SERVICE,
+                    'languageCode' => $languageCode,
+                ]);
+            }
         } finally {
             $lock->release();
         }

@@ -4,6 +4,7 @@ namespace App;
 
 use App\Message\ManuscriptAlphabetDecodeSelectionDispatchMessage;
 use App\Message\ManuscriptLanguageScoreDispatchMessage;
+use App\Message\ManuscriptPatternMatchSearchMessage;
 use App\Message\ParseWikipediaLanguagesMessage;
 use App\Message\ParseWiktionaryLanguagesMessage;
 use App\Message\WikipediaPatternIndexDispatchMessage;
@@ -57,6 +58,14 @@ class Schedule implements ScheduleProviderInterface
 
         $schedule->add(
             RecurringMessage::every('5 minutes', new ManuscriptAlphabetDecodeSelectionDispatchMessage())
+                ->withJitter(self::JITTER_SECONDS)
+        );
+
+        // Fallback: run a cross-language manuscript search every 5 minutes so results stay
+        // fresh even when the per-language dispatch inside WikipediaPatternIndexLanguageMessageHandler
+        // fails to dispatch (e.g. shared-connection issues with --keepalive).
+        $schedule->add(
+            RecurringMessage::every('5 minutes', new ManuscriptPatternMatchSearchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
 
