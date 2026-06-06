@@ -298,7 +298,9 @@ class WikipediaPatternIndexerService
     {
         $this->bulk->sendBatch($targetIndex, $batch);
         $batch = [];
-        $heartbeat?.();
+        if ($heartbeat !== null) {
+            ($heartbeat)();
+        }
     }
 
     /**
