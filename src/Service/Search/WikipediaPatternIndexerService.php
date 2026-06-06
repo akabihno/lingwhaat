@@ -6,7 +6,6 @@ use App\Entity\WikipediaArticleEntity;
 use App\Repository\WikipediaArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Elastica\Client;
-use Elastica\Request;
 use InvalidArgumentException;
 
 class WikipediaPatternIndexerService
@@ -84,14 +83,10 @@ class WikipediaPatternIndexerService
         $aliasName = self::indexNameFor($languageCode);
 
         // Restore ES default refresh and force a final segment merge before serving.
-        $this->esClient->request(
-            $concreteIndex . '/_settings',
-            Request::PUT,
-            ['refresh_interval' => null],
-        );
-        $this->esClient->getIndex($concreteIndex)->refresh();
+        $this->bulk->restoreRefreshInterval($concreteIndex);
+        $this->bulk->forceRefresh($concreteIndex);
 
-        $oldIndices = $this->resolveAliasIndices($aliasName);
+        $oldIndices = $this->bulk->resolveAliasTargets($aliasName);
 
         if ($oldIndices === []) {
             // First run after migration: a legacy plain index with the alias name may exist.
@@ -102,11 +97,7 @@ class WikipediaPatternIndexerService
         }
 
         // Atomic add-new / remove-old via the _aliases API.
-        $actions = [['add' => ['index' => $concreteIndex, 'alias' => $aliasName]]];
-        foreach ($oldIndices as $old) {
-            $actions[] = ['remove' => ['index' => $old, 'alias' => $aliasName]];
-        }
-        $this->esClient->request('_aliases', Request::POST, ['actions' => $actions]);
+        $this->bulk->swapAlias($aliasName, $concreteIndex, $oldIndices);
 
         // Best-effort deletion of the detached indices — failures are non-critical.
         foreach ($oldIndices as $old) {
@@ -321,19 +312,4 @@ class WikipediaPatternIndexerService
         return preg_replace('/[^\p{L}]+/u', '', $s) ?? '';
     }
 
-    /**
-     * Return the concrete index names currently behind an alias.
-     * Returns [] if the alias does not exist or the request fails.
-     *
-     * @return string[]
-     */
-    private function resolveAliasIndices(string $aliasName): array
-    {
-        try {
-            $response = $this->esClient->request('_alias/' . $aliasName);
-            return array_keys($response->getData());
-        } catch (\Throwable) {
-            return [];
-        }
-    }
 }
