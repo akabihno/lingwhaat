@@ -18,7 +18,7 @@ class WikipediaPatternIndexLanguageMessageHandler
     // Safety net for stuck epochs. Set generously above the worst-case duration of indexing a
     // single language; if a worker dies holding the lock, the next tick this many seconds later
     // will be able to acquire it. Released explicitly on normal completion.
-    private const int LOCK_TTL_SECONDS = 1800;
+    private const int LOCK_TTL_SECONDS = 600;
 
     public function __construct(
         private readonly WikipediaPatternIndexerService $indexerService,
@@ -58,16 +58,24 @@ class WikipediaPatternIndexLanguageMessageHandler
                 'service' => self::LOG_SERVICE,
             ]);
 
-            // Nuke the per-language index before this cycle's run. Original "delete-on-every-cycle"
-            // behaviour from the global dispatcher is preserved per-language here.
-            $this->indexerService->deleteIndexForLanguage($languageCode);
+            // Build into a fresh write index (refresh disabled for bulk speed).
+            // promoteToAlias() swaps the alias atomically so search always sees a complete index.
+            $concreteIndex = $this->indexerService->prepareWriteIndex($languageCode);
+            try {
+                $articlesProcessed = $this->indexerService->indexBatchByLanguageCode(
+                    $windowSize,
+                    $languageCode,
+                    $concreteIndex,
+                    $articleLimit,
+                    $startOffset,
+                    fn() => $lock->refresh(),
+                );
 
-            $articlesProcessed = $this->indexerService->indexBatchByLanguageCode(
-                $windowSize,
-                $languageCode,
-                $articleLimit,
-                $startOffset,
-            );
+                $this->indexerService->promoteToAlias($languageCode, $concreteIndex);
+            } catch (\Throwable $e) {
+                $this->indexerService->deleteConcreteIndex($concreteIndex);
+                throw $e;
+            }
 
             $newOffset = $articlesProcessed < $articleLimit
                 ? 0
