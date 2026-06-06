@@ -3,14 +3,12 @@
 namespace App\MessageHandler;
 
 use App\Entity\WikipediaPatternIndexOffsetEntity;
-use App\Message\ManuscriptPatternMatchSearchMessage;
 use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaPatternIndexOffsetRepository;
 use App\Service\Logging\ElasticsearchLogger;
 use App\Service\Search\WikipediaPatternIndexerService;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsMessageHandler]
 class WikipediaPatternIndexLanguageMessageHandler
@@ -26,7 +24,6 @@ class WikipediaPatternIndexLanguageMessageHandler
         private readonly WikipediaPatternIndexerService $indexerService,
         private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
         private readonly LockFactory $lockFactory,
-        private readonly MessageBusInterface $bus,
         private readonly ElasticsearchLogger $logger,
     ) {
     }
@@ -84,21 +81,6 @@ class WikipediaPatternIndexLanguageMessageHandler
             $this->logger->info(sprintf('Indexed %d articles for %s, new offset: %d', $articlesProcessed, $languageCode, $newOffset), [
                 'service' => self::LOG_SERVICE,
             ]);
-
-            // Trigger the manuscript search for this language now that its index is fresh.
-            // Wrapped in try-catch: the dispatch uses the `async` DoctrineTransport which can
-            // share the DBAL connection with this consumer's transport. If the connection is in
-            // a bad state (e.g. due to the --keepalive signal firing mid-query), the INSERT
-            // fails. Logging and continuing preserves the indexing work; the scheduler's
-            // periodic ManuscriptPatternMatchSearchMessage covers the fallback.
-            try {
-                $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage($languageCode));
-            } catch (\Throwable $e) {
-                $this->logger->warning(sprintf('Failed to dispatch ManuscriptPatternMatchSearchMessage for %s: %s', $languageCode, $e->getMessage()), [
-                    'service' => self::LOG_SERVICE,
-                    'languageCode' => $languageCode,
-                ]);
-            }
         } finally {
             $lock->release();
         }
