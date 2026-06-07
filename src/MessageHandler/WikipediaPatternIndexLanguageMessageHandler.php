@@ -5,8 +5,11 @@ namespace App\MessageHandler;
 use App\Entity\WikipediaPatternIndexOffsetEntity;
 use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaPatternIndexOffsetRepository;
+use App\Service\Cache\RedisCacheService;
 use App\Service\Logging\ElasticsearchLogger;
 use App\Service\Search\WikipediaPatternIndexerService;
+use Symfony\Component\Lock\Exception\LockConflictedException;
+use Symfony\Component\Lock\Exception\LockReleasingException;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -24,6 +27,7 @@ class WikipediaPatternIndexLanguageMessageHandler
         private readonly WikipediaPatternIndexerService $indexerService,
         private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
         private readonly LockFactory $lockFactory,
+        private readonly RedisCacheService $cache,
         private readonly ElasticsearchLogger $logger,
     ) {
     }
@@ -41,6 +45,8 @@ class WikipediaPatternIndexLanguageMessageHandler
         );
 
         if (!$lock->acquire()) {
+            // Another worker is already indexing this language. Ack and move on; that worker
+            // owns the dedup marker and will clear it, so we must not touch it here.
             $this->logger->info(sprintf('Previous indexing for %s still in flight — skipping', $languageCode), [
                 'service' => self::LOG_SERVICE,
                 'languageCode' => $languageCode,
@@ -89,8 +95,26 @@ class WikipediaPatternIndexLanguageMessageHandler
             $this->logger->info(sprintf('Indexed %d articles for %s, new offset: %d', $articlesProcessed, $languageCode, $newOffset), [
                 'service' => self::LOG_SERVICE,
             ]);
+
+            // Batch finished cleanly — free the dedup marker so the next scheduler tick can
+            // dispatch this language again. Non-lock failures fall through to the message
+            // being retried; we deliberately leave the marker set so the retry stays deduped
+            // (and the marker's TTL re-opens the language if retries are eventually exhausted).
+            $this->cache->delete(WikipediaPatternIndexLanguageMessage::pendingMarkerKey($languageCode));
+        } catch (LockConflictedException) {
+            // Our lock expired mid-batch and another worker took over this language. The
+            // partial write index was already cleaned up above; ack without retrying and let
+            // the new lock holder finish (and clear the marker).
+            $this->logger->info(sprintf('Lock for %s lost mid-batch — another worker took over, skipping', $languageCode), [
+                'service' => self::LOG_SERVICE,
+                'languageCode' => $languageCode,
+            ]);
         } finally {
-            $lock->release();
+            try {
+                $lock->release();
+            } catch (LockReleasingException) {
+                // The lock was already taken over by another worker; nothing for us to release.
+            }
         }
     }
 }

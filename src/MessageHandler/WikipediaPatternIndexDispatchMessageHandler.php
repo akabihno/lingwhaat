@@ -6,6 +6,7 @@ use App\Message\WikipediaPatternIndexDispatchMessage;
 use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaArticleRepository;
 use App\Repository\WikipediaPatternIndexOffsetRepository;
+use App\Service\Cache\RedisCacheService;
 use App\Service\Logging\ElasticsearchLogger;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -14,11 +15,17 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class WikipediaPatternIndexDispatchMessageHandler
 {
     private const string LOG_SERVICE = '[WikipediaPatternIndexDispatchMessageHandler]';
+    // Safety-net lifetime for a language's "pending" marker. Must comfortably exceed the
+    // worst-case time a language message can sit queued plus its processing time, so we
+    // never re-dispatch a language that is still legitimately in flight. If a worker dies
+    // without clearing the marker, it self-heals after this many seconds.
+    private const int PENDING_MARKER_TTL_SECONDS = 1800;
 
     public function __construct(
         private readonly WikipediaArticleRepository $articleRepository,
         private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
         private readonly MessageBusInterface $bus,
+        private readonly RedisCacheService $cache,
         private readonly ElasticsearchLogger $logger,
     ) {
     }
@@ -47,13 +54,31 @@ class WikipediaPatternIndexDispatchMessageHandler
             'languageCodes' => $languageCodes,
         ]);
 
+        // Dedup: only enqueue a language that has no message already pending or in-flight.
+        // The handler clears the marker once the batch completes, so the next tick picks it
+        // up again. This caps the transport at one message per language and stops the queue
+        // from snowballing when batches take longer than the dispatch interval.
+        $dispatched = 0;
+        $skipped = [];
         foreach ($languageCodes as $languageCode) {
+            $markerKey = WikipediaPatternIndexLanguageMessage::pendingMarkerKey($languageCode);
+            if (!$this->cache->acquirePendingMarker($markerKey, self::PENDING_MARKER_TTL_SECONDS)) {
+                $skipped[] = $languageCode;
+                continue;
+            }
+
             $this->bus->dispatch(new WikipediaPatternIndexLanguageMessage(
                 $languageCode,
                 $message->getWindowSize(),
                 $message->getArticleLimit(),
             ));
+            ++$dispatched;
         }
+
+        $this->logger->info(sprintf('Dispatched %d languages, skipped %d already in flight', $dispatched, count($skipped)), [
+            'service' => self::LOG_SERVICE,
+            'skippedLanguageCodes' => $skipped,
+        ]);
 
         // No central search dispatch here. Each WikipediaPatternIndexLanguageMessageHandler that
         // actually does work (i.e. acquires its per-language lock) dispatches its own

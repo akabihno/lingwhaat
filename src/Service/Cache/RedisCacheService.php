@@ -100,6 +100,35 @@ class RedisCacheService
     }
 
     /**
+     * Atomically claim a one-shot marker. Returns true only if the marker did not
+     * already exist. Used for dispatch-time dedup so we never enqueue a second message
+     * for a key that already has one pending or in-flight.
+     *
+     * Fails open: if Redis is unavailable we return true so indexing is never fully
+     * stalled by a cache outage (the per-language lock still guards execution).
+     *
+     * @param string $key Marker key
+     * @param int $ttl Safety-net TTL in seconds; the marker self-heals if a holder dies
+     * @return bool True if the marker was newly acquired, false if one already existed
+     */
+    public function acquirePendingMarker(string $key, int $ttl): bool
+    {
+        if ($this->redis === null) {
+            return true;
+        }
+
+        try {
+            return $this->redis->set(self::KEY_PREFIX . $key, '1', ['nx', 'ex' => $ttl]) === true;
+        } catch (Exception $e) {
+            $this->logger->warning('Redis acquirePendingMarker failed', [
+                'key' => $key,
+                'error' => $e->getMessage(),
+            ]);
+            return true;
+        }
+    }
+
+    /**
      * Delete cache entry
      *
      * @param string $key Cache key

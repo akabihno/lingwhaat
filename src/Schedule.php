@@ -46,8 +46,11 @@ class Schedule implements ScheduleProviderInterface
                 ->withJitter(self::JITTER_SECONDS)
         );
 
+        // Dispatch is deduped per language (see WikipediaPatternIndexDispatchMessageHandler),
+        // so a tick only enqueues languages that aren't already pending/in-flight. 5 minutes
+        // roughly matches a full pass over all languages given current worker throughput.
         $schedule->add(
-            RecurringMessage::every('1 minute', new WikipediaPatternIndexDispatchMessage())
+            RecurringMessage::every('5 minutes', new WikipediaPatternIndexDispatchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
 
