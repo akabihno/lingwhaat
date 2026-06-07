@@ -3,6 +3,7 @@
 namespace App\MessageHandler;
 
 use App\Entity\WikipediaPatternIndexOffsetEntity;
+use App\Message\ManuscriptPatternMatchSearchMessage;
 use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaPatternIndexOffsetRepository;
 use App\Service\Cache\RedisCacheService;
@@ -12,6 +13,7 @@ use Symfony\Component\Lock\Exception\LockConflictedException;
 use Symfony\Component\Lock\Exception\LockReleasingException;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsMessageHandler]
 class WikipediaPatternIndexLanguageMessageHandler
@@ -28,6 +30,7 @@ class WikipediaPatternIndexLanguageMessageHandler
         private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
         private readonly LockFactory $lockFactory,
         private readonly RedisCacheService $cache,
+        private readonly MessageBusInterface $bus,
         private readonly ElasticsearchLogger $logger,
     ) {
     }
@@ -101,6 +104,11 @@ class WikipediaPatternIndexLanguageMessageHandler
             // being retried; we deliberately leave the marker set so the retry stays deduped
             // (and the marker's TTL re-opens the language if retries are eventually exhausted).
             $this->cache->delete(WikipediaPatternIndexLanguageMessage::pendingMarkerKey($languageCode));
+
+            // Search the freshly-promoted index immediately. Each language handler triggers
+            // its own per-language search so results are captured while matching articles are
+            // still in the active index batch (the batch is small and rotates quickly).
+            $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage($languageCode));
         } catch (LockConflictedException) {
             // Our lock expired mid-batch and another worker took over this language. The
             // partial write index was already cleaned up above; ack without retrying and let
