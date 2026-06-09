@@ -2,13 +2,12 @@
 
 namespace App\MessageHandler;
 
-use App\Entity\WikipediaPatternIndexOffsetEntity;
-use App\Message\ManuscriptPatternMatchSearchMessage;
 use App\Message\WikipediaPatternIndexDispatchMessage;
+use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaArticleRepository;
 use App\Repository\WikipediaPatternIndexOffsetRepository;
+use App\Service\Cache\RedisCacheService;
 use App\Service\Logging\ElasticsearchLogger;
-use App\Service\Search\WikipediaPatternIndexerService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -16,12 +15,17 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class WikipediaPatternIndexDispatchMessageHandler
 {
     private const string LOG_SERVICE = '[WikipediaPatternIndexDispatchMessageHandler]';
+    // Safety-net lifetime for a language's "pending" marker. Must comfortably exceed the
+    // worst-case time a language message can sit queued plus its processing time, so we
+    // never re-dispatch a language that is still legitimately in flight. If a worker dies
+    // without clearing the marker, it self-heals after this many seconds.
+    private const int PENDING_MARKER_TTL_SECONDS = 1800;
 
     public function __construct(
-        private readonly WikipediaPatternIndexerService $indexerService,
         private readonly WikipediaArticleRepository $articleRepository,
         private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
         private readonly MessageBusInterface $bus,
+        private readonly RedisCacheService $cache,
         private readonly ElasticsearchLogger $logger,
     ) {
     }
@@ -34,51 +38,50 @@ class WikipediaPatternIndexDispatchMessageHandler
             'articleLimit' => $message->getArticleLimit(),
         ]);
 
-        $this->indexerService->deleteIndex();
-        $this->logger->info('Deleted existing index', ['service' => self::LOG_SERVICE]);
-
         $languageCodes = $this->articleRepository->getDistinctLanguageCodes();
-        $this->logger->info(sprintf('Found %d language codes to index', count($languageCodes)), [
+        $offsetsByLanguage = $this->offsetRepository->getOffsetsByLanguageCode();
+
+        // Sort least-processed first: languages never indexed (no offset row) get offset=0 and
+        // sort to the top. Tie-break alphabetically for determinism.
+        usort($languageCodes, function (string $a, string $b) use ($offsetsByLanguage): int {
+            $oa = $offsetsByLanguage[$a] ?? 0;
+            $ob = $offsetsByLanguage[$b] ?? 0;
+            return $oa === $ob ? strcmp($a, $b) : $oa <=> $ob;
+        });
+
+        $this->logger->info(sprintf('Fanning out indexing for %d languages (lowest-offset first)', count($languageCodes)), [
             'service' => self::LOG_SERVICE,
             'languageCodes' => $languageCodes,
         ]);
 
+        // Dedup: only enqueue a language that has no message already pending or in-flight.
+        // The handler clears the marker once the batch completes, so the next tick picks it
+        // up again. This caps the transport at one message per language and stops the queue
+        // from snowballing when batches take longer than the dispatch interval.
+        $dispatched = 0;
+        $skipped = [];
         foreach ($languageCodes as $languageCode) {
-            // Read offset values before indexing — em->clear() inside the indexer will detach any
-            // entity loaded here, so we only capture scalar values and re-fetch after indexing.
-            $existing = $this->offsetRepository->findByLanguageCode($languageCode);
-            $startOffset = ($existing !== null && $existing->getWindowSize() === $message->getWindowSize())
-                ? $existing->getCurrentOffset()
-                : 0;
+            $markerKey = WikipediaPatternIndexLanguageMessage::pendingMarkerKey($languageCode);
+            if (!$this->cache->acquirePendingMarker($markerKey, self::PENDING_MARKER_TTL_SECONDS)) {
+                $skipped[] = $languageCode;
+                continue;
+            }
 
-            $this->logger->info(sprintf('Indexing language: %s (offset: %d)', $languageCode, $startOffset), [
-                'service' => self::LOG_SERVICE,
-            ]);
-
-            $articlesProcessed = $this->indexerService->indexBatchByLanguageCode(
-                $message->getWindowSize(),
+            $this->bus->dispatch(new WikipediaPatternIndexLanguageMessage(
                 $languageCode,
+                $message->getWindowSize(),
                 $message->getArticleLimit(),
-                $startOffset
-            );
-
-            // Fewer articles than requested → end of data, wrap offset to 0
-            $newOffset = $articlesProcessed < $message->getArticleLimit()
-                ? 0
-                : $startOffset + $articlesProcessed;
-
-            // Re-fetch after em->clear() was called internally by the indexer
-            $offsetEntity = $this->offsetRepository->findByLanguageCode($languageCode)
-                ?? (new WikipediaPatternIndexOffsetEntity())->setLanguageCode($languageCode);
-            $offsetEntity->setCurrentOffset($newOffset)->setWindowSize($message->getWindowSize());
-            $this->offsetRepository->save($offsetEntity);
-
-            $this->logger->info(sprintf('Indexed %d articles for %s, new offset: %d', $articlesProcessed, $languageCode, $newOffset), [
-                'service' => self::LOG_SERVICE,
-            ]);
+            ));
+            ++$dispatched;
         }
 
-        $this->logger->info('Dispatching ManuscriptPatternMatchSearchMessage', ['service' => self::LOG_SERVICE]);
-        $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage());
+        $this->logger->info(sprintf('Dispatched %d languages, skipped %d already in flight', $dispatched, count($skipped)), [
+            'service' => self::LOG_SERVICE,
+            'skippedLanguageCodes' => $skipped,
+        ]);
+
+        // No central search dispatch here. Each WikipediaPatternIndexLanguageMessageHandler that
+        // actually does work (i.e. acquires its per-language lock) dispatches its own
+        // ManuscriptPatternMatchSearchMessage with that language code attached.
     }
 }

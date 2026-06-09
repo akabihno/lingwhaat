@@ -18,7 +18,7 @@ spec:
         app: elasticsearch
     spec:
       nodeSelector:
-        kubernetes.io/hostname: raspberrypi
+        kubernetes.io/hostname: ubuntu-desktop
       securityContext:
         fsGroup: 1000
       initContainers:

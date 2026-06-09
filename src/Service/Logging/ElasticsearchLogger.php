@@ -71,8 +71,10 @@ class ElasticsearchLogger implements LoggerInterface
                 'context' => $context,
             ]);
 
+            // Intentionally no refresh() — per-doc refresh is a major throughput killer when many
+            // workers log frequently. Elasticsearch refreshes automatically (~1s default), which
+            // is fine for log visibility.
             $this->client->getIndex($indexName)->addDocument($document);
-            $this->client->getIndex($indexName)->refresh();
         } catch (\Throwable $e) {
             error_log(sprintf(
                 'Failed to log to Elasticsearch: %s. Original message: %s',

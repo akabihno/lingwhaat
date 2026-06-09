@@ -6,6 +6,7 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
+  storageClassName: longhorn
   resources:
     requests:
       storage: 1Gi
@@ -17,6 +18,8 @@ metadata:
   namespace: lingwhaat
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: redis
@@ -25,6 +28,8 @@ spec:
       labels:
         app: redis
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: ubuntu-desktop
       containers:
         - name: redis
           image: redis:7-alpine

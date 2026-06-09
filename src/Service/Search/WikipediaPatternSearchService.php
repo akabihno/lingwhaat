@@ -2,6 +2,8 @@
 
 namespace App\Service\Search;
 
+use Elastic\Elasticsearch\Exception\ClientResponseException;
+use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Elastica\Client;
 use Elastica\Query;
 use Elastica\Query\BoolQuery;
@@ -11,7 +13,7 @@ use InvalidArgumentException;
 class WikipediaPatternSearchService
 {
     private Client $esClient;
-    private const string INDEX_NAME = 'wikipedia_global_patterns';
+    private const string INDEX_NAME_PREFIX = 'wikipedia_global_patterns';
     public const int DEFAULT_WINDOW_SIZE = 18;
     private const int BASE = 101;
     private const int MOD = 1000000007;
@@ -22,9 +24,11 @@ class WikipediaPatternSearchService
     }
 
     /**
-     * Search for a cipher pattern in the global concatenated index.
+     * Search for a cipher pattern in a Wikipedia patterns index.
+     * If $languageCode is provided, searches the per-language index; otherwise searches across all
+     * per-language indices via `wikipedia_global_patterns_*` (Elastica multi-index syntax).
      */
-    public function search(string $cipherText, int $limit = 50, int $windowSize = self::DEFAULT_WINDOW_SIZE): array
+    public function search(string $cipherText, int $limit = 50, int $windowSize = self::DEFAULT_WINDOW_SIZE, ?string $languageCode = null): array
     {
         if ($windowSize <= 0) {
             throw new InvalidArgumentException('windowSize must be greater than 0.');
@@ -40,7 +44,10 @@ class WikipediaPatternSearchService
         $patternStr = implode(',', $pattern);
         $patternHash = $this->patternHash($pattern);
 
-        $index = $this->esClient->getIndex(self::INDEX_NAME);
+        $indexName = $languageCode === null
+            ? self::INDEX_NAME_PREFIX . '_*'
+            : self::INDEX_NAME_PREFIX . '_' . $languageCode;
+        $index = $this->esClient->getIndex($indexName);
 
         $bool = new BoolQuery();
 
@@ -60,13 +67,26 @@ class WikipediaPatternSearchService
         $query->setSize($limit);
         $query->setSort(['global_position' => 'asc']);
 
-        $results = $index->search($query)->getResults();
+        try {
+            $results = $index->search($query)->getResults();
+        } catch (ClientResponseException | ServerResponseException $e) {
+            // Index is being modified concurrently (the per-language indexing handler nukes and
+            // recreates wikipedia_global_patterns_<lang>). Possible races we silently absorb here:
+            //   - 404 index_not_found_exception: index was deleted between dispatch and search.
+            //   - 400 No mapping found: index exists but is empty, fields not yet mapped.
+            //   - 503 no_shard_available_action_exception: shards still initializing/relocating.
+            // All three are transient and resolve once the in-flight indexing cycle completes.
+            // Returning no hits lets the search message succeed; the next scheduled search for
+            // this language will see a stable index.
+            return [];
+        }
 
         return $this->formatResults($results);
     }
 
     /**
-     * Format results from the global index.
+     * Format results from the per-language indices. Each hit carries the language code derived
+     * from its source index name so callers don't have to look it up via article_id.
      */
     private function formatResults(array $results): array
     {
@@ -82,10 +102,20 @@ class WikipediaPatternSearchService
                 'pattern' => $src['pattern'] ?? null,
                 'length' => $src['length'] ?? null,
                 'pattern_hash' => $src['pattern_hash'] ?? null,
+                'language_code' => self::languageCodeFromIndexName((string) $hit->getIndex()),
             ];
         }
 
         return $formatted;
+    }
+
+    private static function languageCodeFromIndexName(string $indexName): ?string
+    {
+        $prefix = self::INDEX_NAME_PREFIX . '_';
+        if (!str_starts_with($indexName, $prefix)) {
+            return null;
+        }
+        return substr($indexName, strlen($prefix)) ?: null;
     }
 
     private function normalize(string $s): string

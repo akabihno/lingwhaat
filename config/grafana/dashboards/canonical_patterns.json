@@ -1,0 +1,134 @@
+{
+  "annotations": {"list": []},
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": null,
+  "links": [],
+  "templating": {
+    "list": [
+      {
+        "name": "language",
+        "label": "Language",
+        "type": "query",
+        "datasource": {"type": "prometheus", "uid": "prometheus"},
+        "query": {"query": "label_values(lingwhaat_canonical_pattern_overlap_wikipedia_count, language)", "refId": "PrometheusVariableQueryEditor-VariableQuery"},
+        "refresh": 2,
+        "sort": 1
+      },
+      {
+        "name": "source_id",
+        "label": "Manuscript source",
+        "type": "query",
+        "datasource": {"type": "prometheus", "uid": "prometheus"},
+        "query": {"query": "label_values(lingwhaat_canonical_pattern_overlap_manuscript_count{language=\"$language\"}, source_id)", "refId": "PrometheusVariableQueryEditor-VariableQuery"},
+        "refresh": 2,
+        "sort": 1,
+        "includeAll": true,
+        "multi": true,
+        "current": {"selected": true, "text": "All", "value": "$__all"}
+      }
+    ]
+  },
+  "panels": [
+    {
+      "type": "stat",
+      "title": "Shared top-N patterns: language=$language vs manuscript source",
+      "description": "Number of canonical patterns each manuscript source's top-N has in common with language=$language's top-N. Higher = stronger similarity.",
+      "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {
+          "expr": "count by (source_id) (lingwhaat_canonical_pattern_overlap_manuscript_count{language=\"$language\", source_id=~\"$source_id\"})",
+          "legendFormat": "source {{source_id}}",
+          "refId": "A",
+          "instant": true
+        }
+      ],
+      "options": {
+        "reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false},
+        "colorMode": "value",
+        "graphMode": "none",
+        "orientation": "auto",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {"mode": "thresholds"},
+          "thresholds": {"mode": "absolute", "steps": [
+            {"color": "red", "value": null},
+            {"color": "orange", "value": 1},
+            {"color": "yellow", "value": 5},
+            {"color": "green", "value": 15}
+          ]},
+          "unit": "none"
+        },
+        "overrides": []
+      }
+    },
+    {
+      "type": "table",
+      "title": "Shared patterns (language=$language ∩ source_id=$source_id)",
+      "description": "Patterns appearing in both top-N sets. wiki_count = occurrences in Wikipedia. manuscript_count = occurrences in manuscript_pattern_match.source_data.",
+      "gridPos": {"h": 14, "w": 24, "x": 0, "y": 8},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {
+          "refId": "Wiki",
+          "format": "table",
+          "instant": true,
+          "expr": "lingwhaat_canonical_pattern_overlap_wikipedia_count{language=\"$language\", source_id=~\"$source_id\"}"
+        },
+        {
+          "refId": "Manuscript",
+          "format": "table",
+          "instant": true,
+          "expr": "lingwhaat_canonical_pattern_overlap_manuscript_count{language=\"$language\", source_id=~\"$source_id\"}"
+        }
+      ],
+      "transformations": [
+        {"id": "filterFieldsByName", "options": {"include": {"names": ["pattern", "language", "source_id", "Value #Wiki", "Value #Manuscript"]}}},
+        {"id": "organize", "options": {
+          "renameByName": {
+            "Value #Wiki": "wiki_count",
+            "Value #Manuscript": "manuscript_count"
+          }
+        }}
+      ]
+    },
+    {
+      "type": "barchart",
+      "title": "Manuscript counts of shared patterns ($language ∩ source_id)",
+      "description": "Bar height = how often each shared canonical pattern appears in the manuscript source. Long bars = patterns shared with $language that are very frequent in the manuscript.",
+      "gridPos": {"h": 12, "w": 24, "x": 0, "y": 22},
+      "datasource": {"type": "prometheus", "uid": "prometheus"},
+      "targets": [
+        {
+          "expr": "lingwhaat_canonical_pattern_overlap_manuscript_count{language=\"$language\", source_id=~\"$source_id\"}",
+          "legendFormat": "src={{source_id}} {{pattern}}",
+          "refId": "A",
+          "format": "table",
+          "instant": true
+        }
+      ],
+      "options": {
+        "orientation": "vertical",
+        "xField": "pattern",
+        "legend": {"showLegend": true, "displayMode": "list", "placement": "bottom"}
+      },
+      "fieldConfig": {
+        "defaults": {"custom": {"axisLabel": "manuscript count"}},
+        "overrides": []
+      }
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["lingwhaat", "canonical-pattern", "overlap"],
+  "time": {"from": "now-1h", "to": "now"},
+  "timepicker": {},
+  "timezone": "",
+  "title": "Canonical Pattern Overlap",
+  "uid": "canonical-patterns",
+  "version": 1,
+  "weekStart": ""
+}

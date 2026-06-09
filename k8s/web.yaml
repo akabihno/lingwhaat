@@ -7,6 +7,8 @@ metadata:
   namespace: lingwhaat
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: web
@@ -15,6 +17,8 @@ spec:
       labels:
         app: web
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: raspberrypi
       containers:
         - name: web
           image: registry.local:30500/lingwhaat-php:latest

@@ -4,6 +4,7 @@ namespace App;
 
 use App\Message\ManuscriptAlphabetDecodeSelectionDispatchMessage;
 use App\Message\ManuscriptLanguageScoreDispatchMessage;
+use App\Message\ManuscriptPatternMatchSearchMessage;
 use App\Message\ParseWikipediaLanguagesMessage;
 use App\Message\ParseWiktionaryLanguagesMessage;
 use App\Message\WikipediaPatternIndexDispatchMessage;
@@ -45,18 +46,26 @@ class Schedule implements ScheduleProviderInterface
                 ->withJitter(self::JITTER_SECONDS)
         );
 
+        // Dispatch is deduped per language (see WikipediaPatternIndexDispatchMessageHandler),
+        // so a tick only enqueues languages that aren't already pending/in-flight. 5 minutes
+        // roughly matches a full pass over all languages given current worker throughput.
         $schedule->add(
             RecurringMessage::every('5 minutes', new WikipediaPatternIndexDispatchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
 
         $schedule->add(
-            RecurringMessage::every('5 minutes', new ManuscriptLanguageScoreDispatchMessage())
+            RecurringMessage::every('1 minute', new ManuscriptLanguageScoreDispatchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
 
         $schedule->add(
             RecurringMessage::every('5 minutes', new ManuscriptAlphabetDecodeSelectionDispatchMessage())
+                ->withJitter(self::JITTER_SECONDS)
+        );
+
+        $schedule->add(
+            RecurringMessage::every('5 minutes', new ManuscriptPatternMatchSearchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
 

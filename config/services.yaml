@@ -61,6 +61,10 @@ services:
         arguments:
             $redisDsn: '%env(LOCK_DSN)%'
 
+    App\Service\Metrics\PrometheusMetricsService:
+        arguments:
+            $redisDsn: '%env(LOCK_DSN)%'
+
     App\EventSubscriber\ApiKeyAuthSubscriber:
         arguments:
             $apiKey: '%env(API_KEY)%'

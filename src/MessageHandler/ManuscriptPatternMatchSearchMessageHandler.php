@@ -28,9 +28,11 @@ class ManuscriptPatternMatchSearchMessageHandler
 
     public function __invoke(ManuscriptPatternMatchSearchMessage $message): void
     {
+        $languageCode = $message->getLanguageCode();
         $schedules = $this->scheduleRepository->getAll();
-        $this->logger->info(sprintf('Processing %d manuscript schedules', count($schedules)), [
+        $this->logger->info(sprintf('Processing %d manuscript schedules against language=%s', count($schedules), $languageCode ?? 'all'), [
             'service' => self::LOG_SERVICE,
+            'languageCode' => $languageCode,
         ]);
 
         foreach ($schedules as $schedule) {
@@ -58,7 +60,7 @@ class ManuscriptPatternMatchSearchMessageHandler
                     $window = mb_substr($normalized, $pos, $windowSize);
 
                     try {
-                        $windowHits = $this->searchService->search($window, self::RESULTS_PER_WINDOW);
+                        $windowHits = $this->searchService->search($window, self::RESULTS_PER_WINDOW, WikipediaPatternSearchService::DEFAULT_WINDOW_SIZE, $languageCode);
                     } catch (\InvalidArgumentException) {
                         continue;
                     }

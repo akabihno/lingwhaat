@@ -16,7 +16,7 @@ spec:
         app: kibana
     spec:
       nodeSelector:
-        kubernetes.io/hostname: raspberrypi
+        kubernetes.io/hostname: ubuntu-desktop
       containers:
         - name: kibana
           image: docker.elastic.co/kibana/kibana:8.11.0
