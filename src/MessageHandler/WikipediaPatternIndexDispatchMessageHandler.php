@@ -15,11 +15,13 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class WikipediaPatternIndexDispatchMessageHandler
 {
     private const string LOG_SERVICE = '[WikipediaPatternIndexDispatchMessageHandler]';
-    // Safety-net lifetime for a language's "pending" marker. Must comfortably exceed the
-    // worst-case time a language message can sit queued plus its processing time, so we
-    // never re-dispatch a language that is still legitimately in flight. If a worker dies
-    // without clearing the marker, it self-heals after this many seconds.
-    private const int PENDING_MARKER_TTL_SECONDS = 1800;
+    // Safety-net lifetime for a language's "pending" marker. Cleared explicitly on completion, so
+    // this only governs recovery when a worker dies without clearing it. Sized at one dispatch
+    // interval (5 min): comfortably above the real in-flight time — a 5-article keyset batch now
+    // runs in ~seconds plus brief queue wait — while letting a dead worker's language re-dispatch
+    // on the next tick instead of stalling for many ticks. Re-dispatching a still-in-flight language
+    // is harmless: the per-language lock dedups it into a no-op.
+    private const int PENDING_MARKER_TTL_SECONDS = 300;
 
     public function __construct(
         private readonly WikipediaArticleRepository $articleRepository,

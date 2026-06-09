@@ -20,10 +20,13 @@ class WikipediaPatternIndexLanguageMessageHandler
 {
     private const string LOG_SERVICE = '[WikipediaPatternIndexLanguageMessageHandler]';
     private const string LOCK_RESOURCE_PREFIX = 'wikipedia-pattern-index-language:';
-    // Safety net for stuck epochs. Set generously above the worst-case duration of indexing a
-    // single language; if a worker dies holding the lock, the next tick this many seconds later
-    // will be able to acquire it. Released explicitly on normal completion.
-    private const int LOCK_TTL_SECONDS = 600;
+    // Safety net for stuck epochs, and refreshed via heartbeat after every bulk flush, so it only
+    // needs to exceed the gap between flushes plus margin — not a whole batch. A 5-article keyset
+    // batch now runs in ~seconds (down from up to ~29 min when fetching deep offsets), so 60s is
+    // ~60x headroom while cutting dead-worker lock reclaim to a minute. Released explicitly on
+    // normal completion. NOTE: if articleLimit is raised substantially, re-check this against the
+    // worst-case time to process that many articles between heartbeats.
+    private const int LOCK_TTL_SECONDS = 60;
 
     public function __construct(
         private readonly WikipediaPatternIndexerService $indexerService,
