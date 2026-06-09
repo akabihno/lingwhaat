@@ -59,11 +59,11 @@ class WikipediaPatternIndexLanguageMessageHandler
 
         try {
             $existing = $this->offsetRepository->findByLanguageCode($languageCode);
-            $startOffset = ($existing !== null && $existing->getWindowSize() === $windowSize)
-                ? $existing->getCurrentOffset()
+            $afterId = ($existing !== null && $existing->getWindowSize() === $windowSize)
+                ? $existing->getLastArticleId()
                 : 0;
 
-            $this->logger->info(sprintf('Indexing language: %s (offset: %d)', $languageCode, $startOffset), [
+            $this->logger->info(sprintf('Indexing language: %s (afterId: %d)', $languageCode, $afterId), [
                 'service' => self::LOG_SERVICE,
             ]);
 
@@ -71,12 +71,12 @@ class WikipediaPatternIndexLanguageMessageHandler
             // promoteToAlias() swaps the alias atomically so search always sees a complete index.
             $concreteIndex = $this->indexerService->prepareWriteIndex($languageCode);
             try {
-                $articlesProcessed = $this->indexerService->indexBatchByLanguageCode(
+                $result = $this->indexerService->indexBatchByLanguageCode(
                     $windowSize,
                     $languageCode,
                     $concreteIndex,
                     $articleLimit,
-                    $startOffset,
+                    $afterId,
                     fn() => $lock->refresh(),
                 );
 
@@ -86,16 +86,20 @@ class WikipediaPatternIndexLanguageMessageHandler
                 throw $e;
             }
 
-            $newOffset = $articlesProcessed < $articleLimit
+            $articlesProcessed = $result['processed'];
+
+            // Fewer than a full batch means we reached the end of this language's corpus — reset the
+            // cursor so the next pass starts over; otherwise resume from the last id we processed.
+            $newCursor = $articlesProcessed < $articleLimit
                 ? 0
-                : $startOffset + $articlesProcessed;
+                : $result['lastArticleId'];
 
             $offsetEntity = $this->offsetRepository->findByLanguageCode($languageCode)
                 ?? (new WikipediaPatternIndexOffsetEntity())->setLanguageCode($languageCode);
-            $offsetEntity->setCurrentOffset($newOffset)->setWindowSize($windowSize);
+            $offsetEntity->setLastArticleId($newCursor)->setWindowSize($windowSize);
             $this->offsetRepository->save($offsetEntity);
 
-            $this->logger->info(sprintf('Indexed %d articles for %s, new offset: %d', $articlesProcessed, $languageCode, $newOffset), [
+            $this->logger->info(sprintf('Indexed %d articles for %s, new cursor (last id): %d', $articlesProcessed, $languageCode, $newCursor), [
                 'service' => self::LOG_SERVICE,
             ]);
 

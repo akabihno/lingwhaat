@@ -148,21 +148,24 @@ class WikipediaPatternIndexerService
     }
 
     /**
-     * Index up to $articleLimit articles starting at $startOffset into $targetIndex.
-     * Returns the number of articles actually processed; fewer than $articleLimit
-     * means end of data and the caller should reset the offset.
+     * Index up to $articleLimit articles whose id is greater than $afterId into $targetIndex.
+     * Returns ['processed' => <count>, 'lastArticleId' => <id>]; a processed count below
+     * $articleLimit means end of data and the caller should reset the cursor to 0, otherwise it
+     * should persist lastArticleId to resume the next batch from there.
      *
      * $heartbeat is called after every bulk flush so the caller can refresh a lock TTL
      * or send a keepalive without the service needing to know about either.
+     *
+     * @return array{processed:int, lastArticleId:int}
      */
     public function indexBatchByLanguageCode(
         int $windowSize,
         string $languageCode,
         string $targetIndex,
         int $articleLimit,
-        int $startOffset = 0,
+        int $afterId = 0,
         ?callable $heartbeat = null,
-    ): int {
+    ): array {
         if ($windowSize <= 0) {
             throw new InvalidArgumentException('windowSize must be greater than 0.');
         }
@@ -170,23 +173,26 @@ class WikipediaPatternIndexerService
             throw new InvalidArgumentException('languageCode must be provided.');
         }
 
-        return $this->doIndex($windowSize, $languageCode, $targetIndex, $articleLimit, $startOffset, $heartbeat);
+        return $this->doIndex($windowSize, $languageCode, $targetIndex, $articleLimit, $afterId, $heartbeat);
     }
 
+    /**
+     * @return array{processed:int, lastArticleId:int}
+     */
     private function doIndex(
         int $windowSize,
         string $languageCode,
         string $targetIndex,
         ?int $articleLimit,
-        int $startOffset = 0,
+        int $afterId = 0,
         ?callable $heartbeat = null,
-    ): int {
+    ): array {
         /** @var WikipediaArticleRepository $repo */
         $repo = $this->em->getRepository(WikipediaArticleEntity::class);
 
         $globalPos = 0;
         $batch = [];
-        $offset = $startOffset;
+        $lastArticleId = $afterId;
         $totalArticlesProcessed = 0;
 
         do {
@@ -199,13 +205,14 @@ class WikipediaPatternIndexerService
                 $fetchLimit = min($fetchLimit, $remaining);
             }
 
-            $articles = $repo->findIdAndTextByLanguageCodePaginated(
+            $articles = $repo->findIdAndTextByLanguageCodeAfterId(
                 $languageCode,
                 $fetchLimit,
-                $offset,
+                $lastArticleId,
             );
 
             foreach ($articles as $article) {
+                $lastArticleId = $article['id'];
                 $normalized = $this->normalize($article['text']);
                 $chars = $this->splitChars($normalized);
                 $charCount = count($chars);
@@ -238,7 +245,6 @@ class WikipediaPatternIndexerService
             }
 
             $totalArticlesProcessed += count($articles);
-            $offset += count($articles);
             $this->em->clear();
         } while ($articles !== []);
 
@@ -246,7 +252,7 @@ class WikipediaPatternIndexerService
             $this->flushBatch($batch, $targetIndex, $heartbeat);
         }
 
-        return $totalArticlesProcessed;
+        return ['processed' => $totalArticlesProcessed, 'lastArticleId' => $lastArticleId];
     }
 
     /**

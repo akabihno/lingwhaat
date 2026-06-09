@@ -18,8 +18,11 @@ class WikipediaPatternIndexOffsetEntity
     #[ORM\Column(name: "language_code", type: "string", length: 8)]
     private string $languageCode;
 
-    #[ORM\Column(name: "current_offset", type: "integer")]
-    private int $currentOffset = 0;
+    // Keyset cursor: the id of the last wikipedia_article processed for this language. The next
+    // batch resumes from id > this value; reset to 0 to restart a full pass. (Despite the table
+    // name, this is no longer a row offset — see Version20260609120000 migration.)
+    #[ORM\Column(name: "last_article_id", type: "bigint")]
+    private int $lastArticleId = 0;
 
     #[ORM\Column(name: "window_size", type: "integer")]
     private int $windowSize;
@@ -40,14 +43,14 @@ class WikipediaPatternIndexOffsetEntity
         return $this;
     }
 
-    public function getCurrentOffset(): int
+    public function getLastArticleId(): int
     {
-        return $this->currentOffset;
+        return $this->lastArticleId;
     }
 
-    public function setCurrentOffset(int $currentOffset): self
+    public function setLastArticleId(int $lastArticleId): self
     {
-        $this->currentOffset = $currentOffset;
+        $this->lastArticleId = $lastArticleId;
         return $this;
     }
 
