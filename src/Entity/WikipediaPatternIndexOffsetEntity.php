@@ -27,6 +27,17 @@ class WikipediaPatternIndexOffsetEntity
     #[ORM\Column(name: "window_size", type: "integer")]
     private int $windowSize;
 
+    // Timestamp of the last completed batch (success or failure after retries). Used by the
+    // dispatch handler to detect dead self-chains and re-kick them. Updated at the start of
+    // each processing attempt so a crashed worker still advances the clock.
+    #[ORM\Column(name: "last_run_at", type: "datetime_immutable", nullable: true)]
+    private ?\DateTimeImmutable $lastRunAt = null;
+
+    // Article limit to use on the next batch, calculated from the previous run's timing so that
+    // batches converge on a target wall-clock duration. Capped by the handler's MAX_ARTICLE_LIMIT.
+    #[ORM\Column(name: "next_article_limit", type: "integer")]
+    private int $nextArticleLimit = 5;
+
     public function getId(): int
     {
         return $this->id;
@@ -62,6 +73,28 @@ class WikipediaPatternIndexOffsetEntity
     public function setWindowSize(int $windowSize): self
     {
         $this->windowSize = $windowSize;
+        return $this;
+    }
+
+    public function getLastRunAt(): ?\DateTimeImmutable
+    {
+        return $this->lastRunAt;
+    }
+
+    public function setLastRunAt(\DateTimeImmutable $lastRunAt): self
+    {
+        $this->lastRunAt = $lastRunAt;
+        return $this;
+    }
+
+    public function getNextArticleLimit(): int
+    {
+        return $this->nextArticleLimit;
+    }
+
+    public function setNextArticleLimit(int $nextArticleLimit): self
+    {
+        $this->nextArticleLimit = $nextArticleLimit;
         return $this;
     }
 }

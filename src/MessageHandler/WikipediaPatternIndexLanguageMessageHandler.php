@@ -6,7 +6,6 @@ use App\Entity\WikipediaPatternIndexOffsetEntity;
 use App\Message\ManuscriptPatternMatchSearchMessage;
 use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaPatternIndexOffsetRepository;
-use App\Service\Cache\RedisCacheService;
 use App\Service\Logging\ElasticsearchLogger;
 use App\Service\Search\WikipediaPatternIndexerService;
 use Symfony\Component\Lock\Exception\LockConflictedException;
@@ -20,19 +19,20 @@ class WikipediaPatternIndexLanguageMessageHandler
 {
     private const string LOG_SERVICE = '[WikipediaPatternIndexLanguageMessageHandler]';
     private const string LOCK_RESOURCE_PREFIX = 'wikipedia-pattern-index-language:';
-    // Safety net for stuck epochs, and refreshed via heartbeat after every bulk flush, so it only
-    // needs to exceed the gap between flushes plus margin — not a whole batch. A 5-article keyset
-    // batch now runs in ~seconds (down from up to ~29 min when fetching deep offsets), so 60s is
-    // ~60x headroom while cutting dead-worker lock reclaim to a minute. Released explicitly on
-    // normal completion. NOTE: if articleLimit is raised substantially, re-check this against the
-    // worst-case time to process that many articles between heartbeats.
-    private const int LOCK_TTL_SECONDS = 60;
+    // Safety net for stuck workers: if a worker dies without releasing the lock, this is the
+    // maximum time before the next run can acquire it. Not used for coordination — normal runs
+    // release the lock explicitly and self-dispatch the next message immediately.
+    private const int LOCK_TTL_SECONDS = 300;
+    // Target wall-clock duration for each batch. The article limit adapts each run so the next
+    // batch takes approximately this long, keeping processing continuous without overloading.
+    private const int TARGET_BATCH_MS = 30_000;
+    // Hard ceiling on articles per batch regardless of timing measurements.
+    public const int MAX_ARTICLE_LIMIT = 500;
 
     public function __construct(
         private readonly WikipediaPatternIndexerService $indexerService,
         private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
         private readonly LockFactory $lockFactory,
-        private readonly RedisCacheService $cache,
         private readonly MessageBusInterface $bus,
         private readonly ElasticsearchLogger $logger,
     ) {
@@ -42,7 +42,7 @@ class WikipediaPatternIndexLanguageMessageHandler
     {
         $languageCode = $message->getLanguageCode();
         $windowSize = $message->getWindowSize();
-        $articleLimit = $message->getArticleLimit();
+        $articleLimit = min(self::MAX_ARTICLE_LIMIT, $message->getArticleLimit());
 
         $lock = $this->lockFactory->createLock(
             self::LOCK_RESOURCE_PREFIX . $languageCode,
@@ -51,8 +51,8 @@ class WikipediaPatternIndexLanguageMessageHandler
         );
 
         if (!$lock->acquire()) {
-            // Another worker is already indexing this language. Ack and move on; that worker
-            // owns the dedup marker and will clear it, so we must not touch it here.
+            // Another worker is already indexing this language; this message is a duplicate
+            // (e.g. from a recovery dispatch). Ack and move on.
             $this->logger->info(sprintf('Previous indexing for %s still in flight — skipping', $languageCode), [
                 'service' => self::LOG_SERVICE,
                 'languageCode' => $languageCode,
@@ -61,18 +61,26 @@ class WikipediaPatternIndexLanguageMessageHandler
         }
 
         try {
+            // Stamp last_run_at before the batch so the dispatch watchdog doesn't re-kick this
+            // language while we're running. Uses a direct DQL UPDATE so em->clear() inside
+            // indexBatchByLanguageCode cannot detach or invalidate this write.
+            // Has no effect for languages with no offset row yet — new languages are safely
+            // re-kicked by the watchdog if the first run fails.
+            $this->offsetRepository->touchLastRunAt($languageCode);
+
             $existing = $this->offsetRepository->findByLanguageCode($languageCode);
+
             $afterId = ($existing !== null && $existing->getWindowSize() === $windowSize)
                 ? $existing->getLastArticleId()
                 : 0;
 
-            $this->logger->info(sprintf('Indexing language: %s (afterId: %d)', $languageCode, $afterId), [
+            $this->logger->info(sprintf('Indexing language: %s (afterId: %d, limit: %d)', $languageCode, $afterId, $articleLimit), [
                 'service' => self::LOG_SERVICE,
             ]);
 
-            // Build into a fresh write index (refresh disabled for bulk speed).
-            // promoteToAlias() swaps the alias atomically so search always sees a complete index.
             $concreteIndex = $this->indexerService->prepareWriteIndex($languageCode);
+            $batchStartMs = (int) round(microtime(true) * 1000);
+
             try {
                 $result = $this->indexerService->indexBatchByLanguageCode(
                     $windowSize,
@@ -89,38 +97,47 @@ class WikipediaPatternIndexLanguageMessageHandler
                 throw $e;
             }
 
+            $durationMs = (int) round(microtime(true) * 1000) - $batchStartMs;
             $articlesProcessed = $result['processed'];
 
-            // Fewer than a full batch means we reached the end of this language's corpus — reset the
-            // cursor so the next pass starts over; otherwise resume from the last id we processed.
             $newCursor = $articlesProcessed < $articleLimit
                 ? 0
                 : $result['lastArticleId'];
 
+            $nextArticleLimit = $this->calculateNextLimit($articleLimit, $articlesProcessed, $durationMs);
+
+            // Re-fetch after indexBatchByLanguageCode: em->clear() inside doIndex detaches all
+            // previously-loaded entities, so reusing the $existing reference would cause
+            // persist() to attempt an INSERT and fail on the unique constraint.
             $offsetEntity = $this->offsetRepository->findByLanguageCode($languageCode)
                 ?? (new WikipediaPatternIndexOffsetEntity())->setLanguageCode($languageCode);
-            $offsetEntity->setLastArticleId($newCursor)->setWindowSize($windowSize);
+            $offsetEntity
+                ->setLastArticleId($newCursor)
+                ->setWindowSize($windowSize)
+                ->setLastRunAt(new \DateTimeImmutable())
+                ->setNextArticleLimit($nextArticleLimit);
             $this->offsetRepository->save($offsetEntity);
 
-            $this->logger->info(sprintf('Indexed %d articles for %s, new cursor (last id): %d', $articlesProcessed, $languageCode, $newCursor), [
-                'service' => self::LOG_SERVICE,
-            ]);
+            $this->logger->info(
+                sprintf('Indexed %d articles for %s in %d ms, cursor: %d, next limit: %d',
+                    $articlesProcessed, $languageCode, $durationMs, $newCursor, $nextArticleLimit),
+                ['service' => self::LOG_SERVICE],
+            );
 
-            // Batch finished cleanly — free the dedup marker so the next scheduler tick can
-            // dispatch this language again. Non-lock failures fall through to the message
-            // being retried; we deliberately leave the marker set so the retry stays deduped
-            // (and the marker's TTL re-opens the language if retries are eventually exhausted).
-            $this->cache->delete(WikipediaPatternIndexLanguageMessage::pendingMarkerKey($languageCode));
-
-            // Search the freshly-promoted index immediately. Each language handler triggers
-            // its own per-language search so results are captured while matching articles are
-            // still in the active index batch (the batch is small and rotates quickly).
             $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage($languageCode));
+
+            // Self-chain: immediately queue the next batch so processing continues without
+            // waiting for the periodic dispatch handler.
+            $this->bus->dispatch(new WikipediaPatternIndexLanguageMessage(
+                $languageCode,
+                $windowSize,
+                $nextArticleLimit,
+            ));
         } catch (LockConflictedException) {
-            // Our lock expired mid-batch and another worker took over this language. The
-            // partial write index was already cleaned up above; ack without retrying and let
-            // the new lock holder finish (and clear the marker).
-            $this->logger->info(sprintf('Lock for %s lost mid-batch — another worker took over, skipping', $languageCode), [
+            // Lock expired mid-batch (ES flush took longer than LOCK_TTL_SECONDS between
+            // heartbeat calls). lastRunAt was already set, so the dispatch watchdog will
+            // re-kick this language after MAX_IDLE_SECONDS.
+            $this->logger->info(sprintf('Lock for %s expired mid-batch — watchdog will recover after idle timeout', $languageCode), [
                 'service' => self::LOG_SERVICE,
                 'languageCode' => $languageCode,
             ]);
@@ -128,8 +145,17 @@ class WikipediaPatternIndexLanguageMessageHandler
             try {
                 $lock->release();
             } catch (LockReleasingException) {
-                // The lock was already taken over by another worker; nothing for us to release.
+                // Lock was already expired or taken over; nothing to release.
             }
         }
+    }
+
+    private function calculateNextLimit(int $currentLimit, int $articlesProcessed, int $durationMs): int
+    {
+        if ($articlesProcessed <= 0 || $durationMs <= 0) {
+            return $currentLimit;
+        }
+        $msPerArticle = $durationMs / $articlesProcessed;
+        return min(self::MAX_ARTICLE_LIMIT, max(1, (int) ceil(self::TARGET_BATCH_MS / $msPerArticle)));
     }
 }

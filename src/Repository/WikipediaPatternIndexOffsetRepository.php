@@ -19,25 +19,36 @@ class WikipediaPatternIndexOffsetRepository extends ServiceEntityRepository
     }
 
     /**
-     * Return a map of languageCode => lastArticleId for every offset row in the table.
-     * Used by the dispatcher to prioritise least-processed languages first (a lower last-processed
-     * id means less of the corpus consumed); languages that have no row yet (never indexed) are not
-     * in this map and should be treated as cursor 0 by the caller.
+     * Return all offset entities keyed by languageCode. Languages with no row yet are absent;
+     * callers should treat missing entries as a language that has never been processed.
      *
-     * @return array<string, int>
+     * @return array<string, WikipediaPatternIndexOffsetEntity>
      */
-    public function getOffsetsByLanguageCode(): array
+    public function findAllKeyedByLanguageCode(): array
     {
-        $rows = $this->createQueryBuilder('o')
-            ->select('o.languageCode AS languageCode, o.lastArticleId AS lastArticleId')
-            ->getQuery()
-            ->getArrayResult();
-
         $map = [];
-        foreach ($rows as $row) {
-            $map[(string) $row['languageCode']] = (int) $row['lastArticleId'];
+        foreach ($this->findAll() as $entity) {
+            $map[$entity->getLanguageCode()] = $entity;
         }
         return $map;
+    }
+
+    /**
+     * Stamp last_run_at = now for an existing row without touching the ORM identity map.
+     * Safe to call before indexBatchByLanguageCode (which calls em->clear()), since a DQL
+     * bulk UPDATE goes directly to the database and is unaffected by subsequent clears.
+     * Has no effect for languages that do not yet have an offset row.
+     */
+    public function touchLastRunAt(string $languageCode): void
+    {
+        $this->createQueryBuilder('o')
+            ->update()
+            ->set('o.lastRunAt', ':now')
+            ->where('o.languageCode = :languageCode')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->setParameter('languageCode', $languageCode)
+            ->getQuery()
+            ->execute();
     }
 
     public function save(WikipediaPatternIndexOffsetEntity $entity): void
