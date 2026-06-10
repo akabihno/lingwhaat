@@ -9,7 +9,6 @@ doctrine:
                 use_savepoints: true
             messenger:
                 url: '%env(resolve:DATABASE_URL)%'
-                use_savepoints: true
                 options:
                     # PDO::MYSQL_ATTR_INIT_COMMAND — runs on every new connection.
                     # READ COMMITTED eliminates next-key/gap locks on SELECT FOR UPDATE, which
