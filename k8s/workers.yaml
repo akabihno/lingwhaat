@@ -83,7 +83,7 @@ metadata:
   name: messenger
   namespace: lingwhaat
 spec:
-  replicas: 8
+  replicas: 4
   selector:
     matchLabels:
       app: messenger
