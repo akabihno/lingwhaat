@@ -55,7 +55,7 @@ class Schedule implements ScheduleProviderInterface
         );
 
         $schedule->add(
-            RecurringMessage::every('1 minute', new ManuscriptLanguageScoreDispatchMessage())
+            RecurringMessage::every('10 minutes', new ManuscriptLanguageScoreDispatchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
 

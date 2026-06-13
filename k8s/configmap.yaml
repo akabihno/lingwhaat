@@ -13,10 +13,13 @@ data:
   ELASTICSEARCH_HOST: "elasticsearch"
   ELASTICSEARCH_PORT: "9200"
   LOCK_DSN: "redis://redis:6379"
-  MESSENGER_TRANSPORT_DSN: "redis://redis:6379/messages"
-  MESSENGER_WIKTIONARY_TRANSPORT_DSN: "redis://redis:6379/wiktionary_async"
-  MESSENGER_WIKIPEDIA_TRANSPORT_DSN: "redis://redis:6379/wikipedia_async"
-  MESSENGER_FAILED_DSN: "redis://redis:6379/failed"
+  MESSENGER_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=async"
+  MESSENGER_WIKIPEDIA_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=wikipedia_async"
+  MESSENGER_WIKTIONARY_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=wiktionary_async"
+  MESSENGER_WIKIPEDIA_PATTERN_INDEX_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=wikipedia_pattern_index_async"
+  MESSENGER_SELECTION_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=selection"
+  MESSENGER_MANUSCRIPT_LANGUAGE_SCORE_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=manuscript_language_score_async"
+  MESSENGER_FAILED_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=failed"
 ---
 apiVersion: v1
 kind: ConfigMap
