@@ -124,7 +124,13 @@ class WikipediaPatternIndexLanguageMessageHandler
                 ['service' => self::LOG_SERVICE],
             );
 
-            $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage($languageCode));
+            // Only kick the manuscript search once a full indexing pass for this language has
+            // completed (cursor wrapped back to 0). Dispatching after every batch floods the
+            // single async worker with searches it can't keep up with, growing the queue
+            // unboundedly. The search handler also guards against duplicates via its own lock.
+            if ($newCursor === 0) {
+                $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage($languageCode));
+            }
 
             // Self-chain: immediately queue the next batch so processing continues without
             // waiting for the periodic dispatch handler.
