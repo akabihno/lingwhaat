@@ -31,14 +31,18 @@ class ManuscriptPatternMatchResultRepository extends ServiceEntityRepository
      * their results payload uses a different shape than the ES-hit JSON the scorer expects,
      * so running the scorer on them would mark them as scored=0.0 and bury them forever.
      */
-    public function findUnscored(): array
+    public function findUnscored(?int $limit = null): array
     {
-        return $this->createQueryBuilder('r')
+        $qb = $this->createQueryBuilder('r')
             ->where('r.languageScore IS NULL')
             ->andWhere('r.results NOT LIKE :overlapPrefix')
-            ->setParameter('overlapPrefix', '{"detector":"canonical_pattern_overlap"%')
-            ->getQuery()
-            ->getResult();
+            ->setParameter('overlapPrefix', '{"detector":"canonical_pattern_overlap"%');
+
+        if ($limit !== null) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb->getQuery()->getResult();
     }
 
     public function updateScore(int $id, ?string $languageCode, ?float $languageScore): void
