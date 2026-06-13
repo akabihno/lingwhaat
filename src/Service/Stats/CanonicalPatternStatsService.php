@@ -41,7 +41,7 @@ class CanonicalPatternStatsService
         $repo = $this->em->getRepository(WikipediaArticleEntity::class);
 
         $counts = [];
-        $offset = 0;
+        $afterId = 0;
         $totalProcessed = 0;
 
         do {
@@ -54,17 +54,17 @@ class CanonicalPatternStatsService
                 $fetchLimit = min($fetchLimit, $remaining);
             }
 
-            $articles = $repo->findIdAndTextByLanguageCodePaginated(
+            $articles = $repo->findIdAndTextByLanguageCodeAfterId(
                 $languageCode,
                 $fetchLimit,
-                $offset,
+                $afterId,
             );
 
             foreach ($articles as $article) {
                 $this->accumulateCounts($article['text'], $windowSize, $counts, $maxCounters);
+                $afterId = $article['id'];
             }
 
-            $offset += count($articles);
             $totalProcessed += count($articles);
             $this->em->clear();
 

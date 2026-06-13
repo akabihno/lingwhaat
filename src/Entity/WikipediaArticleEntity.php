@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: WikipediaArticleRepository::class)]
 #[ORM\Table(name: "wikipedia_article")]
-#[ORM\Index(name: 'i_language_code', columns: ['language_code'])]
+#[ORM\Index(name: 'i_lang_id', columns: ['language_code', 'id'])]
 class WikipediaArticleEntity
 {
     #[ORM\Id]

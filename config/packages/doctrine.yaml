@@ -9,7 +9,14 @@ doctrine:
                 use_savepoints: true
             messenger:
                 url: '%env(resolve:DATABASE_URL)%'
-                use_savepoints: true
+                options:
+                    # PDO::MYSQL_ATTR_INIT_COMMAND — runs on every new connection.
+                    # READ COMMITTED eliminates next-key/gap locks on SELECT FOR UPDATE, which
+                    # is what the Doctrine Messenger transport uses to claim messages. Without
+                    # this, polling an empty queue holds a gap lock that blocks concurrent
+                    # INSERTs of new messages into the same queue for the duration of the
+                    # worker's transaction.
+                    1002: 'SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED'
     orm:
         auto_generate_proxy_classes: true
         enable_native_lazy_objects: true

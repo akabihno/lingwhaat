@@ -36,20 +36,27 @@ class WikipediaArticleRepository extends ServiceEntityRepository
     }
 
     /**
+     * Keyset (seek) pagination: fetch the next $limit articles for a language whose id is greater
+     * than $afterId, in ascending id order. Pass 0 to start from the beginning, then feed the id of
+     * the last returned row back in as $afterId for the next page. Unlike OFFSET-based paging this
+     * is a single index range seek on (language_code, id) regardless of how deep into the corpus we
+     * are, so cost stays flat instead of growing with the offset.
+     *
      * @return array<int, array{id:int, text:string}>
      */
-    public function findIdAndTextByLanguageCodePaginated(
+    public function findIdAndTextByLanguageCodeAfterId(
         string $languageCode,
         int $limit = 100,
-        int $offset = 0
+        int $afterId = 0
     ): array {
         $rows = $this->createQueryBuilder('w')
             ->select('w.id AS id, w.text AS text')
             ->where('w.languageCode = :languageCode')
+            ->andWhere('w.id > :afterId')
             ->setParameter('languageCode', $languageCode)
+            ->setParameter('afterId', $afterId)
             ->orderBy('w.id', 'ASC')
             ->setMaxResults($limit)
-            ->setFirstResult($offset)
             ->getQuery()
             ->getArrayResult();
 
