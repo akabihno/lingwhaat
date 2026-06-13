@@ -23,6 +23,13 @@ class WikipediaPatternIndexLanguageMessageHandler
     // maximum time before the next run can acquire it. Not used for coordination — normal runs
     // release the lock explicitly and self-dispatch the next message immediately.
     private const int LOCK_TTL_SECONDS = 300;
+    // Throttle for the per-language manuscript search dispatch. Indexing self-chains a batch
+    // every ~30s and the cursor effectively never wraps to 0 (corpora are millions of articles,
+    // batches only a handful), so dispatching a search after every batch floods the async queue.
+    // This lock is acquired (never released) before each dispatch; its TTL is the minimum gap
+    // between per-language searches. The all-language scheduler sweep covers everything anyway.
+    private const string SEARCH_DISPATCH_THROTTLE_PREFIX = 'manuscript-pattern-search-dispatch:';
+    private const int SEARCH_DISPATCH_THROTTLE_SECONDS = 600;
     // Target wall-clock duration for each batch. The article limit adapts each run so the next
     // batch takes approximately this long, keeping processing continuous without overloading.
     private const int TARGET_BATCH_MS = 30_000;
@@ -124,11 +131,16 @@ class WikipediaPatternIndexLanguageMessageHandler
                 ['service' => self::LOG_SERVICE],
             );
 
-            // Only kick the manuscript search once a full indexing pass for this language has
-            // completed (cursor wrapped back to 0). Dispatching after every batch floods the
-            // single async worker with searches it can't keep up with, growing the queue
-            // unboundedly. The search handler also guards against duplicates via its own lock.
-            if ($newCursor === 0) {
+            // Kick a per-language manuscript search, but at most once per throttle window so the
+            // ~30s batch cadence doesn't flood the async queue. The throttle lock is intentionally
+            // never released: its TTL is the minimum gap between searches for this language. The
+            // search handler's own lock additionally drops any overlapping duplicate.
+            $searchThrottle = $this->lockFactory->createLock(
+                self::SEARCH_DISPATCH_THROTTLE_PREFIX . $languageCode,
+                self::SEARCH_DISPATCH_THROTTLE_SECONDS,
+                false,
+            );
+            if ($searchThrottle->acquire()) {
                 $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage($languageCode));
             }
 
