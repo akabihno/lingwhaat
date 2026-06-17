@@ -19,6 +19,7 @@ data:
   MESSENGER_WIKIPEDIA_PATTERN_INDEX_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=wikipedia_pattern_index_async"
   MESSENGER_SELECTION_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=selection"
   MESSENGER_MANUSCRIPT_LANGUAGE_SCORE_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=manuscript_language_score_async"
+  MESSENGER_WORDS_POPULARITY_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=words_popularity_async"
   MESSENGER_FAILED_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=failed"
 ---
 apiVersion: v1
