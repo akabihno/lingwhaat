@@ -10,7 +10,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 class WordsPopularityScoreSetMessageHandler
 {
-    private const int PROCESSING_LIMIT = 3000;
+    private const int PROCESSING_LIMIT = 200000;
     public function __construct(
         private readonly WordsPopularityScoreSetService $popularityScoreSetService,
         private readonly ElasticsearchLogger $logger
