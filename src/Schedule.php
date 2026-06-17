@@ -42,7 +42,7 @@ class Schedule implements ScheduleProviderInterface
         );
 
         $schedule->add(
-            RecurringMessage::every('10 minutes', new WordsPopularityScoreSetDispatchMessage())
+            RecurringMessage::every('5 minutes', new WordsPopularityScoreSetDispatchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
 

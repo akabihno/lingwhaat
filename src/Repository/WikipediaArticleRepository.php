@@ -91,4 +91,22 @@ class WikipediaArticleRepository extends ServiceEntityRepository
 
         return array_column($rows, 'languageCode');
     }
+
+    /**
+     * Language codes that have at least one article, ordered by article count descending so the
+     * busiest corpora are dispatched first.
+     *
+     * @return string[]
+     */
+    public function getLanguageCodesByArticleCountDesc(): array
+    {
+        $rows = $this->createQueryBuilder('w')
+            ->select('w.languageCode')
+            ->groupBy('w.languageCode')
+            ->orderBy('COUNT(w.id)', 'DESC')
+            ->getQuery()
+            ->getScalarResult();
+
+        return array_column($rows, 'languageCode');
+    }
 }
