@@ -10,16 +10,17 @@ class Decoder(nn.Module):
         self.hid_dim = hid_dim
         self.n_layers = n_layers
 
-        self.embedding = nn.Embedding(output_dim, emb_dim)
+        self.embedding = nn.Embedding(output_dim, emb_dim, padding_idx=0)
         self.attention = Attention(hid_dim)
         self.rnn = nn.GRU(emb_dim + hid_dim, hid_dim, n_layers, dropout=dropout if n_layers > 1 else 0)
         self.fc_out = nn.Linear(emb_dim + hid_dim * 2, output_dim)
         self.dropout = nn.Dropout(dropout)
 
-    def forward(self, input, hidden, encoder_outputs):
+    def forward(self, input, hidden, encoder_outputs, mask=None):
         # input = [batch_size]
         # hidden = [n_layers, batch_size, hid_dim]
         # encoder_outputs = [src_len, batch_size, hid_dim]
+        # mask = [batch_size, src_len]
 
         input = input.unsqueeze(0)
         # input = [1, batch_size]
@@ -28,7 +29,7 @@ class Decoder(nn.Module):
         # embedded = [1, batch_size, emb_dim]
 
         # Calculate attention using top layer hidden state
-        a = self.attention(hidden[-1], encoder_outputs)
+        a = self.attention(hidden[-1], encoder_outputs, mask)
         # a = [batch_size, src_len]
 
         a = a.unsqueeze(1)
