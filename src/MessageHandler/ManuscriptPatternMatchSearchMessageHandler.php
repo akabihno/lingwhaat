@@ -8,6 +8,8 @@ use App\Repository\ManuscriptPatternMatchResultRepository;
 use App\Repository\ManuscriptPatternMatchScheduleRepository;
 use App\Service\Logging\ElasticsearchLogger;
 use App\Service\Search\WikipediaPatternSearchService;
+use Symfony\Component\Lock\Exception\LockReleasingException;
+use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -16,12 +18,17 @@ class ManuscriptPatternMatchSearchMessageHandler
     private const string LOG_SERVICE = '[ManuscriptPatternMatchSearchMessageHandler]';
     private const int RESULTS_PER_WINDOW = 5;
     private const int MAX_TOTAL_HITS = 400;
+    private const string LOCK_RESOURCE_PREFIX = 'manuscript-pattern-search-language:';
+    // Safety net: if a worker dies mid-search without releasing the lock, this is the maximum
+    // time before another search for the same language can run. Normal runs release explicitly.
+    private const int LOCK_TTL_SECONDS = 900;
 
     public function __construct(
         private readonly ManuscriptPatternMatchScheduleRepository $scheduleRepository,
         private readonly ManuscriptPatternMatchRepository $matchRepository,
         private readonly ManuscriptPatternMatchResultRepository $resultRepository,
         private readonly WikipediaPatternSearchService $searchService,
+        private readonly LockFactory $lockFactory,
         private readonly ElasticsearchLogger $logger,
     ) {
     }
@@ -29,6 +36,38 @@ class ManuscriptPatternMatchSearchMessageHandler
     public function __invoke(ManuscriptPatternMatchSearchMessage $message): void
     {
         $languageCode = $message->getLanguageCode();
+
+        // Per-language (or 'all' for the cross-language sweep) dedup lock. With multiple async
+        // workers and frequent dispatches, duplicate search messages for the same language pile
+        // up; running the heavy ES sweep more than once concurrently is pure waste. If a search
+        // for this language is already in flight, ack this duplicate and move on.
+        $lock = $this->lockFactory->createLock(
+            self::LOCK_RESOURCE_PREFIX . ($languageCode ?? 'all'),
+            self::LOCK_TTL_SECONDS,
+            false,
+        );
+
+        if (!$lock->acquire()) {
+            $this->logger->info(sprintf('Search for %s already in flight — skipping duplicate', $languageCode ?? 'all'), [
+                'service' => self::LOG_SERVICE,
+                'languageCode' => $languageCode,
+            ]);
+            return;
+        }
+
+        try {
+            $this->runSearch($languageCode);
+        } finally {
+            try {
+                $lock->release();
+            } catch (LockReleasingException) {
+                // Lock already expired or taken over; nothing to release.
+            }
+        }
+    }
+
+    private function runSearch(?string $languageCode): void
+    {
         $schedules = $this->scheduleRepository->getAll();
         $this->logger->info(sprintf('Processing %d manuscript schedules against language=%s', count($schedules), $languageCode ?? 'all'), [
             'service' => self::LOG_SERVICE,

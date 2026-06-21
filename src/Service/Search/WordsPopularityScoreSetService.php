@@ -4,7 +4,7 @@ namespace App\Service\Search;
 
 use App\Constant\LanguageMappings;
 use App\Repository\WikipediaArticleRepository;
-use App\Repository\WordsPopularityScoreSetScheduleRepository;
+use App\Repository\WordsPopularityScoreSetOffsetRepository;
 use App\Service\Logging\ElasticsearchLogger;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -16,7 +16,7 @@ class WordsPopularityScoreSetService
     public function __construct(
         private readonly WikipediaArticleRepository $wikipediaArticleRepository,
         private readonly FuzzySearchService         $fuzzySearchService,
-        private readonly WordsPopularityScoreSetScheduleRepository $wordsPopularityScoreSetScheduleRepository,
+        private readonly WordsPopularityScoreSetOffsetRepository $wordsPopularityScoreSetOffsetRepository,
         private readonly EntityManagerInterface     $entityManager,
         private readonly ElasticsearchLogger        $logger,
     ) {
@@ -112,7 +112,7 @@ class WordsPopularityScoreSetService
 
         $this->logger->info('[WordsPopularityScoreSetService] Batch processing completed', array_merge(['languageCode' => $languageCode], $stats));
 
-        $this->wordsPopularityScoreSetScheduleRepository->incrementOffsetByLanguageCode($languageCode, $limit);
+        $this->wordsPopularityScoreSetOffsetRepository->incrementOffsetByLanguageCode($languageCode, $limit);
 
         return $stats;
     }

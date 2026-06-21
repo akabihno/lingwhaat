@@ -48,6 +48,24 @@ framework:
                     delay: 1000
                     multiplier: 2
 
+            manuscript_language_score_async:
+                dsn: '%env(MESSENGER_MANUSCRIPT_LANGUAGE_SCORE_TRANSPORT_DSN)%'
+                options:
+                    auto_setup: true
+                retry_strategy:
+                    max_retries: 1
+                    delay: 1000
+                    multiplier: 2
+
+            words_popularity_async:
+                dsn: '%env(MESSENGER_WORDS_POPULARITY_TRANSPORT_DSN)%'
+                options:
+                    auto_setup: true
+                retry_strategy:
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+
             failed:
                 dsn: '%env(MESSENGER_FAILED_DSN)%'
                 options:
@@ -60,11 +78,11 @@ framework:
             'App\Message\ParseWikipediaLanguagesMessage': wikipedia_async
             'App\Message\WikipediaPatternIndexDispatchMessage': wikipedia_pattern_index_async
             'App\Message\WikipediaPatternIndexLanguageMessage': wikipedia_pattern_index_async
-            'App\Message\WordsPopularityScoreSetDispatchMessage': async
-            'App\Message\WordsPopularityScoreSetMessage': async
+            'App\Message\WordsPopularityScoreSetDispatchMessage': words_popularity_async
+            'App\Message\WordsPopularityScoreSetMessage': words_popularity_async
             'App\Message\ManuscriptPatternMatchSearchMessage': async
-            'App\Message\ManuscriptLanguageScoreDispatchMessage': async
-            'App\Message\ManuscriptLanguageScoreMessage': async
+            'App\Message\ManuscriptLanguageScoreDispatchMessage': manuscript_language_score_async
+            'App\Message\ManuscriptLanguageScoreMessage': manuscript_language_score_async
             'App\Message\ManuscriptAlphabetDecodeDispatchMessage': async
             'App\Message\ManuscriptAlphabetDecodeMessage': async
             'App\Message\ManuscriptAlphabetDecodeSelectionDispatchMessage': selection_async
