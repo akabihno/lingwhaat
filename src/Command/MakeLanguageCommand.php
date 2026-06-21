@@ -36,6 +36,7 @@ class MakeLanguageCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -44,6 +45,7 @@ class MakeLanguageCommand extends Command
         ;
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -328,7 +330,7 @@ class MakeLanguageCommand extends Command
 
     private function suppressMigrationWarnings(string $output): string
     {
-        return preg_replace('/^\s*!\s*\[WARNING\][^\n]*previously executed migrations[^\n]*\n?/m', '', $output);
+        return preg_replace('/^\s*!\s*\[WARNING\][^\n]*previously executed migrations[^\n]*\n?/m', '', $output) ?? $output;
     }
 
     private function generateEntityTemplate(string $languageClass, string $tableName): string

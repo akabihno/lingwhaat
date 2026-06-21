@@ -24,6 +24,7 @@ class WikipediaPatternSearchCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -32,6 +33,7 @@ class WikipediaPatternSearchCommand extends Command
             ->addOption('limit', 'l', InputOption::VALUE_OPTIONAL, 'Maximum number of results', self::DEFAULT_RESULT_COUNT);
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

@@ -31,6 +31,7 @@ class SetupElasticsearchIlmCommand extends Command
         $this->elasticsearchUrl = "http://{$host}:{$port}";
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

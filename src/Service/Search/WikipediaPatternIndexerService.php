@@ -187,7 +187,6 @@ class WikipediaPatternIndexerService
         int $afterId = 0,
         ?callable $heartbeat = null,
     ): array {
-        /** @var WikipediaArticleRepository $repo */
         $repo = $this->em->getRepository(WikipediaArticleEntity::class);
 
         $globalPos = 0;

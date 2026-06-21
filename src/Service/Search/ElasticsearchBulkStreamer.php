@@ -49,7 +49,8 @@ class ElasticsearchBulkStreamer
         if (!empty($decoded['errors'])) {
             $failures = array_filter($decoded['items'] ?? [], fn($item) => isset($item['index']['error']));
             $first = reset($failures);
-            throw new \RuntimeException('Bulk indexing errors: ' . json_encode($first['index']['error'] ?? $failures));
+            $detail = is_array($first) ? ($first['index']['error'] ?? $failures) : $failures;
+            throw new \RuntimeException('Bulk indexing errors: ' . json_encode($detail));
         }
     }
 

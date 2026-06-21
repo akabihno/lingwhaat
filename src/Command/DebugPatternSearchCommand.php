@@ -28,6 +28,7 @@ class DebugPatternSearchCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -36,6 +37,7 @@ class DebugPatternSearchCommand extends Command
             ->addOption('test-word', 'w', InputOption::VALUE_OPTIONAL, 'Single word to test');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -139,7 +141,6 @@ class DebugPatternSearchCommand extends Command
 
         // Test 4: Test viable letters finding for each constraint
         $io->section('Test 4: Testing Viable Letters Finding');
-        $alphabet = ScriptAlphabets::getAlphabetForLanguage($languageCode);
 
         foreach ($letterConstraints as $constraintIndex => $constraint) {
             $io->writeln("Constraint $constraintIndex:");

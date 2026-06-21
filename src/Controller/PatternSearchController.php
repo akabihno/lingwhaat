@@ -82,7 +82,7 @@ class PatternSearchController extends AbstractController
         $pattern = $request->query->get('pattern');
         $languageCode = $request->query->get('languageCode');
         $field = $request->query->get('field', 'word');
-        $limit = (int) $request->query->get('limit', 100);
+        $limit = $request->query->getInt('limit', 100);
 
         if (!$pattern) {
             return new JsonResponse(

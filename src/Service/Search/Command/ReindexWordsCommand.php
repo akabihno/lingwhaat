@@ -13,6 +13,7 @@ class ReindexWordsCommand extends Command
 {
     public function __construct(private WordIndexer $indexer) { parent::__construct(); }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Indexing words...');

@@ -151,7 +151,7 @@ class TextDecryptionController extends AbstractController
         } else {
             $text = $request->query->get('text');
             $languageCode = $request->query->get('languageCode');
-            $minCount = (int) $request->query->get('minCount', 5);
+            $minCount = $request->query->getInt('minCount', 5);
         }
 
         if (empty($text)) {

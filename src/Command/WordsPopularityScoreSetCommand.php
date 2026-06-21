@@ -24,6 +24,7 @@ class WordsPopularityScoreSetCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this->addArgument('language', InputArgument::REQUIRED, 'Specific language code to process (e.g., ru, en)')
@@ -32,6 +33,7 @@ class WordsPopularityScoreSetCommand extends Command
 
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

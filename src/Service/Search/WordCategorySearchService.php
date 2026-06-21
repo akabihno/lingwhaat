@@ -12,7 +12,6 @@ class WordCategorySearchService
 {
     public function __construct(
         private readonly HttpClientInterface $httpClient,
-        private readonly WordCategoryIndexer $indexer,
         private readonly string $esHost = 'http://localhost:9200',
     ) {
     }

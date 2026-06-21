@@ -1,6 +1,6 @@
 services:
   ml:
-    profiles: ["local", "rds"]
+    profiles: ["local", "rds", "dev"]
     build:
       context: .
       dockerfile: Dockerfile-python
@@ -16,7 +16,7 @@ services:
           memory: 2g
 
   web:
-    profiles: ["local", "rds"]
+    profiles: ["local", "rds", "dev"]
     build:
       context: .
       dockerfile: Dockerfile-php
@@ -107,7 +107,7 @@ services:
           memory: 1g
 
   redis:
-    profiles: ["local", "rds"]
+    profiles: ["local", "rds", "dev"]
     image: redis:7-alpine
     container_name: redis-cache
     network_mode: host
@@ -116,7 +116,7 @@ services:
     restart: on-failure
 
   composer:
-    profiles: ["local", "rds"]
+    profiles: ["local", "rds", "dev"]
     build:
       context: .
       dockerfile: Dockerfile-composer
@@ -460,6 +460,7 @@ services:
 
   ###> doctrine/doctrine-bundle ###
   database:
+    profiles: ["postgres"]
     image: postgres:${POSTGRES_VERSION:-16}-alpine
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-app}

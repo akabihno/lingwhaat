@@ -23,6 +23,7 @@ class WikipediaPatternIndexDispatchCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -30,6 +31,7 @@ class WikipediaPatternIndexDispatchCommand extends Command
             ->addOption('article-limit', 'l', InputOption::VALUE_REQUIRED, 'Articles per language per run', 100);
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

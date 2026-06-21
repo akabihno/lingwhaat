@@ -1,0 +1,18 @@
+# VCS / IDE
+.git
+.gitattributes
+.idea
+
+# Local runtime data (bind-mounted, never needed in build context)
+mysql_data
+redis_data
+var
+vendor
+
+# Symfony local env overrides
+.env.local
+.env.*.local
+
+# Docs / misc not needed to build the app image
+docs
+*.md

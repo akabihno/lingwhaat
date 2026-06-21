@@ -265,6 +265,6 @@ class LanguageVerificationService
     {
         $text = mb_strtolower($text);
         // Keep only letters and numbers, remove all other characters
-        return preg_replace('/[^\p{L}\p{N}]/u', '', $text);
+        return preg_replace('/[^\p{L}\p{N}]/u', '', $text) ?? $text;
     }
 }

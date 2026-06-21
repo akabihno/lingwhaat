@@ -37,7 +37,6 @@ class CanonicalPatternStatsService
         ?int $articleLimit = null,
         ?\Closure $onProgress = null,
     ): array {
-        /** @var WikipediaArticleRepository $repo */
         $repo = $this->em->getRepository(WikipediaArticleEntity::class);
 
         $counts = [];

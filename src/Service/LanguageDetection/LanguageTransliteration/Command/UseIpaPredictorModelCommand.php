@@ -26,6 +26,7 @@ class UseIpaPredictorModelCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -43,6 +44,7 @@ class UseIpaPredictorModelCommand extends Command
      * @throws DecodingExceptionInterface
      * @throws ClientExceptionInterface
      */
+    #[\Override]
     public function execute(InputInterface $input, OutputInterface $output): int
     {
         // example: php bin/console ml:use:ipa-predictor --lang latvian --word zivis

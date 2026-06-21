@@ -17,6 +17,7 @@ class WordCategorizationService extends AbstractWordCategorizationService
         parent::__construct();
     }
 
+    #[\Override]
     public function categorize(array $words): array
     {
         if (empty($words)) {

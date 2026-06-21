@@ -33,6 +33,7 @@ class CategorizeWordsCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -44,6 +45,7 @@ class CategorizeWordsCommand extends Command
             ->addOption('provider', null, InputOption::VALUE_REQUIRED, 'AI provider to use: anthropic or openai', 'anthropic');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

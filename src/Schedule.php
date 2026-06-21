@@ -25,6 +25,7 @@ class Schedule implements ScheduleProviderInterface
     ) {
     }
 
+    #[\Override]
     public function getSchedule(): SymfonySchedule
     {
         $schedule = (new SymfonySchedule())
