@@ -221,7 +221,7 @@ metadata:
   name: messenger-wikipedia-pattern-index
   namespace: lingwhaat
 spec:
-  replicas: 8
+  replicas: 4
   selector:
     matchLabels:
       app: messenger-wikipedia-pattern-index
