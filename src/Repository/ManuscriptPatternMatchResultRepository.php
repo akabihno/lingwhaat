@@ -55,4 +55,34 @@ class ManuscriptPatternMatchResultRepository extends ServiceEntityRepository
         $entity->setLanguageCode($languageCode)->setLanguageScore($languageScore);
         $this->getEntityManager()->flush();
     }
+
+    /**
+     * Mirror of {@see findUnscored()} for the Atbash scorer: rows whose Atbash
+     * score has not yet been computed. Canonical-pattern-overlap rows are excluded
+     * for the same reason as in findUnscored().
+     */
+    public function findUnscoredAtbash(?int $limit = null): array
+    {
+        $qb = $this->createQueryBuilder('r')
+            ->where('r.languageScoreAtbash IS NULL')
+            ->andWhere('r.results NOT LIKE :overlapPrefix')
+            ->setParameter('overlapPrefix', '{"detector":"canonical_pattern_overlap"%');
+
+        if ($limit !== null) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function updateScoreAtbash(int $id, ?string $languageCodeAtbash, ?float $languageScoreAtbash): void
+    {
+        $entity = $this->find($id);
+        if ($entity === null) {
+            return;
+        }
+
+        $entity->setLanguageCodeAtbash($languageCodeAtbash)->setLanguageScoreAtbash($languageScoreAtbash);
+        $this->getEntityManager()->flush();
+    }
 }
