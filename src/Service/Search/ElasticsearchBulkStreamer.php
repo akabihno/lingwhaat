@@ -62,6 +62,26 @@ class ElasticsearchBulkStreamer
         }
     }
 
+    /**
+     * Delete every doc whose `gen` is below $minGeneration — the docs an earlier indexing pass
+     * wrote but the most recent pass did not re-write (shrunk or removed articles). conflicts=proceed
+     * so concurrent writes from the in-flight next pass don't abort the prune.
+     */
+    public function deleteByGenerationLessThan(string $indexName, int $minGeneration): void
+    {
+        $response = $this->client->request('POST', "{$this->esHost}/{$indexName}/_delete_by_query", [
+            'headers' => ['Content-Type' => 'application/json'],
+            'query' => ['conflicts' => 'proceed'],
+            'body' => json_encode(['query' => ['range' => ['gen' => ['lt' => $minGeneration]]]]),
+            'timeout' => $this->timeout,
+            'max_duration' => $this->timeout,
+        ]);
+        $content = $response->getContent(false);
+        if ($response->getStatusCode() >= 300) {
+            throw new \RuntimeException("Generation prune failed for {$indexName}: {$content}");
+        }
+    }
+
     public function restoreRefreshInterval(string $indexName): void
     {
         $response = $this->client->request('PUT', "{$this->esHost}/{$indexName}/_settings", [

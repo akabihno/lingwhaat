@@ -38,6 +38,12 @@ class WikipediaPatternIndexOffsetEntity
     #[ORM\Column(name: "next_article_limit", type: "integer")]
     private int $nextArticleLimit = 5;
 
+    // Current indexing pass for this language. Stamped onto every doc written this pass; bumped
+    // when a full pass completes (cursor wraps), after which docs left at an older generation are
+    // pruned as stale. See WikipediaPatternIndexerService::pruneStaleGenerations.
+    #[ORM\Column(name: "generation", type: "integer")]
+    private int $generation = 1;
+
     public function getId(): int
     {
         return $this->id;
@@ -95,6 +101,17 @@ class WikipediaPatternIndexOffsetEntity
     public function setNextArticleLimit(int $nextArticleLimit): self
     {
         $this->nextArticleLimit = $nextArticleLimit;
+        return $this;
+    }
+
+    public function getGeneration(): int
+    {
+        return $this->generation;
+    }
+
+    public function setGeneration(int $generation): self
+    {
+        $this->generation = $generation;
         return $this;
     }
 }

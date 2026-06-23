@@ -81,6 +81,8 @@ class WikipediaPatternIndexLanguageMessageHandler
                 ? $existing->getLastArticleId()
                 : 0;
 
+            $generation = $existing?->getGeneration() ?? 1;
+
             $this->logger->info(sprintf('Indexing language: %s (afterId: %d, limit: %d)', $languageCode, $afterId, $articleLimit), [
                 'service' => self::LOG_SERVICE,
             ]);
@@ -90,7 +92,7 @@ class WikipediaPatternIndexLanguageMessageHandler
             // what saturated the single ES node. A failed batch simply propagates and is retried;
             // deterministic doc ids make the re-run an idempotent overwrite, so there is nothing
             // to clean up on the error path.
-            $writeIndex = $this->indexerService->ensureWriteIndex($languageCode);
+            $writeIndex = $this->indexerService->ensureWriteIndex($languageCode, $windowSize);
             $batchStartMs = (int) round(microtime(true) * 1000);
 
             $result = $this->indexerService->indexBatchByLanguageCode(
@@ -99,15 +101,23 @@ class WikipediaPatternIndexLanguageMessageHandler
                 $writeIndex,
                 $articleLimit,
                 $afterId,
+                $generation,
                 fn() => $lock->refresh(),
             );
 
             $durationMs = (int) round(microtime(true) * 1000) - $batchStartMs;
             $articlesProcessed = $result['processed'];
 
-            $newCursor = $articlesProcessed < $articleLimit
-                ? 0
-                : $result['lastArticleId'];
+            // A short batch means we reached the end of the corpus: the cursor wraps to 0 and the
+            // pass is complete. Prune docs not rewritten this pass (shrunk/removed articles) and
+            // advance the generation so the next pass prunes what it in turn leaves stale.
+            $wrapped = $articlesProcessed < $articleLimit;
+            $newCursor = $wrapped ? 0 : $result['lastArticleId'];
+            $newGeneration = $generation;
+            if ($wrapped) {
+                $this->indexerService->pruneStaleGenerations($writeIndex, $generation);
+                $newGeneration = $generation + 1;
+            }
 
             $nextArticleLimit = $this->calculateNextLimit($articleLimit, $articlesProcessed, $durationMs);
 
@@ -120,7 +130,8 @@ class WikipediaPatternIndexLanguageMessageHandler
                 ->setLastArticleId($newCursor)
                 ->setWindowSize($windowSize)
                 ->setLastRunAt(new \DateTimeImmutable())
-                ->setNextArticleLimit($nextArticleLimit);
+                ->setNextArticleLimit($nextArticleLimit)
+                ->setGeneration($newGeneration);
             $this->offsetRepository->save($offsetEntity);
 
             $this->logger->info(
