@@ -85,24 +85,22 @@ class WikipediaPatternIndexLanguageMessageHandler
                 'service' => self::LOG_SERVICE,
             ]);
 
-            $concreteIndex = $this->indexerService->prepareWriteIndex($languageCode);
+            // Resolve the language's stable index once and write this batch straight into it.
+            // No per-batch index create / alias swap / delete: those cluster-state operations are
+            // what saturated the single ES node. A failed batch simply propagates and is retried;
+            // deterministic doc ids make the re-run an idempotent overwrite, so there is nothing
+            // to clean up on the error path.
+            $writeIndex = $this->indexerService->ensureWriteIndex($languageCode);
             $batchStartMs = (int) round(microtime(true) * 1000);
 
-            try {
-                $result = $this->indexerService->indexBatchByLanguageCode(
-                    $windowSize,
-                    $languageCode,
-                    $concreteIndex,
-                    $articleLimit,
-                    $afterId,
-                    fn() => $lock->refresh(),
-                );
-
-                $this->indexerService->promoteToAlias($languageCode, $concreteIndex);
-            } catch (\Throwable $e) {
-                $this->indexerService->deleteConcreteIndex($concreteIndex);
-                throw $e;
-            }
+            $result = $this->indexerService->indexBatchByLanguageCode(
+                $windowSize,
+                $languageCode,
+                $writeIndex,
+                $articleLimit,
+                $afterId,
+                fn() => $lock->refresh(),
+            );
 
             $durationMs = (int) round(microtime(true) * 1000) - $batchStartMs;
             $articlesProcessed = $result['processed'];

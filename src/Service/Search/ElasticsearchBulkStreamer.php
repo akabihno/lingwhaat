@@ -28,7 +28,15 @@ class ElasticsearchBulkStreamer
         $body = '';
 
         foreach ($docs as $doc) {
-            $body .= json_encode(['index' => ['_index' => $indexName]]) . "\n";
+            $meta = ['_index' => $indexName];
+            // A deterministic _id (when supplied by the caller) turns the write into an upsert:
+            // re-indexing the same article overwrites its docs instead of appending duplicates,
+            // which is what lets us write incrementally into a stable index without rebuilding it.
+            if (isset($doc['_id'])) {
+                $meta['_id'] = $doc['_id'];
+                unset($doc['_id']);
+            }
+            $body .= json_encode(['index' => $meta]) . "\n";
             $body .= json_encode($doc) . "\n";
         }
 

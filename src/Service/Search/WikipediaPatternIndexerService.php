@@ -51,21 +51,112 @@ class WikipediaPatternIndexerService
                 'refresh_interval' => '-1',
             ],
             'mappings' => [
-                'properties' => [
-                    'pattern_hash'    => ['type' => 'long'],
-                    'pattern'         => [
-                        'type'   => 'text',
-                        'fields' => ['keyword' => ['type' => 'keyword']],
-                    ],
-                    'global_position' => ['type' => 'long'],
-                    'article_id'      => ['type' => 'long'],
-                    'local_position'  => ['type' => 'long'],
-                    'length'          => ['type' => 'integer'],
-                ],
+                // Mark as managed so ensureWriteIndex adopts (reuses) this index for incremental
+                // batches instead of rebuilding it.
+                '_meta'      => ['stable' => true],
+                'properties' => $this->patternMappingProperties(),
             ],
         ]);
 
         return $concreteName;
+    }
+
+    /**
+     * Resolve the stable, incrementally-written index for a language, creating it on first use.
+     *
+     * Steady state is a no-op beyond one read: if the alias already points at a single managed
+     * index, it is reused and the caller writes deltas straight into it — no per-batch index
+     * create / alias swap / delete (the operations that thrash the cluster state). The one-time
+     * blue-green swap only runs the first time a language is seen or when migrating off a legacy
+     * (unmanaged) index left behind by the old rebuild-per-batch handler.
+     */
+    public function ensureWriteIndex(string $languageCode): string
+    {
+        if ($languageCode === '') {
+            throw new InvalidArgumentException('languageCode must be provided.');
+        }
+
+        $aliasName = self::indexNameFor($languageCode);
+        $targets = $this->bulk->resolveAliasTargets($aliasName);
+
+        if (count($targets) === 1 && $this->isManagedStable($targets[0])) {
+            return $targets[0];
+        }
+
+        // First run for this language, or migrating off a legacy index: build one fresh managed
+        // index, swap the alias to it once, and drop the old target(s).
+        $stableIndex = $this->createStableIndex($languageCode);
+
+        if ($targets === []) {
+            // A legacy plain index may occupy the alias name; remove it so the alias can be created.
+            $legacy = $this->esClient->getIndex($aliasName);
+            if ($legacy->exists()) {
+                $legacy->delete();
+            }
+        }
+
+        $this->bulk->swapAlias($aliasName, $stableIndex, $targets);
+
+        foreach ($targets as $old) {
+            try {
+                $this->esClient->getIndex($old)->delete();
+            } catch (\Throwable) {
+            }
+        }
+
+        return $stableIndex;
+    }
+
+    /**
+     * Create a long-lived index for incremental writes. Unlike prepareWriteIndex this keeps the
+     * default refresh interval (it is continuously written and searched, never bulk-loaded then
+     * swapped) and is tagged managed so ensureWriteIndex reuses it on subsequent batches.
+     */
+    private function createStableIndex(string $languageCode): string
+    {
+        $concreteName = self::WRITE_INDEX_PREFIX . '_' . $languageCode . '_' . time();
+
+        $this->esClient->getIndex($concreteName)->create([
+            'mappings' => [
+                '_meta'      => ['stable' => true],
+                'properties' => $this->patternMappingProperties(),
+            ],
+        ]);
+
+        return $concreteName;
+    }
+
+    /**
+     * True if the index was created by the incremental pipeline (mappings._meta.stable === true).
+     * Legacy indices from the rebuild-per-batch handler lack the marker and trigger a one-time
+     * migration in ensureWriteIndex.
+     */
+    private function isManagedStable(string $indexName): bool
+    {
+        try {
+            $data = $this->esClient->request("{$indexName}/_mapping", 'GET')->getData();
+            return ($data[$indexName]['mappings']['_meta']['stable'] ?? false) === true;
+        } catch (\Throwable) {
+            return false;
+        }
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    private function patternMappingProperties(): array
+    {
+        return [
+            'pattern_hash'    => ['type' => 'long'],
+            'pattern'         => [
+                'type'   => 'text',
+                'fields' => ['keyword' => ['type' => 'keyword']],
+            ],
+            'global_position' => ['type' => 'long'],
+            'article_id'      => ['type' => 'long'],
+            'local_position'  => ['type' => 'long'],
+            'length'          => ['type' => 'integer'],
+        ];
     }
 
     /**
@@ -227,6 +318,9 @@ class WikipediaPatternIndexerService
                     $pattern = $this->buildPatternFromChars($chars, $windowStart, $windowSize);
 
                     $batch[] = [
+                        // Deterministic id => re-indexing an article overwrites its own docs
+                        // instead of duplicating them, making incremental writes idempotent.
+                        '_id'             => $article['id'] . ':' . $windowStart . ':' . $windowSize,
                         'pattern_hash'    => $this->patternHash($pattern),
                         'pattern'         => implode(',', $pattern),
                         'global_position' => $globalPos + $windowStart + $windowSize - 1,
