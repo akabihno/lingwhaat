@@ -146,8 +146,9 @@ class WikipediaPatternIndexerService
     private function managedWindowSize(string $indexName): ?int
     {
         try {
-            $data = $this->esClient->request("{$indexName}/_mapping", 'GET')->getData();
-            $meta = $data[$indexName]['mappings']['_meta'] ?? [];
+            // Elastica 8 removed Client::request(); use the Index mapping API. getMapping() returns
+            // the contents under "mappings", so _meta is at the top level of the result.
+            $meta = $this->esClient->getIndex($indexName)->getMapping()['_meta'] ?? [];
             if (($meta['stable'] ?? false) !== true || !isset($meta['windowSize'])) {
                 return null;
             }
