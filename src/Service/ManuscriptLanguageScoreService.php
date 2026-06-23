@@ -12,8 +12,8 @@ namespace App\Service;
 class ManuscriptLanguageScoreService extends AbstractManuscriptLanguageScoreService
 {
     #[\Override]
-    protected function transformTranslated(string $translated, string $languageCode): string
+    protected function transformWindow(string $wikiWindow, string $languageCode): string
     {
-        return $translated;
+        return $wikiWindow;
     }
 }

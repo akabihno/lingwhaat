@@ -8,17 +8,19 @@ use App\Constant\ScriptAlphabets;
  * Scores a manuscript pattern-match result under the assumption that the
  * plaintext was additionally enciphered with Atbash in the target language.
  *
- * After building the cipher→plaintext mapping (see
- * {@see AbstractManuscriptLanguageScoreService::score()}), the mapped text is
- * run through Atbash over the target language's alphabet before verification.
- * The result is persisted to manuscript_pattern_match_result.language_score_atbash.
+ * Atbash (like any monoalphabetic substitution) preserves the canonical letter
+ * pattern the search matches on, so it cannot be detected at match time. Instead
+ * it is applied to the matched real-language window before the cipher→plaintext
+ * mapping is built: the letters assigned to the manuscript's fake characters
+ * become Atbash(plaintext) over the target language's alphabet. The resulting
+ * score is persisted to manuscript_pattern_match_result.language_score_atbash.
  */
 class ManuscriptLanguageAtbashScoreService extends AbstractManuscriptLanguageScoreService
 {
     #[\Override]
-    protected function transformTranslated(string $translated, string $languageCode): string
+    protected function transformWindow(string $wikiWindow, string $languageCode): string
     {
-        return $this->applyAtbash($translated, $languageCode);
+        return $this->applyAtbash($wikiWindow, $languageCode);
     }
 
     /**

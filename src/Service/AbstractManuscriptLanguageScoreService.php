@@ -41,10 +41,11 @@ abstract class AbstractManuscriptLanguageScoreService
     /**
      * Score a result by trying each ES hit:
      * 1. Fetch the Wikipedia article and extract the matched window.
-     * 2. Build a cipher→plaintext character mapping from the window.
-     * 3. Apply the mapping to the full concatenated manuscript text (all windows for source_id).
-     * 4. Transform the mapped text via {@see transformTranslated()} (no-op for the plain scorer,
-     *    Atbash for the Atbash scorer).
+     * 2. Transform the matched window via {@see transformWindow()} (no-op for the plain scorer,
+     *    Atbash for the Atbash scorer) so the letters assigned to the manuscript's fake characters
+     *    are re-lettered before the mapping is built.
+     * 3. Build a cipher→plaintext character mapping from the (transformed) window.
+     * 4. Apply the mapping to the full concatenated manuscript text (all windows for source_id).
      * 5. Verify the resulting text against the article's language.
      *
      * Returns the language_code and language_score of the best-scoring hit.
@@ -80,11 +81,19 @@ abstract class AbstractManuscriptLanguageScoreService
                 continue;
             }
 
+            $languageCode = $cachedArticle['languageCode'];
+
             $wikiWindow = mb_substr($cachedArticle['text'], $localPosition, $length);
 
             if (mb_strlen($wikiWindow) !== $length) {
                 continue;
             }
+
+            // Hook on the assigned letters, not the full translation: the Atbash scorer re-letters
+            // this real-language window through Atbash so the mapping becomes cipher→Atbash(plaintext).
+            // Applied here so only assigned real-language letters are transformed; the manuscript's
+            // own (untranslated) characters pass through the mapping untouched.
+            $wikiWindow = $this->transformWindow($wikiWindow, $languageCode);
 
             // Build cipher→plaintext mapping from this window's match
             $mapping = [];
@@ -97,9 +106,7 @@ abstract class AbstractManuscriptLanguageScoreService
             // Apply mapping to the full manuscript cipher text
             $translated = implode('', array_map(fn($ch) => $mapping[$ch] ?? $ch, $fullCipherChars));
 
-            $languageCode = $cachedArticle['languageCode'];
-            $candidate = $this->transformTranslated($translated, $languageCode);
-            $verification = $this->verificationService->verifyLanguage($candidate, $languageCode, 1);
+            $verification = $this->verificationService->verifyLanguage($translated, $languageCode, 1);
             $score = (float)($verification['matchPercentage'] ?? 0.0);
 
             if ($score > $bestScore) {
@@ -112,11 +119,13 @@ abstract class AbstractManuscriptLanguageScoreService
     }
 
     /**
-     * Hook applied to the mapped plaintext before language verification.
-     * The base scorer verifies the mapping as-is; subclasses can transform it
-     * (e.g. apply Atbash in the target language) to score an alternative reading.
+     * Hook applied to the matched real-language window before it becomes the
+     * cipher→plaintext mapping. The base scorer uses the window as-is; subclasses
+     * can re-letter it (e.g. apply Atbash in the target language) to score an
+     * alternative reading. Operating on the window — rather than the full
+     * translation — keeps the manuscript's own untranslated characters untouched.
      */
-    abstract protected function transformTranslated(string $translated, string $languageCode): string;
+    abstract protected function transformWindow(string $wikiWindow, string $languageCode): string;
 
     /**
      * @return list<string>
