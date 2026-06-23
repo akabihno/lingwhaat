@@ -10,7 +10,7 @@ use Elastica\Query\Term;
 
 class LanguageVerificationService
 {
-    private const int TOP_WORDS_LIMIT = 20000;
+    private const int TOP_WORDS_LIMIT = 10000;
     private const int MIN_WORD_LENGTH = 3;
     private const int MIN_FUZZY_WORD_LENGTH = 5;
 
