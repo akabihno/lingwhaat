@@ -69,7 +69,6 @@ class WikipediaPatternSearchController extends AbstractController
                     type: 'array',
                     items: new OA\Items(
                         properties: [
-                            new OA\Property(property: 'global_position', type: 'integer', example: 12345),
                             new OA\Property(property: 'article_id', type: 'integer', example: 678),
                             new OA\Property(property: 'local_position', type: 'integer', example: 100),
                             new OA\Property(property: 'pattern', type: 'string', example: '0,1,2,3,4'),

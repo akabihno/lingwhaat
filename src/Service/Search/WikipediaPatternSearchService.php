@@ -65,7 +65,14 @@ class WikipediaPatternSearchService
 
         $query = new Query($bool);
         $query->setSize($limit);
-        $query->setSort(['global_position' => 'asc']);
+        // True corpus reading order: the indexer walks articles by ascending id and emits windows
+        // by ascending position, so (article_id, local_position) is a stable, batch-independent,
+        // idempotent total order. (The old global_position counter reset per batch and collided
+        // across the now-accumulated stable index.)
+        $query->setSort([
+            ['article_id' => 'asc'],
+            ['local_position' => 'asc'],
+        ]);
 
         try {
             $results = $index->search($query)->getResults();
@@ -96,7 +103,6 @@ class WikipediaPatternSearchService
             $src = $hit->getSource();
 
             $formatted[] = [
-                'global_position' => $src['global_position'] ?? null,
                 'article_id' => $src['article_id'] ?? null,
                 'local_position' => $src['local_position'] ?? null,
                 'pattern' => $src['pattern'] ?? null,

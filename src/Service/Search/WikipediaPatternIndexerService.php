@@ -147,15 +147,14 @@ class WikipediaPatternIndexerService
     private function patternMappingProperties(): array
     {
         return [
-            'pattern_hash'    => ['type' => 'long'],
-            'pattern'         => [
+            'pattern_hash'   => ['type' => 'long'],
+            'pattern'        => [
                 'type'   => 'text',
                 'fields' => ['keyword' => ['type' => 'keyword']],
             ],
-            'global_position' => ['type' => 'long'],
-            'article_id'      => ['type' => 'long'],
-            'local_position'  => ['type' => 'long'],
-            'length'          => ['type' => 'integer'],
+            'article_id'     => ['type' => 'long'],
+            'local_position' => ['type' => 'long'],
+            'length'         => ['type' => 'integer'],
         ];
     }
 
@@ -280,7 +279,6 @@ class WikipediaPatternIndexerService
     ): array {
         $repo = $this->em->getRepository(WikipediaArticleEntity::class);
 
-        $globalPos = 0;
         $batch = [];
         $lastArticleId = $afterId;
         $totalArticlesProcessed = 0;
@@ -308,7 +306,6 @@ class WikipediaPatternIndexerService
                 $charCount = count($chars);
 
                 if ($charCount < $windowSize) {
-                    $globalPos += $charCount;
                     continue;
                 }
 
@@ -320,21 +317,18 @@ class WikipediaPatternIndexerService
                     $batch[] = [
                         // Deterministic id => re-indexing an article overwrites its own docs
                         // instead of duplicating them, making incremental writes idempotent.
-                        '_id'             => $article['id'] . ':' . $windowStart . ':' . $windowSize,
-                        'pattern_hash'    => $this->patternHash($pattern),
-                        'pattern'         => implode(',', $pattern),
-                        'global_position' => $globalPos + $windowStart + $windowSize - 1,
-                        'article_id'      => $article['id'],
-                        'local_position'  => $windowStart,
-                        'length'          => $windowSize,
+                        '_id'            => $article['id'] . ':' . $windowStart . ':' . $windowSize,
+                        'pattern_hash'   => $this->patternHash($pattern),
+                        'pattern'        => implode(',', $pattern),
+                        'article_id'     => $article['id'],
+                        'local_position' => $windowStart,
+                        'length'         => $windowSize,
                     ];
 
                     if (count($batch) >= self::BATCH_SIZE) {
                         $this->flushBatch($batch, $targetIndex, $heartbeat);
                     }
                 }
-
-                $globalPos += $charCount;
             }
 
             $totalArticlesProcessed += count($articles);
