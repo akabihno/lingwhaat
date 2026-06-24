@@ -63,22 +63,25 @@ class ElasticsearchBulkStreamer
     }
 
     /**
-     * Delete every doc whose `gen` is below $minGeneration — the docs an earlier indexing pass
-     * wrote but the most recent pass did not re-write (shrunk or removed articles). conflicts=proceed
-     * so concurrent writes from the in-flight next pass don't abort the prune.
+     * Delete every doc in the index. Used to evict a corpus batch once the manuscript search has
+     * consumed it: the per-language index is scratch space holding only the in-flight batch, so it
+     * is cleared after each batch is searched (and defensively before the next, to drop any residue
+     * left by a crash between indexing and eviction). conflicts=proceed so an overlapping write does
+     * not abort the clear. delete_by_query (data-plane) is used rather than drop/recreate so the
+     * cluster state is never churned — that churn is what saturated the single ES node.
      */
-    public function deleteByGenerationLessThan(string $indexName, int $minGeneration): void
+    public function deleteAll(string $indexName): void
     {
         $response = $this->client->request('POST', "{$this->esHost}/{$indexName}/_delete_by_query", [
             'headers' => ['Content-Type' => 'application/json'],
             'query' => ['conflicts' => 'proceed'],
-            'body' => json_encode(['query' => ['range' => ['gen' => ['lt' => $minGeneration]]]]),
+            'body' => json_encode(['query' => ['match_all' => (object) []]]),
             'timeout' => $this->timeout,
             'max_duration' => $this->timeout,
         ]);
         $content = $response->getContent(false);
         if ($response->getStatusCode() >= 300) {
-            throw new \RuntimeException("Generation prune failed for {$indexName}: {$content}");
+            throw new \RuntimeException("Index clear failed for {$indexName}: {$content}");
         }
     }
 

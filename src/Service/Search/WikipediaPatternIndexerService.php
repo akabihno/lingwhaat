@@ -110,13 +110,23 @@ class WikipediaPatternIndexerService
     }
 
     /**
-     * Delete docs left behind by an earlier indexing pass — those an article no longer produces
-     * (it shrank, or was removed from the corpus). After a full pass every current doc carries the
-     * current generation; anything still stamped with an older generation is stale and pruned.
+     * Make a just-indexed batch searchable immediately (the index uses the default ~1s refresh, so
+     * without this the manuscript search could miss the docs it is meant to consume this cycle).
      */
-    public function pruneStaleGenerations(string $targetIndex, int $currentGeneration): void
+    public function refreshIndex(string $targetIndex): void
     {
-        $this->bulk->deleteByGenerationLessThan($targetIndex, $currentGeneration);
+        $this->bulk->forceRefresh($targetIndex);
+    }
+
+    /**
+     * Evict the entire contents of a per-language index. The index is scratch space holding only the
+     * in-flight corpus batch: once the manuscript search has consumed the batch it is cleared so the
+     * index never accumulates toward full-corpus size (the unbounded-growth flaw of keeping every
+     * window resident). Coverage stays complete because the cursor keeps advancing across passes.
+     */
+    public function evictIndexContents(string $targetIndex): void
+    {
+        $this->bulk->deleteAll($targetIndex);
     }
 
     /**

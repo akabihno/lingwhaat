@@ -5,7 +5,6 @@ namespace App;
 use App\Message\ManuscriptAlphabetDecodeSelectionDispatchMessage;
 use App\Message\ManuscriptLanguageAtbashScoreDispatchMessage;
 use App\Message\ManuscriptLanguageScoreDispatchMessage;
-use App\Message\ManuscriptPatternMatchSearchMessage;
 use App\Message\ParseWikipediaLanguagesMessage;
 use App\Message\ParseWiktionaryLanguagesMessage;
 use App\Message\WikipediaPatternIndexDispatchMessage;
@@ -71,10 +70,10 @@ class Schedule implements ScheduleProviderInterface
                 ->withJitter(self::JITTER_SECONDS)
         );
 
-        $schedule->add(
-            RecurringMessage::every('5 minutes', new ManuscriptPatternMatchSearchMessage())
-                ->withJitter(self::JITTER_SECONDS)
-        );
+        // The manuscript pattern search now runs inline per corpus batch (index -> search -> evict
+        // in WikipediaPatternIndexLanguageMessageHandler), so a periodic whole-index sweep is no
+        // longer needed — after eviction it would only ever see the in-flight batch anyway.
+        // ManuscriptPatternMatchSearchMessage remains dispatchable manually for ad-hoc runs.
 
         return $schedule;
     }

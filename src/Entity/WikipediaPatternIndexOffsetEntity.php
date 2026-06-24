@@ -38,9 +38,9 @@ class WikipediaPatternIndexOffsetEntity
     #[ORM\Column(name: "next_article_limit", type: "integer")]
     private int $nextArticleLimit = 5;
 
-    // Current indexing pass for this language. Stamped onto every doc written this pass; bumped
-    // when a full pass completes (cursor wraps), after which docs left at an older generation are
-    // pruned as stale. See WikipediaPatternIndexerService::pruneStaleGenerations.
+    // Indexing pass counter, stamped onto every doc as `gen`. Vestigial under the index->search->
+    // evict model (each batch is evicted after it is searched, so no stale docs persist to prune);
+    // retained as harmless metadata to avoid a schema rollback. Safe to drop in a later migration.
     #[ORM\Column(name: "generation", type: "integer")]
     private int $generation = 1;
 
