@@ -17,7 +17,7 @@ class ManuscriptLanguageScoreDispatchMessageHandler
     private const string LOCK_RESOURCE = 'manuscript-language-score-dispatch';
     // Cap how many unscored results each tick fans out, so a large backlog drains in bounded
     // batches across scheduler ticks instead of flooding the single score worker at once.
-    private const int DISPATCH_BATCH_SIZE = 5;
+    private const int DISPATCH_BATCH_SIZE = 1;
     // TTL covers expected end-to-end batch time. If the spawned per-row work isn't done within
     // this window the next tick may re-queue duplicates — handler is idempotent so that's wasted
     // CPU, not corruption. If the lock holder dies, ticks resume after TTL.
