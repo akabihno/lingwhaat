@@ -49,16 +49,22 @@ class WikipediaArticleRepository extends ServiceEntityRepository
         int $limit = 100,
         int $afterId = 0
     ): array {
-        $rows = $this->createQueryBuilder('w')
-            ->select('w.id AS id, w.text AS text')
-            ->where('w.languageCode = :languageCode')
-            ->andWhere('w.id > :afterId')
-            ->setParameter('languageCode', $languageCode)
-            ->setParameter('afterId', $afterId)
-            ->orderBy('w.id', 'ASC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getArrayResult();
+        // FORCE INDEX (language_code, id): with ORDER BY id LIMIT, MySQL's optimizer otherwise
+        // picks a PRIMARY-key scan and reads millions of rows — fetching every LONGTEXT — to find a
+        // sparse language's matches, which is catastrophic from a low cursor (EXPLAIN: key=PRIMARY
+        // rows=~3M vs forced key=i_lang_id rows=1). DQL can't express index hints, so use native SQL.
+        // MAX_EXECUTION_TIME caps this SELECT at 30s server-side: a safety net so a bad plan or
+        // lock can never again run for thousands of seconds and hang the worker (with FORCE INDEX
+        // the query is sub-second, so this only ever fires on a real regression). MySQL aborts the
+        // statement with an error, which fails the message for a normal retry.
+        $rows = $this->getEntityManager()->getConnection()->executeQuery(
+            'SELECT /*+ MAX_EXECUTION_TIME(30000) */ id, text FROM wikipedia_article FORCE INDEX (i_lang_id)
+             WHERE language_code = :languageCode AND id > :afterId
+             ORDER BY id ASC
+             LIMIT :limit',
+            ['languageCode' => $languageCode, 'afterId' => $afterId, 'limit' => $limit],
+            ['languageCode' => \PDO::PARAM_STR, 'afterId' => \PDO::PARAM_INT, 'limit' => \PDO::PARAM_INT],
+        )->fetchAllAssociative();
 
         return array_map(
             static fn (array $row): array => [

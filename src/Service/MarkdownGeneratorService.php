@@ -49,7 +49,7 @@ class MarkdownGeneratorService
         $generatedLinks = [];
 
         foreach ($letters as $letterArr) {
-            foreach ($letterArr as $key => $letter) {
+            foreach ($letterArr as $letter) {
                 $query = 'SELECT DISTINCT link FROM lingwhaat.'
                     .$this->abstractQuery->getLinksTable($language).' WHERE name LIKE "'.$letter.'%"';
 

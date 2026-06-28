@@ -124,7 +124,8 @@ class WiktionaryArticlesIpaParserService extends AbstractWiktionaryParserService
                     $nextHeadingIndex = -1;
 
                     for ($i = 0; $i < $allHeadings->length; $i++) {
-                        $headingText = $allHeadings->item($i)->textContent;
+                        $heading = $allHeadings->item($i);
+                        $headingText = $heading instanceof \DOMNode ? $heading->textContent : '';
                         if (strpos($headingText, $languageName) !== false) {
                             if ($i + 1 < $allHeadings->length) {
                                 $nextHeadingIndex = $i + 1;
@@ -145,7 +146,7 @@ class WiktionaryArticlesIpaParserService extends AbstractWiktionaryParserService
                             }
                         }
 
-                        if ($isInCorrectSection) {
+                        if ($isInCorrectSection && $ipaNode instanceof \DOMNode) {
                             return trim($ipaNode->textContent);
                         }
                     }
@@ -155,7 +156,10 @@ class WiktionaryArticlesIpaParserService extends AbstractWiktionaryParserService
             // Fallback: if language-specific search fails, try to get the first IPA
             $nodes = $xpath->query("//*[contains(concat(' ', normalize-space(@class), ' '), ' IPA ')]");
             if ($nodes->length > 0) {
-                return trim($nodes->item(0)->textContent);
+                $node = $nodes->item(0);
+                if ($node instanceof \DOMNode) {
+                    return trim($node->textContent);
+                }
             }
 
             return '';

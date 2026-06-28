@@ -78,8 +78,8 @@ class LanguageWordsController extends AbstractController
     public function getWords(Request $request): JsonResponse
     {
         $languageCode = $request->query->get('languageCode', '');
-        $limit = min((int) $request->query->get('limit', 1000), AbstractLanguageRepository::PRONUNCIATION_MAX_RESULTS);
-        $offset = max((int) $request->query->get('offset', 0), 0);
+        $limit = min($request->query->getInt('limit', 1000), AbstractLanguageRepository::PRONUNCIATION_MAX_RESULTS);
+        $offset = max($request->query->getInt('offset', 0), 0);
 
         $entityClass = LanguageMappings::getEntityClassByLanguageCode($languageCode);
 

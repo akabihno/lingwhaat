@@ -8,12 +8,12 @@ class Attention(nn.Module):
         self.attn = nn.Linear(hid_dim * 2, hid_dim)
         self.v = nn.Linear(hid_dim, 1, bias=False)
 
-    def forward(self, hidden, encoder_outputs):
+    def forward(self, hidden, encoder_outputs, mask=None):
         # hidden = [batch_size, hid_dim]
         # encoder_outputs = [src_len, batch_size, hid_dim]
+        # mask = [batch_size, src_len] (1 for real tokens, 0 for <pad>)
 
         src_len = encoder_outputs.shape[0]
-        batch_size = encoder_outputs.shape[1]
 
         # Repeat hidden state src_len times
         hidden = hidden.unsqueeze(1).repeat(1, src_len, 1)
@@ -28,5 +28,9 @@ class Attention(nn.Module):
 
         attention = self.v(energy).squeeze(2)
         # attention = [batch_size, src_len]
+
+        # Prevent attending to padded positions.
+        if mask is not None:
+            attention = attention.masked_fill(mask == 0, -1e10)
 
         return F.softmax(attention, dim=1)

@@ -160,26 +160,22 @@ class ManuscriptAlphabetDecodeService
         array $mapping,
         array $chosen,
         array &$validFlags,
-    ): bool {
+    ): void {
         if ($slot === count($cipherWords)) {
             foreach ($chosen as $s => $idx) {
                 $validFlags[$s][$idx] = true;
             }
-            return true;
+            return;
         }
 
-        $anyFound = false;
         foreach ($candidatesPerSlot[$slot] as $idx => $word) {
             $wordMapping = $this->computeMapping($cipherWords[$slot], $word);
             if ($wordMapping === null || !$this->areMappingsCompatible($mapping, $wordMapping)) {
                 continue;
             }
             $chosen[$slot] = $idx;
-            if ($this->dfsMarkValid($cipherWords, $candidatesPerSlot, $slot + 1, $mapping + $wordMapping, $chosen, $validFlags)) {
-                $anyFound = true;
-            }
+            $this->dfsMarkValid($cipherWords, $candidatesPerSlot, $slot + 1, $mapping + $wordMapping, $chosen, $validFlags);
         }
-        return $anyFound;
     }
 
     /** @return array<string, string>|null */

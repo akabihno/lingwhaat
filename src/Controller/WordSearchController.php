@@ -69,7 +69,7 @@ class WordSearchController extends AbstractController
     public function search(Request $request): JsonResponse
     {
         $word = $request->query->get('word');
-        $limit = (int) $request->query->get('limit', 5);
+        $limit = $request->query->getInt('limit', 5);
         $languageCode = $request->query->get('languageCode');
 
         if (empty($word)) {

@@ -65,19 +65,18 @@ class WikipediaPatternSearchService
 
         $query = new Query($bool);
         $query->setSize($limit);
-        $query->setSort(['global_position' => 'asc']);
+        // True corpus reading order: the indexer walks articles by ascending id and emits windows
+        // by ascending position, so (article_id, local_position) is a stable, batch-independent,
+        // idempotent total order. (The old global_position counter reset per batch and collided
+        // across the now-accumulated stable index.)
+        $query->setSort([
+            ['article_id' => 'asc'],
+            ['local_position' => 'asc'],
+        ]);
 
         try {
             $results = $index->search($query)->getResults();
         } catch (ClientResponseException | ServerResponseException $e) {
-            // Index is being modified concurrently (the per-language indexing handler nukes and
-            // recreates wikipedia_global_patterns_<lang>). Possible races we silently absorb here:
-            //   - 404 index_not_found_exception: index was deleted between dispatch and search.
-            //   - 400 No mapping found: index exists but is empty, fields not yet mapped.
-            //   - 503 no_shard_available_action_exception: shards still initializing/relocating.
-            // All three are transient and resolve once the in-flight indexing cycle completes.
-            // Returning no hits lets the search message succeed; the next scheduled search for
-            // this language will see a stable index.
             return [];
         }
 
@@ -96,7 +95,6 @@ class WikipediaPatternSearchService
             $src = $hit->getSource();
 
             $formatted[] = [
-                'global_position' => $src['global_position'] ?? null,
                 'article_id' => $src['article_id'] ?? null,
                 'local_position' => $src['local_position'] ?? null,
                 'pattern' => $src['pattern'] ?? null,

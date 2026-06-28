@@ -30,6 +30,7 @@ class TrainIpaPredictorModelCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -68,6 +69,7 @@ class TrainIpaPredictorModelCommand extends Command
      * @throws RedirectionExceptionInterface
      * @throws ClientExceptionInterface
      */
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // example: php bin/console ml:train:ipa-predictor --lang latvian
@@ -129,7 +131,7 @@ class TrainIpaPredictorModelCommand extends Command
             ]);
 
             $statusCode = $response->getStatusCode();
-            $content = $response->getContent();
+            $response->getContent();
 
             $output->writeln("Training scheduled on dataset {$this->trainingDataPath} with status {$statusCode}");
         }

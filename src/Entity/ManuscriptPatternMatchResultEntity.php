@@ -29,6 +29,12 @@ class ManuscriptPatternMatchResultEntity
     #[ORM\Column(type: "float", nullable: true)]
     private ?float $languageScore = null;
 
+    #[ORM\Column(name: "language_code_atbash", type: "string", length: 8, nullable: true)]
+    private ?string $languageCodeAtbash = null;
+
+    #[ORM\Column(name: "language_score_atbash", type: "float", nullable: true)]
+    private ?float $languageScoreAtbash = null;
+
     #[ORM\Column(name: "ts_created", type: "string", length: 255)]
     private string $tsCreated;
 
@@ -89,6 +95,28 @@ class ManuscriptPatternMatchResultEntity
     public function setLanguageScore(?float $languageScore): self
     {
         $this->languageScore = $languageScore;
+        return $this;
+    }
+
+    public function getLanguageCodeAtbash(): ?string
+    {
+        return $this->languageCodeAtbash;
+    }
+
+    public function setLanguageCodeAtbash(?string $languageCodeAtbash): self
+    {
+        $this->languageCodeAtbash = $languageCodeAtbash;
+        return $this;
+    }
+
+    public function getLanguageScoreAtbash(): ?float
+    {
+        return $this->languageScoreAtbash;
+    }
+
+    public function setLanguageScoreAtbash(?float $languageScoreAtbash): self
+    {
+        $this->languageScoreAtbash = $languageScoreAtbash;
         return $this;
     }
 

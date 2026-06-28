@@ -108,16 +108,40 @@ def evaluate_model(csv_path, model_path, model_dir='models', use_beam_search=Tru
 if __name__ == "__main__":
     import sys
 
-    if len(sys.argv) < 4:
-        print("Usage: python evaluate_accuracy.py <csv_path> <model_name> <model_dir> [beam_search] [test_size]")
-        print("\nExample:")
-        print("  python evaluate_accuracy.py data/english.csv english_model.pt models true 100")
+    args = sys.argv[1:]
+    if not args:
+        print("Usage:")
+        print("  python evaluate_accuracy.py <lang> [beam_search] [test_size]")
+        print("  python evaluate_accuracy.py <csv_path> <model_name> <model_dir> [beam_search] [test_size]")
+        print("\nExamples:")
+        print("  python evaluate_accuracy.py russian              # held-out: data/test/russian_test.csv vs models/russian_model.pt")
+        print("  python evaluate_accuracy.py data/test/russian_test.csv russian_model.pt models true 200")
         sys.exit(1)
 
-    csv_path = sys.argv[1]
-    model_name = sys.argv[2]
-    model_dir = sys.argv[3]
-    use_beam_search = sys.argv[4].lower() == 'true' if len(sys.argv) > 4 else True
-    test_size = int(sys.argv[5]) if len(sys.argv) > 5 else 100
+    # Language shorthand: auto-resolve the held-out test set and model.
+    if not args[0].endswith('.csv'):
+        lang = args[0]
+        csv_path = os.path.join('data', 'test', f'{lang}_test.csv')
+        model_name = f'{lang}_model.pt'
+        model_dir = 'models'
+        rest = args[1:]
+    else:
+        if len(args) < 3:
+            print("Explicit form: <csv_path> <model_name> <model_dir> [beam_search] [test_size]")
+            sys.exit(1)
+        csv_path, model_name, model_dir = args[0], args[1], args[2]
+        rest = args[3:]
+
+    use_beam_search = rest[0].lower() == 'true' if len(rest) > 0 else True
+    test_size = int(rest[1]) if len(rest) > 1 else 200
+
+    if not os.path.exists(csv_path):
+        print(f"Test set not found: {csv_path}")
+        print("Train the model first — training writes the held-out test split to data/test/<lang>_test.csv.")
+        sys.exit(1)
+
+    if os.path.join('data', 'test') not in csv_path:
+        print(f"⚠ WARNING: {csv_path} is not a held-out test set (data/test/...); "
+              "accuracy may be inflated by training data.\n")
 
     evaluate_model(csv_path, model_name, model_dir, use_beam_search, test_size)

@@ -109,7 +109,7 @@ class LanguageTransliterationDetectionService
 
         // Build a flat list of target language codes for efficient checking
         $targetLanguageCodes = [];
-        foreach ($transliterationCandidates as $scriptName => $languageNames) {
+        foreach ($transliterationCandidates as $languageNames) {
             foreach ($languageNames as $languageName) {
                 $code = LanguageMappings::getLanguageCodeByName($languageName);
                 if ($code) {
@@ -159,7 +159,7 @@ class LanguageTransliterationDetectionService
 
                 // Calculate weights once per word
                 $lengthWeight = $this->getWordLengthWeight($word);
-                $rarityWeight = $this->getRarityWeight($allMatches, '');
+                $rarityWeight = $this->getRarityWeight($allMatches);
 
                 // Process exact matches
                 if (!empty($exactMatches)) {
@@ -448,7 +448,7 @@ class LanguageTransliterationDetectionService
     /**
      * Calculate rarity weight based on how many languages a match appears in
      */
-    private function getRarityWeight(array $allMatches, string $currentLanguageCode): float
+    private function getRarityWeight(array $allMatches): float
     {
         $uniqueLanguages = [];
         foreach ($allMatches as $match) {
@@ -491,7 +491,7 @@ class LanguageTransliterationDetectionService
     ): array {
         $ipaPredictions = [];
 
-        foreach ($sourceLanguages as $scriptName => $languageNames) {
+        foreach ($sourceLanguages as $languageNames) {
             foreach ($languageNames as $languageName) {
                 $languageNameLower = strtolower($languageName);
 

@@ -28,6 +28,7 @@ class TrainWordPredictorModelCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -46,6 +47,7 @@ class TrainWordPredictorModelCommand extends Command
      * @see TrainIpaPredictorModelCommand
      *
      */
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         // example: php bin/console ml:train:word-predictor --lang latvian
@@ -73,7 +75,7 @@ class TrainWordPredictorModelCommand extends Command
 
         $statusCode = $response->getStatusCode();
         try {
-            $content = $response->getContent();
+            $response->getContent();
         } catch (ClientExceptionInterface|RedirectionExceptionInterface|ServerExceptionInterface|TransportExceptionInterface $e) {
             $output->writeln('<error>Exception: '.$e.'</error>');
         }

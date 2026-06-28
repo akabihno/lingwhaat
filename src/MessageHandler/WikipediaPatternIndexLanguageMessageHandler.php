@@ -3,10 +3,10 @@
 namespace App\MessageHandler;
 
 use App\Entity\WikipediaPatternIndexOffsetEntity;
-use App\Message\ManuscriptPatternMatchSearchMessage;
 use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaPatternIndexOffsetRepository;
 use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Search\ManuscriptCorpusSearchService;
 use App\Service\Search\WikipediaPatternIndexerService;
 use Symfony\Component\Lock\Exception\LockConflictedException;
 use Symfony\Component\Lock\Exception\LockReleasingException;
@@ -23,13 +23,6 @@ class WikipediaPatternIndexLanguageMessageHandler
     // maximum time before the next run can acquire it. Not used for coordination — normal runs
     // release the lock explicitly and self-dispatch the next message immediately.
     private const int LOCK_TTL_SECONDS = 300;
-    // Throttle for the per-language manuscript search dispatch. Indexing self-chains a batch
-    // every ~30s and the cursor effectively never wraps to 0 (corpora are millions of articles,
-    // batches only a handful), so dispatching a search after every batch floods the async queue.
-    // This lock is acquired (never released) before each dispatch; its TTL is the minimum gap
-    // between per-language searches. The all-language scheduler sweep covers everything anyway.
-    private const string SEARCH_DISPATCH_THROTTLE_PREFIX = 'manuscript-pattern-search-dispatch:';
-    private const int SEARCH_DISPATCH_THROTTLE_SECONDS = 600;
     // Target wall-clock duration for each batch. The article limit adapts each run so the next
     // batch takes approximately this long, keeping processing continuous without overloading.
     private const int TARGET_BATCH_MS = 30_000;
@@ -38,6 +31,7 @@ class WikipediaPatternIndexLanguageMessageHandler
 
     public function __construct(
         private readonly WikipediaPatternIndexerService $indexerService,
+        private readonly ManuscriptCorpusSearchService $corpusSearchService,
         private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
         private readonly LockFactory $lockFactory,
         private readonly MessageBusInterface $bus,
@@ -81,35 +75,60 @@ class WikipediaPatternIndexLanguageMessageHandler
                 ? $existing->getLastArticleId()
                 : 0;
 
+            $generation = $existing?->getGeneration() ?? 1;
+
             $this->logger->info(sprintf('Indexing language: %s (afterId: %d, limit: %d)', $languageCode, $afterId, $articleLimit), [
                 'service' => self::LOG_SERVICE,
             ]);
 
-            $concreteIndex = $this->indexerService->prepareWriteIndex($languageCode);
+            // Resolve the language's stable index once and write this batch straight into it.
+            // No per-batch index create / alias swap / delete: those cluster-state operations are
+            // what saturated the single ES node. A failed batch simply propagates and is retried;
+            // deterministic doc ids make the re-run an idempotent overwrite, so there is nothing
+            // to clean up on the error path.
+            $writeIndex = $this->indexerService->ensureWriteIndex($languageCode, $windowSize);
+
+            // The index is scratch space holding only the in-flight batch: index a region, search it
+            // for manuscript matches, then evict it. This bounds the index instead of accumulating
+            // every window of the corpus (the unbounded-growth flaw), while the advancing cursor
+            // still covers the whole corpus across passes. Clear up-front first to drop any residue
+            // from a crash between a prior batch's index and its eviction, so this batch is searched
+            // against exactly its own docs (no double-counted result rows on retry).
+            $this->indexerService->evictIndexContents($writeIndex);
+
             $batchStartMs = (int) round(microtime(true) * 1000);
 
-            try {
-                $result = $this->indexerService->indexBatchByLanguageCode(
-                    $windowSize,
-                    $languageCode,
-                    $concreteIndex,
-                    $articleLimit,
-                    $afterId,
-                    fn() => $lock->refresh(),
-                );
+            $result = $this->indexerService->indexBatchByLanguageCode(
+                $windowSize,
+                $languageCode,
+                $writeIndex,
+                $articleLimit,
+                $afterId,
+                $generation,
+                fn() => $lock->refresh(),
+            );
 
-                $this->indexerService->promoteToAlias($languageCode, $concreteIndex);
-            } catch (\Throwable $e) {
-                $this->indexerService->deleteConcreteIndex($concreteIndex);
-                throw $e;
-            }
-
-            $durationMs = (int) round(microtime(true) * 1000) - $batchStartMs;
             $articlesProcessed = $result['processed'];
 
-            $newCursor = $articlesProcessed < $articleLimit
-                ? 0
-                : $result['lastArticleId'];
+            // Search this batch for manuscript matches while it is resident, then evict it. The
+            // index was just cleared, so the search sees only this batch's docs — every region is
+            // searched exactly once per pass (the old whole-index sweep only ever re-reported the
+            // lowest article ids). Refresh first so the just-indexed batch is visible.
+            if ($articlesProcessed > 0) {
+                $this->indexerService->refreshIndex($writeIndex);
+                $lock->refresh();
+                $this->corpusSearchService->searchLanguage($languageCode);
+            }
+            $this->indexerService->evictIndexContents($writeIndex);
+
+            // Measure the whole cycle (index + search + evict) so the adaptive limit keeps total
+            // batch wall-clock near the target — not just the indexing portion.
+            $durationMs = (int) round(microtime(true) * 1000) - $batchStartMs;
+
+            // A short batch means we reached the end of the corpus: wrap the cursor to 0 to re-sweep
+            // the corpus from the start on the next pass.
+            $wrapped = $articlesProcessed < $articleLimit;
+            $newCursor = $wrapped ? 0 : $result['lastArticleId'];
 
             $nextArticleLimit = $this->calculateNextLimit($articleLimit, $articlesProcessed, $durationMs);
 
@@ -122,7 +141,8 @@ class WikipediaPatternIndexLanguageMessageHandler
                 ->setLastArticleId($newCursor)
                 ->setWindowSize($windowSize)
                 ->setLastRunAt(new \DateTimeImmutable())
-                ->setNextArticleLimit($nextArticleLimit);
+                ->setNextArticleLimit($nextArticleLimit)
+                ->setGeneration($generation);
             $this->offsetRepository->save($offsetEntity);
 
             $this->logger->info(
@@ -130,19 +150,6 @@ class WikipediaPatternIndexLanguageMessageHandler
                     $articlesProcessed, $languageCode, $durationMs, $newCursor, $nextArticleLimit),
                 ['service' => self::LOG_SERVICE],
             );
-
-            // Kick a per-language manuscript search, but at most once per throttle window so the
-            // ~30s batch cadence doesn't flood the async queue. The throttle lock is intentionally
-            // never released: its TTL is the minimum gap between searches for this language. The
-            // search handler's own lock additionally drops any overlapping duplicate.
-            $searchThrottle = $this->lockFactory->createLock(
-                self::SEARCH_DISPATCH_THROTTLE_PREFIX . $languageCode,
-                self::SEARCH_DISPATCH_THROTTLE_SECONDS,
-                false,
-            );
-            if ($searchThrottle->acquire()) {
-                $this->bus->dispatch(new ManuscriptPatternMatchSearchMessage($languageCode));
-            }
 
             // Self-chain: immediately queue the next batch so processing continues without
             // waiting for the periodic dispatch handler.

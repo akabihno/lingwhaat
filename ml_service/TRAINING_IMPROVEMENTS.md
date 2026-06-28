@@ -4,6 +4,48 @@
 
 This document describes the improvements made to the ML training system to fix fundamental issues with model training, particularly for large datasets (100k+ samples).
 
+## Architecture upgrade (v2) — REQUIRES RETRAINING ALL MODELS
+
+The seq2seq architecture was upgraded to fix a class of failures where models
+collapsed to near-empty output on short words (e.g. `зонт → "ˈt"`, `дом → "ˈm"`).
+
+**Changes:**
+- **Masked attention (bug fix):** attention previously softmaxed over *all* encoder
+  positions including `<pad>`, so padded batches corrupted the learned alignment.
+  Attention now masks padded positions (`helpers/attention.py`, `seq2seq.py`).
+- **Bidirectional encoder + packed sequences:** the encoder is now bidirectional and
+  uses `pack_padded_sequence`, so it never reads padding and sees both directions of
+  context — standard and materially more accurate for grapheme→phoneme
+  (`helpers/encoder.py`).
+- **Regularization:** label smoothing (0.1) and weight decay (1e-5) to curb the
+  overfitting seen on small datasets (`config.py`, `train.py`).
+- `padding_idx=0` on both embeddings.
+
+**Validation:** trained on a 3k-row Russian subset for 8 epochs (CPU), the new
+architecture already produces `зонт → zont`, `дом → dom`, `работа → rɐˈbotə`,
+`большой → bɐlʲˈʂoj` — versus the old broken outputs above.
+
+> ⚠️ **The new architecture is NOT checkpoint-compatible with the old `.pt` files.**
+> Loading an old model with the new code fails on tensor-shape mismatch. **Every
+> language model (both `models/` and `word-models/`) must be retrained on the GPU box**
+> before the new code is deployed. See "How to Retrain Your Models" below.
+
+### Honest evaluation (held-out test set)
+
+Training now does a deterministic **train / val / test** split (90/5/5) and writes the
+test split — never seen during training or early stopping — to
+`data/test/<lang>_test.csv`. Measure real accuracy after retraining with:
+
+```bash
+# language shorthand (resolves data/test/<lang>_test.csv + models/<lang>_model.pt)
+python evaluate_accuracy.py russian
+# or explicitly, greedy, 200 samples:
+python evaluate_accuracy.py data/test/russian_test.csv russian_model.pt models false 200
+```
+
+Previously `evaluate_accuracy.py` sampled from the full training CSV, so reported
+accuracy was inflated. Point it at `data/test/...` for a trustworthy number.
+
 ## Problems Fixed
 
 ### 1. **Undertrained Models**

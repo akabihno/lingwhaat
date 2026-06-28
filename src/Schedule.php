@@ -3,8 +3,8 @@
 namespace App;
 
 use App\Message\ManuscriptAlphabetDecodeSelectionDispatchMessage;
+use App\Message\ManuscriptLanguageAtbashScoreDispatchMessage;
 use App\Message\ManuscriptLanguageScoreDispatchMessage;
-use App\Message\ManuscriptPatternMatchSearchMessage;
 use App\Message\ParseWikipediaLanguagesMessage;
 use App\Message\ParseWiktionaryLanguagesMessage;
 use App\Message\WikipediaPatternIndexDispatchMessage;
@@ -25,6 +25,7 @@ class Schedule implements ScheduleProviderInterface
     ) {
     }
 
+    #[\Override]
     public function getSchedule(): SymfonySchedule
     {
         $schedule = (new SymfonySchedule())
@@ -60,14 +61,19 @@ class Schedule implements ScheduleProviderInterface
         );
 
         $schedule->add(
-            RecurringMessage::every('5 minutes', new ManuscriptAlphabetDecodeSelectionDispatchMessage())
+            RecurringMessage::every('10 minutes', new ManuscriptLanguageAtbashScoreDispatchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
 
         $schedule->add(
-            RecurringMessage::every('5 minutes', new ManuscriptPatternMatchSearchMessage())
+            RecurringMessage::every('5 minutes', new ManuscriptAlphabetDecodeSelectionDispatchMessage())
                 ->withJitter(self::JITTER_SECONDS)
         );
+
+        // The manuscript pattern search now runs inline per corpus batch (index -> search -> evict
+        // in WikipediaPatternIndexLanguageMessageHandler), so a periodic whole-index sweep is no
+        // longer needed — after eviction it would only ever see the in-flight batch anyway.
+        // ManuscriptPatternMatchSearchMessage remains dispatchable manually for ad-hoc runs.
 
         return $schedule;
     }

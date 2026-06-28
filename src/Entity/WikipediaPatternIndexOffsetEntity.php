@@ -38,6 +38,12 @@ class WikipediaPatternIndexOffsetEntity
     #[ORM\Column(name: "next_article_limit", type: "integer")]
     private int $nextArticleLimit = 5;
 
+    // Indexing pass counter, stamped onto every doc as `gen`. Vestigial under the index->search->
+    // evict model (each batch is evicted after it is searched, so no stale docs persist to prune);
+    // retained as harmless metadata to avoid a schema rollback. Safe to drop in a later migration.
+    #[ORM\Column(name: "generation", type: "integer")]
+    private int $generation = 1;
+
     public function getId(): int
     {
         return $this->id;
@@ -95,6 +101,17 @@ class WikipediaPatternIndexOffsetEntity
     public function setNextArticleLimit(int $nextArticleLimit): self
     {
         $this->nextArticleLimit = $nextArticleLimit;
+        return $this;
+    }
+
+    public function getGeneration(): int
+    {
+        return $this->generation;
+    }
+
+    public function setGeneration(int $generation): self
+    {
+        $this->generation = $generation;
         return $this;
     }
 }

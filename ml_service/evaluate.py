@@ -56,16 +56,18 @@ def encode_sequence(sequence, vocab):
 def greedy_decode(model, input_seq, src_stoi, trg_stoi, trg_itos, max_length=30):
     device = next(model.parameters()).device
     src_tensor = torch.tensor(encode_sequence(input_seq, src_stoi)).unsqueeze(1).to(device)
+    src_len = torch.tensor([src_tensor.shape[0]])
+    mask = (src_tensor != 0).permute(1, 0)
 
     with torch.no_grad():
-        encoder_outputs, hidden = model.encoder(src_tensor)
+        encoder_outputs, hidden = model.encoder(src_tensor, src_len)
 
     input_token = torch.tensor([trg_stoi['<sos>']]).to(device)
     result = []
 
     for _ in range(max_length):
         with torch.no_grad():
-            output, hidden = model.decoder(input_token, hidden, encoder_outputs)
+            output, hidden = model.decoder(input_token, hidden, encoder_outputs, mask)
         top1 = output.argmax(1).item()
 
         if trg_itos[top1] == '<eos>':
@@ -79,9 +81,11 @@ def greedy_decode(model, input_seq, src_stoi, trg_stoi, trg_itos, max_length=30)
 def beam_search_decode(model, input_seq, src_stoi, trg_stoi, trg_itos, beam_width=5, max_length=30):
     device = next(model.parameters()).device
     src_tensor = torch.tensor(encode_sequence(input_seq, src_stoi)).unsqueeze(1).to(device)
+    src_len = torch.tensor([src_tensor.shape[0]])
+    mask = (src_tensor != 0).permute(1, 0)
 
     with torch.no_grad():
-        encoder_outputs, hidden = model.encoder(src_tensor)
+        encoder_outputs, hidden = model.encoder(src_tensor, src_len)
 
     # Initialize beams: (score, tokens, hidden_state)
     beams = [(0.0, [trg_stoi['<sos>']], hidden)]
@@ -97,7 +101,7 @@ def beam_search_decode(model, input_seq, src_stoi, trg_stoi, trg_itos, beam_widt
             input_token = torch.tensor([tokens[-1]]).to(device)
 
             with torch.no_grad():
-                output, new_hidden = model.decoder(input_token, h, encoder_outputs)
+                output, new_hidden = model.decoder(input_token, h, encoder_outputs, mask)
 
             # Get top k predictions
             log_probs = torch.log_softmax(output, dim=1)

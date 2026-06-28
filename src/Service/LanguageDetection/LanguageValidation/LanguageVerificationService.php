@@ -10,7 +10,7 @@ use Elastica\Query\Term;
 
 class LanguageVerificationService
 {
-    private const int TOP_WORDS_LIMIT = 2000;
+    private const int TOP_WORDS_LIMIT = 10000;
     private const int MIN_WORD_LENGTH = 3;
     private const int MIN_FUZZY_WORD_LENGTH = 5;
 
@@ -265,6 +265,6 @@ class LanguageVerificationService
     {
         $text = mb_strtolower($text);
         // Keep only letters and numbers, remove all other characters
-        return preg_replace('/[^\p{L}\p{N}]/u', '', $text);
+        return preg_replace('/[^\p{L}\p{N}]/u', '', $text) ?? $text;
     }
 }

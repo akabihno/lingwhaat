@@ -36,6 +36,7 @@ class CanonicalPatternStatsCommand extends Command
         parent::__construct();
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -46,6 +47,7 @@ class CanonicalPatternStatsCommand extends Command
             ->addOption('article-limit', 'a', InputOption::VALUE_OPTIONAL, 'Cap on Wikipedia articles to process (smoke-test knob; 0 = all)', 0);
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -256,6 +258,6 @@ class CanonicalPatternStatsCommand extends Command
             $value /= 1024;
             $i++;
         }
-        return sprintf('%.1f%s', $value, $units[$i]);
+        return sprintf('%.1f%s', $value, $units[min($i, count($units) - 1)]);
     }
 }

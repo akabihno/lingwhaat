@@ -42,9 +42,30 @@ class IPADataset(Dataset):
 
 def collate_fn(batch):
     src, trg = zip(*batch)
+    src_len = torch.tensor([len(s) for s in src], dtype=torch.long)
     src_pad = nn.utils.rnn.pad_sequence(src, padding_value=0)
     trg_pad = nn.utils.rnn.pad_sequence(trg, padding_value=0)
-    return src_pad, trg_pad
+    return src_pad, trg_pad, src_len
+
+
+def _write_test_csv(test_pairs, csv_path, src_is_word):
+    """Persist the held-out test split as a word,ipa CSV under data/test/."""
+    base = os.path.splitext(os.path.basename(csv_path))[0]
+    out_dir = os.path.join('data', 'test')
+    os.makedirs(out_dir, exist_ok=True)
+    out_path = os.path.join(out_dir, f'{base}_test.csv')
+
+    rows = []
+    for first, second in test_pairs:
+        if src_is_word:        # IPA model: src=word, trg=ipa
+            word, ipa = ''.join(first), ''.join(second)
+        else:                  # word model: src=ipa, trg=word
+            ipa, word = ''.join(first), ''.join(second)
+        rows.append((word, ipa))
+
+    pd.DataFrame(rows, columns=['word', 'ipa']).to_csv(out_path, index=False)
+    print(f"Held-out test set ({len(rows)} rows) written to {out_path}")
+    return out_path
 
 def train_ipa_model_background(csv_path: str, model_path: str):
     try:
@@ -88,19 +109,23 @@ def train_ipa_model(csv_path, model_save_path=None, resume_from_checkpoint=False
     ]
     print(f"Loaded {len(pairs)} word-IPA pairs")
 
-    src_seqs, trg_seqs = tokenize(pairs)
-
-    src_stoi, src_itos = build_vocab(src_seqs)
-    trg_stoi, trg_itos = build_vocab(trg_seqs)
+    # Build vocab from the full character inventory.
+    all_src, all_trg = tokenize(pairs)
+    src_stoi, src_itos = build_vocab(all_src)
+    trg_stoi, trg_itos = build_vocab(all_trg)
 
     config.INPUT_DIM = len(src_stoi)
     config.OUTPUT_DIM = len(trg_stoi)
 
-    # Train/validation split
-    from sklearn.model_selection import train_test_split
-    train_src, val_src, train_trg, val_trg = train_test_split(
-        src_seqs, trg_seqs, test_size=config.VALIDATION_SPLIT, random_state=42
+    # Deterministic train/val/test split. The test split is held out from both
+    # training and early stopping, and written to disk for honest evaluation.
+    train_pairs, val_pairs, test_pairs = split_pairs(
+        pairs, config.VALIDATION_SPLIT, config.TEST_SPLIT, seed=42
     )
+    _write_test_csv(test_pairs, csv_path, src_is_word=True)
+
+    train_src, train_trg = tokenize(train_pairs)
+    val_src, val_trg = tokenize(val_pairs)
 
     train_data = IPADataset(train_src, train_trg, src_stoi, trg_stoi)
     val_data = IPADataset(val_src, val_trg, src_stoi, trg_stoi)
@@ -132,8 +157,8 @@ def train_ipa_model(csv_path, model_save_path=None, resume_from_checkpoint=False
     print(f"  Estimated model size: {total_params * 4 / (1024*1024):.2f} MB")
     print(f"{'='*60}\n")
 
-    optimizer = optim.Adam(model.parameters(), lr=config.LEARNING_RATE)
-    criterion = nn.CrossEntropyLoss(ignore_index=0)
+    optimizer = optim.Adam(model.parameters(), lr=config.LEARNING_RATE, weight_decay=config.WEIGHT_DECAY)
+    criterion = nn.CrossEntropyLoss(ignore_index=0, label_smoothing=config.LABEL_SMOOTHING)
 
     # Learning rate scheduler with updated patience
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
@@ -175,10 +200,10 @@ def train_ipa_model(csv_path, model_save_path=None, resume_from_checkpoint=False
         epoch_loss = 0
         batch_count = 0
 
-        for src, trg in train_iterator:
-            src, trg = src.to(device), trg.to(device)
+        for src, trg, src_len in train_iterator:
+            src, trg, src_len = src.to(device), trg.to(device), src_len.to(device)
             optimizer.zero_grad()
-            output = model(src, trg)
+            output = model(src, trg, src_len)
 
             output_dim = output.shape[-1]
             output = output[1:].view(-1, output_dim)
@@ -200,9 +225,9 @@ def train_ipa_model(csv_path, model_save_path=None, resume_from_checkpoint=False
         model.eval()
         val_loss = 0
         with torch.no_grad():
-            for src, trg in val_iterator:
-                src, trg = src.to(device), trg.to(device)
-                output = model(src, trg, teacher_forcing_ratio=0)  # No teacher forcing during validation
+            for src, trg, src_len in val_iterator:
+                src, trg, src_len = src.to(device), trg.to(device), src_len.to(device)
+                output = model(src, trg, src_len, teacher_forcing_ratio=0)  # No teacher forcing during validation
 
                 output_dim = output.shape[-1]
                 output = output[1:].view(-1, output_dim)
@@ -324,19 +349,23 @@ def train_word_model(csv_path, model_save_path=None, resume_from_checkpoint=Fals
     ]
     print(f"Loaded {len(pairs)} IPA-word pairs")
 
-    src_seqs, trg_seqs = tokenize(pairs)
-
-    src_stoi, src_itos = build_vocab(src_seqs)
-    trg_stoi, trg_itos = build_vocab(trg_seqs)
+    # Build vocab from the full character inventory.
+    all_src, all_trg = tokenize(pairs)
+    src_stoi, src_itos = build_vocab(all_src)
+    trg_stoi, trg_itos = build_vocab(all_trg)
 
     config.INPUT_DIM = len(src_stoi)
     config.OUTPUT_DIM = len(trg_stoi)
 
-    # Train/validation split
-    from sklearn.model_selection import train_test_split
-    train_src, val_src, train_trg, val_trg = train_test_split(
-        src_seqs, trg_seqs, test_size=config.VALIDATION_SPLIT, random_state=42
+    # Deterministic train/val/test split. The test split is held out from both
+    # training and early stopping, and written to disk for honest evaluation.
+    train_pairs, val_pairs, test_pairs = split_pairs(
+        pairs, config.VALIDATION_SPLIT, config.TEST_SPLIT, seed=42
     )
+    _write_test_csv(test_pairs, csv_path, src_is_word=False)
+
+    train_src, train_trg = tokenize(train_pairs)
+    val_src, val_trg = tokenize(val_pairs)
 
     train_data = IPADataset(train_src, train_trg, src_stoi, trg_stoi)
     val_data = IPADataset(val_src, val_trg, src_stoi, trg_stoi)
@@ -368,8 +397,8 @@ def train_word_model(csv_path, model_save_path=None, resume_from_checkpoint=Fals
     print(f"  Estimated model size: {total_params * 4 / (1024*1024):.2f} MB")
     print(f"{'='*60}\n")
 
-    optimizer = optim.Adam(model.parameters(), lr=config.LEARNING_RATE)
-    criterion = nn.CrossEntropyLoss(ignore_index=0)
+    optimizer = optim.Adam(model.parameters(), lr=config.LEARNING_RATE, weight_decay=config.WEIGHT_DECAY)
+    criterion = nn.CrossEntropyLoss(ignore_index=0, label_smoothing=config.LABEL_SMOOTHING)
 
     # Learning rate scheduler with updated patience
     scheduler = optim.lr_scheduler.ReduceLROnPlateau(
@@ -411,10 +440,10 @@ def train_word_model(csv_path, model_save_path=None, resume_from_checkpoint=Fals
         epoch_loss = 0
         batch_count = 0
 
-        for src, trg in train_iterator:
-            src, trg = src.to(device), trg.to(device)
+        for src, trg, src_len in train_iterator:
+            src, trg, src_len = src.to(device), trg.to(device), src_len.to(device)
             optimizer.zero_grad()
-            output = model(src, trg)
+            output = model(src, trg, src_len)
 
             output_dim = output.shape[-1]
             output = output[1:].view(-1, output_dim)
@@ -436,9 +465,9 @@ def train_word_model(csv_path, model_save_path=None, resume_from_checkpoint=Fals
         model.eval()
         val_loss = 0
         with torch.no_grad():
-            for src, trg in val_iterator:
-                src, trg = src.to(device), trg.to(device)
-                output = model(src, trg, teacher_forcing_ratio=0)  # No teacher forcing during validation
+            for src, trg, src_len in val_iterator:
+                src, trg, src_len = src.to(device), trg.to(device), src_len.to(device)
+                output = model(src, trg, src_len, teacher_forcing_ratio=0)  # No teacher forcing during validation
 
                 output_dim = output.shape[-1]
                 output = output[1:].view(-1, output_dim)

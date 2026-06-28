@@ -260,7 +260,7 @@ class PatternSearchService
         $params['fixedChars'] = [];
 
         // Convert samePositions to 0-indexed and prepare for parameters
-        foreach ($samePositions as $groupIndex => $group) {
+        foreach ($samePositions as $group) {
             if (!empty($group) && count($group) >= 2) {
                 $params['samePositions'][] = array_map(fn($p) => $p - 1, $group);
             }
@@ -283,7 +283,7 @@ class PatternSearchService
                 $allConstrainedPositions[] = $pos - 1;
             }
         }
-        foreach ($fixedChars as $position => $char) {
+        foreach (array_keys($fixedChars) as $position) {
             if ($position >= 1) {
                 $allConstrainedPositions[] = $position - 1;
             }
@@ -299,7 +299,7 @@ class PatternSearchService
                 }
             }
         }
-        foreach ($fixedChars as $position => $char) {
+        foreach (array_keys($fixedChars) as $position) {
             if ($position > $maxPosition) {
                 $maxPosition = $position;
             }
@@ -1537,83 +1537,6 @@ class PatternSearchService
                 'error' => $e->getMessage(),
             ]);
             return [];
-        }
-    }
-
-    /**
-     * Recursively build multi-letter word sequences.
-     *
-     * @param array $wordResultsByPosition Words for each position
-     * @param array $positionIndices Position indices
-     * @param int $currentIndex Current position in the sequence
-     * @param array $currentSequence Current sequence being built
-     * @param array &$sequences Reference to store completed sequences
-     * @param array $assignedLetters Letters assigned to constraints
-     * @param array $letterConstraints Original constraints
-     * @param int $limit Maximum sequences
-     */
-    private function recursiveMultiLetterSequenceBuild(
-        array $wordResultsByPosition,
-        array $positionIndices,
-        int $currentIndex,
-        array $currentSequence,
-        array &$sequences,
-        array $assignedLetters,
-        array $letterConstraints,
-        int $limit
-    ): void {
-        if (count($sequences) >= $limit) {
-            return;
-        }
-
-        if ($currentIndex >= count($positionIndices)) {
-            // Check if all words are from the same language
-            $languageCode = $currentSequence[0]['languageCode'];
-            $allSameLanguage = true;
-            foreach ($currentSequence as $word) {
-                if ($word['languageCode'] !== $languageCode) {
-                    $allSameLanguage = false;
-                    break;
-                }
-            }
-
-            if ($allSameLanguage) {
-                $sequences[] = [
-                    'languageCode' => $languageCode,
-                    'letters' => $assignedLetters,
-                    'words' => array_map(fn($w) => [
-                        'word' => $w['word'],
-                        'ipa' => $w['ipa'] ?? null
-                    ], $currentSequence)
-                ];
-            }
-            return;
-        }
-
-        $positionIndex = $positionIndices[$currentIndex];
-
-        if (!isset($wordResultsByPosition[$positionIndex])) {
-            return;
-        }
-
-        foreach ($wordResultsByPosition[$positionIndex] as $word) {
-            $newSequence = $currentSequence;
-            $newSequence[] = $word;
-
-            $this->recursiveMultiLetterSequenceBuild(
-                $wordResultsByPosition,
-                $positionIndices,
-                $currentIndex + 1,
-                $newSequence,
-                $sequences,
-                $assignedLetters,
-                $letterConstraints,
-                $limit
-            );
-
-            if (count($sequences) >= $limit) {
-                break;
-            }
         }
     }
 

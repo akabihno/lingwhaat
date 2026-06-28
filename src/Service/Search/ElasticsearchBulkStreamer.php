@@ -28,7 +28,15 @@ class ElasticsearchBulkStreamer
         $body = '';
 
         foreach ($docs as $doc) {
-            $body .= json_encode(['index' => ['_index' => $indexName]]) . "\n";
+            $meta = ['_index' => $indexName];
+            // A deterministic _id (when supplied by the caller) turns the write into an upsert:
+            // re-indexing the same article overwrites its docs instead of appending duplicates,
+            // which is what lets us write incrementally into a stable index without rebuilding it.
+            if (isset($doc['_id'])) {
+                $meta['_id'] = $doc['_id'];
+                unset($doc['_id']);
+            }
+            $body .= json_encode(['index' => $meta]) . "\n";
             $body .= json_encode($doc) . "\n";
         }
 
@@ -49,7 +57,31 @@ class ElasticsearchBulkStreamer
         if (!empty($decoded['errors'])) {
             $failures = array_filter($decoded['items'] ?? [], fn($item) => isset($item['index']['error']));
             $first = reset($failures);
-            throw new \RuntimeException('Bulk indexing errors: ' . json_encode($first['index']['error'] ?? $failures));
+            $detail = is_array($first) ? ($first['index']['error'] ?? $failures) : $failures;
+            throw new \RuntimeException('Bulk indexing errors: ' . json_encode($detail));
+        }
+    }
+
+    /**
+     * Delete every doc in the index. Used to evict a corpus batch once the manuscript search has
+     * consumed it: the per-language index is scratch space holding only the in-flight batch, so it
+     * is cleared after each batch is searched (and defensively before the next, to drop any residue
+     * left by a crash between indexing and eviction). conflicts=proceed so an overlapping write does
+     * not abort the clear. delete_by_query (data-plane) is used rather than drop/recreate so the
+     * cluster state is never churned — that churn is what saturated the single ES node.
+     */
+    public function deleteAll(string $indexName): void
+    {
+        $response = $this->client->request('POST', "{$this->esHost}/{$indexName}/_delete_by_query", [
+            'headers' => ['Content-Type' => 'application/json'],
+            'query' => ['conflicts' => 'proceed'],
+            'body' => json_encode(['query' => ['match_all' => (object) []]]),
+            'timeout' => $this->timeout,
+            'max_duration' => $this->timeout,
+        ]);
+        $content = $response->getContent(false);
+        if ($response->getStatusCode() >= 300) {
+            throw new \RuntimeException("Index clear failed for {$indexName}: {$content}");
         }
     }
 

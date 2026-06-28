@@ -8,7 +8,12 @@ class Seq2Seq(nn.Module):
         self.decoder = decoder
         self.device = device
 
-    def forward(self, src, trg, teacher_forcing_ratio=0.5):
+    def create_mask(self, src):
+        # src = [src_len, batch_size]; <pad> is index 0
+        # mask = [batch_size, src_len]
+        return (src != 0).permute(1, 0)
+
+    def forward(self, src, trg, src_len=None, teacher_forcing_ratio=0.5):
         # src = [src_len, batch_size]
         # trg = [trg_len, batch_size]
 
@@ -18,14 +23,16 @@ class Seq2Seq(nn.Module):
 
         outputs = torch.zeros(trg_len, batch_size, trg_vocab_size).to(self.device)
 
-        encoder_outputs, hidden = self.encoder(src)
+        encoder_outputs, hidden = self.encoder(src, src_len)
         # encoder_outputs = [src_len, batch_size, hid_dim]
         # hidden = [n_layers, batch_size, hid_dim]
+
+        mask = self.create_mask(src)
 
         input = trg[0, :]
 
         for t in range(1, trg_len):
-            output, hidden = self.decoder(input, hidden, encoder_outputs)
+            output, hidden = self.decoder(input, hidden, encoder_outputs, mask)
             outputs[t] = output
             top1 = output.argmax(1)
             input = trg[t] if torch.rand(1).item() < teacher_forcing_ratio else top1
