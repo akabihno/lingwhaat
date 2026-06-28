@@ -47,13 +47,15 @@ class ManuscriptPatternMatchResultRepository extends ServiceEntityRepository
 
     public function updateScore(int $id, ?string $languageCode, ?float $languageScore): void
     {
-        $entity = $this->find($id);
-        if ($entity === null) {
-            return;
-        }
-
-        $entity->setLanguageCode($languageCode)->setLanguageScore($languageScore);
-        $this->getEntityManager()->flush();
+        // Raw UPDATE rather than load-entity + flush. The scorer can hold the result entity
+        // for 10-30 minutes (per-row score() is ES-heavy) before persisting; across that window
+        // the long-lived worker's UnitOfWork state proved unreliable — flush() returned without
+        // error yet never wrote the row (rows stayed language_score IS NULL forever). A direct
+        // statement on the connection sidesteps the EM entirely and always commits.
+        $this->getEntityManager()->getConnection()->executeStatement(
+            'UPDATE manuscript_pattern_match_result SET language_code = ?, language_score = ? WHERE id = ?',
+            [$languageCode, $languageScore, $id]
+        );
     }
 
     /**
@@ -77,12 +79,11 @@ class ManuscriptPatternMatchResultRepository extends ServiceEntityRepository
 
     public function updateScoreAtbash(int $id, ?string $languageCodeAtbash, ?float $languageScoreAtbash): void
     {
-        $entity = $this->find($id);
-        if ($entity === null) {
-            return;
-        }
-
-        $entity->setLanguageCodeAtbash($languageCodeAtbash)->setLanguageScoreAtbash($languageScoreAtbash);
-        $this->getEntityManager()->flush();
+        // Raw UPDATE for the same reason as updateScore(): the long-lived Atbash worker's
+        // flush() after a multi-minute score() silently failed to persist. See updateScore().
+        $this->getEntityManager()->getConnection()->executeStatement(
+            'UPDATE manuscript_pattern_match_result SET language_code_atbash = ?, language_score_atbash = ? WHERE id = ?',
+            [$languageCodeAtbash, $languageScoreAtbash, $id]
+        );
     }
 }

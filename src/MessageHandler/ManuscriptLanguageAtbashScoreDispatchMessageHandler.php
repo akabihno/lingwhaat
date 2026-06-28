@@ -15,13 +15,17 @@ class ManuscriptLanguageAtbashScoreDispatchMessageHandler
 {
     private const string LOG_SERVICE = '[ManuscriptLanguageAtbashScoreDispatchMessageHandler]';
     private const string LOCK_RESOURCE = 'manuscript-language-atbash-score-dispatch';
-    // Cap how many unscored results each tick fans out, so a large backlog drains in bounded
-    // batches across scheduler ticks instead of flooding the single score worker at once.
-    private const int DISPATCH_BATCH_SIZE = 1;
-    // TTL covers expected end-to-end batch time. If the spawned per-row work isn't done within
-    // this window the next tick may re-queue duplicates — handler is idempotent so that's wasted
-    // CPU, not corruption. If the lock holder dies, ticks resume after TTL.
-    private const int LOCK_TTL_SECONDS = 300;
+    // Cap how many unscored results each tick fans out. Matched to the number of atbash score
+    // worker pods so one tick hands every worker exactly one row and the whole batch drains in a
+    // single round within LOCK_TTL_SECONDS — no in-flight row is still NULL when the lock frees, so
+    // the next tick never re-fans rows that are already being scored.
+    private const int DISPATCH_BATCH_SIZE = 2;
+    // Must exceed the real end-to-end time for one batch. Per-row score() is ES-heavy and measured
+    // at ~12-30 min, so the previous 300s TTL expired mid-batch and let the 5-min scheduler
+    // re-queue the same in-flight rows as duplicates. 1800s comfortably covers a worst-case round.
+    // Re-dispatch is only wasted CPU (handler is idempotent), never corruption; if the lock holder
+    // dies, ticks resume after TTL.
+    private const int LOCK_TTL_SECONDS = 1800;
 
     public function __construct(
         private readonly ManuscriptPatternMatchResultRepository $resultRepository,
