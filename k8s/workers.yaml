@@ -307,7 +307,7 @@ metadata:
   name: messenger-manuscript-language-score
   namespace: lingwhaat
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: messenger-manuscript-language-score
@@ -329,11 +329,11 @@ spec:
                 name: lingwhaat-secrets
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: "384Mi"
+              cpu: "200m"
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "1500Mi"
+              cpu: "1000m"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -341,7 +341,7 @@ metadata:
   name: messenger-manuscript-language-atbash-score
   namespace: lingwhaat
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: messenger-manuscript-language-atbash-score
@@ -363,11 +363,11 @@ spec:
                 name: lingwhaat-secrets
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "100m"
+              memory: "384Mi"
+              cpu: "200m"
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "1500Mi"
+              cpu: "1000m"
 ---
 apiVersion: apps/v1
 kind: Deployment
