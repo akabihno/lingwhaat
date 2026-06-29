@@ -25,7 +25,7 @@ class ManuscriptLanguageScoreDispatchMessageHandler
     // re-queue the same in-flight rows as duplicates. 1800s comfortably covers a worst-case round.
     // Re-dispatch is only wasted CPU (handler is idempotent), never corruption; if the lock holder
     // dies, ticks resume after TTL.
-    private const int LOCK_TTL_SECONDS = 1800;
+    private const float LOCK_TTL_SECONDS = 1800.0;
 
     public function __construct(
         private readonly ManuscriptPatternMatchResultRepository $resultRepository,
