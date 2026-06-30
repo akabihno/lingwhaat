@@ -5,7 +5,7 @@ namespace App\Message;
 class WikipediaPatternIndexDispatchMessage
 {
     public function __construct(
-        private readonly int $windowSize = 18,
+        private readonly int $windowSize = 50,
         private readonly int $articleLimit = 5,
     ) {
     }

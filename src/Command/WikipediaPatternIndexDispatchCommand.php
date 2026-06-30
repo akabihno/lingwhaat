@@ -27,7 +27,7 @@ class WikipediaPatternIndexDispatchCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('window-size', 'w', InputOption::VALUE_REQUIRED, 'Pattern window size', 18)
+            ->addOption('window-size', 'w', InputOption::VALUE_REQUIRED, 'Pattern window size', 50)
             ->addOption('article-limit', 'l', InputOption::VALUE_REQUIRED, 'Articles per language per run', 100);
     }
 
