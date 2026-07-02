@@ -15,13 +15,13 @@ class WikipediaPatternIndexOffsetEntity
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column(name: "language_code", type: "string", length: 8)]
+    #[ORM\Column(name: "language_code", type: "string", length: 16)]
     private string $languageCode;
 
     // Keyset cursor: the id of the last wikipedia_article processed for this language. The next
     // batch resumes from id > this value; reset to 0 to restart a full pass. (Despite the table
     // name, this is no longer a row offset — see Version20260609120000 migration.)
-    #[ORM\Column(name: "last_article_id", type: "bigint")]
+    #[ORM\Column(name: "last_article_id", type: "bigint", options: ["default" => 0])]
     private int $lastArticleId = 0;
 
     #[ORM\Column(name: "window_size", type: "integer")]
@@ -35,13 +35,13 @@ class WikipediaPatternIndexOffsetEntity
 
     // Article limit to use on the next batch, calculated from the previous run's timing so that
     // batches converge on a target wall-clock duration. Capped by the handler's MAX_ARTICLE_LIMIT.
-    #[ORM\Column(name: "next_article_limit", type: "integer")]
+    #[ORM\Column(name: "next_article_limit", type: "integer", options: ["default" => 5])]
     private int $nextArticleLimit = 5;
 
     // Indexing pass counter, stamped onto every doc as `gen`. Vestigial under the index->search->
     // evict model (each batch is evicted after it is searched, so no stale docs persist to prune);
     // retained as harmless metadata to avoid a schema rollback. Safe to drop in a later migration.
-    #[ORM\Column(name: "generation", type: "integer")]
+    #[ORM\Column(name: "generation", type: "integer", options: ["default" => 1])]
     private int $generation = 1;
 
     public function getId(): int

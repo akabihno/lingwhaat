@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ManuscriptPatternMatchResultRepository::class)]
 #[ORM\Table(name: "manuscript_pattern_match_result")]
+#[ORM\Index(columns: ["source_id"], name: "idx_source_id")]
+#[ORM\Index(columns: ["language_score"], name: "idx_unscored")]
 class ManuscriptPatternMatchResultEntity
 {
     #[ORM\Id]
@@ -23,13 +25,13 @@ class ManuscriptPatternMatchResultEntity
     #[ORM\Column(type: "text")]
     private string $results;
 
-    #[ORM\Column(type: "string", length: 8, nullable: true)]
+    #[ORM\Column(type: "string", length: 16, nullable: true)]
     private ?string $languageCode = null;
 
     #[ORM\Column(type: "float", nullable: true)]
     private ?float $languageScore = null;
 
-    #[ORM\Column(name: "language_code_atbash", type: "string", length: 8, nullable: true)]
+    #[ORM\Column(name: "language_code_atbash", type: "string", length: 16, nullable: true)]
     private ?string $languageCodeAtbash = null;
 
     #[ORM\Column(name: "language_score_atbash", type: "float", nullable: true)]

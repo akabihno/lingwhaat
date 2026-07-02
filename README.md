@@ -5,30 +5,34 @@ This project aims to detect the language of written text with high speed and acc
 ## Features
 
 - Fast and accurate language detection
-- Support for 59 languages
+- Support for 76 languages
 - IPA-based transliteration system
 - Data sourced from Wiktionary using MediaWiki APIs
 - Kubernetes-based deployment
 
 ## Supported Languages
 
-|            |              |            |                 |
-|------------|--------------|------------|-----------------|
-| Afar       | Afrikaans    | Albanian   | Arabic          |
-| Armenian   | Azerbaijani  | Bengali    | Breton          |
-| Bulgarian  | Burmese      | Catalan    | Czech           |
-| Danish     | Dutch        | English    | Estonian        |
-| Finnish    | French       | Galician   | Georgian        |
-| German     | Greek        | Gullah     | Hausa           |
-| Hebrew     | Hindi        | Hungarian  | Icelandic       |
-| Italian    | Japanese     | Kazakh     | Komi            |
-| Korean     | Latin        | Latvian    | Lithuanian      |
-| Mandarin   | Middle Dutch | Mongolian  | Norwegian       |
-| Old Dutch  | Pali         | Persian    | Polish          |
-| Portuguese | Romanian     | Russian    | Serbo-Croatian* |
-| Somali     | Spanish      | Swahili    | Swedish         |
-| Tagalog    | Telugu       | Turkish    | Ukrainian       |
-| Urdu       | Uzbek        | Vietnamese |                 |
+|             |             |                   |                 |
+|-------------|-------------|-------------------|-----------------|
+| Afar        | Afrikaans   | Albanian          | Arabic          |
+| Armenian    | Azerbaijani | Basque            | Belarusian      |
+| Bengali     | Breton      | Bulgarian         | Burmese         |
+| Catalan     | Cebuano     | Chechen           | Croatian        |
+| Czech       | Danish      | Dutch             | Egyptian Arabic |
+| English     | Esperanto   | Estonian          | Finnish         |
+| French      | Galician    | Georgian          | German          |
+| Greek       | Gullah      | Hausa             | Hebrew          |
+| Hindi       | Hungarian   | Icelandic         | Indonesian      |
+| Italian     | Japanese    | Kazakh            | Komi            |
+| Korean      | Latin       | Latvian           | Lithuanian      |
+| Malay       | Mandarin    | Middle Dutch      | Min Nan         |
+| Minangkabau | Mongolian   | Norwegian         | Old Dutch       |
+| Pali        | Persian     | Polish            | Portuguese      |
+| Romanian    | Russian     | Serbian           | Serbo-Croatian* |
+| Slovak      | Somali      | South Azerbaijani | Spanish         |
+| Swahili     | Swedish     | Tagalog           | Tatar           |
+| Telugu      | Turkish     | Ukrainian         | Urdu            |
+| Uzbek       | Vietnamese  | Waray-Waray       | Welsh           |
 
 *Officially deprecated. Serbo-Croatian here includes: Bosnian, Croatian, Montenegrin, Serbian.
 

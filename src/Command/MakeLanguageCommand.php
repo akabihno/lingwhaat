@@ -294,7 +294,9 @@ class MakeLanguageCommand extends Command
         $tableRows = array_merge([$headerRow, $separatorRow], array_map($formatRow, $chunks));
         $newTable = implode("\n", $tableRows);
 
-        $content = preg_replace('/\|[^\n]+\|\n\|[-|]+\|\n(?:\|[^\n]+\|\n?)*/', $newTable . "\n", $content);
+        // Limit 1: only the Supported Languages table (the first in the README) — an
+        // unbounded replace would clobber every other markdown table in the file.
+        $content = preg_replace('/\|[^\n]+\|\n\|[-|]+\|\n(?:\|[^\n]+\|\n?)*/', $newTable . "\n", $content, 1);
 
         $content = preg_replace(
             '/- Support for \d+ languages/',

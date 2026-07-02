@@ -9,6 +9,8 @@ class WiktionaryArticlesCategoriesService extends AbstractWiktionaryParserServic
 {
     const int WIKTIONARY_RESULT_LIMIT = 500;
     const int INSERT_BUFFER_SIZE = 300;
+    const int FETCH_RETRY_LIMIT = 3;
+    const int FETCH_RETRY_DELAY_SECONDS = 10;
 
     public function __construct(protected AbstractQuery $abstractQuery)
     {
@@ -33,6 +35,7 @@ class WiktionaryArticlesCategoriesService extends AbstractWiktionaryParserServic
 
         $buffer = [];
         $bufferSize = self::INSERT_BUFFER_SIZE;
+        $retries = 0;
 
         do {
             $url = $this->getWiktionaryBaseApiLink($language) . "?" . http_build_query($params);
@@ -46,8 +49,16 @@ class WiktionaryArticlesCategoriesService extends AbstractWiktionaryParserServic
             $result = json_decode($output, true);
 
             if (!isset($result["query"]["categorymembers"])) {
+                // A transient API failure (e.g. throttling) mid-pagination must not silently
+                // truncate the word list — re-request the same page before giving up.
+                if ($retries < self::FETCH_RETRY_LIMIT) {
+                    $retries++;
+                    sleep(self::FETCH_RETRY_DELAY_SECONDS);
+                    continue;
+                }
                 break;
             }
+            $retries = 0;
 
             foreach ($result["query"]["categorymembers"] as $categoryMember) {
                 $title = $categoryMember["title"] ?? null;
@@ -86,6 +97,10 @@ class WiktionaryArticlesCategoriesService extends AbstractWiktionaryParserServic
             return "Categorie:Woorden_in_het_Nederlands";
         } elseif ($language == 'komi') {
             return "Категория:Коми-зырянский_язык";
+        } elseif ($language == 'egyptianarabic') {
+            return "Category:Egyptian_Arabic_lemmas";
+        } elseif ($language == 'waray') {
+            return "Category:Waray-Waray_lemmas";
         }
         else {
             return "Category:".ucfirst($language)."_lemmas";
