@@ -8,6 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ManuscriptAlphabetDecodeResultRepository::class)]
 #[ORM\Table(name: "manuscript_alphabet_decode_result")]
 #[ORM\Index(columns: ["openai_status", "priority_hint"], name: "idx_decode_processing")]
+#[ORM\Index(columns: ["language_code"], name: "idx_decode_language")]
+#[ORM\Index(columns: ["match_id"], name: "idx_decode_match_id")]
 class ManuscriptAlphabetDecodeResultEntity
 {
     public const string STATUS_OK = 'ok';
@@ -22,7 +24,7 @@ class ManuscriptAlphabetDecodeResultEntity
     #[ORM\Column(type: "integer")]
     private int $matchId;
 
-    #[ORM\Column(type: "string", length: 8)]
+    #[ORM\Column(type: "string", length: 16)]
     private string $languageCode;
 
     #[ORM\Column(type: "integer")]
@@ -31,13 +33,13 @@ class ManuscriptAlphabetDecodeResultEntity
     #[ORM\Column(type: "string", length: 64)]
     private string $wordLengths;
 
-    #[ORM\Column(type: "text")]
+    #[ORM\Column(type: "text", length: 65535)]
     private string $cipherWords;
 
     #[ORM\Column(type: "text")]
     private string $wordCandidates;
 
-    #[ORM\Column(type: "text", nullable: true)]
+    #[ORM\Column(type: "text", length: 65535, nullable: true)]
     private ?string $selectedPhrase = null;
 
     #[ORM\Column(type: "string", length: 16, nullable: true)]

@@ -12,6 +12,13 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_pattern_match_schedule TO '${
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.word_category TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_alphabet_decode_result TO '${MYSQL_WEB_USER}'@'%';
 
+-- Symfony's doctrine-bridge schema listeners probe DB identity via a throwaway table
+-- (schema_subscriber_check_). Pre-create it with a permanent sentinel row so the probe
+-- never tries to DROP it (drop only happens when the table ends up empty), keeping the
+-- web user DML-only. Needed for doctrine:migrations:diff / make:language.
+CREATE TABLE IF NOT EXISTS lingwhaat.schema_subscriber_check_ (id INT AUTO_INCREMENT NOT NULL, random_key VARCHAR(14) NOT NULL, PRIMARY KEY(id)) ENGINE=InnoDB;
+INSERT INTO lingwhaat.schema_subscriber_check_ (random_key) SELECT 'sentinel' FROM DUAL WHERE NOT EXISTS (SELECT 1 FROM lingwhaat.schema_subscriber_check_);
+GRANT SELECT,INSERT,DELETE ON lingwhaat.schema_subscriber_check_ TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE,DELETE ON lingwhaat.doctrine_migration_versions TO '${MYSQL_WEB_USER}'@'%';
 
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_afar_language TO '${MYSQL_WEB_USER}'@'%';
@@ -82,4 +89,38 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_telugu_language TO '${MYSQ
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.telugu_links TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_burmese_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.burmese_links TO '${MYSQL_WEB_USER}'@'%';
-FLUSH PRIVILEGES;
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_belarusian_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.belarusian_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_basque_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.basque_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_cebuano_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.cebuano_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_chechen_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.chechen_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_croatian_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.croatian_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_egyptianarabic_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.egyptianarabic_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_esperanto_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.esperanto_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_indonesian_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.indonesian_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_malay_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.malay_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_minangkabau_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.minangkabau_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_minnan_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.minnan_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_serbian_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.serbian_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_slovak_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.slovak_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_southazerbaijani_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.southazerbaijani_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_tatar_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.tatar_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_waray_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.waray_links TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_welsh_language TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.welsh_links TO '${MYSQL_WEB_USER}'@'%';
+FLUSH PRIVILEGES;

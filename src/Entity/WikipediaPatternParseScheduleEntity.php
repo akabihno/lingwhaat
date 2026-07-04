@@ -14,7 +14,7 @@ class WikipediaPatternParseScheduleEntity
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column(type: "string", length: 8)]
+    #[ORM\Column(type: "string", length: 16)]
     private string $languageCode;
 
     public function getId(): int

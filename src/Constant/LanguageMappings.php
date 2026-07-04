@@ -18,6 +18,10 @@ class LanguageMappings
     public const string ARMENIAN_LANGUAGE_NAME = 'Armenian';
     public const string AZERBAIJANI_LANGUAGE_CODE = 'az';
     public const string AZERBAIJANI_LANGUAGE_NAME = 'Azerbaijani';
+    public const string BASQUE_LANGUAGE_CODE = 'eu';
+    public const string BASQUE_LANGUAGE_NAME = 'Basque';
+    public const string BELARUSIAN_LANGUAGE_CODE = 'be';
+    public const string BELARUSIAN_LANGUAGE_NAME = 'Belarusian';
     public const string BENGALI_LANGUAGE_CODE = 'bn';
     public const string BENGALI_LANGUAGE_NAME = 'Bengali';
     public const string BRETON_LANGUAGE_CODE = 'br';
@@ -28,14 +32,24 @@ class LanguageMappings
     public const string BURMESE_LANGUAGE_NAME = 'Burmese';
     public const string CATALAN_LANGUAGE_CODE = 'ca';
     public const string CATALAN_LANGUAGE_NAME = 'Catalan';
+    public const string CEBUANO_LANGUAGE_CODE = 'ceb';
+    public const string CEBUANO_LANGUAGE_NAME = 'Cebuano';
+    public const string CHECHEN_LANGUAGE_CODE = 'ce';
+    public const string CHECHEN_LANGUAGE_NAME = 'Chechen';
+    public const string CROATIAN_LANGUAGE_CODE = 'hr';
+    public const string CROATIAN_LANGUAGE_NAME = 'Croatian';
     public const string CZECH_LANGUAGE_CODE = 'cs';
     public const string CZECH_LANGUAGE_NAME = 'Czech';
     public const string DANISH_LANGUAGE_CODE = 'da';
     public const string DANISH_LANGUAGE_NAME = 'Danish';
     public const string DUTCH_LANGUAGE_CODE = 'nl';
     public const string DUTCH_LANGUAGE_NAME = 'Dutch';
+    public const string EGYPTIANARABIC_LANGUAGE_CODE = 'arz';
+    public const string EGYPTIANARABIC_LANGUAGE_NAME = 'Egyptianarabic';
     public const string ENGLISH_LANGUAGE_CODE = 'en';
     public const string ENGLISH_LANGUAGE_NAME = 'English';
+    public const string ESPERANTO_LANGUAGE_CODE = 'eo';
+    public const string ESPERANTO_LANGUAGE_NAME = 'Esperanto';
     public const string ESTONIAN_LANGUAGE_CODE = 'et';
     public const string ESTONIAN_LANGUAGE_NAME = 'Estonian';
     public const string FINNISH_LANGUAGE_CODE = 'fi';
@@ -62,6 +76,8 @@ class LanguageMappings
     public const string HUNGARIAN_LANGUAGE_NAME = 'Hungarian';
     public const string ICELANDIC_LANGUAGE_CODE = 'is';
     public const string ICELANDIC_LANGUAGE_NAME = 'Islandic';
+    public const string INDONESIAN_LANGUAGE_CODE = 'id';
+    public const string INDONESIAN_LANGUAGE_NAME = 'Indonesian';
     public const string ITALIAN_LANGUAGE_CODE = 'it';
     public const string ITALIAN_LANGUAGE_NAME = 'Italian';
     public const string JAPANESE_LANGUAGE_CODE = 'ja';
@@ -78,10 +94,16 @@ class LanguageMappings
     public const string LATVIAN_LANGUAGE_NAME = 'Latvian';
     public const string LITHUANIAN_LANGUAGE_CODE = 'lt';
     public const string LITHUANIAN_LANGUAGE_NAME = 'Lithuanian';
+    public const string MALAY_LANGUAGE_CODE = 'ms';
+    public const string MALAY_LANGUAGE_NAME = 'Malay';
     public const string MANDARIN_LANGUAGE_CODE = 'zh';
     public const string MANDARIN_LANGUAGE_NAME = 'Mandarin';
     public const string MIDDLE_DUTCH_LANGUAGE_CODE = 'dum';
     public const string MIDDLE_DUTCH_LANGUAGE_NAME = 'Middledutch';
+    public const string MINANGKABAU_LANGUAGE_CODE = 'min';
+    public const string MINANGKABAU_LANGUAGE_NAME = 'Minangkabau';
+    public const string MINNAN_LANGUAGE_CODE = 'zh-min-nan';
+    public const string MINNAN_LANGUAGE_NAME = 'Minnan';
     public const string MONGOLIAN_LANGUAGE_CODE = 'mn';
     public const string MONGOLIAN_LANGUAGE_NAME = 'Mongolian';
     public const string NORWEGIAN_LANGUAGE_CODE = 'no';
@@ -100,10 +122,16 @@ class LanguageMappings
     public const string ROMANIAN_LANGUAGE_NAME = 'Romanian';
     public const string RUSSIAN_LANGUAGE_CODE = 'ru';
     public const string RUSSIAN_LANGUAGE_NAME = 'Russian';
+    public const string SERBIAN_LANGUAGE_CODE = 'sr';
+    public const string SERBIAN_LANGUAGE_NAME = 'Serbian';
     public const string SERBOCROATIAN_LANGUAGE_CODE = 'sh';
     public const string SERBOCROATIAN_LANGUAGE_NAME = 'Serbocroatian';
+    public const string SLOVAK_LANGUAGE_CODE = 'sk';
+    public const string SLOVAK_LANGUAGE_NAME = 'Slovak';
     public const string SOMALI_LANGUAGE_CODE = 'so';
     public const string SOMALI_LANGUAGE_NAME = 'Somali';
+    public const string SOUTHAZERBAIJANI_LANGUAGE_CODE = 'azb';
+    public const string SOUTHAZERBAIJANI_LANGUAGE_NAME = 'Southazerbaijani';
     public const string SPANISH_LANGUAGE_CODE = 'es';
     public const string SPANISH_LANGUAGE_NAME = 'Spanish';
     public const string SWAHILI_LANGUAGE_CODE = 'sw';
@@ -112,6 +140,8 @@ class LanguageMappings
     public const string SWEDISH_LANGUAGE_NAME = 'Swedish';
     public const string TAGALOG_LANGUAGE_CODE = 'tl';
     public const string TAGALOG_LANGUAGE_NAME = 'Tagalog';
+    public const string TATAR_LANGUAGE_CODE = 'tt';
+    public const string TATAR_LANGUAGE_NAME = 'Tatar';
     public const string TELUGU_LANGUAGE_CODE = 'te';
     public const string TELUGU_LANGUAGE_NAME = 'Telugu';
     public const string TURKISH_LANGUAGE_CODE = 'tr';
@@ -123,6 +153,10 @@ class LanguageMappings
     public const string UZBEK_LANGUAGE_CODE = 'uz';
     public const string UZBEK_LANGUAGE_NAME = 'Uzbek';
     public const string VIETNAMESE_LANGUAGE_CODE = 'vi';
+    public const string WARAY_LANGUAGE_CODE = 'war';
+    public const string WELSH_LANGUAGE_CODE = 'cy';
+    public const string WELSH_LANGUAGE_NAME = 'Welsh';
+    public const string WARAY_LANGUAGE_NAME = 'Waray';
     public const string VIETNAMESE_LANGUAGE_NAME = 'Vietnamese';
 
 
@@ -135,15 +169,22 @@ class LanguageMappings
             self::ARABIC_LANGUAGE_CODE,
             self::ARMENIAN_LANGUAGE_CODE,
             self::AZERBAIJANI_LANGUAGE_CODE,
+            self::BASQUE_LANGUAGE_CODE,
+            self::BELARUSIAN_LANGUAGE_CODE,
             self::BENGALI_LANGUAGE_CODE,
             self::BRETON_LANGUAGE_CODE,
             self::BULGARIAN_LANGUAGE_CODE,
             self::BURMESE_LANGUAGE_CODE,
             self::CATALAN_LANGUAGE_CODE,
+            self::CEBUANO_LANGUAGE_CODE,
+            self::CHECHEN_LANGUAGE_CODE,
+            self::CROATIAN_LANGUAGE_CODE,
             self::CZECH_LANGUAGE_CODE,
             self::DANISH_LANGUAGE_CODE,
             self::DUTCH_LANGUAGE_CODE,
+            self::EGYPTIANARABIC_LANGUAGE_CODE,
             self::ENGLISH_LANGUAGE_CODE,
+            self::ESPERANTO_LANGUAGE_CODE,
             self::ESTONIAN_LANGUAGE_CODE,
             self::FINNISH_LANGUAGE_CODE,
             self::FRENCH_LANGUAGE_CODE,
@@ -157,6 +198,7 @@ class LanguageMappings
             self::HINDI_LANGUAGE_CODE,
             self::HUNGARIAN_LANGUAGE_CODE,
             self::ICELANDIC_LANGUAGE_CODE,
+            self::INDONESIAN_LANGUAGE_CODE,
             self::ITALIAN_LANGUAGE_CODE,
             self::JAPANESE_LANGUAGE_CODE,
             self::KAZAKH_LANGUAGE_CODE,
@@ -165,8 +207,11 @@ class LanguageMappings
             self::LATIN_LANGUAGE_CODE,
             self::LATVIAN_LANGUAGE_CODE,
             self::LITHUANIAN_LANGUAGE_CODE,
+            self::MALAY_LANGUAGE_CODE,
             self::MANDARIN_LANGUAGE_CODE,
             self::MIDDLE_DUTCH_LANGUAGE_CODE,
+            self::MINANGKABAU_LANGUAGE_CODE,
+            self::MINNAN_LANGUAGE_CODE,
             self::MONGOLIAN_LANGUAGE_CODE,
             self::NORWEGIAN_LANGUAGE_CODE,
             self::OLD_DUTCH_LANGUAGE_CODE,
@@ -176,18 +221,24 @@ class LanguageMappings
             self::PORTUGUESE_LANGUAGE_CODE,
             self::ROMANIAN_LANGUAGE_CODE,
             self::RUSSIAN_LANGUAGE_CODE,
+            self::SERBIAN_LANGUAGE_CODE,
             self::SERBOCROATIAN_LANGUAGE_CODE,
+            self::SLOVAK_LANGUAGE_CODE,
             self::SOMALI_LANGUAGE_CODE,
+            self::SOUTHAZERBAIJANI_LANGUAGE_CODE,
             self::SPANISH_LANGUAGE_CODE,
             self::SWAHILI_LANGUAGE_CODE,
             self::SWEDISH_LANGUAGE_CODE,
             self::TAGALOG_LANGUAGE_CODE,
+            self::TATAR_LANGUAGE_CODE,
             self::TELUGU_LANGUAGE_CODE,
             self::TURKISH_LANGUAGE_CODE,
             self::UKRAINIAN_LANGUAGE_CODE,
             self::URDU_LANGUAGE_CODE,
             self::UZBEK_LANGUAGE_CODE,
             self::VIETNAMESE_LANGUAGE_CODE,
+            self::WARAY_LANGUAGE_CODE,
+            self::WELSH_LANGUAGE_CODE,
         ];
     }
 
@@ -200,15 +251,22 @@ class LanguageMappings
             self::ARABIC_LANGUAGE_CODE => 'App\Entity\ArabicLanguageEntity',
             self::ARMENIAN_LANGUAGE_CODE => 'App\Entity\ArmenianLanguageEntity',
             self::AZERBAIJANI_LANGUAGE_CODE => 'App\Entity\AzerbaijaniLanguageEntity',
+            self::BASQUE_LANGUAGE_CODE => 'App\Entity\BasqueLanguageEntity',
+            self::BELARUSIAN_LANGUAGE_CODE => 'App\Entity\BelarusianLanguageEntity',
             self::BENGALI_LANGUAGE_CODE => 'App\Entity\BengaliLanguageEntity',
             self::BRETON_LANGUAGE_CODE => 'App\Entity\BretonLanguageEntity',
             self::BULGARIAN_LANGUAGE_CODE => 'App\Entity\BulgarianLanguageEntity',
             self::BURMESE_LANGUAGE_CODE => 'App\Entity\BurmeseLanguageEntity',
             self::CATALAN_LANGUAGE_CODE => 'App\Entity\CatalanLanguageEntity',
+            self::CEBUANO_LANGUAGE_CODE => 'App\Entity\CebuanoLanguageEntity',
+            self::CHECHEN_LANGUAGE_CODE => 'App\Entity\ChechenLanguageEntity',
+            self::CROATIAN_LANGUAGE_CODE => 'App\Entity\CroatianLanguageEntity',
             self::CZECH_LANGUAGE_CODE => 'App\Entity\CzechLanguageEntity',
             self::DANISH_LANGUAGE_CODE => 'App\Entity\DanishLanguageEntity',
             self::DUTCH_LANGUAGE_CODE => 'App\Entity\DutchLanguageEntity',
+            self::EGYPTIANARABIC_LANGUAGE_CODE => 'App\Entity\EgyptianarabicLanguageEntity',
             self::ENGLISH_LANGUAGE_CODE => 'App\Entity\EnglishLanguageEntity',
+            self::ESPERANTO_LANGUAGE_CODE => 'App\Entity\EsperantoLanguageEntity',
             self::ESTONIAN_LANGUAGE_CODE => 'App\Entity\EstonianLanguageEntity',
             self::FINNISH_LANGUAGE_CODE => 'App\Entity\FinnishLanguageEntity',
             self::FRENCH_LANGUAGE_CODE => 'App\Entity\FrenchLanguageEntity',
@@ -222,6 +280,7 @@ class LanguageMappings
             self::HINDI_LANGUAGE_CODE => 'App\Entity\HindiLanguageEntity',
             self::HUNGARIAN_LANGUAGE_CODE => 'App\Entity\HungarianLanguageEntity',
             self::ICELANDIC_LANGUAGE_CODE => 'App\Entity\IcelandicLanguageEntity',
+            self::INDONESIAN_LANGUAGE_CODE => 'App\Entity\IndonesianLanguageEntity',
             self::ITALIAN_LANGUAGE_CODE => 'App\Entity\ItalianLanguageEntity',
             self::JAPANESE_LANGUAGE_CODE => 'App\Entity\JapaneseLanguageEntity',
             self::KAZAKH_LANGUAGE_CODE => 'App\Entity\KazakhLanguageEntity',
@@ -230,8 +289,11 @@ class LanguageMappings
             self::LATIN_LANGUAGE_CODE => 'App\Entity\LatinLanguageEntity',
             self::LATVIAN_LANGUAGE_CODE => 'App\Entity\LatvianLanguageEntity',
             self::LITHUANIAN_LANGUAGE_CODE => 'App\Entity\LithuanianLanguageEntity',
+            self::MALAY_LANGUAGE_CODE => 'App\Entity\MalayLanguageEntity',
             self::MANDARIN_LANGUAGE_CODE => 'App\Entity\MandarinLanguageEntity',
             self::MIDDLE_DUTCH_LANGUAGE_CODE => 'App\Entity\MiddleDutchLanguageEntity',
+            self::MINANGKABAU_LANGUAGE_CODE => 'App\Entity\MinangkabauLanguageEntity',
+            self::MINNAN_LANGUAGE_CODE => 'App\Entity\MinnanLanguageEntity',
             self::MONGOLIAN_LANGUAGE_CODE => 'App\Entity\MongolianLanguageEntity',
             self::NORWEGIAN_LANGUAGE_CODE => 'App\Entity\NorwegianLanguageEntity',
             self::OLD_DUTCH_LANGUAGE_CODE => 'App\Entity\OldDutchLanguageEntity',
@@ -241,18 +303,24 @@ class LanguageMappings
             self::PORTUGUESE_LANGUAGE_CODE => 'App\Entity\PortugueseLanguageEntity',
             self::ROMANIAN_LANGUAGE_CODE => 'App\Entity\RomanianLanguageEntity',
             self::RUSSIAN_LANGUAGE_CODE => 'App\Entity\RussianLanguageEntity',
+            self::SERBIAN_LANGUAGE_CODE => 'App\Entity\SerbianLanguageEntity',
             self::SERBOCROATIAN_LANGUAGE_CODE => 'App\Entity\SerboCroatianLanguageEntity',
+            self::SLOVAK_LANGUAGE_CODE => 'App\Entity\SlovakLanguageEntity',
             self::SOMALI_LANGUAGE_CODE => 'App\Entity\SomaliLanguageEntity',
+            self::SOUTHAZERBAIJANI_LANGUAGE_CODE => 'App\Entity\SouthazerbaijaniLanguageEntity',
             self::SPANISH_LANGUAGE_CODE => 'App\Entity\SpanishLanguageEntity',
             self::SWAHILI_LANGUAGE_CODE => 'App\Entity\SwahiliLanguageEntity',
             self::SWEDISH_LANGUAGE_CODE => 'App\Entity\SwedishLanguageEntity',
             self::TAGALOG_LANGUAGE_CODE => 'App\Entity\TagalogLanguageEntity',
+            self::TATAR_LANGUAGE_CODE => 'App\Entity\TatarLanguageEntity',
             self::TELUGU_LANGUAGE_CODE => 'App\Entity\TeluguLanguageEntity',
             self::TURKISH_LANGUAGE_CODE => 'App\Entity\TurkishLanguageEntity',
             self::UKRAINIAN_LANGUAGE_CODE => 'App\Entity\UkrainianLanguageEntity',
             self::URDU_LANGUAGE_CODE => 'App\Entity\UrduLanguageEntity',
             self::UZBEK_LANGUAGE_CODE => 'App\Entity\UzbekLanguageEntity',
             self::VIETNAMESE_LANGUAGE_CODE => 'App\Entity\VietnameseLanguageEntity',
+            self::WARAY_LANGUAGE_CODE => 'App\Entity\WarayLanguageEntity',
+            self::WELSH_LANGUAGE_CODE => 'App\Entity\WelshLanguageEntity',
         ];
 
         return $map[$languageCode] ?? null;
@@ -268,15 +336,22 @@ class LanguageMappings
             'ArabicLanguageEntity' => self::ARABIC_LANGUAGE_CODE,
             'ArmenianLanguageEntity' => self::ARMENIAN_LANGUAGE_CODE,
             'AzerbaijaniLanguageEntity' => self::AZERBAIJANI_LANGUAGE_CODE,
+            'BasqueLanguageEntity' => self::BASQUE_LANGUAGE_CODE,
+            'BelarusianLanguageEntity' => self::BELARUSIAN_LANGUAGE_CODE,
             'BengaliLanguageEntity' => self::BENGALI_LANGUAGE_CODE,
             'BretonLanguageEntity' => self::BRETON_LANGUAGE_CODE,
             'BulgarianLanguageEntity' => self::BULGARIAN_LANGUAGE_CODE,
             'BurmeseLanguageEntity' => self::BURMESE_LANGUAGE_CODE,
             'CatalanLanguageEntity' => self::CATALAN_LANGUAGE_CODE,
+            'CebuanoLanguageEntity' => self::CEBUANO_LANGUAGE_CODE,
+            'ChechenLanguageEntity' => self::CHECHEN_LANGUAGE_CODE,
+            'CroatianLanguageEntity' => self::CROATIAN_LANGUAGE_CODE,
             'CzechLanguageEntity' => self::CZECH_LANGUAGE_CODE,
             'DanishLanguageEntity' => self::DANISH_LANGUAGE_CODE,
             'DutchLanguageEntity' => self::DUTCH_LANGUAGE_CODE,
+            'EgyptianarabicLanguageEntity' => self::EGYPTIANARABIC_LANGUAGE_CODE,
             'EnglishLanguageEntity' => self::ENGLISH_LANGUAGE_CODE,
+            'EsperantoLanguageEntity' => self::ESPERANTO_LANGUAGE_CODE,
             'EstonianLanguageEntity' => self::ESTONIAN_LANGUAGE_CODE,
             'FinnishLanguageEntity' => self::FINNISH_LANGUAGE_CODE,
             'FrenchLanguageEntity' => self::FRENCH_LANGUAGE_CODE,
@@ -290,6 +365,7 @@ class LanguageMappings
             'HindiLanguageEntity' => self::HINDI_LANGUAGE_CODE,
             'HungarianLanguageEntity' => self::HUNGARIAN_LANGUAGE_CODE,
             'IcelandicLanguageEntity' => self::ICELANDIC_LANGUAGE_CODE,
+            'IndonesianLanguageEntity' => self::INDONESIAN_LANGUAGE_CODE,
             'ItalianLanguageEntity' => self::ITALIAN_LANGUAGE_CODE,
             'JapaneseLanguageEntity' => self::JAPANESE_LANGUAGE_CODE,
             'KazakhLanguageEntity' => self::KAZAKH_LANGUAGE_CODE,
@@ -298,8 +374,11 @@ class LanguageMappings
             'LatinLanguageEntity' => self::LATIN_LANGUAGE_CODE,
             'LatvianLanguageEntity' => self::LATVIAN_LANGUAGE_CODE,
             'LithuanianLanguageEntity' => self::LITHUANIAN_LANGUAGE_CODE,
+            'MalayLanguageEntity' => self::MALAY_LANGUAGE_CODE,
             'MandarinLanguageEntity' => self::MANDARIN_LANGUAGE_CODE,
             'MiddleDutchLanguageEntity' => self::MIDDLE_DUTCH_LANGUAGE_CODE,
+            'MinangkabauLanguageEntity' => self::MINANGKABAU_LANGUAGE_CODE,
+            'MinnanLanguageEntity' => self::MINNAN_LANGUAGE_CODE,
             'MongolianLanguageEntity' => self::MONGOLIAN_LANGUAGE_CODE,
             'NorwegianLanguageEntity' => self::NORWEGIAN_LANGUAGE_CODE,
             'OldDutchLanguageEntity' => self::OLD_DUTCH_LANGUAGE_CODE,
@@ -309,18 +388,24 @@ class LanguageMappings
             'PortugueseLanguageEntity' => self::PORTUGUESE_LANGUAGE_CODE,
             'RomanianLanguageEntity' => self::ROMANIAN_LANGUAGE_CODE,
             'RussianLanguageEntity' => self::RUSSIAN_LANGUAGE_CODE,
+            'SerbianLanguageEntity' => self::SERBIAN_LANGUAGE_CODE,
             'SerboCroatianLanguageEntity' => self::SERBOCROATIAN_LANGUAGE_CODE,
+            'SlovakLanguageEntity' => self::SLOVAK_LANGUAGE_CODE,
             'SomaliLanguageEntity' => self::SOMALI_LANGUAGE_CODE,
+            'SouthazerbaijaniLanguageEntity' => self::SOUTHAZERBAIJANI_LANGUAGE_CODE,
             'SpanishLanguageEntity' => self::SPANISH_LANGUAGE_CODE,
             'SwahiliLanguageEntity' => self::SWAHILI_LANGUAGE_CODE,
             'SwedishLanguageEntity' => self::SWEDISH_LANGUAGE_CODE,
             'TagalogLanguageEntity' => self::TAGALOG_LANGUAGE_CODE,
+            'TatarLanguageEntity' => self::TATAR_LANGUAGE_CODE,
             'TeluguLanguageEntity' => self::TELUGU_LANGUAGE_CODE,
             'TurkishLanguageEntity' => self::TURKISH_LANGUAGE_CODE,
             'UkrainianLanguageEntity' => self::UKRAINIAN_LANGUAGE_CODE,
             'UrduLanguageEntity' => self::URDU_LANGUAGE_CODE,
             'UzbekLanguageEntity' => self::UZBEK_LANGUAGE_CODE,
             'VietnameseLanguageEntity' => self::VIETNAMESE_LANGUAGE_CODE,
+            'WarayLanguageEntity' => self::WARAY_LANGUAGE_CODE,
+            'WelshLanguageEntity' => self::WELSH_LANGUAGE_CODE,
         ];
 
         foreach ($map as $entityFragment => $code) {
@@ -341,15 +426,22 @@ class LanguageMappings
             self::ARABIC_LANGUAGE_NAME => self::ARABIC_LANGUAGE_CODE,
             self::ARMENIAN_LANGUAGE_NAME => self::ARMENIAN_LANGUAGE_CODE,
             self::AZERBAIJANI_LANGUAGE_NAME => self::AZERBAIJANI_LANGUAGE_CODE,
+            self::BASQUE_LANGUAGE_NAME => self::BASQUE_LANGUAGE_CODE,
+            self::BELARUSIAN_LANGUAGE_NAME => self::BELARUSIAN_LANGUAGE_CODE,
             self::BENGALI_LANGUAGE_NAME => self::BENGALI_LANGUAGE_CODE,
             self::BRETON_LANGUAGE_NAME => self::BRETON_LANGUAGE_CODE,
             self::BULGARIAN_LANGUAGE_NAME => self::BULGARIAN_LANGUAGE_CODE,
             self::BURMESE_LANGUAGE_NAME => self::BURMESE_LANGUAGE_CODE,
             self::CATALAN_LANGUAGE_NAME => self::CATALAN_LANGUAGE_CODE,
+            self::CEBUANO_LANGUAGE_NAME => self::CEBUANO_LANGUAGE_CODE,
+            self::CHECHEN_LANGUAGE_NAME => self::CHECHEN_LANGUAGE_CODE,
+            self::CROATIAN_LANGUAGE_NAME => self::CROATIAN_LANGUAGE_CODE,
             self::CZECH_LANGUAGE_NAME => self::CZECH_LANGUAGE_CODE,
             self::DANISH_LANGUAGE_NAME => self::DANISH_LANGUAGE_CODE,
             self::DUTCH_LANGUAGE_NAME => self::DUTCH_LANGUAGE_CODE,
+            self::EGYPTIANARABIC_LANGUAGE_NAME => self::EGYPTIANARABIC_LANGUAGE_CODE,
             self::ENGLISH_LANGUAGE_NAME => self::ENGLISH_LANGUAGE_CODE,
+            self::ESPERANTO_LANGUAGE_NAME => self::ESPERANTO_LANGUAGE_CODE,
             self::ESTONIAN_LANGUAGE_NAME => self::ESTONIAN_LANGUAGE_CODE,
             self::FINNISH_LANGUAGE_NAME => self::FINNISH_LANGUAGE_CODE,
             self::FRENCH_LANGUAGE_NAME => self::FRENCH_LANGUAGE_CODE,
@@ -363,6 +455,7 @@ class LanguageMappings
             self::HINDI_LANGUAGE_NAME => self::HINDI_LANGUAGE_CODE,
             self::HUNGARIAN_LANGUAGE_NAME => self::HUNGARIAN_LANGUAGE_CODE,
             self::ICELANDIC_LANGUAGE_NAME => self::ICELANDIC_LANGUAGE_CODE,
+            self::INDONESIAN_LANGUAGE_NAME => self::INDONESIAN_LANGUAGE_CODE,
             self::ITALIAN_LANGUAGE_NAME => self::ITALIAN_LANGUAGE_CODE,
             self::JAPANESE_LANGUAGE_NAME => self::JAPANESE_LANGUAGE_CODE,
             self::KAZAKH_LANGUAGE_NAME => self::KAZAKH_LANGUAGE_CODE,
@@ -371,8 +464,11 @@ class LanguageMappings
             self::LATIN_LANGUAGE_NAME => self::LATIN_LANGUAGE_CODE,
             self::LATVIAN_LANGUAGE_NAME => self::LATVIAN_LANGUAGE_CODE,
             self::LITHUANIAN_LANGUAGE_NAME => self::LITHUANIAN_LANGUAGE_CODE,
+            self::MALAY_LANGUAGE_NAME => self::MALAY_LANGUAGE_CODE,
             self::MANDARIN_LANGUAGE_NAME => self::MANDARIN_LANGUAGE_CODE,
             self::MIDDLE_DUTCH_LANGUAGE_NAME => self::MIDDLE_DUTCH_LANGUAGE_CODE,
+            self::MINANGKABAU_LANGUAGE_NAME => self::MINANGKABAU_LANGUAGE_CODE,
+            self::MINNAN_LANGUAGE_NAME => self::MINNAN_LANGUAGE_CODE,
             self::MONGOLIAN_LANGUAGE_NAME => self::MONGOLIAN_LANGUAGE_CODE,
             self::NORWEGIAN_LANGUAGE_NAME => self::NORWEGIAN_LANGUAGE_CODE,
             self::OLD_DUTCH_LANGUAGE_NAME => self::OLD_DUTCH_LANGUAGE_CODE,
@@ -382,18 +478,24 @@ class LanguageMappings
             self::PORTUGUESE_LANGUAGE_NAME => self::PORTUGUESE_LANGUAGE_CODE,
             self::ROMANIAN_LANGUAGE_NAME => self::ROMANIAN_LANGUAGE_CODE,
             self::RUSSIAN_LANGUAGE_NAME => self::RUSSIAN_LANGUAGE_CODE,
+            self::SERBIAN_LANGUAGE_NAME => self::SERBIAN_LANGUAGE_CODE,
             self::SERBOCROATIAN_LANGUAGE_NAME => self::SERBOCROATIAN_LANGUAGE_CODE,
+            self::SLOVAK_LANGUAGE_NAME => self::SLOVAK_LANGUAGE_CODE,
             self::SOMALI_LANGUAGE_NAME => self::SOMALI_LANGUAGE_CODE,
+            self::SOUTHAZERBAIJANI_LANGUAGE_NAME => self::SOUTHAZERBAIJANI_LANGUAGE_CODE,
             self::SPANISH_LANGUAGE_NAME => self::SPANISH_LANGUAGE_CODE,
             self::SWAHILI_LANGUAGE_NAME => self::SWAHILI_LANGUAGE_CODE,
             self::SWEDISH_LANGUAGE_NAME => self::SWEDISH_LANGUAGE_CODE,
             self::TAGALOG_LANGUAGE_NAME => self::TAGALOG_LANGUAGE_CODE,
+            self::TATAR_LANGUAGE_NAME => self::TATAR_LANGUAGE_CODE,
             self::TELUGU_LANGUAGE_NAME => self::TELUGU_LANGUAGE_CODE,
             self::TURKISH_LANGUAGE_NAME => self::TURKISH_LANGUAGE_CODE,
             self::UKRAINIAN_LANGUAGE_NAME => self::UKRAINIAN_LANGUAGE_CODE,
             self::URDU_LANGUAGE_NAME => self::URDU_LANGUAGE_CODE,
             self::UZBEK_LANGUAGE_NAME => self::UZBEK_LANGUAGE_CODE,
             self::VIETNAMESE_LANGUAGE_NAME => self::VIETNAMESE_LANGUAGE_CODE,
+            self::WARAY_LANGUAGE_NAME => self::WARAY_LANGUAGE_CODE,
+            self::WELSH_LANGUAGE_NAME => self::WELSH_LANGUAGE_CODE,
         ];
 
         if ($flip) {

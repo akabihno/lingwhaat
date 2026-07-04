@@ -111,7 +111,7 @@ class WiktionaryArticlesIpaParserService extends AbstractWiktionaryParserService
             @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
 
             $xpath = new DOMXPath($dom);
-            $languageName = ucfirst(strtolower($language));
+            $languageName = $this->getWiktionaryHeadingName($language);
             $headings = $xpath->query("//h2[.//span[contains(text(), '$languageName')]]");
 
             if ($headings->length > 0) {
@@ -167,6 +167,18 @@ class WiktionaryArticlesIpaParserService extends AbstractWiktionaryParserService
             var_dump('Error parsing Wiktionary result: ' . $e->getMessage());
             return '';
         }
+    }
+
+    // Single-word internal language names whose en.wiktionary section heading differs.
+    protected function getWiktionaryHeadingName(string $language): string
+    {
+        return match (strtolower($language)) {
+            'egyptianarabic' => 'Egyptian Arabic',
+            'southazerbaijani' => 'South Azerbaijani',
+            'minnan' => 'Min Nan',
+            'serbocroatian' => 'Serbo-Croatian',
+            default => ucfirst(strtolower($language)),
+        };
     }
 
     protected function wiktionaryGetRequest(string $uaEmail, string $title, string $language): string

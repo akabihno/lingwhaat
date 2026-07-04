@@ -4,7 +4,7 @@ doctrine:
         connections:
             default:
                 url: '%env(resolve:DATABASE_URL)%'
-                schema_filter: '~^(?!.*_links$).*$~'
+                schema_filter: '~^(?!.*_links$|schema_subscriber_check_$).*$~'
                 profiling_collect_backtrace: '%kernel.debug%'
                 use_savepoints: true
             messenger:

@@ -15,12 +15,12 @@ class WordsPopularityScoreSetOffsetEntity
     #[ORM\Column]
     private int $id;
 
-    #[ORM\Column(name: "language_code", type: "string", length: 8)]
+    #[ORM\Column(name: "language_code", type: "string", length: 16)]
     private string $languageCode;
 
     // Article pagination cursor for this language. Advanced by the batch limit after each run
     // (see WordsPopularityScoreSetService). Reset to 0 to restart a full pass.
-    #[ORM\Column(name: "offset", type: "bigint")]
+    #[ORM\Column(name: "offset", type: "bigint", options: ["default" => 0])]
     private int $offset = 0;
 
     public function getId(): int

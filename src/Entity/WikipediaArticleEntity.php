@@ -15,7 +15,7 @@ class WikipediaArticleEntity
     #[ORM\Column(type: "bigint")]
     private int $id;
 
-    #[ORM\Column(type: "string", length: 8)]
+    #[ORM\Column(type: "string", length: 16)]
     private string $languageCode;
 
     #[ORM\Column(type: "string", length: 2048)]
