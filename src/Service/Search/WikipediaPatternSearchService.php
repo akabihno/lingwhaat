@@ -2,6 +2,7 @@
 
 namespace App\Service\Search;
 
+use App\Constant\PatternIndexConstants;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
 use Elastica\Client;
@@ -14,7 +15,9 @@ class WikipediaPatternSearchService
 {
     private Client $esClient;
     private const string INDEX_NAME_PREFIX = 'wikipedia_global_patterns';
-    public const int DEFAULT_WINDOW_SIZE = 18;
+    // Must match the window size the corpus was indexed with — search filters length = windowSize,
+    // so a mismatch silently returns zero hits.
+    public const int DEFAULT_WINDOW_SIZE = PatternIndexConstants::WINDOW_SIZE;
     private const int BASE = 101;
     private const int MOD = 1000000007;
 

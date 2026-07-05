@@ -2,10 +2,12 @@
 
 namespace App\Message;
 
+use App\Constant\PatternIndexConstants;
+
 class WikipediaPatternIndexDispatchMessage
 {
     public function __construct(
-        private readonly int $windowSize = 29,
+        private readonly int $windowSize = PatternIndexConstants::WINDOW_SIZE,
         private readonly int $articleLimit = 5,
     ) {
     }

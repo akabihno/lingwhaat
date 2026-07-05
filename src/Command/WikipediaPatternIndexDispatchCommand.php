@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Constant\PatternIndexConstants;
 use App\Message\WikipediaPatternIndexDispatchMessage;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -27,7 +28,7 @@ class WikipediaPatternIndexDispatchCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('window-size', 'w', InputOption::VALUE_REQUIRED, 'Pattern window size', 29)
+            ->addOption('window-size', 'w', InputOption::VALUE_REQUIRED, 'Pattern window size', PatternIndexConstants::WINDOW_SIZE)
             ->addOption('article-limit', 'l', InputOption::VALUE_REQUIRED, 'Articles per language per run', 100);
     }
 

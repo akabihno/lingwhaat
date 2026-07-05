@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Constant\PatternIndexConstants;
 use App\Service\Search\WikipediaPatternIndexerService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -29,7 +30,8 @@ class WikipediaPatternIndexCommand extends Command
             'window-size',
             'w',
             InputOption::VALUE_REQUIRED,
-            'Pattern window size to index'
+            'Pattern window size to index',
+            PatternIndexConstants::WINDOW_SIZE
         )
         ->addOption(
             'language-code',
