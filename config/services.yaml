@@ -4,6 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    # Manuscript character-grouping feature flag. Off ('0') = legacy per-character pattern search;
+    # on ('1'/'true') = collapse configured multi-char sequences to single glyphs first. Default
+    # here keeps existing deployments on the old behaviour until the env var is set.
+    env(MANUSCRIPT_CHARACTER_GROUPING_ENABLED): '0'
 
 services:
     # default configuration for services in *this* file
@@ -27,6 +31,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Service\Search\ManuscriptCorpusSearchService:
+      arguments:
+        $characterGroupingEnabled: '%env(bool:MANUSCRIPT_CHARACTER_GROUPING_ENABLED)%'
 
     App\EventSubscriber\WordIndexSubscriber:
       tags:

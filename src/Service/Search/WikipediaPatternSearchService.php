@@ -43,7 +43,29 @@ class WikipediaPatternSearchService
             throw new InvalidArgumentException('Search text length must match the window size.');
         }
 
-        $pattern = $this->buildPattern($normalized);
+        $symbols = preg_split('//u', $normalized, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
+        return $this->searchByPattern($symbols, $limit, $languageCode);
+    }
+
+    /**
+     * Search by an explicit ordered list of symbols — either single characters (legacy per-letter
+     * search) or grouped multi-character tokens (manuscript character grouping). The canonical
+     * pattern and the length filter are both derived from the symbol sequence, so a window of N
+     * grouped tokens matches indexed corpus windows of length N. {@see search()} is the special
+     * case where every symbol is one character and N equals the window size.
+     *
+     * @param array<int, string> $symbols
+     * @return array<int, array<string, mixed>>
+     */
+    public function searchByPattern(array $symbols, int $limit = 50, ?string $languageCode = null): array
+    {
+        $length = count($symbols);
+        if ($length <= 0) {
+            throw new InvalidArgumentException('Symbol list must not be empty.');
+        }
+
+        $pattern = $this->buildPattern($symbols);
         $patternStr = implode(',', $pattern);
         $patternHash = $this->patternHash($pattern);
 
@@ -59,7 +81,7 @@ class WikipediaPatternSearchService
         $bool->addFilter($patternHashQuery);
 
         $lengthQuery = new Term();
-        $lengthQuery->setTerm('length', $windowSize);
+        $lengthQuery->setTerm('length', $length);
         $bool->addFilter($lengthQuery);
 
         $patternQuery = new Term();
@@ -126,24 +148,25 @@ class WikipediaPatternSearchService
     }
 
     /**
+     * Reduce an ordered symbol list to its canonical isomorph pattern (each symbol replaced by its
+     * first-appearance rank). Symbols are whole tokens, so a grouped ligature counts as one
+     * position exactly like a single character does.
+     *
+     * @param array<int, string> $symbols
      * @return array<int, int>
      */
-    private function buildPattern(string $s): array
+    private function buildPattern(array $symbols): array
     {
         $map = [];
         $nextId = 0;
         $pattern = [];
 
-        foreach (preg_split('//u', $s, -1, PREG_SPLIT_NO_EMPTY) as $ch) {
-            if ($ch === false) {
-                continue;
+        foreach ($symbols as $symbol) {
+            if (!isset($map[$symbol])) {
+                $map[$symbol] = $nextId++;
             }
 
-            if (!isset($map[$ch])) {
-                $map[$ch] = $nextId++;
-            }
-
-            $pattern[] = $map[$ch];
+            $pattern[] = $map[$symbol];
         }
 
         return $pattern;
