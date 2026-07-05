@@ -14,6 +14,11 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            # Manuscript character-grouping flag, bound by argument name so the corpus search and
+            # both language scorers tokenize the manuscript identically (see the scorer note on why
+            # they must stay in lock-step). Off ('0') = legacy per-character behaviour.
+            bool $characterGroupingEnabled: '%env(bool:MANUSCRIPT_CHARACTER_GROUPING_ENABLED)%'
 
     # Auto-tag all language repositories
     _instanceof:
@@ -31,10 +36,6 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
-
-    App\Service\Search\ManuscriptCorpusSearchService:
-      arguments:
-        $characterGroupingEnabled: '%env(bool:MANUSCRIPT_CHARACTER_GROUPING_ENABLED)%'
 
     App\EventSubscriber\WordIndexSubscriber:
       tags:

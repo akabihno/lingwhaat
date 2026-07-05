@@ -52,6 +52,13 @@ class ManuscriptCorpusSearchService
                 'service' => self::LOG_SERVICE,
             ]);
 
+            // Grouping sequences are per source, and every match here shares this schedule's id as
+            // its sourceId (findBySourceId), so resolve them once for the whole schedule instead of
+            // re-issuing the same query per match.
+            $sequences = $this->characterGroupingEnabled
+                ? $this->characterGroupRepository->findSequencesBySourceId($schedule->getId())
+                : [];
+
             foreach ($matches as $match) {
                 $normalized = $this->normalize($match->getSourceData());
                 $windowSize = WikipediaPatternSearchService::DEFAULT_WINDOW_SIZE;
@@ -61,9 +68,6 @@ class ManuscriptCorpusSearchService
                 // A window is $windowSize *tokens*, so a grouped window can span more than
                 // $windowSize characters while still producing a $windowSize-length canonical
                 // pattern — the length the per-character corpus index was built with.
-                $sequences = $this->characterGroupingEnabled
-                    ? $this->characterGroupRepository->findSequencesBySourceId($match->getSourceId())
-                    : [];
                 $tokens = ManuscriptWindowTokenizer::tokenize($normalized, $sequences);
                 $tokenCount = count($tokens);
 
