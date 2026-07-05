@@ -11,6 +11,7 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_pattern_match TO '${MYSQL_WEB
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_pattern_match_schedule TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.word_category TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_alphabet_decode_result TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_character_group TO '${MYSQL_WEB_USER}'@'%';
 
 -- Symfony's doctrine-bridge schema listeners probe DB identity via a throwaway table
 -- (schema_subscriber_check_). Pre-create it with a permanent sentinel row so the probe
@@ -123,4 +124,4 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_waray_language TO '${MYSQL
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.waray_links TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.pronunciation_welsh_language TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.welsh_links TO '${MYSQL_WEB_USER}'@'%';
-FLUSH PRIVILEGES;
+FLUSH PRIVILEGES;
