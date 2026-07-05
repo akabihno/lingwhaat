@@ -19,40 +19,56 @@ final class ManuscriptWindowTokenizer
      */
     public static function tokenize(string $normalized, array $sequences): array
     {
+        $chars = preg_split('//u', $normalized, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+
         if ($sequences === []) {
-            return preg_split('//u', $normalized, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+            return $chars;
         }
 
-        // Precompute each sequence's length once (parallel to $sequences) so the per-position scan
-        // is a handful of mb_substr comparisons instead of re-measuring and slicing every candidate.
-        $lengths = array_map(static fn (string $sequence): int => mb_strlen($sequence), $sequences);
+        // Split the text into code points once (O(1) indexed access afterwards) and pre-split each
+        // sequence into its own code-point array (parallel to $sequences). The per-position scan is
+        // then plain array comparisons — no mb_substr (which is O(i) per call and would make
+        // tokenizing a full concatenated manuscript quadratic) and no per-candidate temp string.
+        // Sequences arrive longest-first, so the first match is the greediest.
+        $sequenceChars = array_map(
+            static fn (string $sequence): array => preg_split('//u', $sequence, -1, PREG_SPLIT_NO_EMPTY) ?: [],
+            $sequences,
+        );
 
-        $total = mb_strlen($normalized);
+        $total = count($chars);
         $tokens = [];
         $i = 0;
 
         while ($i < $total) {
-            $matchedLength = 0;
+            $matched = null;
 
-            foreach ($sequences as $index => $sequence) {
-                $length = $lengths[$index];
+            foreach ($sequenceChars as $index => $seqChars) {
+                $length = count($seqChars);
                 if ($length === 0 || $i + $length > $total) {
                     continue;
                 }
 
-                if (mb_substr($normalized, $i, $length) === $sequence) {
-                    $tokens[] = $sequence;
-                    $matchedLength = $length;
+                $isMatch = true;
+                for ($k = 0; $k < $length; ++$k) {
+                    if ($chars[$i + $k] !== $seqChars[$k]) {
+                        $isMatch = false;
+                        break;
+                    }
+                }
+
+                if ($isMatch) {
+                    $matched = $sequences[$index];
+                    $i += $length;
                     break;
                 }
             }
 
-            if ($matchedLength === 0) {
-                $tokens[] = mb_substr($normalized, $i, 1);
-                $matchedLength = 1;
+            if ($matched === null) {
+                $tokens[] = $chars[$i];
+                ++$i;
+            } else {
+                $tokens[] = $matched;
             }
-
-            $i += $matchedLength;
         }
 
         return $tokens;
