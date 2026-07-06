@@ -4,12 +4,21 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    # Manuscript character-grouping feature flag. Off ('0') = legacy per-character pattern search;
+    # on ('1'/'true') = collapse configured multi-char sequences to single glyphs first. Default
+    # here keeps existing deployments on the old behaviour until the env var is set.
+    env(MANUSCRIPT_CHARACTER_GROUPING_ENABLED): '0'
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        bind:
+            # Manuscript character-grouping flag, bound by argument name so the corpus search and
+            # both language scorers tokenize the manuscript identically (see the scorer note on why
+            # they must stay in lock-step). Off ('0') = legacy per-character behaviour.
+            bool $characterGroupingEnabled: '%env(bool:MANUSCRIPT_CHARACTER_GROUPING_ENABLED)%'
 
     # Auto-tag all language repositories
     _instanceof:

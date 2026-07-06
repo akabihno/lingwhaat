@@ -3,9 +3,11 @@
 namespace App\Service;
 
 use App\Entity\ManuscriptPatternMatchResultEntity;
+use App\Repository\ManuscriptCharacterGroupRepository;
 use App\Repository\ManuscriptPatternMatchRepository;
 use App\Repository\WikipediaArticleRepository;
 use App\Service\LanguageDetection\LanguageValidation\LanguageVerificationService;
+use App\Service\Search\ManuscriptWindowTokenizer;
 
 abstract class AbstractManuscriptLanguageScoreService
 {
@@ -13,14 +15,24 @@ abstract class AbstractManuscriptLanguageScoreService
     private const int ARTICLE_CACHE_LIMIT = 256;
 
     /**
-     * Per-worker memo of the concatenated, normalized, char-split cipher text per sourceId.
-     * Building this list dominates score() runtime for any source with many match rows;
+     * Per-worker memo of the concatenated, normalized cipher text per sourceId, split into glyph
+     * tokens (single characters with grouping off; grouped ligatures collapsed to one entry with it
+     * on). Building this list dominates score() runtime for any source with many match rows;
      * caching it survives across every message this worker handles until --memory-limit
      * recycles the process.
      *
      * @var array<int, list<string>>
      */
-    private array $cipherCharsCache = [];
+    private array $cipherTokensCache = [];
+
+    /**
+     * Per-worker memo of the (normalized, longest-first) grouping sequences per sourceId. Empty for
+     * every source while the feature flag is off. Keeps the tokenization of cipher_window per hit
+     * consistent with the tokenization the search side used to produce it.
+     *
+     * @var array<int, list<string>>
+     */
+    private array $sequencesCache = [];
 
     /**
      * Per-worker memo of normalized Wikipedia article text and its language code per articleId.
@@ -35,6 +47,11 @@ abstract class AbstractManuscriptLanguageScoreService
         private readonly ManuscriptPatternMatchRepository $matchRepository,
         private readonly WikipediaArticleRepository $articleRepository,
         private readonly LanguageVerificationService $verificationService,
+        private readonly ManuscriptCharacterGroupRepository $characterGroupRepository,
+        // Must track the search side's MANUSCRIPT_CHARACTER_GROUPING_ENABLED flag: cipher_window was
+        // written grouped iff the flag was on, so it must be re-tokenized the same way here to keep
+        // the glyph→plaintext alignment (and hence language_score) correct.
+        private readonly bool $characterGroupingEnabled = false,
     ) {
     }
 
@@ -60,19 +77,26 @@ abstract class AbstractManuscriptLanguageScoreService
             return ['language_code' => null, 'language_score' => 0.0];
         }
 
-        $fullCipherChars = $this->getCipherChars($result->getSourceId());
+        $sourceId = $result->getSourceId();
+        $fullCipherTokens = $this->getCipherTokens($sourceId);
 
         $bestScore = 0.0;
         $bestLanguage = null;
 
         foreach ($hits as $hit) {
-            // cipher_window is stored per-hit by the search handler
-            $cipherWindow = $hit['cipher_window'] ?? '';
+            // cipher_window is stored per-hit by the search handler. Re-tokenize it with this
+            // source's groupings so a grouped glyph (e.g. a digraph) counts as a single position —
+            // exactly as the search side did when it built the length-$length canonical pattern.
+            // With grouping off this yields one token per character, so the length check and the
+            // alignment below reduce to the original per-character behaviour.
+            $cipherWindow = (string)($hit['cipher_window'] ?? '');
             $articleId = (int)($hit['article_id'] ?? 0);
             $localPosition = (int)($hit['local_position'] ?? 0);
             $length = (int)($hit['length'] ?? 0);
 
-            if ($articleId <= 0 || $length <= 0 || mb_strlen($cipherWindow) !== $length) {
+            $cipherTokens = ManuscriptWindowTokenizer::tokenize($cipherWindow, $this->getSequences($sourceId));
+
+            if ($articleId <= 0 || $length <= 0 || count($cipherTokens) !== $length) {
                 continue;
             }
 
@@ -95,16 +119,16 @@ abstract class AbstractManuscriptLanguageScoreService
             // own (untranslated) characters pass through the mapping untouched.
             $wikiWindow = $this->transformWindow($wikiWindow, $languageCode);
 
-            // Build cipher→plaintext mapping from this window's match
+            // Build glyph→plaintext mapping: each cipher glyph (token) aligns to one wiki character.
             $mapping = [];
             for ($i = 0; $i < $length; $i++) {
-                $cipherChar = mb_substr($cipherWindow, $i, 1);
+                $cipherGlyph = $cipherTokens[$i];
                 $wikiChar = mb_substr($wikiWindow, $i, 1);
-                $mapping[$cipherChar] ??= $wikiChar;
+                $mapping[$cipherGlyph] ??= $wikiChar;
             }
 
-            // Apply mapping to the full manuscript cipher text
-            $translated = implode('', array_map(fn($ch) => $mapping[$ch] ?? $ch, $fullCipherChars));
+            // Apply mapping to the full manuscript cipher text under the same glyph tokenization.
+            $translated = implode('', array_map(fn($glyph) => $mapping[$glyph] ?? $glyph, $fullCipherTokens));
 
             $verification = $this->verificationService->verifyLanguage($translated, $languageCode, 1);
             $score = (float)($verification['matchPercentage'] ?? 0.0);
@@ -128,12 +152,15 @@ abstract class AbstractManuscriptLanguageScoreService
     abstract protected function transformWindow(string $wikiWindow, string $languageCode): string;
 
     /**
+     * The full manuscript cipher text for a source, split into glyph tokens (grouped ligatures
+     * collapsed to one entry when the feature is on; one entry per character otherwise).
+     *
      * @return list<string>
      */
-    private function getCipherChars(int $sourceId): array
+    private function getCipherTokens(int $sourceId): array
     {
-        if (isset($this->cipherCharsCache[$sourceId])) {
-            return $this->cipherCharsCache[$sourceId];
+        if (isset($this->cipherTokensCache[$sourceId])) {
+            return $this->cipherTokensCache[$sourceId];
         }
 
         $allMatches = $this->matchRepository->findBySourceId($sourceId);
@@ -141,17 +168,32 @@ abstract class AbstractManuscriptLanguageScoreService
             fn($m) => $this->normalize($m->getSourceData()),
             $allMatches,
         ));
-        $chars = preg_split('//u', $fullCipherText, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+        $tokens = ManuscriptWindowTokenizer::tokenize($fullCipherText, $this->getSequences($sourceId));
 
-        if (count($this->cipherCharsCache) >= self::CIPHER_CACHE_LIMIT) {
-            $oldest = array_key_first($this->cipherCharsCache);
+        if (count($this->cipherTokensCache) >= self::CIPHER_CACHE_LIMIT) {
+            $oldest = array_key_first($this->cipherTokensCache);
             if ($oldest !== null) {
-                unset($this->cipherCharsCache[$oldest]);
+                unset($this->cipherTokensCache[$oldest]);
             }
         }
-        $this->cipherCharsCache[$sourceId] = $chars;
+        $this->cipherTokensCache[$sourceId] = $tokens;
 
-        return $chars;
+        return $tokens;
+    }
+
+    /**
+     * Normalized, longest-first grouping sequences for a source — empty while the feature flag is
+     * off, so tokenization degrades to a per-character split. Memoized per worker.
+     *
+     * @return list<string>
+     */
+    private function getSequences(int $sourceId): array
+    {
+        if (!$this->characterGroupingEnabled) {
+            return [];
+        }
+
+        return $this->sequencesCache[$sourceId] ??= $this->characterGroupRepository->findSequencesBySourceId($sourceId);
     }
 
     /**

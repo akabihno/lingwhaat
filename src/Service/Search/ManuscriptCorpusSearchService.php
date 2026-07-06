@@ -2,6 +2,7 @@
 
 namespace App\Service\Search;
 
+use App\Repository\ManuscriptCharacterGroupRepository;
 use App\Repository\ManuscriptPatternMatchRepository;
 use App\Repository\ManuscriptPatternMatchResultRepository;
 use App\Repository\ManuscriptPatternMatchScheduleRepository;
@@ -28,7 +29,12 @@ class ManuscriptCorpusSearchService
         private readonly ManuscriptPatternMatchRepository $matchRepository,
         private readonly ManuscriptPatternMatchResultRepository $resultRepository,
         private readonly WikipediaPatternSearchService $searchService,
+        private readonly ManuscriptCharacterGroupRepository $characterGroupRepository,
         private readonly ElasticsearchLogger $logger,
+        // Feature flag (env MANUSCRIPT_CHARACTER_GROUPING_ENABLED). When on, configured multi-char
+        // sequences for a source collapse to a single glyph before the canonical pattern is built;
+        // when off the tokenizer degrades to a per-character split (legacy behaviour).
+        private readonly bool $characterGroupingEnabled = false,
     ) {
     }
 
@@ -46,30 +52,47 @@ class ManuscriptCorpusSearchService
                 'service' => self::LOG_SERVICE,
             ]);
 
+            // Grouping sequences are per source, and every match here shares this schedule's id as
+            // its sourceId (findBySourceId), so resolve them once for the whole schedule instead of
+            // re-issuing the same query per match.
+            $sequences = $this->characterGroupingEnabled
+                ? $this->characterGroupRepository->findSequencesBySourceId($schedule->getId())
+                : [];
+
             foreach ($matches as $match) {
                 $normalized = $this->normalize($match->getSourceData());
-                $textLength = mb_strlen($normalized);
                 $windowSize = WikipediaPatternSearchService::DEFAULT_WINDOW_SIZE;
 
-                if ($textLength < $windowSize) {
-                    $this->logger->info(sprintf('Skipping match id=%d: normalized length %d < window size %d', $match->getId(), $textLength, $windowSize), [
+                // Tokenize into glyphs. With grouping enabled, sequences configured for this source
+                // collapse to a single token; otherwise every character is its own token (legacy).
+                // A window is $windowSize *tokens*, so a grouped window can span more than
+                // $windowSize characters while still producing a $windowSize-length canonical
+                // pattern — the length the per-character corpus index was built with.
+                $tokens = ManuscriptWindowTokenizer::tokenize($normalized, $sequences);
+                $tokenCount = count($tokens);
+
+                if ($tokenCount < $windowSize) {
+                    $this->logger->info(sprintf('Skipping match id=%d: token length %d < window size %d', $match->getId(), $tokenCount, $windowSize), [
                         'service' => self::LOG_SERVICE,
                     ]);
                     continue;
                 }
 
                 $allHits = [];
-                $windowCount = $textLength - $windowSize + 1;
+                $windowCount = $tokenCount - $windowSize + 1;
 
-                for ($pos = 0; $pos <= $textLength - $windowSize; $pos++) {
-                    $window = mb_substr($normalized, $pos, $windowSize);
+                for ($pos = 0; $pos <= $tokenCount - $windowSize; $pos++) {
+                    $windowTokens = array_slice($tokens, $pos, $windowSize);
 
                     try {
-                        $windowHits = $this->searchService->search($window, self::RESULTS_PER_WINDOW, WikipediaPatternSearchService::DEFAULT_WINDOW_SIZE, $languageCode);
+                        $windowHits = $this->searchService->searchByPattern($windowTokens, self::RESULTS_PER_WINDOW, $languageCode);
                     } catch (\InvalidArgumentException) {
                         continue;
                     }
 
+                    // Recorded as-written: cipher_window is the concatenated glyphs (a grouped
+                    // token contributes all its characters) and cipher_position is the token index.
+                    $window = implode('', $windowTokens);
                     foreach ($windowHits as $hit) {
                         $hit['cipher_position'] = $pos;
                         $hit['cipher_window'] = $window;

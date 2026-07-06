@@ -13,6 +13,11 @@ data:
   ELASTICSEARCH_HOST: "elasticsearch"
   ELASTICSEARCH_PORT: "9200"
   LOCK_DSN: "redis://redis:6379"
+  # Manuscript character grouping: "0" = legacy per-character pattern search (default),
+  # "1" = collapse configured multi-character glyph sequences before building the canonical pattern.
+  # To flip in prod, set the same key in the lingwhaat-secrets Secret (it overrides this ConfigMap
+  # via envFrom order) or change it here.
+  MANUSCRIPT_CHARACTER_GROUPING_ENABLED: "0"
   MESSENGER_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=async"
   MESSENGER_WIKIPEDIA_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=wikipedia_async"
   MESSENGER_WIKTIONARY_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=wiktionary_async"

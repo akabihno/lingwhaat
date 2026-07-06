@@ -27,23 +27,25 @@ class WikipediaPatternSearchService
     }
 
     /**
-     * Search for a cipher pattern in a Wikipedia patterns index.
-     * If $languageCode is provided, searches the per-language index; otherwise searches across all
-     * per-language indices via `wikipedia_global_patterns_*` (Elastica multi-index syntax).
+     * Search a Wikipedia patterns index by an explicit ordered list of symbols — either single
+     * characters (legacy per-letter search) or grouped multi-character tokens (manuscript character
+     * grouping). The canonical pattern and the length filter are both derived from the symbol
+     * sequence, so a window of N symbols matches indexed corpus windows of length N. Callers build
+     * the symbol list with {@see ManuscriptWindowTokenizer::tokenize()} (empty groupings ⇒ one
+     * symbol per character). If $languageCode is given the per-language index is searched, otherwise
+     * all `wikipedia_global_patterns_*` indices.
+     *
+     * @param array<int, string> $symbols
+     * @return array<int, array<string, mixed>>
      */
-    public function search(string $cipherText, int $limit = 50, int $windowSize = self::DEFAULT_WINDOW_SIZE, ?string $languageCode = null): array
+    public function searchByPattern(array $symbols, int $limit = 50, ?string $languageCode = null): array
     {
-        if ($windowSize <= 0) {
-            throw new InvalidArgumentException('windowSize must be greater than 0.');
+        $length = count($symbols);
+        if ($length <= 0) {
+            throw new InvalidArgumentException('Symbol list must not be empty.');
         }
 
-        $normalized = $this->normalize($cipherText);
-        $normalizedLength = mb_strlen($normalized);
-        if ($normalizedLength !== $windowSize) {
-            throw new InvalidArgumentException('Search text length must match the window size.');
-        }
-
-        $pattern = $this->buildPattern($normalized);
+        $pattern = $this->buildPattern($symbols);
         $patternStr = implode(',', $pattern);
         $patternHash = $this->patternHash($pattern);
 
@@ -59,7 +61,7 @@ class WikipediaPatternSearchService
         $bool->addFilter($patternHashQuery);
 
         $lengthQuery = new Term();
-        $lengthQuery->setTerm('length', $windowSize);
+        $lengthQuery->setTerm('length', $length);
         $bool->addFilter($lengthQuery);
 
         $patternQuery = new Term();
@@ -119,31 +121,26 @@ class WikipediaPatternSearchService
         return substr($indexName, strlen($prefix)) ?: null;
     }
 
-    private function normalize(string $s): string
-    {
-        $s = mb_strtolower($s);
-        return preg_replace('/[^\p{L}]+/u', '', $s) ?? '';
-    }
-
     /**
+     * Reduce an ordered symbol list to its canonical isomorph pattern (each symbol replaced by its
+     * first-appearance rank). Symbols are whole tokens, so a grouped ligature counts as one
+     * position exactly like a single character does.
+     *
+     * @param array<int, string> $symbols
      * @return array<int, int>
      */
-    private function buildPattern(string $s): array
+    private function buildPattern(array $symbols): array
     {
         $map = [];
         $nextId = 0;
         $pattern = [];
 
-        foreach (preg_split('//u', $s, -1, PREG_SPLIT_NO_EMPTY) as $ch) {
-            if ($ch === false) {
-                continue;
+        foreach ($symbols as $symbol) {
+            if (!isset($map[$symbol])) {
+                $map[$symbol] = $nextId++;
             }
 
-            if (!isset($map[$ch])) {
-                $map[$ch] = $nextId++;
-            }
-
-            $pattern[] = $map[$ch];
+            $pattern[] = $map[$symbol];
         }
 
         return $pattern;
