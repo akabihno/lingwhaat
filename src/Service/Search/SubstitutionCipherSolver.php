@@ -74,27 +74,38 @@ class SubstitutionCipherSolver
             $candidatesPerSlot[] = $patternCache[$pattern];
         }
 
+        // Most-constrained-first: solve the slots with the fewest candidates (typically the long,
+        // rare-pattern words) before the short ambiguous ones. Those pin most of the alphabet up
+        // front, so every later slot collapses to a handful of compatible candidates — the
+        // difference between a search that finishes instantly and one that explores millions of
+        // dead-end partial combinations. Results are re-expanded into original word order.
+        $order = array_keys($candidatesPerSlot);
+        usort($order, fn(int $a, int $b): int => count($candidatesPerSlot[$a]) <=> count($candidatesPerSlot[$b]));
+
         $results = [];
-        $this->collectDecodings($cipherWords, $candidatesPerSlot, 0, [], [], [], $results, $maxResults);
+        $this->collectDecodings($cipherWords, $candidatesPerSlot, $order, 0, [], [], [], $results, $maxResults);
 
         return $results;
     }
 
     /**
-     * Depth-first walk over the words, extending one global bijective letter map and emitting
-     * a decoding each time a consistent word is chosen for every slot.
+     * Depth-first walk over the words (in $order, most-constrained first), extending one global
+     * bijective letter map and emitting a decoding — re-keyed into original word order — each time
+     * a consistent word is chosen for every slot.
      *
      * @param list<string>          $cipherWords
      * @param list<list<string>>    $candidatesPerSlot
+     * @param list<int>             $order   slot indices to visit, most-constrained first
      * @param array<string, string> $forward cipher char => plaintext char
      * @param array<string, string> $reverse plaintext char => cipher char
-     * @param list<string>          $chosen  plaintext words picked so far
+     * @param array<int, string>    $chosen  plaintext word chosen, keyed by original slot index
      * @param list<list<string>>    $results
      */
     private function collectDecodings(
         array $cipherWords,
         array $candidatesPerSlot,
-        int $slot,
+        array $order,
+        int $depth,
         array $forward,
         array $reverse,
         array $chosen,
@@ -105,29 +116,32 @@ class SubstitutionCipherSolver
             return;
         }
 
-        if ($slot === count($cipherWords)) {
-            $results[] = $chosen;
+        if ($depth === count($order)) {
+            ksort($chosen);
+            $results[] = array_values($chosen);
             return;
         }
 
+        $slot = $order[$depth];
         foreach ($candidatesPerSlot[$slot] as $candidate) {
             $extended = $this->extendMapping($forward, $reverse, $cipherWords[$slot], $candidate);
             if ($extended === null) {
                 continue;
             }
 
-            $chosen[] = $candidate;
+            $chosen[$slot] = $candidate;
             $this->collectDecodings(
                 $cipherWords,
                 $candidatesPerSlot,
-                $slot + 1,
+                $order,
+                $depth + 1,
                 $extended['forward'],
                 $extended['reverse'],
                 $chosen,
                 $results,
                 $maxResults,
             );
-            array_pop($chosen);
+            unset($chosen[$slot]);
 
             if (count($results) >= $maxResults) {
                 return;
