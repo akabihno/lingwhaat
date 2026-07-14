@@ -6,6 +6,8 @@ use App\Entity\WikipediaPatternIndexOffsetEntity;
 use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaPatternIndexOffsetRepository;
 use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Metrics\MetricName;
+use App\Service\Metrics\PrometheusMetricsService;
 use App\Service\Search\ManuscriptCorpusSearchService;
 use App\Service\Search\WikipediaPatternIndexerService;
 use Symfony\Component\Lock\Exception\LockConflictedException;
@@ -36,6 +38,7 @@ class WikipediaPatternIndexLanguageMessageHandler
         private readonly LockFactory $lockFactory,
         private readonly MessageBusInterface $bus,
         private readonly ElasticsearchLogger $logger,
+        private readonly PrometheusMetricsService $metrics,
     ) {
     }
 
@@ -109,6 +112,18 @@ class WikipediaPatternIndexLanguageMessageHandler
             );
 
             $articlesProcessed = $result['processed'];
+
+            // Count the articles just written into Elasticsearch. incBy is a no-op at 0, so an
+            // end-of-corpus empty batch doesn't touch the counter.
+            if ($articlesProcessed > 0) {
+                $this->metrics
+                    ->counter(
+                        MetricName::WIKIPEDIA_ARTICLES_INDEXED_TOTAL,
+                        'Total Wikipedia articles indexed into Elasticsearch by the pattern-index pipeline.',
+                        ['language'],
+                    )
+                    ->incBy($articlesProcessed, [$languageCode]);
+            }
 
             // Search this batch for manuscript matches while it is resident, then evict it. The
             // index was just cleared, so the search sees only this batch's docs — every region is

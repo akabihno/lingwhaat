@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Repository\ManuscriptPatternMatchRepository;
 use App\Repository\ManuscriptPatternMatchResultRepository;
 use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Metrics\MetricName;
 use App\Service\Metrics\PrometheusMetricsService;
 use App\Service\Stats\CanonicalPatternStatsService;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,9 +23,6 @@ class CanonicalPatternStatsCommand extends Command
 {
     private const int DEFAULT_WINDOW_SIZE = 18;
     private const int DEFAULT_TOP_N = 50;
-
-    private const string GAUGE_OVERLAP_WIKI = 'canonical_pattern_overlap_wikipedia_count';
-    private const string GAUGE_OVERLAP_MANUSCRIPT = 'canonical_pattern_overlap_manuscript_count';
 
     public function __construct(
         private readonly CanonicalPatternStatsService $stats,
@@ -125,12 +123,12 @@ class CanonicalPatternStatsCommand extends Command
 
         $labelNames = ['language', 'source_id', 'window', 'pattern'];
         $wikiGauge = $this->metrics->gauge(
-            self::GAUGE_OVERLAP_WIKI,
+            MetricName::CANONICAL_PATTERN_OVERLAP_WIKIPEDIA_COUNT,
             'Wikipedia occurrence count for canonical patterns that are shared between language=$language top-N and the manuscript source_id top-N.',
             $labelNames,
         );
         $manuscriptGauge = $this->metrics->gauge(
-            self::GAUGE_OVERLAP_MANUSCRIPT,
+            MetricName::CANONICAL_PATTERN_OVERLAP_MANUSCRIPT_COUNT,
             'Manuscript occurrence count for canonical patterns that are shared between language=$language top-N and the manuscript source_id top-N.',
             $labelNames,
         );
