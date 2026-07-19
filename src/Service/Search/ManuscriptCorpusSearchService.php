@@ -23,6 +23,12 @@ class ManuscriptCorpusSearchService
     private const string LOG_SERVICE = '[ManuscriptCorpusSearchService]';
     private const int RESULTS_PER_WINDOW = 5;
     private const int MAX_TOTAL_HITS = 400;
+    // How many windows to bundle into a single _msearch round-trip. Kept conservative because the
+    // corpus ES is a single node: _msearch runs its sub-searches concurrently against the search
+    // threadpool, so an over-large batch is exactly the "No alive nodes" saturation risk. It also
+    // bounds the wasted work when the MAX_TOTAL_HITS early-exit fires mid-batch (a full chunk is
+    // always issued). Tune upward while watching ES rather than starting high.
+    private const int WINDOWS_PER_MSEARCH = 25;
 
     public function __construct(
         private readonly ManuscriptPatternMatchScheduleRepository $scheduleRepository,
@@ -78,29 +84,35 @@ class ManuscriptCorpusSearchService
                     continue;
                 }
 
-                $allHits = [];
-                $windowCount = $tokenCount - $windowSize + 1;
-
+                // Build every window once (keyed by token position), then search them against the
+                // corpus in batched _msearch round-trips instead of one ES request per window.
+                $windows = [];
                 for ($pos = 0; $pos <= $tokenCount - $windowSize; $pos++) {
-                    $windowTokens = array_slice($tokens, $pos, $windowSize);
+                    $windows[$pos] = array_slice($tokens, $pos, $windowSize);
+                }
 
-                    try {
-                        $windowHits = $this->searchService->searchByPattern($windowTokens, self::RESULTS_PER_WINDOW, $languageCode);
-                    } catch (\InvalidArgumentException) {
-                        continue;
-                    }
+                $allHits = [];
+                $windowCount = count($windows);
 
-                    // Recorded as-written: cipher_window is the concatenated glyphs (a grouped
-                    // token contributes all its characters) and cipher_position is the token index.
-                    $window = implode('', $windowTokens);
-                    foreach ($windowHits as $hit) {
-                        $hit['cipher_position'] = $pos;
-                        $hit['cipher_window'] = $window;
-                        $allHits[] = $hit;
-                    }
+                foreach (array_chunk($windows, self::WINDOWS_PER_MSEARCH, true) as $windowChunk) {
+                    $hitsByPos = $this->searchService->searchByPatterns($windowChunk, self::RESULTS_PER_WINDOW, $languageCode);
 
-                    if (count($allHits) >= self::MAX_TOTAL_HITS) {
-                        break;
+                    foreach ($hitsByPos as $pos => $windowHits) {
+                        // Recorded as-written: cipher_window is the concatenated glyphs (a grouped
+                        // token contributes all its characters) and cipher_position is the token index.
+                        $window = implode('', $windows[$pos]);
+                        foreach ($windowHits as $hit) {
+                            $hit['cipher_position'] = $pos;
+                            $hit['cipher_window'] = $window;
+                            $allHits[] = $hit;
+                        }
+
+                        // Cap total hits per match — this whole array becomes one JSON result row.
+                        // Checked per window (not per chunk) so the blob overshoots 400 by at most
+                        // one window's worth of hits, as it did before batching.
+                        if (count($allHits) >= self::MAX_TOTAL_HITS) {
+                            break 2;
+                        }
                     }
                 }
 
