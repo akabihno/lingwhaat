@@ -4,7 +4,6 @@ ssl-certs/*.pem
 
 #PHP
 vendor
-composer.lock
 
 #Python
 ml_service/__pycache__/
