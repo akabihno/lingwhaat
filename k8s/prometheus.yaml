@@ -34,6 +34,19 @@ data:
       - job_name: 'prometheus'
         static_configs:
           - targets: ['localhost:9090']
+
+      - job_name: 'node-exporter'
+        kubernetes_sd_configs:
+          - role: node
+        relabel_configs:
+          # role: node sets __address__ to <node-ip>:10250 (the kubelet). node_exporter listens on
+          # the same node IP at :9100 (hostNetwork), so repoint the port to scrape it.
+          - source_labels: [__address__]
+            regex: '(.*):10250'
+            replacement: '${1}:9100'
+            target_label: __address__
+          - source_labels: [__meta_kubernetes_node_name]
+            target_label: node
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -54,6 +67,8 @@ spec:
       labels:
         app: prometheus
     spec:
+      # Needs API read access to Nodes for the node-exporter service-discovery (see k8s/node-exporter.yaml).
+      serviceAccountName: prometheus
       nodeSelector:
         kubernetes.io/hostname: ubuntu-desktop
       securityContext:

@@ -1,0 +1,96 @@
+# Node-level host metrics (CPU, memory, disk/filesystem, network) for every node in the cluster.
+# node_exporter runs as a DaemonSet (one pod per node) and exposes :9100 on the node's own network.
+# Prometheus discovers the nodes via the Kubernetes API (role: node) and scrapes each node IP — that
+# discovery is why the prometheus Deployment needs the ServiceAccount + RBAC defined below.
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  namespace: lingwhaat
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: lingwhaat-prometheus
+rules:
+  # role: node service-discovery lists/watches Nodes to build the scrape target set.
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: lingwhaat-prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: lingwhaat-prometheus
+subjects:
+  - kind: ServiceAccount
+    name: prometheus
+    namespace: lingwhaat
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+  namespace: lingwhaat
+  labels:
+    app: node-exporter
+spec:
+  selector:
+    matchLabels:
+      app: node-exporter
+  template:
+    metadata:
+      labels:
+        app: node-exporter
+    spec:
+      hostNetwork: true        # exposes :9100 on the node IP, where Prometheus scrapes it
+      hostPID: true
+      tolerations:
+        - operator: Exists     # run on every node, including any tainted control-plane node
+      containers:
+        - name: node-exporter
+          image: quay.io/prometheus/node-exporter:v1.8.2
+          args:
+            # Read the host's /proc, /sys and rootfs (mounted below) instead of the container's own,
+            # so CPU/memory/disk metrics describe the node rather than this pod.
+            - --path.procfs=/host/proc
+            - --path.sysfs=/host/sys
+            - --path.rootfs=/host/root
+            # Drop pseudo/container filesystems so disk metrics reflect real volumes only.
+            - --collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($|/)
+          ports:
+            - containerPort: 9100
+              name: metrics
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "30Mi"
+            limits:
+              cpu: "200m"
+              memory: "80Mi"
+          volumeMounts:
+            - name: proc
+              mountPath: /host/proc
+              readOnly: true
+            - name: sys
+              mountPath: /host/sys
+              readOnly: true
+            - name: root
+              mountPath: /host/root
+              readOnly: true
+              mountPropagation: HostToContainer
+      volumes:
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: root
+          hostPath:
+            path: /

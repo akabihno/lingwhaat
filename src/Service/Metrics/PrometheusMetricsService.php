@@ -3,6 +3,7 @@
 namespace App\Service\Metrics;
 
 use Prometheus\CollectorRegistry;
+use Prometheus\Counter;
 use Prometheus\Gauge;
 use Prometheus\RenderTextFormat;
 use Prometheus\Storage\Redis;
@@ -38,6 +39,17 @@ class PrometheusMetricsService
     public function gauge(string $name, string $help, array $labelNames): Gauge
     {
         return $this->registry->getOrRegisterGauge(self::NAMESPACE, $name, $help, $labelNames);
+    }
+
+    /**
+     * A monotonic counter stored in Redis. Unlike the gauges written by the stats command, counters
+     * are not wiped between runs — they accumulate across worker restarts for the storage lifetime.
+     *
+     * @param array<string> $labelNames
+     */
+    public function counter(string $name, string $help, array $labelNames): Counter
+    {
+        return $this->registry->getOrRegisterCounter(self::NAMESPACE, $name, $help, $labelNames);
     }
 
     /**
