@@ -75,6 +75,41 @@ class WikipediaArticleRepository extends ServiceEntityRepository
         );
     }
 
+    /**
+     * Offset-paginated articles for a language, ascending by id.
+     *
+     * FORCE INDEX (language_code, id) for the same reason as
+     * findIdAndTextByLanguageCodeAfterId(): with ORDER BY id LIMIT the optimizer otherwise picks a
+     * PRIMARY-key scan and reads millions of LONGTEXT rows to find a sparse language's matches.
+     *
+     * @return array<int, array{id:int, wikipediaLink:string, text:string, tsCreated:string}>
+     */
+    public function findByLanguageCodePaginatedOrdered(
+        string $languageCode,
+        int $limit = 20,
+        int $offset = 0
+    ): array {
+        $rows = $this->getEntityManager()->getConnection()->executeQuery(
+            'SELECT /*+ MAX_EXECUTION_TIME(30000) */ id, wikipedia_link, text, ts_created
+             FROM wikipedia_article FORCE INDEX (i_lang_id)
+             WHERE language_code = :languageCode
+             ORDER BY id ASC
+             LIMIT :limit OFFSET :offset',
+            ['languageCode' => $languageCode, 'limit' => $limit, 'offset' => $offset],
+            ['languageCode' => \PDO::PARAM_STR, 'limit' => \PDO::PARAM_INT, 'offset' => \PDO::PARAM_INT],
+        )->fetchAllAssociative();
+
+        return array_map(
+            static fn (array $row): array => [
+                'id' => (int) $row['id'],
+                'wikipediaLink' => (string) $row['wikipedia_link'],
+                'text' => (string) $row['text'],
+                'tsCreated' => (string) $row['ts_created'],
+            ],
+            $rows
+        );
+    }
+
     public function countByLanguageCode(string $languageCode): int
     {
         return (int) $this->createQueryBuilder('w')
