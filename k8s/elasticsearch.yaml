@@ -55,17 +55,22 @@ spec:
               cpu: "2000m"
           readinessProbe:
             httpGet:
-              path: /_cluster/health?wait_for_status=yellow&timeout=1s
+              path: /_cluster/health?wait_for_status=yellow&timeout=5s
               port: 9200
             initialDelaySeconds: 30
             periodSeconds: 10
+            timeoutSeconds: 10
             failureThreshold: 10
+          # Liveness only asks "is the HTTP layer answering" — a cluster-level
+          # health check here restarts a busy-but-healthy node, which is how the
+          # translog gets truncated mid-write.
           livenessProbe:
             httpGet:
-              path: /_cluster/health
+              path: /_cluster/health?local=true
               port: 9200
             initialDelaySeconds: 60
             periodSeconds: 20
+            timeoutSeconds: 10
             failureThreshold: 5
           volumeMounts:
             - name: elasticsearch-data
