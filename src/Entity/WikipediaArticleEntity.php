@@ -8,6 +8,10 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: WikipediaArticleRepository::class)]
 #[ORM\Table(name: "wikipedia_article")]
 #[ORM\Index(name: 'i_lang_id', columns: ['language_code', 'id'])]
+// Prefix index: wikipedia_link is VARCHAR(2048), well past InnoDB's 3072-byte key limit at
+// utf8mb4. 191 chars covers all but pathologically long titles as a filter; MySQL rechecks the
+// full column afterwards, so lookups stay exact.
+#[ORM\Index(name: 'i_lang_link', columns: ['language_code', 'wikipedia_link'], options: ['lengths' => [null, 191]])]
 class WikipediaArticleEntity
 {
     #[ORM\Id]

@@ -80,8 +80,8 @@ class CanonicalPatternStatsCommand extends Command
         $started = microtime(true);
 
         // Each run fully replaces the overlap metrics — wipe stale series from previous runs first.
-        $io->writeln('Wiping previous canonical-pattern metrics from Redis...');
-        $this->metrics->wipe();
+        $io->writeln('Wiping previous canonical-pattern metrics from Redis (pipeline counters are preserved)...');
+        $this->metrics->wipeGauges();
 
         $io->section(sprintf(
             'Wikipedia (language=%s, window=%d, top=%d, max_counters=%d, article_limit=%s)',

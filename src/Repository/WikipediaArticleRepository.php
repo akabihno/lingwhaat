@@ -110,6 +110,24 @@ class WikipediaArticleRepository extends ServiceEntityRepository
         );
     }
 
+    /**
+     * Whether this language already holds an article with this link. Backed by i_lang_link
+     * (language_code, wikipedia_link(191)) — a prefix index, so MySQL narrows on the prefix and
+     * then verifies the full value, which keeps the result exact for links longer than 191 chars.
+     */
+    public function existsByLanguageCodeAndLink(string $languageCode, string $wikipediaLink): bool
+    {
+        $id = $this->getEntityManager()->getConnection()->fetchOne(
+            'SELECT id FROM wikipedia_article
+             WHERE language_code = :languageCode AND wikipedia_link = :wikipediaLink
+             LIMIT 1',
+            ['languageCode' => $languageCode, 'wikipediaLink' => $wikipediaLink],
+            ['languageCode' => \PDO::PARAM_STR, 'wikipediaLink' => \PDO::PARAM_STR],
+        );
+
+        return $id !== false;
+    }
+
     public function countByLanguageCode(string $languageCode): int
     {
         return (int) $this->createQueryBuilder('w')

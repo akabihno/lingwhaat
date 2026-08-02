@@ -28,4 +28,12 @@ final class MetricName
      * manuscript source top-N. Written by app:canonical-pattern-stats.
      */
     public const string CANONICAL_PATTERN_OVERLAP_MANUSCRIPT_COUNT = 'canonical_pattern_overlap_manuscript_count';
+
+    /**
+     * Counter: total number of Wikipedia articles fetched and stored in the DB by the
+     * parse-wikipedia-articles pipeline. Labelled by language, incremented only once a batch is
+     * committed. Pairs with WIKIPEDIA_ARTICLES_INDEXED_TOTAL — ingest rate vs. index rate.
+     * Monotonically increasing (per process/storage lifetime) — use rate() in Prometheus.
+     */
+    public const string WIKIPEDIA_ARTICLES_FETCHED_TOTAL = 'wikipedia_articles_fetched_total';
 }
