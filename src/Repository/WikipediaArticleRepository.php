@@ -111,6 +111,41 @@ class WikipediaArticleRepository extends ServiceEntityRepository
     }
 
     /**
+     * Keyset-paginated articles for a language, ascending by id, starting strictly after
+     * $afterId. Same shape as findByLanguageCodePaginatedOrdered() but a single index range
+     * seek on (language_code, id) instead of an OFFSET skip, so cost stays flat no matter how
+     * deep into the corpus $afterId is — see findIdAndTextByLanguageCodeAfterId() for why
+     * OFFSET degrades and FORCE INDEX is needed here too.
+     *
+     * @return array<int, array{id:int, wikipediaLink:string, text:string, tsCreated:string}>
+     */
+    public function findByLanguageCodeAfterIdOrdered(
+        string $languageCode,
+        int $limit = 20,
+        int $afterId = 0
+    ): array {
+        $rows = $this->getEntityManager()->getConnection()->executeQuery(
+            'SELECT /*+ MAX_EXECUTION_TIME(30000) */ id, wikipedia_link, text, ts_created
+             FROM wikipedia_article FORCE INDEX (i_lang_id)
+             WHERE language_code = :languageCode AND id > :afterId
+             ORDER BY id ASC
+             LIMIT :limit',
+            ['languageCode' => $languageCode, 'afterId' => $afterId, 'limit' => $limit],
+            ['languageCode' => \PDO::PARAM_STR, 'afterId' => \PDO::PARAM_INT, 'limit' => \PDO::PARAM_INT],
+        )->fetchAllAssociative();
+
+        return array_map(
+            static fn (array $row): array => [
+                'id' => (int) $row['id'],
+                'wikipediaLink' => (string) $row['wikipedia_link'],
+                'text' => (string) $row['text'],
+                'tsCreated' => (string) $row['ts_created'],
+            ],
+            $rows
+        );
+    }
+
+    /**
      * Whether this language already holds an article with this link. Backed by i_lang_link
      * (language_code, wikipedia_link(191)) — a prefix index, so MySQL narrows on the prefix and
      * then verifies the full value, which keeps the result exact for links longer than 191 chars.

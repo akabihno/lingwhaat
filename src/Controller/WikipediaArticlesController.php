@@ -44,10 +44,17 @@ class WikipediaArticlesController extends AbstractController
             ),
             new OA\Parameter(
                 name: 'offset',
-                description: 'Pagination offset',
+                description: 'Pagination offset. Ignored when afterId is given. OFFSET-based paging costs grow with depth (MySQL must skip that many rows), so prefer afterId for deep/iterative sweeps.',
                 in: 'query',
                 required: false,
                 schema: new OA\Schema(type: 'integer', default: 0, example: 0)
+            ),
+            new OA\Parameter(
+                name: 'afterId',
+                description: 'Keyset cursor: return articles with id > afterId, ascending. Takes precedence over offset when present. Cost stays flat regardless of how deep into the corpus afterId is (a single index range seek), unlike offset. Feed back the response\'s nextAfterId to page forward.',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(type: 'integer', example: 90000)
             ),
         ],
         responses: [
@@ -61,6 +68,8 @@ class WikipediaArticlesController extends AbstractController
                         new OA\Property(property: 'count', description: 'Articles in this page', type: 'integer', example: 20),
                         new OA\Property(property: 'limit', type: 'integer', example: 20),
                         new OA\Property(property: 'offset', type: 'integer', example: 0),
+                        new OA\Property(property: 'afterId', description: 'The afterId cursor used for this request, if any', type: 'integer', example: 90000, nullable: true),
+                        new OA\Property(property: 'nextAfterId', description: 'id of the last returned article; pass as afterId to fetch the next page. Null when no articles were returned', type: 'integer', example: 90142, nullable: true),
                         new OA\Property(
                             property: 'articles',
                             type: 'array',
@@ -86,6 +95,8 @@ class WikipediaArticlesController extends AbstractController
         $languageCode = (string) $request->query->get('languageCode', '');
         $limit = min(max($request->query->getInt('limit', self::DEFAULT_LIMIT), 1), self::MAX_LIMIT);
         $offset = max($request->query->getInt('offset', 0), 0);
+        $usingCursor = $request->query->has('afterId');
+        $afterId = max($request->query->getInt('afterId', 0), 0);
 
         if (!in_array($languageCode, LanguageMappings::getLanguageCodes(), true)) {
             return new JsonResponse(
@@ -95,7 +106,9 @@ class WikipediaArticlesController extends AbstractController
         }
 
         try {
-            $articles = $this->wikipediaArticleRepository->findByLanguageCodePaginatedOrdered($languageCode, $limit, $offset);
+            $articles = $usingCursor
+                ? $this->wikipediaArticleRepository->findByLanguageCodeAfterIdOrdered($languageCode, $limit, $afterId)
+                : $this->wikipediaArticleRepository->findByLanguageCodePaginatedOrdered($languageCode, $limit, $offset);
             $total = $this->wikipediaArticleRepository->countByLanguageCode($languageCode);
         } catch (\Throwable $e) {
             return new JsonResponse(
@@ -104,12 +117,16 @@ class WikipediaArticlesController extends AbstractController
             );
         }
 
+        $lastArticle = $articles === [] ? null : $articles[count($articles) - 1];
+
         return $this->json([
             'languageCode' => $languageCode,
             'total' => $total,
             'count' => count($articles),
             'limit' => $limit,
             'offset' => $offset,
+            'afterId' => $usingCursor ? $afterId : null,
+            'nextAfterId' => $lastArticle['id'] ?? null,
             'articles' => $articles,
         ]);
     }
