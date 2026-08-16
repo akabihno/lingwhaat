@@ -6,7 +6,7 @@ class ParseWikipediaArticlesMessage
 {
     public function __construct(
         private readonly string $languageCode,
-        private readonly int $limit = 10
+        private readonly int $limit = 20
     ) {
     }
 

@@ -4,14 +4,19 @@ namespace App\Service;
 
 use App\Entity\WikipediaArticleEntity;
 use App\Exception\WikipediaArticleLimitExceededException;
+use App\Repository\WikipediaArticleRepository;
+use App\Service\Metrics\MetricName;
+use App\Service\Metrics\PrometheusMetricsService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class WikipediaPatternParserService extends AbstractWikiParserService
 {
-    private const int ARTICLE_LIMIT = 200000;
+    private const int ARTICLE_LIMIT = 300000;
+    private const int FLUSH_BATCH_SIZE = 10;
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
+        private readonly PrometheusMetricsService $metrics,
     )
     {
     }
@@ -26,47 +31,92 @@ class WikipediaPatternParserService extends AbstractWikiParserService
             throw new \InvalidArgumentException('limit must be greater than 0.');
         }
 
+        /** @var WikipediaArticleRepository $repo */
         $repo = $this->entityManager->getRepository(WikipediaArticleEntity::class);
-        $existingCount = $repo->count(['languageCode' => $languageCode]);
+        $existingCount = $repo->countByLanguageCode($languageCode);
         if ($existingCount > self::ARTICLE_LIMIT) {
             throw new WikipediaArticleLimitExceededException($languageCode, $existingCount, self::ARTICLE_LIMIT);
         }
 
-        for ($i = 0; $i < $limit; $i++) {
-            $randomTitle = $this->wikiGetRandomTitle($languageCode, 'wikipedia');
+        $titles = $this->wikiGetRandomTitles($languageCode, 'wikipedia', $limit);
+        if (!$titles) {
+            echo "Could not fetch random titles.\n";
 
-            if ($randomTitle) {
-                echo "Fetching article: $randomTitle\n";
-                $rawHtml = $this->wikiGetRequest($randomTitle, $languageCode, 'wikipedia');
-                if (!$rawHtml) {
-                    continue;
-                }
+            return [];
+        }
 
-                $cleanText = $this->sanitizeWikipediaHtml($rawHtml);
+        $pending = 0;
 
-                if (empty($cleanText)) {
-                    continue;
-                }
+        foreach ($titles as $title) {
+            $link = $this->buildArticleLink($languageCode, $title);
 
-                $entity = new WikipediaArticleEntity();
-                $entity->setLanguageCode($languageCode);
-                $entity->setWikipediaLink("https://$languageCode.wikipedia.org/wiki/" . str_replace(' ', '_', $randomTitle));
-                $entity->setText($cleanText);
-                $entity->setTsCreated(date('Y-m-d H:i:s'));
+            // Titles come from list=random, so a run keeps drawing articles we already hold — and
+            // for every language whose Wikipedia is smaller than ARTICLE_LIMIT the ceiling is never
+            // reached, so that would go on forever. There is no unique constraint on
+            // (language_code, wikipedia_link) to lean on, so check before spending a fetch on it.
+            if ($repo->existsByLanguageCodeAndLink($languageCode, $link)) {
+                echo "Skipping already stored article: $title\n";
+                continue;
+            }
 
-                $this->entityManager->persist($entity);
+            echo "Fetching article: $title\n";
+            $rawHtml = $this->wikiGetRequest($title, $languageCode, 'wikipedia');
+            if (!$rawHtml) {
+                continue;
+            }
 
-                if (($i + 1) % 10 === 0) {
-                    $this->entityManager->flush();
-                    $this->entityManager->clear();
-                }
-            } else {
-                echo "Could not fetch a random title.\n";
+            $cleanText = $this->sanitizeWikipediaHtml($rawHtml);
+
+            if (empty($cleanText)) {
+                continue;
+            }
+
+            $entity = new WikipediaArticleEntity();
+            $entity->setLanguageCode($languageCode);
+            $entity->setWikipediaLink($link);
+            $entity->setText($cleanText);
+            $entity->setTsCreated(date('Y-m-d H:i:s'));
+
+            $this->entityManager->persist($entity);
+            $pending++;
+
+            if ($pending === self::FLUSH_BATCH_SIZE) {
+                $this->flushBatch($languageCode, $pending);
+                $pending = 0;
             }
         }
-        $this->entityManager->flush();
+
+        $this->flushBatch($languageCode, $pending);
 
         return [];
+    }
+
+    /**
+     * Commit the pending inserts, and only once they are committed count them. Counting at
+     * persist() time would credit articles that a failing flush never wrote — and since the handler
+     * rethrows and Messenger retries the message, those would then be counted a second time.
+     */
+    private function flushBatch(string $languageCode, int $pending): void
+    {
+        if ($pending === 0) {
+            return;
+        }
+
+        $this->entityManager->flush();
+        $this->entityManager->clear();
+
+        $this->metrics
+            ->counter(
+                MetricName::WIKIPEDIA_ARTICLES_FETCHED_TOTAL,
+                'Total Wikipedia articles stored in DB by parse-wikipedia-articles pipeline.',
+                ['language'],
+            )
+            ->incBy($pending, [$languageCode]);
+    }
+
+    private function buildArticleLink(string $languageCode, string $title): string
+    {
+        return "https://$languageCode.wikipedia.org/wiki/" . str_replace(' ', '_', $title);
     }
 
     private function sanitizeWikipediaHtml(string $html): string

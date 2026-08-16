@@ -53,13 +53,44 @@ class PrometheusMetricsService
     }
 
     /**
-     * Clears every metric stored under our Redis prefix. Use this when the metric set is fully
-     * replaced on each run (the canonical-pattern overlap, for example), so stale label
-     * combinations from previous runs don't keep getting scraped.
+     * Clears the metrics that are fully replaced on each run (the canonical-pattern overlap gauges,
+     * for example) so stale label combinations from previous runs don't keep getting scraped —
+     * while preserving the monotonic counters the pipelines write.
+     *
+     * The storage adapter can only wipe everything at once, so counters are snapshotted and
+     * re-applied afterwards. An increment landing inside that window is lost; counters are only
+     * ever read as rates, so a single missed increment is not worth locking for.
      */
-    public function wipe(): void
+    public function wipeGauges(): void
     {
+        $counters = [];
+        foreach ($this->registry->getMetricFamilySamples() as $family) {
+            if ($family->getType() !== Counter::TYPE) {
+                continue;
+            }
+
+            foreach ($family->getSamples() as $sample) {
+                $counters[] = [
+                    'name' => $family->getName(),
+                    'help' => $family->getHelp(),
+                    'labelNames' => $family->getLabelNames(),
+                    'labelValues' => $sample->getLabelValues(),
+                    // getValue() hands back the Redis string; cast so incBy() takes the float path
+                    // rather than passing a string to Redis' integer HINCRBY.
+                    'value' => (float) $sample->getValue(),
+                ];
+            }
+        }
+
         $this->registry->wipeStorage();
+
+        foreach ($counters as $counter) {
+            // Empty namespace on purpose: getMetricFamilySamples() already reports the namespaced
+            // name, and passing NAMESPACE again would prepend it twice.
+            $this->registry
+                ->getOrRegisterCounter('', $counter['name'], $counter['help'], $counter['labelNames'])
+                ->incBy($counter['value'], $counter['labelValues']);
+        }
     }
 
     public function render(): string
