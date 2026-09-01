@@ -23,7 +23,7 @@ class LanguageVerificationController extends AbstractController
     #[Route('/api/language/verify', name: 'language_verify', methods: ['POST'])]
     #[OA\Post(
         path: '/api/language/verify',
-        description: 'Verifies what percentage of the input text matches a specific language by finding words from the language dictionary. Works with obfuscated text (no spaces required). Uses top 2000 most popular words from Elasticsearch index.',
+        description: 'Verifies what percentage of the input text matches a specific language by finding words from the language dictionary. Works with obfuscated text (no spaces required). Uses the top 10000 most popular words from the Elasticsearch index.',
         summary: 'Verify text language match percentage',
         requestBody: new OA\RequestBody(
             required: true,
@@ -44,7 +44,7 @@ class LanguageVerificationController extends AbstractController
                     ),
                     new OA\Property(
                         property: 'fuzziness',
-                        description: 'Fuzzy matching level - maximum edit distance (0=exact only, 1-2=allow typos, default: 1)',
+                        description: 'Fuzzy matching level - maximum edit distance (0=exact only, 1-2=allow typos, default: 1). Values outside 0-2 are clamped.',
                         type: 'integer',
                         example: 1
                     )
@@ -104,11 +104,11 @@ class LanguageVerificationController extends AbstractController
                                     property: 'topWordsChecked',
                                     description: 'Number of top words from dictionary that were checked',
                                     type: 'integer',
-                                    example: 2000
+                                    example: 10000
                                 ),
                                 new OA\Property(
                                     property: 'fuzziness',
-                                    description: 'Fuzziness level used for matching',
+                                    description: 'Fuzziness level actually used for matching, after clamping',
                                     type: 'integer',
                                     example: 1
                                 )
@@ -141,7 +141,9 @@ class LanguageVerificationController extends AbstractController
 
         $text = $data['text'];
         $languageCode = $data['languageCode'];
-        $fuzziness = $data['fuzziness'] ?? 1;
+        // Cast rather than pass straight through: a non-int here reached an int parameter and
+        // raised a TypeError, which is an Error and so escaped the catch below as a bare 500.
+        $fuzziness = (int) ($data['fuzziness'] ?? 1);
 
         try {
             $result = $this->languageVerificationService->verifyLanguage(
