@@ -2,6 +2,7 @@
 
 namespace App\Service\LanguageDetection\LanguageValidation;
 
+use App\Service\Cache\RedisCacheService;
 use App\Service\Logging\ElasticsearchLogger;
 use Elastica\Client;
 use Elastica\Query;
@@ -14,11 +15,20 @@ class LanguageVerificationService
     private const int MIN_WORD_LENGTH = 3;
     private const int MIN_FUZZY_WORD_LENGTH = 5;
 
+    /**
+     * The top-word list per language only changes when the words index is rebuilt, so it is
+     * cached rather than re-fetched on every request. Elasticsearch is a single node here and
+     * pulling 10k documents per verification is the dominant load this endpoint puts on it.
+     */
+    private const int TOP_WORDS_CACHE_TTL = 3600;
+    private const string TOP_WORDS_CACHE_PREFIX = 'language_verification:top_words:';
+
     private Client $esClient;
     private string $indexName = 'words_index';
 
     public function __construct(
         private readonly ElasticsearchLogger $logger,
+        private readonly RedisCacheService $cache,
         Client $esClient,
     ) {
         $this->esClient = $esClient;
@@ -129,7 +139,7 @@ class LanguageVerificationService
             ]
         ];
 
-        $this->logger->info("[LanguageVerificationService] Language verification completed", $result);
+        $this->logger->info("[LanguageVerificationService] Language verification completed", $result['details']);
 
         return $result;
     }
@@ -143,6 +153,13 @@ class LanguageVerificationService
      */
     private function fetchTopWords(string $languageCode, int $limit = self::TOP_WORDS_LIMIT): array
     {
+        $cacheKey = self::TOP_WORDS_CACHE_PREFIX . $languageCode . ':' . $limit;
+
+        $cached = $this->cache->get($cacheKey);
+        if (is_array($cached)) {
+            return $cached;
+        }
+
         try {
             $boolQuery = new BoolQuery();
 
@@ -153,10 +170,21 @@ class LanguageVerificationService
             $query = new Query($boolQuery);
             $query->setSize($limit);
             $query->setSort(['score' => ['order' => 'desc']]);
+            // Only the term itself is used; without this Elasticsearch ships the whole document.
+            $query->setSource(['word']);
 
             $results = $this->esClient->getIndex($this->indexName)->search($query);
 
-            return array_map(fn($r) => $r->getSource()['word'] ?? '', $results->getResults());
+            $words = array_values(array_filter(
+                array_map(fn($r) => $r->getSource()['word'] ?? '', $results->getResults()),
+                fn(string $word) => $word !== ''
+            ));
+
+            if (!empty($words)) {
+                $this->cache->set($cacheKey, $words, self::TOP_WORDS_CACHE_TTL);
+            }
+
+            return $words;
         } catch (\Exception $e) {
             $this->logger->error("[LanguageVerificationService] Error fetching top words: {$e->getMessage()}");
             return [];
