@@ -53,11 +53,21 @@ spec:
             limits:
               memory: "4Gi"
               cpu: "2000m"
+          # Recovering ~250 shards on this node takes minutes. The startup probe
+          # holds liveness/readiness off until the HTTP layer is up, so a slow
+          # cold start can never be mistaken for a hung node.
+          startupProbe:
+            httpGet:
+              path: /_cluster/health?local=true
+              port: 9200
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 60
           readinessProbe:
             httpGet:
               path: /_cluster/health?wait_for_status=yellow&timeout=5s
               port: 9200
-            initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 10
             failureThreshold: 10
@@ -68,7 +78,6 @@ spec:
             httpGet:
               path: /_cluster/health?local=true
               port: 9200
-            initialDelaySeconds: 60
             periodSeconds: 20
             timeoutSeconds: 10
             failureThreshold: 5

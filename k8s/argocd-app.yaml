@@ -16,6 +16,11 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    # ignoreDifferences below only affects diff computation; without this option
+    # ArgoCD still applies storageClassName on the bound PVC, which the API
+    # server rejects as immutable, failing the sync for every other manifest too.
+    syncOptions:
+      - RespectIgnoreDifferences=true
   ignoreDifferences:
     - group: ""
       kind: PersistentVolumeClaim
