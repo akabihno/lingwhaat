@@ -40,6 +40,8 @@ class WordSearchShadow
     public const string SHAPE_WILDCARD_WORD = 'wildcard_word';
     public const string SHAPE_WILDCARD_IPA = 'wildcard_ipa';
     public const string SHAPE_POSITIONAL = 'positional';
+    // Whole /api/language detections: the language ES's lookups vote for vs MySQL's.
+    public const string SHAPE_DETECTED_LANGUAGE = 'detected_language';
 
     public function __construct(
         private readonly ElasticsearchLogger $logger,
@@ -55,9 +57,11 @@ class WordSearchShadow
      * @param callable(T, T): string $compare returns the outcome
      * @param array<string, mixed> $query logged with disagreements
      * @param string|null $backend overrides WORD_LOOKUP_BACKEND
+     * @param (callable(T|null): void)|null $onMysqlResult shadow mode only: receives the MySQL
+     *        result (null if it failed), for callers that compare at a higher level
      * @return T
      */
-    public function serve(string $shape, array $query, callable $elasticsearch, callable $mysql, callable $compare, ?string $backend = null): mixed
+    public function serve(string $shape, array $query, callable $elasticsearch, callable $mysql, callable $compare, ?string $backend = null, ?callable $onMysqlResult = null): mixed
     {
         $backend ??= $this->wordLookupBackend;
         if ($backend === WordSearchBackend::MYSQL) {
@@ -76,8 +80,15 @@ class WordSearchShadow
         } catch (\Throwable $e) {
             $this->record($shape, 'error');
             $this->logger->warning(sprintf('MySQL %s lookup failed: %s', $shape, $e->getMessage()), ['service' => self::LOG_SERVICE, 'query' => $query]);
+            if ($onMysqlResult !== null) {
+                ($onMysqlResult)(null);
+            }
 
             return $esResult;
+        }
+
+        if ($onMysqlResult !== null) {
+            ($onMysqlResult)($mysqlResult);
         }
 
         $this->record($shape, $outcome);
@@ -206,6 +217,20 @@ class WordSearchShadow
     public static function compareExists(bool $es, bool $mysql): string
     {
         return $es === $mysql ? 'same' : 'different';
+    }
+
+    /**
+     * Record an outcome that a caller determined itself (e.g. comparing whole detections); logged
+     * unless "same".
+     *
+     * @param array<string, mixed> $context
+     */
+    public function recordComparison(string $shape, string $outcome, array $context): void
+    {
+        $this->record($shape, $outcome);
+        if ($outcome !== 'same') {
+            $this->logger->info(sprintf('Shadow %s: %s', $shape, $outcome), ['service' => self::LOG_SERVICE] + $context);
+        }
     }
 
     private function record(string $shape, string $outcome): void

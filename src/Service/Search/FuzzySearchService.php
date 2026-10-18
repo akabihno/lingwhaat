@@ -41,7 +41,7 @@ class FuzzySearchService
      * Entries containing $input as a token. Elasticsearch returns up to $limit (default 5) entries;
      * MySQL returns the best entry of every matching language, capped only by an explicit $limit.
      */
-    public function findExactMatches(string $input, ?int $limit = null): array
+    public function findExactMatches(string $input, ?int $limit = null, ?callable $onMysqlResult = null): array
     {
         return $this->shadow->serve(
             WordSearchShadow::SHAPE_EXACT_WORD,
@@ -49,6 +49,7 @@ class FuzzySearchService
             fn () => $this->esFindExactMatches($input, $limit ?? self::ES_EXACT_LIMIT),
             fn () => $this->mysqlLookup->exactMatches(WordSearchTokenEntity::FIELD_WORD, $input, $limit),
             fn (array $es, array $mysql) => WordSearchShadow::compareExact($es, $mysql, $limit ?? self::ES_EXACT_LIMIT),
+            onMysqlResult: $onMysqlResult,
         );
     }
 
@@ -65,7 +66,7 @@ class FuzzySearchService
         return array_map(fn($r) => $r->getSource(), $results->getResults());
     }
 
-    public function findClosestMatches(string $input, int $limit = 5, string $languageCode = ''): array
+    public function findClosestMatches(string $input, int $limit = 5, string $languageCode = '', ?callable $onMysqlResult = null): array
     {
         return $this->shadow->serve(
             WordSearchShadow::SHAPE_FUZZY_WORD,
@@ -73,6 +74,7 @@ class FuzzySearchService
             fn () => $this->esFindClosestMatches($input, $limit, $languageCode),
             fn () => $this->mysqlLookup->closestMatches(WordSearchTokenEntity::FIELD_WORD, $input, $limit, $languageCode !== '' ? $languageCode : null),
             WordSearchShadow::compareFuzzy(...),
+            onMysqlResult: $onMysqlResult,
         );
     }
 
