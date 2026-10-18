@@ -328,7 +328,11 @@ class LanguageMappings
 
     public static function detectLanguageCodeFromEntity(object $entity): ?string
     {
+        // Exact match on the short class name. A substring match let 'DutchLanguageEntity' claim
+        // MiddleDutch/OldDutch and 'CroatianLanguageEntity' claim SerboCroatian. Short names also
+        // cover Doctrine proxies (Proxies\__CG__\App\Entity\XLanguageEntity).
         $class = get_class($entity);
+        $shortName = substr($class, (int) strrpos('\\' . $class, '\\'));
         $map = [
             'AfarLanguageEntity' => self::AFAR_LANGUAGE_CODE,
             'AfrikaansLanguageEntity' => self::AFRIKAANS_LANGUAGE_CODE,
@@ -408,13 +412,7 @@ class LanguageMappings
             'WelshLanguageEntity' => self::WELSH_LANGUAGE_CODE,
         ];
 
-        foreach ($map as $entityFragment => $code) {
-            if (str_contains($class, $entityFragment)) {
-                return $code;
-            }
-        }
-
-        return null;
+        return $map[$shortName] ?? null;
     }
 
     public static function getLanguageCodeByName(string $languageName, bool $flip = false): ?string

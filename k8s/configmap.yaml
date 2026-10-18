@@ -18,6 +18,8 @@ data:
   # To flip in prod, set the same key in the lingwhaat-secrets Secret (it overrides this ConfigMap
   # via envFrom order) or change it here.
   MANUSCRIPT_CHARACTER_GROUPING_ENABLED: "0"
+  # elasticsearch | mysql — which store serves the word-search queries already ported to MySQL
+  WORD_SEARCH_BACKEND: "mysql"
   MESSENGER_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=async"
   MESSENGER_WIKIPEDIA_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=wikipedia_async"
   MESSENGER_WIKTIONARY_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=wiktionary_async"

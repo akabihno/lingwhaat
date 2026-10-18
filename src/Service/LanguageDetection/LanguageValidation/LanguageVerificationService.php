@@ -3,6 +3,8 @@
 namespace App\Service\LanguageDetection\LanguageValidation;
 
 use App\Service\Cache\RedisCacheService;
+use App\Constant\WordSearchBackend;
+use App\Repository\WordSearchRepository;
 use App\Service\Logging\ElasticsearchLogger;
 use Elastica\Client;
 use Elastica\Query;
@@ -46,6 +48,8 @@ class LanguageVerificationService
         private readonly ElasticsearchLogger $logger,
         private readonly RedisCacheService $cache,
         Client $esClient,
+        private readonly WordSearchRepository $wordSearchRepository,
+        private readonly string $wordSearchBackend = WordSearchBackend::ELASTICSEARCH,
     ) {
         $this->esClient = $esClient;
     }
@@ -473,7 +477,8 @@ class LanguageVerificationService
      */
     private function fetchTopWords(string $languageCode, int $limit = self::TOP_WORDS_LIMIT): array
     {
-        $cacheKey = self::TOP_WORDS_CACHE_PREFIX . $languageCode . ':' . $limit;
+        // The backend is part of the key so switching it never serves the other store's list.
+        $cacheKey = self::TOP_WORDS_CACHE_PREFIX . $this->wordSearchBackend . ':' . $languageCode . ':' . $limit;
 
         /** @var list<array{0: string, 1: string}>|null $cached */
         $cached = $this->cache->get($cacheKey);
@@ -482,25 +487,9 @@ class LanguageVerificationService
         }
 
         try {
-            $boolQuery = new BoolQuery();
-
-            $languageTerm = new Term();
-            $languageTerm->setTerm('languageCode', $languageCode);
-            $boolQuery->addFilter($languageTerm);
-
-            $query = new Query($boolQuery);
-            $query->setSize($limit);
-            $query->setSort(['score' => ['order' => 'desc']]);
-            // Only the term itself is used; without this Elasticsearch ships the whole document.
-            $query->setSource(['word']);
-
-            $results = $this->esClient->getIndex($this->indexName)->search($query);
-
             $words = [];
 
-            foreach ($results->getResults() as $result) {
-                $word = $result->getSource()['word'] ?? '';
-
+            foreach ($this->topWordsByScore($languageCode, $limit) as $word) {
                 if ($word === '') {
                     continue;
                 }
@@ -519,6 +508,35 @@ class LanguageVerificationService
             $this->logger->error("[LanguageVerificationService] Error fetching top words: {$e->getMessage()}");
             return [];
         }
+    }
+
+    /**
+     * The $limit highest-scored dictionary words of a language, highest first.
+     *
+     * @return list<string>
+     */
+    private function topWordsByScore(string $languageCode, int $limit): array
+    {
+        if ($this->wordSearchBackend === WordSearchBackend::MYSQL) {
+            return $this->wordSearchRepository->findTopWords($languageCode, $limit);
+        }
+
+        $boolQuery = new BoolQuery();
+
+        $languageTerm = new Term();
+        $languageTerm->setTerm('languageCode', $languageCode);
+        $boolQuery->addFilter($languageTerm);
+
+        $query = new Query($boolQuery);
+        $query->setSize($limit);
+        $query->setSort(['score' => ['order' => 'desc']]);
+        // Only the term itself is used; without this Elasticsearch ships the whole document.
+        $query->setSource(['word']);
+
+        return array_map(
+            static fn ($result): string => (string) ($result->getSource()['word'] ?? ''),
+            $this->esClient->getIndex($this->indexName)->search($query)->getResults(),
+        );
     }
 
     /**

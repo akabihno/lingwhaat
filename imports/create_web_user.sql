@@ -12,6 +12,10 @@ GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_pattern_match_schedule TO '${
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.word_category TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_alphabet_decode_result TO '${MYSQL_WEB_USER}'@'%';
 GRANT SELECT,INSERT,UPDATE ON lingwhaat.manuscript_character_group TO '${MYSQL_WEB_USER}'@'%';
+-- MySQL word search (replaces the words_index ES index); app:word-search-rebuild deletes and
+-- re-inserts a language at a time.
+GRANT SELECT,INSERT,UPDATE,DELETE ON lingwhaat.word_search TO '${MYSQL_WEB_USER}'@'%';
+GRANT SELECT,INSERT,UPDATE,DELETE ON lingwhaat.word_search_token TO '${MYSQL_WEB_USER}'@'%';
 
 -- Symfony's doctrine-bridge schema listeners probe DB identity via a throwaway table
 -- (schema_subscriber_check_). Pre-create it with a permanent sentinel row so the probe
