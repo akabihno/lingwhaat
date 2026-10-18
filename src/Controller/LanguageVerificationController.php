@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Service\LanguageDetection\LanguageValidation\LanguageVerificationService;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class LanguageVerificationController extends AbstractController
 {
     public function __construct(
-        protected ElasticsearchLogger $logger,
+        protected PipelineLogger $logger,
         protected LanguageVerificationService $languageVerificationService
     )
     {

@@ -3,13 +3,8 @@
 namespace App\Service\LanguageDetection\LanguageValidation;
 
 use App\Service\Cache\RedisCacheService;
-use App\Constant\WordSearchBackend;
 use App\Repository\WordSearchRepository;
-use App\Service\Logging\ElasticsearchLogger;
-use Elastica\Client;
-use Elastica\Query;
-use Elastica\Query\BoolQuery;
-use Elastica\Query\Term;
+use App\Service\Logging\PipelineLogger;
 
 class LanguageVerificationService
 {
@@ -29,7 +24,8 @@ class LanguageVerificationService
      * pulling 10k documents per verification is the dominant load this endpoint puts on it.
      */
     private const int TOP_WORDS_CACHE_TTL = 3600;
-    private const string TOP_WORDS_CACHE_PREFIX = 'language_verification:top_words:v2:';
+    // v3: lists come from word_search (live scores); never serve the older Elasticsearch-built ones.
+    private const string TOP_WORDS_CACHE_PREFIX = 'language_verification:top_words:v3:';
 
     /**
      * Matching runs on a single-byte transcription of the text so that the C implementations of
@@ -41,17 +37,11 @@ class LanguageVerificationService
     private const int ALPHABET_LIMIT = 254;
     private const string ABSENT_CHARACTER = "\xFF";
 
-    private Client $esClient;
-    private string $indexName = 'words_index';
-
     public function __construct(
-        private readonly ElasticsearchLogger $logger,
+        private readonly PipelineLogger $logger,
         private readonly RedisCacheService $cache,
-        Client $esClient,
         private readonly WordSearchRepository $wordSearchRepository,
-        private readonly string $wordSearchBackend = WordSearchBackend::ELASTICSEARCH,
     ) {
-        $this->esClient = $esClient;
     }
 
     /**
@@ -469,7 +459,7 @@ class LanguageVerificationService
     }
 
     /**
-     * Fetch top N words with highest scores from Elasticsearch
+     * Fetch the top N words with the highest scores (word_search)
      *
      * @param string $languageCode Target language code
      * @param int $limit Number of top words to fetch
@@ -477,8 +467,7 @@ class LanguageVerificationService
      */
     private function fetchTopWords(string $languageCode, int $limit = self::TOP_WORDS_LIMIT): array
     {
-        // The backend is part of the key so switching it never serves the other store's list.
-        $cacheKey = self::TOP_WORDS_CACHE_PREFIX . $this->wordSearchBackend . ':' . $languageCode . ':' . $limit;
+        $cacheKey = self::TOP_WORDS_CACHE_PREFIX . $languageCode . ':' . $limit;
 
         /** @var list<array{0: string, 1: string}>|null $cached */
         $cached = $this->cache->get($cacheKey);
@@ -489,7 +478,7 @@ class LanguageVerificationService
         try {
             $words = [];
 
-            foreach ($this->topWordsByScore($languageCode, $limit) as $word) {
+            foreach ($this->wordSearchRepository->findTopWords($languageCode, $limit) as $word) {
                 if ($word === '') {
                     continue;
                 }
@@ -508,35 +497,6 @@ class LanguageVerificationService
             $this->logger->error("[LanguageVerificationService] Error fetching top words: {$e->getMessage()}");
             return [];
         }
-    }
-
-    /**
-     * The $limit highest-scored dictionary words of a language, highest first.
-     *
-     * @return list<string>
-     */
-    private function topWordsByScore(string $languageCode, int $limit): array
-    {
-        if ($this->wordSearchBackend === WordSearchBackend::MYSQL) {
-            return $this->wordSearchRepository->findTopWords($languageCode, $limit);
-        }
-
-        $boolQuery = new BoolQuery();
-
-        $languageTerm = new Term();
-        $languageTerm->setTerm('languageCode', $languageCode);
-        $boolQuery->addFilter($languageTerm);
-
-        $query = new Query($boolQuery);
-        $query->setSize($limit);
-        $query->setSort(['score' => ['order' => 'desc']]);
-        // Only the term itself is used; without this Elasticsearch ships the whole document.
-        $query->setSource(['word']);
-
-        return array_map(
-            static fn ($result): string => (string) ($result->getSource()['word'] ?? ''),
-            $this->esClient->getIndex($this->indexName)->search($query)->getResults(),
-        );
     }
 
     /**

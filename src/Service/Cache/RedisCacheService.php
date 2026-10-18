@@ -2,7 +2,7 @@
 
 namespace App\Service\Cache;
 
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use Exception;
 use Redis;
 
@@ -15,7 +15,7 @@ class RedisCacheService
     private const int DEFAULT_REDIS_PORT = 6379;
 
     public function __construct(
-        private readonly ElasticsearchLogger $logger,
+        private readonly PipelineLogger $logger,
         string                               $redisDsn
     ) {
         try {

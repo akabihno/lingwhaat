@@ -74,7 +74,6 @@
     "ext-mbstring": "*",
     "nelmio/api-doc-bundle": "^5.10.3",
     "promphp/prometheus_client_php": "^2.15.1",
-    "ruflin/elastica": "^8.2.0",
     "ext-curl": "*",
     "ext-dom": "*",
     "ext-libxml": "*",

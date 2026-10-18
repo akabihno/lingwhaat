@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Service\LanguageDetection\LanguageDetectionService;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +15,7 @@ use Symfony\Component\RateLimiter\RateLimiterFactory;
 class LanguageDetectionController extends AbstractController
 {
     public function __construct(
-        protected ElasticsearchLogger $logger,
+        protected PipelineLogger $logger,
         protected LanguageDetectionService $languageDetectionService
     )
     {

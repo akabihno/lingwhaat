@@ -3,7 +3,7 @@
 namespace App\MessageHandler;
 
 use App\Message\ParseWiktionaryArticlesMessage;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use App\Service\WiktionaryArticlesIpaParserService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -12,7 +12,7 @@ class ParseWiktionaryArticlesMessageHandler
 {
     public function __construct(
         private readonly WiktionaryArticlesIpaParserService $parserService,
-        private readonly ElasticsearchLogger $logger
+        private readonly PipelineLogger $logger
     ) {
     }
 

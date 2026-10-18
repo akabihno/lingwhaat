@@ -2,8 +2,6 @@
 
 namespace App\Service\Search;
 
-use Elastic\Elasticsearch\Exception\ClientResponseException;
-use Elastic\Elasticsearch\Exception\ServerResponseException;
 
 /**
  * Treats an input text as a monoalphabetic substitution cipher and recovers the plaintext
@@ -33,8 +31,6 @@ class SubstitutionCipherSolver
      * @return list<list<string>> each inner list is one plaintext decoding, one word per
      *                            input word in original order, best (highest-scoring) first
      *
-     * @throws ClientResponseException
-     * @throws ServerResponseException
      */
     public function solve(
         string $languageCode,

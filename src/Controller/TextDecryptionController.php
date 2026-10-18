@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use App\Service\Search\TextDecryptionService;
 use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,7 +16,7 @@ use Symfony\Component\RateLimiter\RateLimiterFactory;
 class TextDecryptionController extends AbstractController
 {
     public function __construct(
-        protected ElasticsearchLogger $logger,
+        protected PipelineLogger $logger,
         protected TextDecryptionService $decryptionService
     ) {
     }
@@ -81,7 +81,7 @@ class TextDecryptionController extends AbstractController
                         ),
                         new OA\Property(
                             property: 'match_count',
-                            description: 'Number of words successfully matched in Elasticsearch',
+                            description: 'Number of words successfully matched in the dictionary',
                             type: 'integer',
                             example: 12
                         ),

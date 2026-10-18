@@ -5,7 +5,7 @@ namespace App\MessageHandler;
 use App\Message\ParseWiktionaryArticlesMessage;
 use App\Message\ParseWiktionaryLanguagesMessage;
 use App\Repository\LanguageParseScheduleRepository;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -15,7 +15,7 @@ class ParseWiktionaryLanguagesMessageHandler
     public function __construct(
         private readonly LanguageParseScheduleRepository $repository,
         private readonly MessageBusInterface $bus,
-        private readonly ElasticsearchLogger $logger,
+        private readonly PipelineLogger $logger,
     ) {
     }
 

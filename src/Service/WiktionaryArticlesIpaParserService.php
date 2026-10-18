@@ -3,7 +3,7 @@
 namespace App\Service;
 
 use App\Query\AbstractQuery;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use DOMDocument;
 use DOMXPath;
 use Dotenv\Dotenv;
@@ -14,7 +14,7 @@ class WiktionaryArticlesIpaParserService extends AbstractWiktionaryParserService
 
     public function __construct(
         protected AbstractQuery $abstractQuery,
-        protected ElasticsearchLogger $logger,
+        protected PipelineLogger $logger,
     )
     {
     }

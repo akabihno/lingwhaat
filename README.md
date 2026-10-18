@@ -110,7 +110,7 @@ echo "<server-ip> registry.local" | sudo tee -a /etc/hosts
 
 ### Install Longhorn (distributed storage)
 
-Longhorn provides persistent volumes replicated across nodes, so data survives node failures. Required for Elasticsearch indexes and generated docs.
+Longhorn provides persistent volumes replicated across nodes, so data survives node failures. Required for generated docs, Redis, Prometheus and Grafana.
 
 **Prerequisites — run on every node:**
 ```bash
@@ -227,13 +227,9 @@ kubectl get secret lingwhaat-secrets -n lingwhaat -o json | python3 -c "import s
 | web (HTTP) | NodePort | 30080 |
 | web (HTTPS) | NodePort | 30443 |
 | redis | ClusterIP | 6379 |
-| elasticsearch | NodePort | 30920 |
-| kibana | NodePort | 30561 |
 | argocd | NodePort | 30808 |
 
-Database is hosted on AWS RDS and accessed via `DATABASE_URL` in `k8s/secret.yaml`.
-
-Elasticsearch and Kibana run in the `lingwhaat` namespace and are accessible internally via `elasticsearch:9200`.
+The database is MySQL 8.4 on the raspberrypi node (compose service `db`), accessed via `DATABASE_URL` in `k8s/secret.yaml`.
 
 ## ArgoCD
 

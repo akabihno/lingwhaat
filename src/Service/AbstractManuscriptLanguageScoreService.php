@@ -56,7 +56,7 @@ abstract class AbstractManuscriptLanguageScoreService
     }
 
     /**
-     * Score a result by trying each ES hit:
+     * Score a result by trying each corpus hit:
      * 1. Fetch the Wikipedia article and extract the matched window.
      * 2. Transform the matched window via {@see transformWindow()} (no-op for the plain scorer,
      *    Atbash for the Atbash scorer) so the letters assigned to the manuscript's fake characters

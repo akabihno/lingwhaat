@@ -6,7 +6,7 @@ use App\Constant\LanguageMappings;
 use App\Repository\WikipediaArticleRepository;
 use App\Repository\WordSearchRepository;
 use App\Repository\WordsPopularityScoreSetOffsetRepository;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use Doctrine\ORM\EntityManagerInterface;
 
 class WordsPopularityScoreSetService
@@ -19,7 +19,7 @@ class WordsPopularityScoreSetService
         private readonly FuzzySearchService         $fuzzySearchService,
         private readonly WordsPopularityScoreSetOffsetRepository $wordsPopularityScoreSetOffsetRepository,
         private readonly EntityManagerInterface     $entityManager,
-        private readonly ElasticsearchLogger        $logger,
+        private readonly PipelineLogger        $logger,
         private readonly WordSearchRepository       $wordSearchRepository,
     ) {
     }
@@ -71,7 +71,7 @@ class WordsPopularityScoreSetService
         $wordMatchCache = [];
 
         foreach ($wordBatches as $batchWords) {
-            // Batch lookup in Elasticsearch
+            // Batch lookup in word_search
             foreach ($batchWords as $word) {
                 if (!isset($wordMatchCache[$word])) {
                     $matches = $this->fuzzySearchService->findClosestMatches($word, 1, $languageCode);

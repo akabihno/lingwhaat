@@ -8,13 +8,6 @@ parameters:
     # on ('1'/'true') = collapse configured multi-char sequences to single glyphs first. Default
     # here keeps existing deployments on the old behaviour until the env var is set.
     env(MANUSCRIPT_CHARACTER_GROUPING_ENABLED): '0'
-    # Word search store during the move off the Elasticsearch words_index: 'elasticsearch' or
-    # 'mysql' (word_search tables, filled by app:word-search-rebuild). See App\Constant\WordSearchBackend.
-    env(WORD_SEARCH_BACKEND): 'elasticsearch'
-    # Exact/fuzzy word lookups: 'elasticsearch', 'shadow' (serve ES, compare MySQL) or 'mysql'.
-    env(WORD_LOOKUP_BACKEND): 'elasticsearch'
-    # Wildcard and positional pattern searches (PatternSearchService): same three values.
-    env(WORD_PATTERN_BACKEND): 'elasticsearch'
 
 services:
     # default configuration for services in *this* file
@@ -26,9 +19,6 @@ services:
             # both language scorers tokenize the manuscript identically (see the scorer note on why
             # they must stay in lock-step). Off ('0') = legacy per-character behaviour.
             bool $characterGroupingEnabled: '%env(bool:MANUSCRIPT_CHARACTER_GROUPING_ENABLED)%'
-            string $wordSearchBackend: '%env(WORD_SEARCH_BACKEND)%'
-            string $wordLookupBackend: '%env(WORD_LOOKUP_BACKEND)%'
-            string $wordPatternBackend: '%env(WORD_PATTERN_BACKEND)%'
 
     # Auto-tag all language repositories
     _instanceof:
@@ -47,20 +37,7 @@ services:
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
 
-    App\EventSubscriber\WordIndexSubscriber:
-      tags:
-        - { name: doctrine.event_subscriber }
-
-    Elastica\Client:
-      factory: [ 'App\Service\Search\ElasticsearchClientFactory', 'create' ]
-      arguments:
-        $esHost: 'http://%env(ELASTICSEARCH_HOST)%:%env(ELASTICSEARCH_PORT)%'
-
-    App\Service\Search\ElasticsearchBulkStreamer:
-      arguments:
-        $esHost: 'http://%env(ELASTICSEARCH_HOST)%:%env(ELASTICSEARCH_PORT)%'
-
-    App\Service\Logging\ElasticsearchLogger:
+    App\Service\Logging\PipelineLogger:
       arguments:
         $logger: '@monolog.logger.pipeline'
 

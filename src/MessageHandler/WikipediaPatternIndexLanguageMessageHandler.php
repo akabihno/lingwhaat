@@ -5,7 +5,7 @@ namespace App\MessageHandler;
 use App\Entity\WikipediaPatternIndexOffsetEntity;
 use App\Message\WikipediaPatternIndexLanguageMessage;
 use App\Repository\WikipediaPatternIndexOffsetRepository;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use App\Service\Metrics\MetricName;
 use App\Service\Metrics\PrometheusMetricsService;
 use App\Service\Search\ManuscriptCorpusSearchService;
@@ -37,7 +37,7 @@ class WikipediaPatternIndexLanguageMessageHandler
         private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
         private readonly LockFactory $lockFactory,
         private readonly MessageBusInterface $bus,
-        private readonly ElasticsearchLogger $logger,
+        private readonly PipelineLogger $logger,
         private readonly PrometheusMetricsService $metrics,
     ) {
     }

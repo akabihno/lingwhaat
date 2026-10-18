@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'language:decrypt-text',
-    description: 'Decrypt text by trying letter substitutions and finding matches in Elasticsearch'
+    description: 'Decrypt text by trying letter substitutions and finding matches in the dictionary'
 )]
 class DecryptTextCommand extends Command
 {
@@ -96,7 +96,7 @@ class DecryptTextCommand extends Command
         }
 
         if (!empty($result['matched_words'])) {
-            $output->writeln('<comment>Matched words found in Elasticsearch:</comment>');
+            $output->writeln('<comment>Matched words found in the dictionary:</comment>');
             $matchedWordsStr = implode(', ', array_slice($result['matched_words'], 0, 20));
             if (count($result['matched_words']) > 20) {
                 $matchedWordsStr .= ' ... (and ' . (count($result['matched_words']) - 20) . ' more)';
