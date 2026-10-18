@@ -2,6 +2,7 @@
 
 namespace App\Service\Search;
 
+use App\Entity\WordSearchTokenEntity;
 use App\Service\LanguageDetection\LanguageValidation\LanguageValidationService;
 use Elastica\Client;
 use Elastica\Query;
@@ -20,6 +21,8 @@ class TextDecryptionService
         protected LanguageNormalizationService $normalizationService,
         protected LanguageValidationService $languageValidationService,
         Client $esClient,
+        private readonly MysqlWordLookup $mysqlLookup,
+        private readonly WordSearchShadow $shadow,
     ) {
         $this->esClient = $esClient;
     }
@@ -140,22 +143,13 @@ class TextDecryptionService
         }
 
         try {
-            $boolQuery = new BoolQuery();
-
-            $termWord = new Term();
-            $termWord->setTerm('word', $word);
-            $boolQuery->addMust($termWord);
-
-            $termLang = new Term();
-            $termLang->setTerm('languageCode', $languageCode);
-            $boolQuery->addMust($termLang);
-
-            $query = new Query($boolQuery);
-            $query->setSize(1);
-
-            $results = $this->esClient->getIndex($this->indexName)->search($query);
-
-            $exists = count($results->getResults()) > 0;
+            $exists = $this->shadow->serve(
+                WordSearchShadow::SHAPE_EXISTS_WORD,
+                ['input' => $word, 'languageCode' => $languageCode],
+                fn () => $this->esWordExists($word, $languageCode),
+                fn () => $this->mysqlLookup->exists(WordSearchTokenEntity::FIELD_WORD, $word, $languageCode),
+                WordSearchShadow::compareExists(...),
+            );
 
             $this->wordExistsCache[$cacheKey] = $exists;
 
@@ -163,5 +157,23 @@ class TextDecryptionService
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+    private function esWordExists(string $word, string $languageCode): bool
+    {
+        $boolQuery = new BoolQuery();
+
+        $termWord = new Term();
+        $termWord->setTerm('word', $word);
+        $boolQuery->addMust($termWord);
+
+        $termLang = new Term();
+        $termLang->setTerm('languageCode', $languageCode);
+        $boolQuery->addMust($termLang);
+
+        $query = new Query($boolQuery);
+        $query->setSize(1);
+
+        return count($this->esClient->getIndex($this->indexName)->search($query)->getResults()) > 0;
     }
 }

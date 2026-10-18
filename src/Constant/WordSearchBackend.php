@@ -3,12 +3,15 @@
 namespace App\Constant;
 
 /**
- * Which store serves word searches (env WORD_SEARCH_BACKEND) while the Elasticsearch words_index
- * is being replaced by the word_search MySQL tables. Query shapes move over one at a time; shapes
- * not yet ported always use Elasticsearch.
+ * Which store serves word searches while the Elasticsearch words_index is being replaced by the
+ * word_search MySQL tables:
+ *  - WORD_SEARCH_BACKEND: pattern and top-word lookups (elasticsearch | mysql).
+ *  - WORD_LOOKUP_BACKEND: exact/fuzzy word and IPA token lookups (elasticsearch | shadow | mysql);
+ *    shadow serves Elasticsearch and compares MySQL alongside, see WordSearchShadow.
  */
 final class WordSearchBackend
 {
     public const string ELASTICSEARCH = 'elasticsearch';
+    public const string SHADOW = 'shadow';
     public const string MYSQL = 'mysql';
 }

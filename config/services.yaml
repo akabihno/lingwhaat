@@ -11,6 +11,8 @@ parameters:
     # Word search store during the move off the Elasticsearch words_index: 'elasticsearch' or
     # 'mysql' (word_search tables, filled by app:word-search-rebuild). See App\Constant\WordSearchBackend.
     env(WORD_SEARCH_BACKEND): 'elasticsearch'
+    # Exact/fuzzy word and IPA lookups: 'elasticsearch', 'shadow' (serve ES, compare MySQL) or 'mysql'.
+    env(WORD_LOOKUP_BACKEND): 'elasticsearch'
 
 services:
     # default configuration for services in *this* file
@@ -23,6 +25,7 @@ services:
             # they must stay in lock-step). Off ('0') = legacy per-character behaviour.
             bool $characterGroupingEnabled: '%env(bool:MANUSCRIPT_CHARACTER_GROUPING_ENABLED)%'
             string $wordSearchBackend: '%env(WORD_SEARCH_BACKEND)%'
+            string $wordLookupBackend: '%env(WORD_LOOKUP_BACKEND)%'
 
     # Auto-tag all language repositories
     _instanceof:
