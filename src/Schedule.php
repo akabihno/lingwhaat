@@ -70,10 +70,8 @@ class Schedule implements ScheduleProviderInterface
                 ->withJitter(self::JITTER_SECONDS)
         );
 
-        // The manuscript pattern search now runs inline per corpus batch (index -> search -> evict
-        // in WikipediaPatternIndexLanguageMessageHandler), so a periodic whole-index sweep is no
-        // longer needed — after eviction it would only ever see the in-flight batch anyway.
-        // ManuscriptPatternMatchSearchMessage remains dispatchable manually for ad-hoc runs.
+        // The manuscript pattern search runs inline per corpus batch (scan -> match in memory in
+        // WikipediaPatternIndexLanguageMessageHandler), so there is no separate search sweep.
 
         return $schedule;
     }

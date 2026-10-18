@@ -178,8 +178,11 @@ INSERT INTO lingwhaat.wikipedia_pattern_parse_schedule SET language_code = 'fi';
 Set popularity score for language:
 INSERT INTO lingwhaat.words_popularity_score_set_schedule SET language_code = 'fi';
 
-Create canonical patterns for language:
-kubectl exec -it -n lingwhaat deploy/web -- php bin/console app:wikipedia-pattern-index --window-size 18 --language-code fi
+Match manuscripts against the canonical patterns of every language's articles (continuous, batch by batch, in memory):
+kubectl exec -it -n lingwhaat deploy/web -- php bin/console app:wikipedia-pattern-index-dispatch
+
+To re-sweep the whole corpus (e.g. after adding a manuscript), reset the per-language cursors first:
+TRUNCATE lingwhaat.wikipedia_pattern_index_offset;
 
 Reindex all words for all languages:
 kubectl exec -it -n lingwhaat deploy/web -- php bin/console language:reindex-words

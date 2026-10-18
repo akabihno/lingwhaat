@@ -4,10 +4,9 @@ namespace App\Constant;
 
 class PatternIndexConstants
 {
-    // Sliding-window size (in characters) for the Wikipedia canonical-pattern corpus.
-    // The indexer bakes this into every ES doc (`length` field and the deterministic `_id`),
-    // and the search side filters on `length` = window size, so the index and search sides
-    // must always agree — both read this single constant. Changing it triggers a per-language
-    // index rebuild and a full corpus re-sweep (see WikipediaPatternIndexerService).
+    // Sliding-window size (in characters) for the Wikipedia canonical-pattern corpus. The dispatch
+    // message carries it to every per-language batch, which uses it for both the corpus windows and
+    // the manuscript windows. The per-language cursor records the size it was swept with, so changing
+    // this restarts every language's sweep from the beginning of its corpus.
     public const int WINDOW_SIZE = 21;
 }

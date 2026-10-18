@@ -89,7 +89,6 @@ framework:
             'App\Message\WikipediaPatternIndexLanguageMessage': wikipedia_pattern_index_async
             'App\Message\WordsPopularityScoreSetDispatchMessage': words_popularity_async
             'App\Message\WordsPopularityScoreSetMessage': words_popularity_async
-            'App\Message\ManuscriptPatternMatchSearchMessage': async
             'App\Message\ManuscriptLanguageScoreDispatchMessage': manuscript_language_score_async
             'App\Message\ManuscriptLanguageScoreMessage': manuscript_language_score_async
             'App\Message\ManuscriptLanguageAtbashScoreDispatchMessage': manuscript_language_atbash_score_async
