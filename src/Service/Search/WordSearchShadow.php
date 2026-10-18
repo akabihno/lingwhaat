@@ -28,9 +28,7 @@ class WordSearchShadow
 {
     private const string LOG_SERVICE = '[WordSearchShadow]';
     public const string SHAPE_EXACT_WORD = 'exact_word';
-    public const string SHAPE_EXACT_IPA = 'exact_ipa';
     public const string SHAPE_FUZZY_WORD = 'fuzzy_word';
-    public const string SHAPE_FUZZY_IPA = 'fuzzy_ipa';
     public const string SHAPE_EXISTS_WORD = 'exists_word';
 
     public function __construct(

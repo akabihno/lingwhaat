@@ -39,15 +39,6 @@ framework:
                     delay: 1000
                     multiplier: 2
 
-            selection_async:
-                dsn: '%env(MESSENGER_SELECTION_TRANSPORT_DSN)%'
-                options:
-                    auto_setup: true
-                retry_strategy:
-                    max_retries: 3
-                    delay: 1000
-                    multiplier: 2
-
             manuscript_language_score_async:
                 dsn: '%env(MESSENGER_MANUSCRIPT_LANGUAGE_SCORE_TRANSPORT_DSN)%'
                 options:
@@ -95,5 +86,3 @@ framework:
             'App\Message\ManuscriptLanguageAtbashScoreMessage': manuscript_language_atbash_score_async
             'App\Message\ManuscriptAlphabetDecodeDispatchMessage': async
             'App\Message\ManuscriptAlphabetDecodeMessage': async
-            'App\Message\ManuscriptAlphabetDecodeSelectionDispatchMessage': selection_async
-            'App\Message\ManuscriptAlphabetDecodeSelectionMessage': selection_async

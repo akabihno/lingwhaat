@@ -111,29 +111,7 @@ class FuzzySearchService
         return array_map(fn($r) => $r->getSource(), $results->getResults());
     }
 
-    public function findExactMatchesByIpa(string $ipa, ?int $limit = null): array
-    {
-        return $this->shadow->serve(
-            WordSearchShadow::SHAPE_EXACT_IPA,
-            ['input' => $ipa, 'limit' => $limit],
-            fn () => $this->esFindExactMatchesByIpa($ipa, $limit ?? self::ES_EXACT_LIMIT),
-            fn () => $this->mysqlLookup->exactMatches(WordSearchTokenEntity::FIELD_IPA, $ipa, $limit),
-            fn (array $es, array $mysql) => WordSearchShadow::compareExact($es, $mysql, $limit ?? self::ES_EXACT_LIMIT),
-        );
-    }
 
-    private function esFindExactMatchesByIpa(string $ipa, int $limit): array
-    {
-        $term = new Term();
-        $term->setTerm('ipa', $ipa);
-
-        $query = new Query($term);
-        $query->setSize($limit);
-
-        $results = $this->esClient->getIndex($this->indexName)->search($query);
-
-        return array_map(fn($r) => $r->getSource(), $results->getResults());
-    }
 
     /**
      * @return array<int, array<string, mixed>>
@@ -159,34 +137,6 @@ class FuzzySearchService
         $query->setSort([
             'score' => ['order' => 'desc'],
         ]);
-
-        $results = $this->esClient->getIndex($this->indexName)->search($query);
-
-        return array_map(fn($r) => $r->getSource(), $results->getResults());
-    }
-
-    public function findClosestMatchesByIpa(string $ipa, int $limit = 5): array
-    {
-        return $this->shadow->serve(
-            WordSearchShadow::SHAPE_FUZZY_IPA,
-            ['input' => $ipa, 'limit' => $limit],
-            fn () => $this->esFindClosestMatchesByIpa($ipa, $limit),
-            fn () => $this->mysqlLookup->closestMatches(WordSearchTokenEntity::FIELD_IPA, $ipa, $limit),
-            WordSearchShadow::compareFuzzy(...),
-        );
-    }
-
-    private function esFindClosestMatchesByIpa(string $ipa, int $limit): array
-    {
-        $fuzzy = new Fuzzy();
-        $fuzzy->setParam('ipa', [
-            'value' => $ipa,
-            'fuzziness' => 1,
-            'prefix_length' => 1,
-        ]);
-
-        $query = new Query($fuzzy);
-        $query->setSize($limit);
 
         $results = $this->esClient->getIndex($this->indexName)->search($query);
 

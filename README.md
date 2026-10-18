@@ -6,7 +6,6 @@ This project aims to detect the language of written text with high speed and acc
 
 - Fast and accurate language detection
 - Support for 76 languages
-- IPA-based transliteration system
 - Data sourced from Wiktionary using MediaWiki APIs
 - Kubernetes-based deployment
 
@@ -38,7 +37,7 @@ This project aims to detect the language of written text with high speed and acc
 
 ## Data Sources
 
-IPA data for universal transliteration is parsed from [Wiktionary](https://en.wiktionary.org/wiki/Wiktionary:Main_Page) using 
+IPA data is parsed from [Wiktionary](https://en.wiktionary.org/wiki/Wiktionary:Main_Page) using 
 [MediaWiki API](https://www.mediawiki.org/wiki/API)
 
 Note: for some languages used Wiktionary in it's respective language, e.g. https://nl.wiktionary.org/w/api.php for Dutch.

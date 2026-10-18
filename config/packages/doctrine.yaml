@@ -4,7 +4,8 @@ doctrine:
         connections:
             default:
                 url: '%env(resolve:DATABASE_URL)%'
-                schema_filter: '~^(?!.*_links$|schema_subscriber_check_$).*$~'
+                # word_category: data kept from the removed word-categorization feature (no entity).
+                schema_filter: '~^(?!.*_links$|schema_subscriber_check_$|word_category$).*$~'
                 profiling_collect_backtrace: '%kernel.debug%'
                 use_savepoints: true
             messenger:
