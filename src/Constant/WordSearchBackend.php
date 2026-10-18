@@ -8,6 +8,7 @@ namespace App\Constant;
  *  - WORD_SEARCH_BACKEND: pattern and top-word lookups (elasticsearch | mysql).
  *  - WORD_LOOKUP_BACKEND: exact/fuzzy word token lookups (elasticsearch | shadow | mysql);
  *    shadow serves Elasticsearch and compares MySQL alongside, see WordSearchShadow.
+ *  - WORD_PATTERN_BACKEND: wildcard and positional pattern searches (elasticsearch | shadow | mysql).
  */
 final class WordSearchBackend
 {

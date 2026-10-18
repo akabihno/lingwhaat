@@ -3,7 +3,10 @@
 namespace App\Service\Search;
 
 use App\Constant\ScriptAlphabets;
+use App\Constant\WordSearchBackend;
+use App\Entity\WordSearchTokenEntity;
 use App\Repository\LetterFrequencyRepository;
+use App\Repository\WordSearchRepository;
 use App\Service\Cache\RedisCacheService;
 use App\Service\Logging\ElasticsearchLogger;
 use Elastica\Client;
@@ -25,6 +28,9 @@ class PatternSearchService
         protected RedisCacheService $cache,
         protected LetterFrequencyRepository $letterFrequencyRepository,
         Client $esClient,
+        private readonly WordSearchRepository $wordSearchRepository,
+        private readonly WordSearchShadow $shadow,
+        private readonly string $wordPatternBackend = WordSearchBackend::ELASTICSEARCH,
     ) {
         $this->esClient = $esClient;
     }
@@ -65,11 +71,14 @@ class PatternSearchService
                 'limit' => $limit,
             ]);
 
-            $results = $this->esClient->getIndex($this->indexName)->search($mainQuery);
-
-            $result = array_map(function ($r) {
-                return $r->getSource();
-            }, $results->getResults());
+            $result = $this->shadow->serve(
+                WordSearchShadow::SHAPE_WILDCARD_WORD,
+                ['pattern' => $pattern, 'languageCode' => $languageCode, 'limit' => $limit],
+                fn () => array_map(fn ($r) => $r->getSource(), $this->esClient->getIndex($this->indexName)->search($mainQuery)->getResults()),
+                fn () => $this->mysqlWildcard(WordSearchTokenEntity::FIELD_WORD, strtolower($pattern), $languageCode, $limit),
+                fn (array $es, array $mysql) => WordSearchShadow::compareCapped($es, $mysql, $limit),
+                $this->wordPatternBackend,
+            );
 
             $this->logger->info('Pattern search completed', [
                 'service' => '[PatternSearchService]',
@@ -125,11 +134,14 @@ class PatternSearchService
                 'limit' => $limit,
             ]);
 
-            $results = $this->esClient->getIndex($this->indexName)->search($mainQuery);
-
-            $result = array_map(function ($r) {
-                return $r->getSource();
-            }, $results->getResults());
+            $result = $this->shadow->serve(
+                WordSearchShadow::SHAPE_WILDCARD_IPA,
+                ['pattern' => $pattern, 'languageCode' => $languageCode, 'limit' => $limit],
+                fn () => array_map(fn ($r) => $r->getSource(), $this->esClient->getIndex($this->indexName)->search($mainQuery)->getResults()),
+                fn () => $this->mysqlWildcard(WordSearchTokenEntity::FIELD_IPA, strtolower($pattern), $languageCode, $limit),
+                fn (array $es, array $mysql) => WordSearchShadow::compareCapped($es, $mysql, $limit),
+                $this->wordPatternBackend,
+            );
 
             $this->logger->info('IPA pattern search completed', [
                 'service' => '[PatternSearchService]',
@@ -175,39 +187,8 @@ class PatternSearchService
         }
 
         try {
-            // Build parameterized script to avoid script compilation limit
-            $scriptData = $this->buildParameterizedScript($samePositions, $fixedChars, $exactLength);
-
-            $script = new Script(
-                $scriptData['source'],
-                $scriptData['params'],
-                'painless'
-            );
-            $scriptQuery = new Query\Script($script);
-
-            $query = new Query\BoolQuery();
-            $query->addFilter($scriptQuery);
-
-            if ($languageCode !== null) {
-                $languageQuery = new Query\Term();
-                $languageQuery->setTerm('languageCode', $languageCode);
-                $query->addMust($languageQuery);
-            }
-
-            if ($notLanguageCodes !== null && !empty($notLanguageCodes)) {
-                foreach ($notLanguageCodes as $excludedLang) {
-                    $excludeQuery = new Query\Term();
-                    $excludeQuery->setTerm('languageCode', $excludedLang);
-                    $query->addMustNot($excludeQuery);
-                }
-            }
-
-            $mainQuery = new Query($query);
-            $mainQuery->setSize($limit);
-
             $this->logger->info('Advanced pattern search initiated', [
                 'service' => '[PatternSearchService]',
-                'script_params' => $scriptData['params'],
                 'same_positions' => $samePositions,
                 'fixed_chars' => $fixedChars,
                 'exact_length' => $exactLength,
@@ -216,11 +197,9 @@ class PatternSearchService
                 'limit' => $limit,
             ]);
 
-            $results = $this->esClient->getIndex($this->indexName)->search($mainQuery);
-
-            $result = array_map(function ($r) {
-                return $r->getSource();
-            }, $results->getResults());
+            $result = $this->runPositionQueries([
+                $this->positionQuery($samePositions, $fixedChars, $exactLength, $languageCode, $notLanguageCodes, $limit),
+            ])[0];
 
             $this->logger->info('Advanced pattern search completed', [
                 'service' => '[PatternSearchService]',
@@ -810,7 +789,9 @@ class PatternSearchService
             'lengths' => $exactLengths,
             'lang' => $languageCode,
             'not_langs' => $notLanguageCodes,
-            'alphabet' => $alphabet
+            'alphabet' => $alphabet,
+            // Results differ by store (MySQL has newer languages); never serve one store's from the other.
+            'backend' => $this->wordPatternBackend,
         ]);
 
         $cached = $this->cache->get($cacheKey);
@@ -851,16 +832,7 @@ class PatternSearchService
                     $exactLength = isset($exactLengths[$wordIndex]) ? $exactLengths[$wordIndex] : null;
 
                     // Build the query
-                    $query = $this->buildAdvancedPatternQuery(
-                        $samePositions,
-                        $fixedChars,
-                        $exactLength,
-                        $languageCode,
-                        $notLanguageCodes
-                    );
-
-                    $msearchQueries[] = ['index' => $this->indexName];
-                    $msearchQueries[] = ['query' => $query->getQuery()->toArray(), 'size' => 1];
+                    $msearchQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLength, $languageCode, $notLanguageCodes, 1);
                     $letterMap[] = ['letter' => $letter, 'wordIndex' => $wordIndex];
                 }
             }
@@ -890,100 +862,30 @@ class PatternSearchService
     }
 
     /**
-     * Execute msearch query and extract viable letters from results.
+     * Letters for which at least one of their position queries has a match.
      *
-     * @param array $msearchQueries Array of msearch query pairs
-     * @param array $letterMap Mapping of result indices to letters
+     * @param list<array<string, mixed>> $positionQueries see positionQuery()
+     * @param array $letterMap Mapping of query indices to letters
      * @return array Array of viable letters
      */
-    private function executeMsearchForViableLetters(array $msearchQueries, array $letterMap): array
+    private function executeMsearchForViableLetters(array $positionQueries, array $letterMap): array
     {
         try {
-            $this->logger->info('Starting msearch for viable letters', [
-                'service' => '[PatternSearchService]',
-                'query_count' => count($msearchQueries) / 2,
-            ]);
-
-            // Use Elastica's Multi\Search for proper msearch handling
-            $multiSearch = new MultiSearch($this->esClient);
-
-            // msearchQueries is an array of alternating headers and bodies
-            // We need to convert this to Search objects
-            for ($i = 0; $i < count($msearchQueries); $i += 2) {
-                $header = $msearchQueries[$i];
-                $searchBody = $msearchQueries[$i + 1];
-
-                // Create a Search object
-                $search = new Search($this->esClient);
-                $search->addIndexByName($header['index']);
-
-                // Extract the query part and size from the search body
-                if (isset($searchBody['query'])) {
-                    // Debug: log the actual query structure
-                    if ($i < 4) { // Only log first 2 queries to avoid spam
-                        error_log("DEBUG: Query structure for query $i: " . json_encode($searchBody['query']));
-                    }
-                    // Elastica's setQuery expects an AbstractQuery object or array
-                    // If the query is already an array with 'bool' key, create a BoolQuery from it
-                    if (isset($searchBody['query']['bool'])) {
-                        $boolQuery = new \Elastica\Query\BoolQuery();
-                        $boolQuery->setParams($searchBody['query']['bool']);
-                        $search->setQuery($boolQuery);
-                    } else {
-                        $search->setQuery($searchBody['query']);
-                    }
-                }
-
-                if (isset($searchBody['size'])) {
-                    $search->setOption('size', $searchBody['size']);
-                }
-
-                $multiSearch->addSearch($search);
-            }
-
-            $this->logger->info('Executing msearch for viable letters', [
-                'service' => '[PatternSearchService]',
-            ]);
-
-            // Debug: dump first query structure before executing
-            if (count($msearchQueries) >= 2) {
-                error_log("DEBUG: First query body structure: " . json_encode($msearchQueries[1]));
-            }
-
-            $resultSets = $multiSearch->search();
-
-            $this->logger->info('Msearch completed for viable letters', [
-                'service' => '[PatternSearchService]',
-                'result_count' => count($resultSets),
-            ]);
             $viableLetters = [];
-
-            error_log("DEBUG: executeMsearchForViableLetters - got " . count($resultSets) . " result sets, letterMap has " . count($letterMap) . " entries");
-
-            foreach ($resultSets as $index => $resultSet) {
-                $totalHits = $resultSet->getTotalHits();
-                if ($index < 5) {  // Log first few for debugging
-                    error_log("DEBUG: ResultSet $index has $totalHits hits, letter=" . ($letterMap[$index]['letter'] ?? 'unknown'));
-                }
-
-                if ($totalHits > 0) {
-                    $letter = $letterMap[$index]['letter'];
-                    if (!in_array($letter, $viableLetters)) {
-                        $viableLetters[] = $letter;
-                    }
+            foreach ($this->runPositionQueries($positionQueries) as $index => $hits) {
+                $letter = $letterMap[$index]['letter'];
+                if ($hits !== [] && !in_array($letter, $viableLetters)) {
+                    $viableLetters[] = $letter;
                 }
             }
-
-            error_log("DEBUG: executeMsearchForViableLetters returning " . count($viableLetters) . " viable letters");
 
             return $viableLetters;
         } catch (Exception $e) {
-            error_log("DEBUG: executeMsearchForViableLetters EXCEPTION: " . $e->getMessage());
-            error_log("DEBUG: Stack trace: " . $e->getTraceAsString());
             $this->logger->error('Msearch for viable letters failed', [
                 'service' => '[PatternSearchService]',
                 'error' => $e->getMessage(),
             ]);
+
             return [];
         }
     }
@@ -1209,8 +1111,7 @@ class PatternSearchService
         ?array $notLanguageCodes
     ): bool {
         $numWords = count($letterConstraints[0]);
-        $multiSearch = new MultiSearch($this->esClient);
-        $hasAnyQueries = false;
+        $positionQueries = [];
 
         for ($wordIndex = 0; $wordIndex < $numWords; $wordIndex++) {
             $samePositions = [];
@@ -1230,35 +1131,19 @@ class PatternSearchService
 
             if (!$hasWordConstraint) continue;
 
-            // Build query object directly
-            $query = $this->buildAdvancedPatternQuery(
-                $samePositions,
-                $fixedChars,
-                $exactLengths[$wordIndex] ?? null,
-                $languageCode,
-                $notLanguageCodes
-            );
-
-            $search = new Search($this->esClient);
-            $search->addIndexByName($this->indexName);
-            $search->setQuery($query->getQuery());
-            $search->setOption('size', 1);
-            $search->setOption('terminate_after', 1); // Extra speed: stop immediately
-
-            $multiSearch->addSearch($search);
-            $hasAnyQueries = true;
+            // Existence check: one hit is enough (terminate_after on Elasticsearch).
+            $positionQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLengths[$wordIndex] ?? null, $languageCode, $notLanguageCodes, 1, true);
         }
 
-        if (!$hasAnyQueries) return true;
+        if ($positionQueries === []) return true;
 
         try {
-            $resultSets = $multiSearch->search();
-            foreach ($resultSets as $resultSet) {
-                if ($resultSet->getTotalHits() === 0) return false;
+            foreach ($this->runPositionQueries($positionQueries) as $hits) {
+                if ($hits === []) return false;
             }
             return true;
         } catch (Exception $e) {
-            // Log error but don't fail the whole search if ES is just grumpy
+            // Log error but don't fail the whole search if the backend is just grumpy
             error_log("Fail Fast Query Error: " . $e->getMessage());
             return true;
         }
@@ -1359,16 +1244,7 @@ class PatternSearchService
             }
 
             // Build query
-            $query = $this->buildAdvancedPatternQuery(
-                $samePositions,
-                $fixedChars,
-                $exactLength,
-                $languageCode,
-                $notLanguageCodes
-            );
-
-            $msearchQueries[] = ['index' => $this->indexName];
-            $msearchQueries[] = ['query' => $query->getQuery()->toArray(), 'size' => 500];
+            $msearchQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLength, $languageCode, $notLanguageCodes, 500);
             $wordQueryMap[] = $wordIndex;
         }
 
@@ -1473,61 +1349,18 @@ class PatternSearchService
     }
 
     /**
-     * Execute msearch query and extract word results for each position.
+     * Run the word-position queries and key their hits by word position.
      *
-     * @param array $msearchQueries Array of msearch query pairs
-     * @param array $wordQueryMap Mapping of result indices to word positions
-     * @return array Array of word results by position
+     * @param list<array<string, mixed>> $positionQueries see positionQuery()
+     * @param array $wordQueryMap Mapping of query indices to word positions
+     * @return array Array of word results indexed by word position
      */
-    private function executeMsearchForWordPositions(array $msearchQueries, array $wordQueryMap): array
+    private function executeMsearchForWordPositions(array $positionQueries, array $wordQueryMap): array
     {
         try {
-            // Use Elastica's Multi\Search for proper msearch handling
-            $multiSearch = new MultiSearch($this->esClient);
-
-            // msearchQueries is an array of alternating headers and bodies
-            // We need to convert this to Search objects
-            for ($i = 0; $i < count($msearchQueries); $i += 2) {
-                $header = $msearchQueries[$i];
-                $searchBody = $msearchQueries[$i + 1];
-
-                // Create a Search object
-                $search = new Search($this->esClient);
-                $search->addIndexByName($header['index']);
-
-                // Extract the query part and size from the search body
-                if (isset($searchBody['query'])) {
-                    // Debug: log the actual query structure
-                    if ($i < 4) { // Only log first 2 queries to avoid spam
-                        error_log("DEBUG: Query structure for query $i: " . json_encode($searchBody['query']));
-                    }
-                    // Elastica's setQuery expects an AbstractQuery object or array
-                    // If the query is already an array with 'bool' key, create a BoolQuery from it
-                    if (isset($searchBody['query']['bool'])) {
-                        $boolQuery = new \Elastica\Query\BoolQuery();
-                        $boolQuery->setParams($searchBody['query']['bool']);
-                        $search->setQuery($boolQuery);
-                    } else {
-                        $search->setQuery($searchBody['query']);
-                    }
-                }
-
-                if (isset($searchBody['size'])) {
-                    $search->setOption('size', $searchBody['size']);
-                }
-
-                $multiSearch->addSearch($search);
-            }
-
-            $resultSets = $multiSearch->search();
             $wordResultsByPosition = [];
-
-            foreach ($resultSets as $index => $resultSet) {
-                $wordIndex = $wordQueryMap[$index];
-
-                $wordResultsByPosition[$wordIndex] = array_map(function ($result) {
-                    return $result->getSource();
-                }, $resultSet->getResults());
+            foreach ($this->runPositionQueries($positionQueries) as $index => $hits) {
+                $wordResultsByPosition[$wordQueryMap[$index]] = $hits;
             }
 
             return $wordResultsByPosition;
@@ -1536,8 +1369,125 @@ class PatternSearchService
                 'service' => '[PatternSearchService]',
                 'error' => $e->getMessage(),
             ]);
+
             return [];
         }
+    }
+
+    /**
+     * One positional query for runPositionQueries().
+     *
+     * @return array{samePositions: array, fixedChars: array, exactLength: ?int, languageCode: ?string, notLanguageCodes: ?array, size: int, terminateAfter: bool}
+     */
+    private function positionQuery(
+        array $samePositions,
+        array $fixedChars,
+        ?int $exactLength,
+        ?string $languageCode,
+        ?array $notLanguageCodes,
+        int $size,
+        bool $terminateAfter = false,
+    ): array {
+        return [
+            'samePositions' => $samePositions,
+            'fixedChars' => $fixedChars,
+            'exactLength' => $exactLength,
+            'languageCode' => $languageCode,
+            'notLanguageCodes' => $notLanguageCodes,
+            'size' => $size,
+            'terminateAfter' => $terminateAfter,
+        ];
+    }
+
+    /**
+     * Run positional queries (one Elasticsearch _msearch, or one SQL query each on word_search)
+     * per WORD_PATTERN_BACKEND. Returns the hits of each query, in order.
+     *
+     * @param list<array<string, mixed>> $positionQueries see positionQuery()
+     * @return list<list<array<string, mixed>>>
+     */
+    private function runPositionQueries(array $positionQueries): array
+    {
+        if ($positionQueries === []) {
+            return [];
+        }
+
+        return $this->shadow->serve(
+            WordSearchShadow::SHAPE_POSITIONAL,
+            ['queries' => count($positionQueries), 'first' => $positionQueries[0]],
+            fn () => $this->esRunPositionQueries($positionQueries),
+            fn () => array_map(
+                fn (array $q) => $this->wordSearchRepository->findByPositions(
+                    $this->buildParameterizedScript($q['samePositions'], $q['fixedChars'], $q['exactLength'])['params'],
+                    $q['languageCode'],
+                    $q['notLanguageCodes'],
+                    $q['size'],
+                ),
+                $positionQueries,
+            ),
+            fn (array $es, array $mysql) => WordSearchShadow::compareCappedBatch($es, $mysql, array_column($positionQueries, 'size')),
+            $this->wordPatternBackend,
+        );
+    }
+
+    /**
+     * @param list<array<string, mixed>> $positionQueries
+     * @return list<list<array<string, mixed>>>
+     */
+    private function esRunPositionQueries(array $positionQueries): array
+    {
+        $multiSearch = new MultiSearch($this->esClient);
+        foreach ($positionQueries as $q) {
+            $query = $this->buildAdvancedPatternQuery($q['samePositions'], $q['fixedChars'], $q['exactLength'], $q['languageCode'], $q['notLanguageCodes']);
+
+            $search = new Search($this->esClient);
+            $search->addIndexByName($this->indexName);
+            $search->setQuery($query->getQuery());
+            $search->setOption('size', $q['size']);
+            if ($q['terminateAfter']) {
+                $search->setOption('terminate_after', 1);
+            }
+            $multiSearch->addSearch($search);
+        }
+
+        // Searches are added unkeyed, so results map back positionally.
+        return array_map(
+            fn ($resultSet) => array_map(fn ($r) => $r->getSource(), $resultSet->getResults()),
+            array_values($multiSearch->search()->getResultSets()),
+        );
+    }
+
+    /**
+     * Wildcard search on word_search_token. Elasticsearch wildcard syntax: '?' is one character,
+     * '*' any run, a backslash escapes the next character.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function mysqlWildcard(int $field, string $pattern, ?string $languageCode, int $limit): array
+    {
+        $like = '';
+        $length = 0;
+        $hasRun = false;
+        $chars = mb_str_split($pattern);
+        for ($i = 0, $n = count($chars); $i < $n; $i++) {
+            $char = $chars[$i];
+            if ($char === '\\' && $i + 1 < $n) {
+                $char = $chars[++$i];
+                $like .= in_array($char, ['%', '_', '\\'], true) ? '\\' . $char : $char;
+                $length++;
+            } elseif ($char === '?') {
+                $like .= '_';
+                $length++;
+            } elseif ($char === '*') {
+                $like .= '%';
+                $hasRun = true;
+            } else {
+                $like .= in_array($char, ['%', '_', '\\'], true) ? '\\' . $char : $char;
+                $length++;
+            }
+        }
+
+        return $this->wordSearchRepository->findByTokenLike($field, $like, $hasRun ? null : $length, $languageCode, $limit);
     }
 
     /**
@@ -1672,7 +1622,8 @@ class PatternSearchService
             'lengths' => $exactLengths,
             'lang' => $languageCode,
             'not_langs' => $notLanguageCodes,
-            'limit' => $limit
+            'limit' => $limit,
+            'backend' => $this->wordPatternBackend,
         ]);
 
         $cached = $this->cache->get($cacheKey);
@@ -1702,16 +1653,7 @@ class PatternSearchService
             $exactLength = $exactLengths[$wordIndex] ?? null;
 
             // Build query
-            $query = $this->buildAdvancedPatternQuery(
-                $samePositions,
-                $fixedChars,
-                $exactLength,
-                $languageCode,
-                $notLanguageCodes
-            );
-
-            $msearchQueries[] = ['index' => $this->indexName];
-            $msearchQueries[] = ['query' => $query->getQuery()->toArray(), 'size' => 500];
+            $msearchQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLength, $languageCode, $notLanguageCodes, 500);
             $wordQueryMap[] = $wordIndex;
         }
 
