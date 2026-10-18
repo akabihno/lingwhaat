@@ -3,11 +3,11 @@
 namespace App\Service\LanguageDetection\LanguageValidation;
 
 use App\Constant\ScriptAlphabets;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 
 class LanguageValidationService
 {
-    public function __construct(protected ElasticsearchLogger $logger)
+    public function __construct(protected PipelineLogger $logger)
     {
     }
 

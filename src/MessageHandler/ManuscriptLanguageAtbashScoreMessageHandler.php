@@ -4,7 +4,7 @@ namespace App\MessageHandler;
 
 use App\Message\ManuscriptLanguageAtbashScoreMessage;
 use App\Repository\ManuscriptPatternMatchResultRepository;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use App\Service\ManuscriptLanguageAtbashScoreService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
@@ -17,7 +17,7 @@ class ManuscriptLanguageAtbashScoreMessageHandler
     public function __construct(
         private readonly ManuscriptPatternMatchResultRepository $resultRepository,
         private readonly ManuscriptLanguageAtbashScoreService $scoreService,
-        private readonly ElasticsearchLogger $logger,
+        private readonly PipelineLogger $logger,
     ) {
     }
 

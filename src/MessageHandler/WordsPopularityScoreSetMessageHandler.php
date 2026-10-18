@@ -3,7 +3,7 @@
 namespace App\MessageHandler;
 
 use App\Message\WordsPopularityScoreSetMessage;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use App\Service\Search\WordsPopularityScoreSetService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -13,7 +13,7 @@ class WordsPopularityScoreSetMessageHandler
     private const int PROCESSING_LIMIT = 200000;
     public function __construct(
         private readonly WordsPopularityScoreSetService $popularityScoreSetService,
-        private readonly ElasticsearchLogger $logger
+        private readonly PipelineLogger $logger
     ) {
     }
 

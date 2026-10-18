@@ -6,7 +6,7 @@ use App\Repository\ManuscriptCharacterGroupRepository;
 use App\Repository\ManuscriptPatternMatchRepository;
 use App\Repository\ManuscriptPatternMatchResultRepository;
 use App\Repository\ManuscriptPatternMatchScheduleRepository;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 
 /**
  * Manuscript side of the corpus pattern search. For each corpus batch the pattern-index handler asks
@@ -33,7 +33,7 @@ class ManuscriptCorpusSearchService
         private readonly ManuscriptPatternMatchRepository $matchRepository,
         private readonly ManuscriptPatternMatchResultRepository $resultRepository,
         private readonly ManuscriptCharacterGroupRepository $characterGroupRepository,
-        private readonly ElasticsearchLogger $logger,
+        private readonly PipelineLogger $logger,
         // Feature flag (env MANUSCRIPT_CHARACTER_GROUPING_ENABLED). When on, configured multi-char
         // sequences for a source collapse to a single glyph before the canonical pattern is built;
         // when off the tokenizer degrades to a per-character split (legacy behaviour).

@@ -167,9 +167,8 @@ class WordSearchRepository extends ServiceEntityRepository
     }
 
     /**
-     * Entries matching positional constraints on the lowercased word, exactly as the former
-     * Elasticsearch painless script checked them (see PatternSearchService::buildParameterizedScript,
-     * whose params this takes): optional exact length, minimum length maxPosition, every group of
+     * Entries matching positional constraints on the lowercased word, as the former Elasticsearch
+     * painless script checked them (params from PatternSearchService::positionParams): optional exact length, minimum length maxPosition, every group of
      * 0-based positions holding the same character, and fixed characters (first character of each
      * given string) at 0-based positions. Most popular first; a single-row query (an existence
      * check) skips the ordering.

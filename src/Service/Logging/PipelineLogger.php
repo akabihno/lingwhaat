@@ -6,12 +6,11 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
 /**
- * Application logger. Despite the name (kept to avoid churning its many call sites), it no
- * longer writes to Elasticsearch: it forwards to the Monolog "pipeline" channel, which prod
- * sends to stderr as JSON. Logging one HTTP request per line to the single-node ES was a large
- * share of its write load and made every worker block on ES just to log.
+ * Application logger for the API and pipelines: forwards to the Monolog "pipeline" channel, which
+ * prod sends to stderr as JSON (kubectl logs). Formerly ElasticsearchLogger, which wrote every
+ * line to Elasticsearch.
  */
-class ElasticsearchLogger implements LoggerInterface
+class PipelineLogger implements LoggerInterface
 {
     public function __construct(private readonly LoggerInterface $logger)
     {

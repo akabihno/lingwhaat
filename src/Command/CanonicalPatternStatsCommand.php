@@ -4,7 +4,7 @@ namespace App\Command;
 
 use App\Repository\ManuscriptPatternMatchRepository;
 use App\Repository\ManuscriptPatternMatchResultRepository;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use App\Service\Metrics\MetricName;
 use App\Service\Metrics\PrometheusMetricsService;
 use App\Service\Stats\CanonicalPatternStatsService;
@@ -29,7 +29,7 @@ class CanonicalPatternStatsCommand extends Command
         private readonly ManuscriptPatternMatchRepository $manuscriptRepository,
         private readonly ManuscriptPatternMatchResultRepository $resultRepository,
         private readonly PrometheusMetricsService $metrics,
-        private readonly ElasticsearchLogger $esLogger,
+        private readonly PipelineLogger $esLogger,
     ) {
         parent::__construct();
     }

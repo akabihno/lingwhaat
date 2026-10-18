@@ -3,36 +3,23 @@
 namespace App\Service\Search;
 
 use App\Constant\ScriptAlphabets;
-use App\Constant\WordSearchBackend;
 use App\Entity\WordSearchTokenEntity;
 use App\Repository\LetterFrequencyRepository;
 use App\Repository\WordSearchRepository;
 use App\Service\Cache\RedisCacheService;
-use App\Service\Logging\ElasticsearchLogger;
-use Elastica\Client;
-use Elastica\Query;
-use Elastica\Query\Wildcard;
-use Elastica\Script\Script;
-use Elastica\Multi\Search as MultiSearch;
-use Elastica\Search;
+use App\Service\Logging\PipelineLogger;
 use Exception;
 
 class PatternSearchService
 {
     private const int MIN_COMMON_CHARS = 3;
-    private Client $esClient;
-    private string $indexName = 'words_index';
 
     public function __construct(
-        protected ElasticsearchLogger $logger,
+        protected PipelineLogger $logger,
         protected RedisCacheService $cache,
         protected LetterFrequencyRepository $letterFrequencyRepository,
-        Client $esClient,
         private readonly WordSearchRepository $wordSearchRepository,
-        private readonly WordSearchShadow $shadow,
-        private readonly string $wordPatternBackend = WordSearchBackend::ELASTICSEARCH,
     ) {
-        $this->esClient = $esClient;
     }
 
     /**
@@ -50,20 +37,6 @@ class PatternSearchService
         }
 
         try {
-            $wildcardQuery = new Wildcard('word', strtolower($pattern));
-
-            $query = new Query\BoolQuery();
-            $query->addMust($wildcardQuery);
-
-            if ($languageCode !== null) {
-                $languageQuery = new Query\Term();
-                $languageQuery->setTerm('languageCode', $languageCode);
-                $query->addMust($languageQuery);
-            }
-
-            $mainQuery = new Query($query);
-            $mainQuery->setSize($limit);
-
             $this->logger->info('Pattern search initiated', [
                 'service' => '[PatternSearchService]',
                 'pattern' => $pattern,
@@ -71,14 +44,7 @@ class PatternSearchService
                 'limit' => $limit,
             ]);
 
-            $result = $this->shadow->serve(
-                WordSearchShadow::SHAPE_WILDCARD_WORD,
-                ['pattern' => $pattern, 'languageCode' => $languageCode, 'limit' => $limit],
-                fn () => array_map(fn ($r) => $r->getSource(), $this->esClient->getIndex($this->indexName)->search($mainQuery)->getResults()),
-                fn () => $this->mysqlWildcard(WordSearchTokenEntity::FIELD_WORD, strtolower($pattern), $languageCode, $limit),
-                fn (array $es, array $mysql) => WordSearchShadow::compareCapped($es, $mysql, $limit),
-                $this->wordPatternBackend,
-            );
+            $result = $this->mysqlWildcard(WordSearchTokenEntity::FIELD_WORD, strtolower($pattern), $languageCode, $limit);
 
             $this->logger->info('Pattern search completed', [
                 'service' => '[PatternSearchService]',
@@ -113,20 +79,6 @@ class PatternSearchService
         }
 
         try {
-            $wildcardQuery = new Wildcard('ipa', strtolower($pattern));
-
-            $query = new Query\BoolQuery();
-            $query->addMust($wildcardQuery);
-
-            if ($languageCode !== null) {
-                $languageQuery = new Query\Term();
-                $languageQuery->setTerm('languageCode', $languageCode);
-                $query->addMust($languageQuery);
-            }
-
-            $mainQuery = new Query($query);
-            $mainQuery->setSize($limit);
-
             $this->logger->info('IPA pattern search initiated', [
                 'service' => '[PatternSearchService]',
                 'ipa_pattern' => $pattern,
@@ -134,14 +86,7 @@ class PatternSearchService
                 'limit' => $limit,
             ]);
 
-            $result = $this->shadow->serve(
-                WordSearchShadow::SHAPE_WILDCARD_IPA,
-                ['pattern' => $pattern, 'languageCode' => $languageCode, 'limit' => $limit],
-                fn () => array_map(fn ($r) => $r->getSource(), $this->esClient->getIndex($this->indexName)->search($mainQuery)->getResults()),
-                fn () => $this->mysqlWildcard(WordSearchTokenEntity::FIELD_IPA, strtolower($pattern), $languageCode, $limit),
-                fn (array $es, array $mysql) => WordSearchShadow::compareCapped($es, $mysql, $limit),
-                $this->wordPatternBackend,
-            );
+            $result = $this->mysqlWildcard(WordSearchTokenEntity::FIELD_IPA, strtolower($pattern), $languageCode, $limit);
 
             $this->logger->info('IPA pattern search completed', [
                 'service' => '[PatternSearchService]',
@@ -221,15 +166,16 @@ class PatternSearchService
     }
 
     /**
-     * Builds a parameterized Painless script for positional pattern matching.
-     * Uses parameters instead of inline values to avoid script compilation limit.
+     * Normalizes positional constraints for WordSearchRepository::findByPositions: 1-based
+     * positions become 0-based, groups of fewer than two positions are dropped, fixed characters
+     * are lowercased, and maxPosition (the minimum word length) is the highest position used.
      *
      * @param array $samePositions Groups of positions that must contain the same character
      * @param array $fixedChars Fixed characters at specific positions
      * @param int|null $exactLength Optional exact word length
-     * @return array Array with 'source' and 'params' keys
+     * @return array{exactLength: ?int, maxPosition: int, samePositions: list<list<int>>, fixedChars: list<array{pos: int, char: string}>, constrainedPositions: list<int>}
      */
-    private function buildParameterizedScript(array $samePositions, array $fixedChars, ?int $exactLength = null): array
+    private function positionParams(array $samePositions, array $fixedChars, ?int $exactLength = null): array
     {
         $params = [];
 
@@ -285,56 +231,7 @@ class PatternSearchService
         }
         $params['maxPosition'] = $maxPosition;
 
-        // Build generic parameterized script
-        $script = "
-            if (doc['word.keyword'].size() == 0) { return false; }
-            String word = doc['word.keyword'].value.toLowerCase();
-
-            // Check exact length if specified
-            if (params.exactLength != null && word.length() != params.exactLength) {
-                return false;
-            }
-
-            // Check minimum length
-            if (params.maxPosition > 0 && word.length() < params.maxPosition) {
-                return false;
-            }
-
-            // Check same position constraints
-            for (int groupIdx = 0; groupIdx < params.samePositions.size(); groupIdx++) {
-                def group = params.samePositions[groupIdx];
-                if (group.size() < 2) continue;
-
-                int firstPos = group[0];
-                char firstChar = word.charAt(firstPos);
-
-                // Check all positions in group have same character
-                for (int i = 1; i < group.size(); i++) {
-                    if (word.charAt(group[i]) != firstChar) {
-                        return false;
-                    }
-                }
-            }
-
-            // Check fixed character constraints
-            for (int i = 0; i < params.fixedChars.size(); i++) {
-                def constraint = params.fixedChars[i];
-                int pos = constraint.pos;
-                String charStr = constraint['char'];
-                char expectedChar = charStr.charAt(0);
-
-                if (word.charAt(pos) != expectedChar) {
-                    return false;
-                }
-            }
-
-            return true;
-        ";
-
-        return [
-            'source' => $script,
-            'params' => $params
-        ];
+        return $params;
     }
 
     /**
@@ -767,7 +664,7 @@ class PatternSearchService
     /**
      * Find which letters are actually viable for each constraint by doing quick test queries.
      * This dramatically reduces the search space.
-     * Uses parallel _msearch and Redis caching for optimal performance.
+     * Results are cached in Redis.
      *
      * @param array $letterConstraints All letter constraints
      * @param array|null $exactLengths Exact lengths for words
@@ -790,8 +687,6 @@ class PatternSearchService
             'lang' => $languageCode,
             'not_langs' => $notLanguageCodes,
             'alphabet' => $alphabet,
-            // Results differ by store (MySQL has newer languages); never serve one store's from the other.
-            'backend' => $this->wordPatternBackend,
         ]);
 
         $cached = $this->cache->get($cacheKey);
@@ -811,7 +706,7 @@ class PatternSearchService
             error_log("DEBUG: Processing constraint $constraintIndex");
 
             // Build all queries for parallel execution
-            $msearchQueries = [];
+            $positionQueries = [];
             $letterMap = []; // Map search index to letter
 
             for ($i = 0; $i < mb_strlen($alphabet, 'UTF-8'); $i++) {
@@ -832,20 +727,20 @@ class PatternSearchService
                     $exactLength = isset($exactLengths[$wordIndex]) ? $exactLengths[$wordIndex] : null;
 
                     // Build the query
-                    $msearchQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLength, $languageCode, $notLanguageCodes, 1);
+                    $positionQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLength, $languageCode, $notLanguageCodes, 1);
                     $letterMap[] = ['letter' => $letter, 'wordIndex' => $wordIndex];
                 }
             }
 
-            // Execute all queries in parallel using _msearch
-            error_log("DEBUG: Constraint $constraintIndex - msearchQueries count=" . count($msearchQueries) . ", letterMap count=" . count($letterMap));
+            // Run all queries for this constraint
+            error_log("DEBUG: Constraint $constraintIndex - positionQueries count=" . count($positionQueries) . ", letterMap count=" . count($letterMap));
 
-            if (!empty($msearchQueries)) {
-                error_log("DEBUG: Calling executeMsearchForViableLetters for constraint $constraintIndex");
-                $viableLetters = $this->executeMsearchForViableLetters($msearchQueries, $letterMap);
-                error_log("DEBUG: executeMsearchForViableLetters returned for constraint $constraintIndex");
+            if (!empty($positionQueries)) {
+                error_log("DEBUG: Calling runViableLetterQueries for constraint $constraintIndex");
+                $viableLetters = $this->runViableLetterQueries($positionQueries, $letterMap);
+                error_log("DEBUG: runViableLetterQueries returned for constraint $constraintIndex");
             } else {
-                error_log("DEBUG: msearchQueries is EMPTY for constraint $constraintIndex!");
+                error_log("DEBUG: positionQueries is EMPTY for constraint $constraintIndex!");
             }
 
             error_log("DEBUG: Constraint $constraintIndex has " . count($viableLetters) . " viable letters");
@@ -868,7 +763,7 @@ class PatternSearchService
      * @param array $letterMap Mapping of query indices to letters
      * @return array Array of viable letters
      */
-    private function executeMsearchForViableLetters(array $positionQueries, array $letterMap): array
+    private function runViableLetterQueries(array $positionQueries, array $letterMap): array
     {
         try {
             $viableLetters = [];
@@ -881,59 +776,13 @@ class PatternSearchService
 
             return $viableLetters;
         } catch (Exception $e) {
-            $this->logger->error('Msearch for viable letters failed', [
+            $this->logger->error('Viable letter queries failed', [
                 'service' => '[PatternSearchService]',
                 'error' => $e->getMessage(),
             ]);
 
             return [];
         }
-    }
-
-    /**
-     * Build Elasticsearch query for advanced pattern matching.
-     *
-     * @param array $samePositions Position groups
-     * @param array $fixedChars Fixed characters
-     * @param int|null $exactLength Exact length
-     * @param string|null $languageCode Language filter
-     * @param array|null $notLanguageCodes Languages to exclude
-     * @return Query
-     */
-    private function buildAdvancedPatternQuery(
-        array $samePositions,
-        array $fixedChars,
-        ?int $exactLength,
-        ?string $languageCode,
-        ?array $notLanguageCodes
-    ): Query {
-        $scriptData = $this->buildParameterizedScript($samePositions, $fixedChars, $exactLength);
-
-        $script = new Script(
-            $scriptData['source'],
-            $scriptData['params'],
-            'painless'
-        );
-        $scriptQuery = new Query\Script($script);
-
-        $query = new Query\BoolQuery();
-        $query->addFilter($scriptQuery);
-
-        if ($languageCode !== null) {
-            $languageQuery = new Query\Term();
-            $languageQuery->setTerm('languageCode', $languageCode);
-            $query->addMust($languageQuery);
-        }
-
-        if (!empty($notLanguageCodes)) {
-            foreach ($notLanguageCodes as $excludedLang) {
-                $excludeQuery = new Query\Term();
-                $excludeQuery->setTerm('languageCode', $excludedLang);
-                $query->addMustNot($excludeQuery);
-            }
-        }
-
-        return new Query($query);
     }
 
     /**
@@ -1131,8 +980,8 @@ class PatternSearchService
 
             if (!$hasWordConstraint) continue;
 
-            // Existence check: one hit is enough (terminate_after on Elasticsearch).
-            $positionQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLengths[$wordIndex] ?? null, $languageCode, $notLanguageCodes, 1, true);
+            // Existence check: one hit is enough.
+            $positionQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLengths[$wordIndex] ?? null, $languageCode, $notLanguageCodes, 1);
         }
 
         if ($positionQueries === []) return true;
@@ -1151,7 +1000,7 @@ class PatternSearchService
 
     /**
      * Find word sequences that match all assigned letter constraints.
-     * Uses parallel _msearch for optimal performance.
+     * Runs the queries for all word positions as one batch.
      *
      * @param array $assignedLetters Array of letters assigned to each constraint
      * @param array $letterConstraints Original letter constraints
@@ -1203,7 +1052,7 @@ class PatternSearchService
         ]);
 
         // Build all queries for parallel execution
-        $msearchQueries = [];
+        $positionQueries = [];
         $wordQueryMap = [];
 
         for ($wordIndex = 0; $wordIndex < $numWords; $wordIndex++) {
@@ -1244,7 +1093,7 @@ class PatternSearchService
             }
 
             // Build query
-            $msearchQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLength, $languageCode, $notLanguageCodes, 500);
+            $positionQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLength, $languageCode, $notLanguageCodes, 500);
             $wordQueryMap[] = $wordIndex;
         }
 
@@ -1255,9 +1104,9 @@ class PatternSearchService
         ]);
 
         // Execute all queries in parallel
-        $wordResultsByPosition = $this->executeMsearchForWordPositions($msearchQueries, $wordQueryMap);
+        $wordResultsByPosition = $this->runWordPositionQueries($positionQueries, $wordQueryMap);
 
-        $this->logger->info('[DEBUG] Executed msearch', [
+        $this->logger->info('[DEBUG] Executed word position queries', [
             'service' => '[PatternSearchService]',
             'word_results_keys' => array_keys($wordResultsByPosition),
             'word_results_counts' => array_map('count', $wordResultsByPosition),
@@ -1355,7 +1204,7 @@ class PatternSearchService
      * @param array $wordQueryMap Mapping of query indices to word positions
      * @return array Array of word results indexed by word position
      */
-    private function executeMsearchForWordPositions(array $positionQueries, array $wordQueryMap): array
+    private function runWordPositionQueries(array $positionQueries, array $wordQueryMap): array
     {
         try {
             $wordResultsByPosition = [];
@@ -1365,7 +1214,7 @@ class PatternSearchService
 
             return $wordResultsByPosition;
         } catch (Exception $e) {
-            $this->logger->error('Msearch for word positions failed', [
+            $this->logger->error('Word position queries failed', [
                 'service' => '[PatternSearchService]',
                 'error' => $e->getMessage(),
             ]);
@@ -1377,7 +1226,7 @@ class PatternSearchService
     /**
      * One positional query for runPositionQueries().
      *
-     * @return array{samePositions: array, fixedChars: array, exactLength: ?int, languageCode: ?string, notLanguageCodes: ?array, size: int, terminateAfter: bool}
+     * @return array{samePositions: array, fixedChars: array, exactLength: ?int, languageCode: ?string, notLanguageCodes: ?array, size: int}
      */
     private function positionQuery(
         array $samePositions,
@@ -1386,7 +1235,6 @@ class PatternSearchService
         ?string $languageCode,
         ?array $notLanguageCodes,
         int $size,
-        bool $terminateAfter = false,
     ): array {
         return [
             'samePositions' => $samePositions,
@@ -1395,65 +1243,26 @@ class PatternSearchService
             'languageCode' => $languageCode,
             'notLanguageCodes' => $notLanguageCodes,
             'size' => $size,
-            'terminateAfter' => $terminateAfter,
         ];
     }
 
     /**
-     * Run positional queries (one Elasticsearch _msearch, or one SQL query each on word_search)
-     * per WORD_PATTERN_BACKEND. Returns the hits of each query, in order.
+     * Run positional queries, one SQL query each on word_search. Returns the hits of each query,
+     * in order.
      *
      * @param list<array<string, mixed>> $positionQueries see positionQuery()
      * @return list<list<array<string, mixed>>>
      */
     private function runPositionQueries(array $positionQueries): array
     {
-        if ($positionQueries === []) {
-            return [];
-        }
-
-        return $this->shadow->serve(
-            WordSearchShadow::SHAPE_POSITIONAL,
-            ['queries' => count($positionQueries), 'first' => $positionQueries[0]],
-            fn () => $this->esRunPositionQueries($positionQueries),
-            fn () => array_map(
-                fn (array $q) => $this->wordSearchRepository->findByPositions(
-                    $this->buildParameterizedScript($q['samePositions'], $q['fixedChars'], $q['exactLength'])['params'],
-                    $q['languageCode'],
-                    $q['notLanguageCodes'],
-                    $q['size'],
-                ),
-                $positionQueries,
-            ),
-            fn (array $es, array $mysql) => WordSearchShadow::compareCappedBatch($es, $mysql, array_column($positionQueries, 'size')),
-            $this->wordPatternBackend,
-        );
-    }
-
-    /**
-     * @param list<array<string, mixed>> $positionQueries
-     * @return list<list<array<string, mixed>>>
-     */
-    private function esRunPositionQueries(array $positionQueries): array
-    {
-        $multiSearch = new MultiSearch($this->esClient);
-        foreach ($positionQueries as $q) {
-            $query = $this->buildAdvancedPatternQuery($q['samePositions'], $q['fixedChars'], $q['exactLength'], $q['languageCode'], $q['notLanguageCodes']);
-
-            $search = new Search($this->esClient);
-            $search->addIndexByName($this->indexName);
-            $search->setQuery($query->getQuery());
-            $search->setOption('size', $q['size']);
-            if ($q['terminateAfter']) {
-                $search->setOption('terminate_after', 1);
-            }
-            $multiSearch->addSearch($search);
-        }
-
-        // Searches are added unkeyed, so results map back positionally.
         return array_map(
-            fn ($resultSet) => array_map(fn ($r) => $r->getSource(), $resultSet->getResults()),
-            array_values($multiSearch->search()->getResultSets()),
+            fn (array $q) => $this->wordSearchRepository->findByPositions(
+                $this->positionParams($q['samePositions'], $q['fixedChars'], $q['exactLength']),
+                $q['languageCode'],
+                $q['notLanguageCodes'],
+                $q['size'],
+            ),
+            $positionQueries,
         );
     }
 
@@ -1597,7 +1406,7 @@ class PatternSearchService
 
     /**
      * Find word sequences for a specific letter at given positions.
-     * Uses parallel _msearch and Redis caching for optimal performance.
+     * Results are cached in Redis.
      *
      * @param string $letter The letter to search for
      * @param array $sequencePositions Position arrays for each word
@@ -1623,7 +1432,6 @@ class PatternSearchService
             'lang' => $languageCode,
             'not_langs' => $notLanguageCodes,
             'limit' => $limit,
-            'backend' => $this->wordPatternBackend,
         ]);
 
         $cached = $this->cache->get($cacheKey);
@@ -1632,7 +1440,7 @@ class PatternSearchService
         }
 
         // Build all queries for parallel execution
-        $msearchQueries = [];
+        $positionQueries = [];
         $wordQueryMap = [];
 
         foreach ($sequencePositions as $wordIndex => $positions) {
@@ -1653,14 +1461,14 @@ class PatternSearchService
             $exactLength = $exactLengths[$wordIndex] ?? null;
 
             // Build query
-            $msearchQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLength, $languageCode, $notLanguageCodes, 500);
+            $positionQueries[] = $this->positionQuery($samePositions, $fixedChars, $exactLength, $languageCode, $notLanguageCodes, 500);
             $wordQueryMap[] = $wordIndex;
         }
 
         // Execute all queries in parallel
         $wordResultsByPosition = [];
-        if (!empty($msearchQueries)) {
-            $wordResultsByPosition = $this->executeMsearchForWordPositions($msearchQueries, $wordQueryMap);
+        if (!empty($positionQueries)) {
+            $wordResultsByPosition = $this->runWordPositionQueries($positionQueries, $wordQueryMap);
         }
 
         // Combine words from each position to form sequences

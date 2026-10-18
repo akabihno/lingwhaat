@@ -1,7 +1,7 @@
 monolog:
     channels:
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
-        - pipeline # Application/pipeline logs (App\Service\Logging\ElasticsearchLogger)
+        - pipeline # Application/pipeline logs (App\Service\Logging\PipelineLogger)
 
 when@dev:
     monolog:

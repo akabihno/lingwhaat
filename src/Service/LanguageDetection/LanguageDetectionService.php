@@ -2,22 +2,18 @@
 
 namespace App\Service\LanguageDetection;
 
-use App\Constant\WordSearchBackend;
 use App\Service\LanguageNormalizationService;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use App\Service\Search\FuzzySearchService;
-use App\Service\Search\WordSearchShadow;
 use Symfony\Component\Uid\Uuid;
 
 class LanguageDetectionService
 {
     const int EXACT_MATCH_SCORE = 5;
     public function __construct(
-        protected ElasticsearchLogger $logger,
+        protected PipelineLogger $logger,
         protected LanguageNormalizationService $languageNormalizationService,
         protected FuzzySearchService $fuzzySearchService,
-        private readonly WordSearchShadow $shadow,
-        private readonly string $wordLookupBackend = WordSearchBackend::ELASTICSEARCH,
     )
     {
     }
@@ -52,26 +48,6 @@ class LanguageDetectionService
         $languageCounts = [];
         $matchCount = 0;
 
-        // Shadow mode: tally the votes MySQL's lookups would have cast, from the results the shadow
-        // router already computed, to compare whole detections (not just per-word result lists).
-        $shadowing = $this->wordLookupBackend === WordSearchBackend::SHADOW;
-        $mysqlCounts = [];
-        $mysqlComplete = true;
-        // A plain closure on purpose: an arrow function would capture the tallies by value.
-        $mysqlVotes = function (int $weight) use ($shadowing, &$mysqlCounts, &$mysqlComplete): ?callable {
-            if (!$shadowing) {
-                return null;
-            }
-
-            return function (?array $matches) use (&$mysqlCounts, &$mysqlComplete, $weight): void {
-                if ($matches === null) {
-                    $mysqlComplete = false;
-                    return;
-                }
-                self::addVotes($mysqlCounts, $matches, $weight);
-            };
-        };
-
         foreach ($words as $word) {
             $word = $this->languageNormalizationService->normalizeWord($word);
             if (!$word) {
@@ -79,14 +55,12 @@ class LanguageDetectionService
             }
 
             try {
-                $exactMatches = $this->fuzzySearchService->findExactMatches($word, null, $mysqlVotes(self::EXACT_MATCH_SCORE));
+                $exactMatches = $this->fuzzySearchService->findExactMatches($word);
                 $matchCount += self::addVotes($languageCounts, $exactMatches, self::EXACT_MATCH_SCORE);
 
-                $matches = $this->fuzzySearchService->findClosestMatches($word, 5, '', $mysqlVotes(1));
+                $matches = $this->fuzzySearchService->findClosestMatches($word);
                 $matchCount += self::addVotes($languageCounts, $matches, 1);
             } catch (\Throwable $e) {
-                // The two tallies no longer cover the same lookups.
-                $mysqlComplete = false;
                 $this->logger->error(
                     'Search failed',
                     [
@@ -100,10 +74,6 @@ class LanguageDetectionService
         }
 
         $topLanguageCode = self::topLanguage($languageCounts);
-
-        if ($shadowing) {
-            $this->compareWithMysql($uuid, $languageInput, $languageCounts, $mysqlCounts, $mysqlComplete);
-        }
 
         $this->logger->info(
             'Completed detection',
@@ -157,36 +127,6 @@ class LanguageDetectionService
         arsort($counts);
 
         return array_key_first($counts);
-    }
-
-    /**
-     * Record whether MySQL's lookups would have detected the same language. A different winner
-     * that MySQL scores equal to ES's winner is a "tie": which of equal counts wins depends only on
-     * result order.
-     *
-     * @param array<string, int> $esCounts
-     * @param array<string, int> $mysqlCounts
-     */
-    private function compareWithMysql(string $uuid, string $input, array $esCounts, array $mysqlCounts, bool $complete): void
-    {
-        $esTop = self::topLanguage($esCounts);
-        $mysqlTop = self::topLanguage($mysqlCounts);
-
-        $outcome = match (true) {
-            !$complete => 'incomplete',
-            $esTop === $mysqlTop => 'same',
-            $esTop !== null && $mysqlTop !== null && ($mysqlCounts[$esTop] ?? 0) === $mysqlCounts[$mysqlTop] => 'tie',
-            default => 'different',
-        };
-
-        arsort($esCounts);
-        arsort($mysqlCounts);
-        $this->shadow->recordComparison(WordSearchShadow::SHAPE_DETECTED_LANGUAGE, $outcome, [
-            'uuid' => $uuid,
-            'input' => $input,
-            'es' => array_slice($esCounts, 0, 5, true),
-            'mysql' => array_slice($mysqlCounts, 0, 5, true),
-        ]);
     }
 
 }

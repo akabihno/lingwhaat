@@ -49,50 +49,6 @@ services:
           memory: 512m
     restart: on-failure
 
-  elasticsearch:
-    profiles: ["elastic"]
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-      - xpack.security.enabled=false
-      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-      - bootstrap.memory_lock=true
-    network_mode: host
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - elasticsearch_data:/usr/share/elasticsearch/data
-    restart: on-failure
-    deploy:
-      resources:
-        limits:
-          memory: 2g
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-
-  kibana:
-    profiles: ["elastic"]
-    image: docker.elastic.co/kibana/kibana:8.11.0
-    container_name: kibana
-    environment:
-      - ELASTICSEARCH_HOSTS=http://localhost:9200
-      - SERVER_HOST=0.0.0.0
-    network_mode: host
-    depends_on:
-      elasticsearch:
-        condition: service_healthy
-    restart: on-failure
-    deploy:
-      resources:
-        limits:
-          memory: 1g
-
   redis:
     profiles: ["local", "rds", "dev"]
     image: redis:7-alpine
@@ -464,6 +420,5 @@ services:
 
 volumes:
   database_data:
-  elasticsearch_data:
   prometheus_data:
   grafana_data:

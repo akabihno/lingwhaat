@@ -87,8 +87,8 @@ kubectl exec -it -n lingwhaat deploy/web -- php bin/console app:wikipedia-patter
 To re-sweep the whole corpus (e.g. after adding a manuscript), reset the per-language cursors first:
 TRUNCATE lingwhaat.wikipedia_pattern_index_offset;
 
-Reindex all words for all languages:
-kubectl exec -it -n lingwhaat deploy/web -- php bin/console language:reindex-words
+Rebuild the word search tables (word_search / word_search_token) for all languages, or one with `-l fi`:
+kubectl exec -it -n lingwhaat deploy/web -- su -s /bin/sh www-data -c 'php bin/console app:word-search-rebuild'
 
 
 Also note: for future deployments, if a pod gets scheduled back onto raspberrypi and hits ImagePullBackOff, just delete that pod and the scheduler will place it on another    

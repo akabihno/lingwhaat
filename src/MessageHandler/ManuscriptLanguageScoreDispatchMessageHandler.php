@@ -5,7 +5,7 @@ namespace App\MessageHandler;
 use App\Message\ManuscriptLanguageScoreDispatchMessage;
 use App\Message\ManuscriptLanguageScoreMessage;
 use App\Repository\ManuscriptPatternMatchResultRepository;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -31,7 +31,7 @@ class ManuscriptLanguageScoreDispatchMessageHandler
         private readonly ManuscriptPatternMatchResultRepository $resultRepository,
         private readonly MessageBusInterface $bus,
         private readonly LockFactory $lockFactory,
-        private readonly ElasticsearchLogger $logger,
+        private readonly PipelineLogger $logger,
     ) {
     }
 

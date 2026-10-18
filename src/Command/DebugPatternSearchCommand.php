@@ -2,10 +2,10 @@
 
 namespace App\Command;
 
+use App\Entity\WordSearchTokenEntity;
+use App\Repository\WordSearchRepository;
 use App\Service\Search\PatternSearchService;
 use App\Constant\ScriptAlphabets;
-use Elastica\Client;
-use Elastica\Query;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -19,11 +19,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class DebugPatternSearchCommand extends Command
 {
-    private const string INDEX_NAME = 'words_index';
 
     public function __construct(
         private PatternSearchService $patternSearchService,
-        private Client $esClient,
+        private WordSearchRepository $wordSearchRepository,
     ) {
         parent::__construct();
     }
@@ -81,8 +80,8 @@ class DebugPatternSearchCommand extends Command
         $io->writeln("Alphabet length: " . mb_strlen($alphabet, 'UTF-8'));
         $io->newLine();
 
-        // Test 1: Check if individual words exist in Elasticsearch
-        $io->section('Test 1: Checking if words exist in Elasticsearch');
+        // Test 1: Check if individual words exist in the dictionary
+        $io->section('Test 1: Checking if words exist in the dictionary');
         foreach ($words as $index => $word) {
             $wordLength = mb_strlen($word, 'UTF-8');
             $this->checkWordExists($io, $word, $languageCode, $wordLength, $exactLengths[$index]);
@@ -492,27 +491,13 @@ class DebugPatternSearchCommand extends Command
         }
 
         try {
-            // Simple term query
-            $query = new Query\BoolQuery();
+            // Entries containing the word as a token (up to 5 shown)
+            $token = strtolower($word);
+            $results = $this->wordSearchRepository->findRankedEntriesByTokens(WordSearchTokenEntity::FIELD_WORD, $token, [$token], $lang, 5);
 
-            $termQuery = new Query\Term();
-            $termQuery->setTerm('word', strtolower($word));
-            $query->addMust($termQuery);
-
-            $langQuery = new Query\Term();
-            $langQuery->setTerm('languageCode', $lang);
-            $query->addMust($langQuery);
-
-            $mainQuery = new Query($query);
-            $mainQuery->setSize(5);
-
-            $results = $this->esClient->getIndex(self::INDEX_NAME)->search($mainQuery);
-            $totalHits = $results->getTotalHits();
-
-            if ($totalHits > 0) {
-                $io->writeln("<info>FOUND ($totalHits matches)</info>");
-                foreach ($results->getResults() as $result) {
-                    $source = $result->getSource();
+            if ($results !== []) {
+                $io->writeln('<info>FOUND (' . count($results) . ' shown)</info>');
+                foreach ($results as $source) {
                     $io->writeln("    => {$source['word']} (lang: {$source['languageCode']})");
                 }
             } else {

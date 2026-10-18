@@ -4,7 +4,7 @@ namespace App\MessageHandler;
 
 use App\Exception\WikipediaArticleLimitExceededException;
 use App\Message\ParseWikipediaArticlesMessage;
-use App\Service\Logging\ElasticsearchLogger;
+use App\Service\Logging\PipelineLogger;
 use App\Service\WikipediaPatternParserService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
@@ -13,7 +13,7 @@ class ParseWikipediaArticlesMessageHandler
 {
     public function __construct(
         private readonly WikipediaPatternParserService $parserService,
-        private readonly ElasticsearchLogger $logger
+        private readonly PipelineLogger $logger
     ) {
     }
 

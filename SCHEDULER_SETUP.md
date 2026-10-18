@@ -91,7 +91,7 @@ $schedule->add(
 
 ### Monitoring
 
-Check Elasticsearch logs for parser activity.
+Check the worker logs (`kubectl logs`, JSON lines on the `pipeline` channel) for parser activity.
 
 ### Failed Messages
 
