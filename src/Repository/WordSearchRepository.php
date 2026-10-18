@@ -137,6 +137,94 @@ class WordSearchRepository extends ServiceEntityRepository
         return array_map(self::toDocument(...), $rows);
     }
 
+    /**
+     * Entries with a token matching a SQL LIKE pattern (translated from an Elasticsearch wildcard
+     * by the caller), each entry once, most popular first.
+     *
+     * @return list<array{word: string, ipa: string, languageCode: string, score: int, pattern: string, wordLength: int}>
+     */
+    public function findByTokenLike(int $field, string $likePattern, ?int $tokenLength, ?string $languageCode, int $limit): array
+    {
+        $sql = 'SELECT ws.word, ws.ipa, ws.language_code, ws.score, ws.pattern, ws.word_length
+                FROM word_search_token t
+                JOIN word_search ws ON ws.language_code = t.language_code AND ws.source_id = t.source_id
+                WHERE t.field = :field AND t.token LIKE :likePattern';
+        $params = ['field' => $field, 'likePattern' => $likePattern, 'limit' => $limit];
+        if ($tokenLength !== null) {
+            $sql .= ' AND t.token_length = :tokenLength';
+            $params['tokenLength'] = $tokenLength;
+        }
+        if ($languageCode !== null) {
+            $sql .= ' AND t.language_code = :languageCode';
+            $params['languageCode'] = $languageCode;
+        }
+        // Grouped by word_search's primary key, so its other columns are functionally dependent.
+        $sql .= ' GROUP BY ws.language_code, ws.source_id ORDER BY ws.score DESC, ws.language_code, ws.source_id DESC LIMIT :limit';
+
+        $rows = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $params, ['limit' => \PDO::PARAM_INT]);
+
+        return array_map(self::toDocument(...), $rows);
+    }
+
+    /**
+     * Entries matching positional constraints on the lowercased word, exactly as the former
+     * Elasticsearch painless script checked them (see PatternSearchService::buildParameterizedScript,
+     * whose params this takes): optional exact length, minimum length maxPosition, every group of
+     * 0-based positions holding the same character, and fixed characters (first character of each
+     * given string) at 0-based positions. Most popular first; a single-row query (an existence
+     * check) skips the ordering.
+     *
+     * @param array{exactLength: ?int, maxPosition: int, samePositions: list<list<int>>, fixedChars: list<array{pos: int, char: string}>} $params
+     * @param list<string>|null $notLanguageCodes
+     * @return list<array{word: string, ipa: string, languageCode: string, score: int, pattern: string, wordLength: int}>
+     */
+    public function findByPositions(array $params, ?string $languageCode, ?array $notLanguageCodes, int $limit): array
+    {
+        $conditions = [];
+        $values = ['limit' => $limit];
+        $types = ['limit' => \PDO::PARAM_INT];
+        $lower = 'LOWER(ws.word)';
+
+        if ($languageCode !== null) {
+            $conditions[] = 'ws.language_code = :languageCode';
+            $values['languageCode'] = $languageCode;
+        }
+        if (!empty($notLanguageCodes)) {
+            $conditions[] = 'ws.language_code NOT IN (:notLanguageCodes)';
+            $values['notLanguageCodes'] = array_values($notLanguageCodes);
+            $types['notLanguageCodes'] = ArrayParameterType::STRING;
+        }
+        if ($params['exactLength'] !== null) {
+            // word_length (as stored) narrows the scan; lowercasing can only lengthen a word.
+            $conditions[] = "ws.word_length BETWEEN :exactLengthMin AND :exactLength AND CHAR_LENGTH({$lower}) = :exactLength";
+            $values['exactLength'] = $params['exactLength'];
+            $values['exactLengthMin'] = max(0, $params['exactLength'] - 2);
+        }
+        if ($params['maxPosition'] > 0) {
+            $conditions[] = "CHAR_LENGTH({$lower}) >= :maxPosition";
+            $values['maxPosition'] = $params['maxPosition'];
+        }
+        foreach ($params['samePositions'] as $group) {
+            $first = (int) $group[0] + 1;
+            foreach (array_slice($group, 1) as $position) {
+                $conditions[] = sprintf('SUBSTRING(%s, %d, 1) = SUBSTRING(%s, %d, 1)', $lower, $first, $lower, (int) $position + 1);
+            }
+        }
+        foreach ($params['fixedChars'] as $i => $constraint) {
+            $conditions[] = sprintf('SUBSTRING(%s, %d, 1) = :fixedChar%d', $lower, (int) $constraint['pos'] + 1, $i);
+            $values["fixedChar{$i}"] = mb_substr((string) $constraint['char'], 0, 1);
+        }
+
+        $sql = 'SELECT ws.word, ws.ipa, ws.language_code, ws.score, ws.pattern, ws.word_length FROM word_search ws'
+            . ($conditions !== [] ? ' WHERE ' . implode(' AND ', $conditions) : '')
+            . ($limit > 1 ? ' ORDER BY ws.score DESC, ws.language_code, ws.source_id DESC' : '')
+            . ' LIMIT :limit';
+
+        $rows = $this->getEntityManager()->getConnection()->fetchAllAssociative($sql, $values, $types);
+
+        return array_map(self::toDocument(...), $rows);
+    }
+
     public function tokenExists(int $field, string $token, string $languageCode): bool
     {
         return $this->getEntityManager()->getConnection()->fetchOne(

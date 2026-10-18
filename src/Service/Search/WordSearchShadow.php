@@ -8,7 +8,8 @@ use App\Service\Metrics\MetricName;
 use App\Service\Metrics\PrometheusMetricsService;
 
 /**
- * Routes a word lookup to Elasticsearch, MySQL, or both (shadow mode), per WORD_LOOKUP_BACKEND.
+ * Routes a word lookup to Elasticsearch, MySQL, or both (shadow mode), per WORD_LOOKUP_BACKEND
+ * (or the backend a caller passes, e.g. WORD_PATTERN_BACKEND for pattern searches).
  *
  * In shadow mode the caller always gets the Elasticsearch answer; the MySQL answer is computed
  * alongside, compared, and the outcome counted in word_search_shadow_total{shape,outcome}, with
@@ -21,6 +22,12 @@ use App\Service\Metrics\PrometheusMetricsService;
  *    is what language detection counts.
  *  - missing: (exact) ES found a language MySQL did not.
  *  - extra: (exact) MySQL found more languages and ES was not capped.
+ *  - both_capped: (wildcard/positional) both stores hit the size cap, so their (unordered) hits
+ *    cannot be compared beyond that.
+ *  - mysql_superset: (wildcard/positional) every ES hit is among MySQL's hits, plus more (MySQL
+ *    has languages added after the words_index build).
+ *  - mysql_capped: (wildcard/positional) ES's result was complete, MySQL hit the cap and its top-N
+ *    leaves out some ES hits; not verifiable from the capped results.
  *  - different: anything else.
  *  - error: the MySQL lookup threw.
  */
@@ -30,6 +37,9 @@ class WordSearchShadow
     public const string SHAPE_EXACT_WORD = 'exact_word';
     public const string SHAPE_FUZZY_WORD = 'fuzzy_word';
     public const string SHAPE_EXISTS_WORD = 'exists_word';
+    public const string SHAPE_WILDCARD_WORD = 'wildcard_word';
+    public const string SHAPE_WILDCARD_IPA = 'wildcard_ipa';
+    public const string SHAPE_POSITIONAL = 'positional';
 
     public function __construct(
         private readonly ElasticsearchLogger $logger,
@@ -44,14 +54,16 @@ class WordSearchShadow
      * @param callable(): T $mysql
      * @param callable(T, T): string $compare returns the outcome
      * @param array<string, mixed> $query logged with disagreements
+     * @param string|null $backend overrides WORD_LOOKUP_BACKEND
      * @return T
      */
-    public function serve(string $shape, array $query, callable $elasticsearch, callable $mysql, callable $compare): mixed
+    public function serve(string $shape, array $query, callable $elasticsearch, callable $mysql, callable $compare, ?string $backend = null): mixed
     {
-        if ($this->wordLookupBackend === WordSearchBackend::MYSQL) {
+        $backend ??= $this->wordLookupBackend;
+        if ($backend === WordSearchBackend::MYSQL) {
             return $mysql();
         }
-        if ($this->wordLookupBackend !== WordSearchBackend::SHADOW) {
+        if ($backend !== WordSearchBackend::SHADOW) {
             return $elasticsearch();
         }
 
@@ -128,6 +140,69 @@ class WordSearchShadow
         return $la === $lb ? 'same_languages' : 'different';
     }
 
+    /**
+     * Hits of one size-capped, unordered query (ES returned script/wildcard hits in index order).
+     *
+     * @param list<array<string, mixed>> $es
+     * @param list<array<string, mixed>> $mysql
+     */
+    public static function compareCapped(array $es, array $mysql, int $size): string
+    {
+        $entries = static function (array $docs): array {
+            $keys = array_map(static fn (array $d): string => $d['languageCode'] . ':' . $d['word'], $docs);
+            sort($keys);
+            return $keys;
+        };
+        $a = $entries($es);
+        $b = $entries($mysql);
+
+        if ($a === $b) {
+            return 'same';
+        }
+        $esCapped = count($es) >= $size;
+        $mysqlCapped = count($mysql) >= $size;
+        if ($esCapped && $mysqlCapped) {
+            return 'both_capped';
+        }
+
+        // Multiset containment: every ES hit (with multiplicity) is among MySQL's hits.
+        $remaining = array_count_values($b);
+        foreach ($a as $key) {
+            if (($remaining[$key] ?? 0) === 0) {
+                // MySQL's capped top-N may simply leave out some of ES's complete hits.
+                return ($mysqlCapped && !$esCapped) ? 'mysql_capped' : 'different';
+            }
+            $remaining[$key]--;
+        }
+
+        return 'mysql_superset';
+    }
+
+    /**
+     * A batch of capped queries: the worst per-query outcome.
+     *
+     * @param list<list<array<string, mixed>>> $es
+     * @param list<list<array<string, mixed>>> $mysql
+     * @param list<int> $sizes
+     */
+    public static function compareCappedBatch(array $es, array $mysql, array $sizes): string
+    {
+        if (count($es) !== count($mysql)) {
+            return 'different';
+        }
+
+        $rank = ['same' => 0, 'both_capped' => 1, 'mysql_superset' => 2, 'mysql_capped' => 3, 'different' => 4];
+        $worst = 'same';
+        foreach ($sizes as $i => $size) {
+            $outcome = self::compareCapped($es[$i], $mysql[$i], $size);
+            if ($rank[$outcome] > $rank[$worst]) {
+                $worst = $outcome;
+            }
+        }
+
+        return $worst;
+    }
+
     public static function compareExists(bool $es, bool $mysql): string
     {
         return $es === $mysql ? 'same' : 'different';
@@ -147,6 +222,10 @@ class WordSearchShadow
     {
         if (!is_array($result)) {
             return $result;
+        }
+        if ($result !== [] && is_array($result[0] ?? null) && !isset($result[0]['languageCode'])) {
+            // A batch: hit counts per query.
+            return array_map('count', $result);
         }
 
         return array_map(static fn (array $d): string => $d['languageCode'] . ':' . $d['word'], array_slice($result, 0, 20));

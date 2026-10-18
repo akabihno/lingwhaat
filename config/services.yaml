@@ -13,6 +13,8 @@ parameters:
     env(WORD_SEARCH_BACKEND): 'elasticsearch'
     # Exact/fuzzy word lookups: 'elasticsearch', 'shadow' (serve ES, compare MySQL) or 'mysql'.
     env(WORD_LOOKUP_BACKEND): 'elasticsearch'
+    # Wildcard and positional pattern searches (PatternSearchService): same three values.
+    env(WORD_PATTERN_BACKEND): 'elasticsearch'
 
 services:
     # default configuration for services in *this* file
@@ -26,6 +28,7 @@ services:
             bool $characterGroupingEnabled: '%env(bool:MANUSCRIPT_CHARACTER_GROUPING_ENABLED)%'
             string $wordSearchBackend: '%env(WORD_SEARCH_BACKEND)%'
             string $wordLookupBackend: '%env(WORD_LOOKUP_BACKEND)%'
+            string $wordPatternBackend: '%env(WORD_PATTERN_BACKEND)%'
 
     # Auto-tag all language repositories
     _instanceof:
