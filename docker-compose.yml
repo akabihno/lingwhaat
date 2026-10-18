@@ -31,7 +31,10 @@ services:
       - WIKTIONARY_UA_EMAIL=${WIKTIONARY_UA_EMAIL}
       - RATE_LIMITER_WHITELISTED_IP=${RATE_LIMITER_WHITELISTED_IP}
       - LOCK_DSN=${LOCK_DSN}
-    image: php:8.5-apache
+    # Name for the image built above. Must not be the Dockerfile's base image: compose tags the
+    # build with this name, so `php:8.5-apache` here overwrote the official base locally and every
+    # later Dockerfile-php build stacked on an old copy of the app (deleted files lived on).
+    image: lingwhaat-php:dev
     container_name: php-app
     network_mode: host
     depends_on:
