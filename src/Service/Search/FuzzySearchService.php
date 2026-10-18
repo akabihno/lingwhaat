@@ -3,6 +3,7 @@
 namespace App\Service\Search;
 
 use App\Constant\WordSearchBackend;
+use App\Entity\WordSearchTokenEntity;
 use App\Repository\WordSearchRepository;
 use App\Service\Logging\ElasticsearchLogger;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
@@ -15,6 +16,9 @@ use Elastica\Query\Term;
 
 class FuzzySearchService
 {
+    // Hits per exact query on Elasticsearch; MySQL returns every matching language instead.
+    private const int ES_EXACT_LIMIT = 5;
+
     private Client $esClient;
     private string $indexName = 'words_index';
 
@@ -22,6 +26,8 @@ class FuzzySearchService
         protected ElasticsearchLogger $logger,
         Client $esClient,
         private readonly WordSearchRepository $wordSearchRepository,
+        private readonly MysqlWordLookup $mysqlLookup,
+        private readonly WordSearchShadow $shadow,
         private readonly string $wordSearchBackend = WordSearchBackend::ELASTICSEARCH,
     ) {
         $this->esClient = $esClient;
@@ -31,7 +37,22 @@ class FuzzySearchService
      * @throws ServerResponseException
      * @throws ClientResponseException
      */
-    public function findExactMatches(string $input, int $limit = 5): array
+    /**
+     * Entries containing $input as a token. Elasticsearch returns up to $limit (default 5) entries;
+     * MySQL returns the best entry of every matching language, capped only by an explicit $limit.
+     */
+    public function findExactMatches(string $input, ?int $limit = null): array
+    {
+        return $this->shadow->serve(
+            WordSearchShadow::SHAPE_EXACT_WORD,
+            ['input' => $input, 'limit' => $limit],
+            fn () => $this->esFindExactMatches($input, $limit ?? self::ES_EXACT_LIMIT),
+            fn () => $this->mysqlLookup->exactMatches(WordSearchTokenEntity::FIELD_WORD, $input, $limit),
+            fn (array $es, array $mysql) => WordSearchShadow::compareExact($es, $mysql, $limit ?? self::ES_EXACT_LIMIT),
+        );
+    }
+
+    private function esFindExactMatches(string $input, int $limit): array
     {
         $term = new Term();
         $term->setTerm('word', $input);
@@ -45,6 +66,17 @@ class FuzzySearchService
     }
 
     public function findClosestMatches(string $input, int $limit = 5, string $languageCode = ''): array
+    {
+        return $this->shadow->serve(
+            WordSearchShadow::SHAPE_FUZZY_WORD,
+            ['input' => $input, 'limit' => $limit, 'languageCode' => $languageCode],
+            fn () => $this->esFindClosestMatches($input, $limit, $languageCode),
+            fn () => $this->mysqlLookup->closestMatches(WordSearchTokenEntity::FIELD_WORD, $input, $limit, $languageCode !== '' ? $languageCode : null),
+            WordSearchShadow::compareFuzzy(...),
+        );
+    }
+
+    private function esFindClosestMatches(string $input, int $limit, string $languageCode): array
     {
         $fuzzy = new Fuzzy();
         $fuzzy->setParam('word', [
@@ -79,7 +111,18 @@ class FuzzySearchService
         return array_map(fn($r) => $r->getSource(), $results->getResults());
     }
 
-    public function findExactMatchesByIpa(string $ipa, int $limit = 5): array
+    public function findExactMatchesByIpa(string $ipa, ?int $limit = null): array
+    {
+        return $this->shadow->serve(
+            WordSearchShadow::SHAPE_EXACT_IPA,
+            ['input' => $ipa, 'limit' => $limit],
+            fn () => $this->esFindExactMatchesByIpa($ipa, $limit ?? self::ES_EXACT_LIMIT),
+            fn () => $this->mysqlLookup->exactMatches(WordSearchTokenEntity::FIELD_IPA, $ipa, $limit),
+            fn (array $es, array $mysql) => WordSearchShadow::compareExact($es, $mysql, $limit ?? self::ES_EXACT_LIMIT),
+        );
+    }
+
+    private function esFindExactMatchesByIpa(string $ipa, int $limit): array
     {
         $term = new Term();
         $term->setTerm('ipa', $ipa);
@@ -123,6 +166,17 @@ class FuzzySearchService
     }
 
     public function findClosestMatchesByIpa(string $ipa, int $limit = 5): array
+    {
+        return $this->shadow->serve(
+            WordSearchShadow::SHAPE_FUZZY_IPA,
+            ['input' => $ipa, 'limit' => $limit],
+            fn () => $this->esFindClosestMatchesByIpa($ipa, $limit),
+            fn () => $this->mysqlLookup->closestMatches(WordSearchTokenEntity::FIELD_IPA, $ipa, $limit),
+            WordSearchShadow::compareFuzzy(...),
+        );
+    }
+
+    private function esFindClosestMatchesByIpa(string $ipa, int $limit): array
     {
         $fuzzy = new Fuzzy();
         $fuzzy->setParam('ipa', [

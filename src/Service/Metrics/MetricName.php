@@ -36,4 +36,11 @@ final class MetricName
      * Monotonically increasing (per process/storage lifetime) — use rate() in Prometheus.
      */
     public const string WIKIPEDIA_ARTICLES_FETCHED_TOTAL = 'wikipedia_articles_fetched_total';
+
+    /**
+     * Counter: word lookups run against both Elasticsearch and MySQL in shadow mode
+     * (WORD_LOOKUP_BACKEND=shadow), labelled by query shape and comparison outcome (see
+     * WordSearchShadow). The share of non-"same" outcomes is how the MySQL port is judged.
+     */
+    public const string WORD_SEARCH_SHADOW_TOTAL = 'word_search_shadow_total';
 }
