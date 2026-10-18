@@ -52,8 +52,7 @@ services:
 
     App\Service\Logging\ElasticsearchLogger:
       arguments:
-        $client: '@Elastica\Client'
-        $indexPrefix: 'application-logs'
+        $logger: '@monolog.logger.pipeline'
 
     # Service locator for TrainIpaPredictorModelCommand
     App\Service\LanguageDetection\LanguageTransliteration\Command\TrainIpaPredictorModelCommand:

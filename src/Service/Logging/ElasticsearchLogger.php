@@ -2,20 +2,19 @@
 
 namespace App\Service\Logging;
 
-use Elastica\Client;
-use Elastica\Document;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
+/**
+ * Application logger. Despite the name (kept to avoid churning its many call sites), it no
+ * longer writes to Elasticsearch: it forwards to the Monolog "pipeline" channel, which prod
+ * sends to stderr as JSON. Logging one HTTP request per line to the single-node ES was a large
+ * share of its write load and made every worker block on ES just to log.
+ */
 class ElasticsearchLogger implements LoggerInterface
 {
-    private string $indexPrefix;
-    private Client $client;
-
-    public function __construct(Client $client, string $indexPrefix = 'application-logs')
+    public function __construct(private readonly LoggerInterface $logger)
     {
-        $this->client = $client;
-        $this->indexPrefix = $indexPrefix;
     }
 
     #[\Override]
@@ -69,28 +68,7 @@ class ElasticsearchLogger implements LoggerInterface
     #[\Override]
     public function log($level, $message, array $context = []): void
     {
-        try {
-            $now = new \DateTime();
-            $indexName = sprintf('%s-%s', $this->indexPrefix, $now->format('Y.m.d'));
-
-            $document = new Document(null, [
-                'timestamp' => $now->format('c'),
-                'level' => $level,
-                'message' => $message,
-                'context' => $context,
-            ]);
-
-            // Intentionally no refresh() — per-doc refresh is a major throughput killer when many
-            // workers log frequently. Elasticsearch refreshes automatically (~1s default), which
-            // is fine for log visibility.
-            $this->client->getIndex($indexName)->addDocument($document);
-        } catch (\Throwable $e) {
-            error_log(sprintf(
-                'Failed to log to Elasticsearch: %s. Original message: %s',
-                $e->getMessage(),
-                $message
-            ));
-        }
+        $this->logger->log($level, $message, $context);
     }
 
 }
