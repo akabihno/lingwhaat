@@ -2,6 +2,8 @@
 
 namespace App\Service\Search;
 
+use App\Constant\WordSearchBackend;
+use App\Repository\WordSearchRepository;
 use App\Service\Logging\ElasticsearchLogger;
 use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Exception\ServerResponseException;
@@ -19,6 +21,8 @@ class FuzzySearchService
     public function __construct(
         protected ElasticsearchLogger $logger,
         Client $esClient,
+        private readonly WordSearchRepository $wordSearchRepository,
+        private readonly string $wordSearchBackend = WordSearchBackend::ELASTICSEARCH,
     ) {
         $this->esClient = $esClient;
     }
@@ -93,6 +97,10 @@ class FuzzySearchService
      */
     public function findByPattern(string $pattern, string $languageCode, int $limit = 30): array
     {
+        if ($this->wordSearchBackend === WordSearchBackend::MYSQL) {
+            return $this->wordSearchRepository->findByPattern($pattern, $languageCode, $limit);
+        }
+
         $boolQuery = new BoolQuery();
 
         $patternTerm = new Term();

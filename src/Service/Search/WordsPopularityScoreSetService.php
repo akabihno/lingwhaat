@@ -4,6 +4,7 @@ namespace App\Service\Search;
 
 use App\Constant\LanguageMappings;
 use App\Repository\WikipediaArticleRepository;
+use App\Repository\WordSearchRepository;
 use App\Repository\WordsPopularityScoreSetOffsetRepository;
 use App\Service\Logging\ElasticsearchLogger;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,6 +20,7 @@ class WordsPopularityScoreSetService
         private readonly WordsPopularityScoreSetOffsetRepository $wordsPopularityScoreSetOffsetRepository,
         private readonly EntityManagerInterface     $entityManager,
         private readonly ElasticsearchLogger        $logger,
+        private readonly WordSearchRepository       $wordSearchRepository,
     ) {
     }
 
@@ -90,7 +92,7 @@ class WordsPopularityScoreSetService
 
         // Bulk update scores using raw SQL for performance
         if (!empty($scoreIncrements)) {
-            $this->bulkUpdateScores($entityClass, $scoreIncrements);
+            $this->bulkUpdateScores($entityClass, $languageCode, $scoreIncrements);
             $this->logger->info("Bulk updated scores for {$processedWords} words", [
                 'languageCode' => $languageCode,
                 'uniqueWords' => count($uniqueWords),
@@ -123,7 +125,7 @@ class WordsPopularityScoreSetService
      * @param string $entityClass The language entity FQCN
      * @param array<string, int> $scoreIncrements Map of word names to score increments
      */
-    private function bulkUpdateScores(string $entityClass, array $scoreIncrements): void
+    private function bulkUpdateScores(string $entityClass, string $languageCode, array $scoreIncrements): void
     {
         $connection = $this->entityManager->getConnection();
         $tableName = $this->entityManager->getClassMetadata($entityClass)->getTableName();
@@ -160,6 +162,9 @@ class WordsPopularityScoreSetService
                 WHERE name IN ({$namesString})";
 
         $connection->executeStatement($sql, $params, $types);
+
+        // Keep the word_search copy (MySQL word search) in step with the source table.
+        $this->wordSearchRepository->syncScoresFromSource($languageCode, $tableName, array_map('strval', array_keys($scoreIncrements)));
     }
 
     /**

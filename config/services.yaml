@@ -8,6 +8,9 @@ parameters:
     # on ('1'/'true') = collapse configured multi-char sequences to single glyphs first. Default
     # here keeps existing deployments on the old behaviour until the env var is set.
     env(MANUSCRIPT_CHARACTER_GROUPING_ENABLED): '0'
+    # Word search store during the move off the Elasticsearch words_index: 'elasticsearch' or
+    # 'mysql' (word_search tables, filled by app:word-search-rebuild). See App\Constant\WordSearchBackend.
+    env(WORD_SEARCH_BACKEND): 'elasticsearch'
 
 services:
     # default configuration for services in *this* file
@@ -19,6 +22,7 @@ services:
             # both language scorers tokenize the manuscript identically (see the scorer note on why
             # they must stay in lock-step). Off ('0') = legacy per-character behaviour.
             bool $characterGroupingEnabled: '%env(bool:MANUSCRIPT_CHARACTER_GROUPING_ENABLED)%'
+            string $wordSearchBackend: '%env(WORD_SEARCH_BACKEND)%'
 
     # Auto-tag all language repositories
     _instanceof:
