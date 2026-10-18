@@ -36,25 +36,5 @@ class ManuscriptAlphabetDecodeResultRepository extends ServiceEntityRepository
     /**
      * @return ManuscriptAlphabetDecodeResultEntity[]
      */
-    public function findUnprocessed(int $limit): array
-    {
-        return $this->createQueryBuilder('r')
-            ->where('r.openaiStatus IS NULL')
-            ->orderBy('r.priorityHint', 'DESC')
-            ->addOrderBy('r.id', 'ASC')
-            ->setMaxResults($limit)
-            ->getQuery()
-            ->getResult();
-    }
 
-    public function updateSelection(int $id, string $status, ?string $selectedPhrase): void
-    {
-        $entity = $this->find($id);
-        if ($entity === null) {
-            return;
-        }
-
-        $entity->setOpenaiStatus($status)->setSelectedPhrase($selectedPhrase);
-        $this->getEntityManager()->flush();
-    }
 }

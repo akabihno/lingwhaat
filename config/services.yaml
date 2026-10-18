@@ -11,7 +11,7 @@ parameters:
     # Word search store during the move off the Elasticsearch words_index: 'elasticsearch' or
     # 'mysql' (word_search tables, filled by app:word-search-rebuild). See App\Constant\WordSearchBackend.
     env(WORD_SEARCH_BACKEND): 'elasticsearch'
-    # Exact/fuzzy word and IPA lookups: 'elasticsearch', 'shadow' (serve ES, compare MySQL) or 'mysql'.
+    # Exact/fuzzy word lookups: 'elasticsearch', 'shadow' (serve ES, compare MySQL) or 'mysql'.
     env(WORD_LOOKUP_BACKEND): 'elasticsearch'
 
 services:
@@ -61,16 +61,6 @@ services:
       arguments:
         $logger: '@monolog.logger.pipeline'
 
-    # Service locator for TrainIpaPredictorModelCommand
-    App\Service\LanguageDetection\LanguageTransliteration\Command\TrainIpaPredictorModelCommand:
-        arguments:
-            $container: !tagged_locator app.language_repository
-
-    # Inject project directory for model file path resolution
-    App\Service\LanguageDetection\LanguageTransliteration\LanguageTransliterationDetectionService:
-        arguments:
-            $projectDir: '%kernel.project_dir%'
-
     # Redis cache service configuration
     App\Service\Cache\RedisCacheService:
         arguments:
@@ -84,18 +74,3 @@ services:
         arguments:
             $apiKey: '%env(API_KEY)%'
 
-    App\Service\Categorization\WordCategorizationService:
-        arguments:
-            $anthropicApiKey: '%env(ANTHROPIC_API_KEY)%'
-
-    App\Service\Categorization\OpenAIWordCategorizationService:
-        arguments:
-            $openaiApiKey: '%env(OPENAI_API_KEY)%'
-
-    App\Service\ManuscriptAlphabetDecodeSelectionService:
-        arguments:
-            $openaiApiKey: '%env(OPENAI_API_KEY)%'
-
-    App\Service\Search\WordCategorySearchService:
-        arguments:
-            $esHost: 'http://%env(ELASTICSEARCH_HOST)%:%env(ELASTICSEARCH_PORT)%'

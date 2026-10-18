@@ -20,14 +20,13 @@ data:
   MANUSCRIPT_CHARACTER_GROUPING_ENABLED: "0"
   # elasticsearch | mysql — which store serves the word-search queries already ported to MySQL
   WORD_SEARCH_BACKEND: "mysql"
-  # elasticsearch | shadow | mysql — exact/fuzzy word and IPA lookups; shadow serves ES and
+  # elasticsearch | shadow | mysql — exact/fuzzy word lookups; shadow serves ES and
   # compares MySQL (metric word_search_shadow_total)
   WORD_LOOKUP_BACKEND: "shadow"
   MESSENGER_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=async"
   MESSENGER_WIKIPEDIA_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=wikipedia_async"
   MESSENGER_WIKTIONARY_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=wiktionary_async"
   MESSENGER_WIKIPEDIA_PATTERN_INDEX_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=wikipedia_pattern_index_async"
-  MESSENGER_SELECTION_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=selection"
   MESSENGER_MANUSCRIPT_LANGUAGE_SCORE_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=manuscript_language_score_async"
   MESSENGER_MANUSCRIPT_LANGUAGE_ATBASH_SCORE_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=manuscript_language_atbash_score_async"
   MESSENGER_WORDS_POPULARITY_TRANSPORT_DSN: "doctrine://messenger?table_name=messenger_messages&queue_name=words_popularity_async"
