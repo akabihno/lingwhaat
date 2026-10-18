@@ -42,25 +42,24 @@ services:
       - ./ssl-certs:/ssl-certs:ro
 
   db:
-    profiles: ["local"]
-    image: mysql:8.1.0
+    profiles: ["local", "mysql"]
+    image: mysql:8.4
     container_name: database
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     network_mode: host
     volumes:
-      - ./mysql_data:/var/lib/mysql
-      - ./migrations:/docker-entrypoint-initdb.d
-      - ./my.cnf:/etc/mysql/my.cnf
+      - ${MYSQL_DATA_DIR:-/mnt/stuff/mysql/data}:/var/lib/mysql
+      - ./my.cnf:/etc/mysql/conf.d/lingwhaat.cnf:ro
     deploy:
       resources:
         limits:
-          memory: 1g
-          cpus: '1.0'
+          memory: 4g
+          cpus: '2.0'
         reservations:
-          memory: 512m
-    restart: on-failure
+          memory: 1g
+    restart: unless-stopped
 
   elasticsearch:
     profiles: ["elastic"]
