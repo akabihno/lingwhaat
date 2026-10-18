@@ -13,6 +13,10 @@ vendor
 .env.local
 .env.*.local
 
+# Secrets and local tooling state that must not be baked into the pushed image
+k8s/secret.yaml
+.claude
+
 # Docs / misc not needed to build the app image
 docs
 *.md
