@@ -68,7 +68,8 @@ class WordIndexer
         $index->create([
             'settings' => [
                 'index' => [
-                    'max_ngram_diff' => 10
+                    'max_ngram_diff' => 10,
+                    'number_of_replicas' => 0,
                 ],
                 'analysis' => [
                     'analyzer' => [

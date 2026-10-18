@@ -49,6 +49,8 @@ class WikipediaPatternIndexerService
         $this->esClient->getIndex($concreteName)->create([
             'settings' => [
                 'refresh_interval' => '-1',
+                // Single-node cluster: a replica can never be assigned and only keeps it yellow.
+                'number_of_replicas' => 0,
             ],
             'mappings' => [
                 // Tag managed + the windowSize this index was built for, so ensureWriteIndex adopts
@@ -139,6 +141,9 @@ class WikipediaPatternIndexerService
         $concreteName = self::WRITE_INDEX_PREFIX . '_' . $languageCode . '_' . time();
 
         $this->esClient->getIndex($concreteName)->create([
+            'settings' => [
+                'number_of_replicas' => 0,
+            ],
             'mappings' => [
                 '_meta'      => ['stable' => true, 'windowSize' => $windowSize],
                 'properties' => $this->patternMappingProperties(),
