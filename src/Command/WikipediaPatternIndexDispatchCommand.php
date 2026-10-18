@@ -14,7 +14,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 #[AsCommand(
     name: 'app:wikipedia-pattern-index-dispatch',
-    description: 'Dispatch WikipediaPatternIndexDispatchMessage immediately (index then search)',
+    description: 'Dispatch WikipediaPatternIndexDispatchMessage immediately (scan articles and match manuscripts)',
 )]
 class WikipediaPatternIndexDispatchCommand extends Command
 {

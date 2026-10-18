@@ -11,8 +11,8 @@ namespace App\Service\Metrics;
 final class MetricName
 {
     /**
-     * Counter: total number of Wikipedia articles indexed into Elasticsearch by the pattern-index
-     * pipeline. Labelled by language so per-language throughput is visible. Monotonically
+     * Counter: total number of Wikipedia articles scanned for manuscript matches by the pattern-index
+     * pipeline (name kept from when the articles were indexed into Elasticsearch). Labelled by language so per-language throughput is visible. Monotonically
      * increasing (per process/storage lifetime) — use rate() in Prometheus for throughput.
      */
     public const string WIKIPEDIA_ARTICLES_INDEXED_TOTAL = 'wikipedia_articles_indexed_total';

@@ -9,32 +9,29 @@ use App\Repository\ManuscriptPatternMatchScheduleRepository;
 use App\Service\Logging\ElasticsearchLogger;
 
 /**
- * Runs every manuscript schedule's matches against whatever is currently resident in the per-language
- * corpus index(es) and appends the hits to manuscript_pattern_match_result.
+ * Manuscript side of the corpus pattern search. For each corpus batch the pattern-index handler asks
+ * this service for a {@see ManuscriptWindowMatcher} loaded with every manuscript window, streams the
+ * batch through it ({@see WikipediaCorpusScanner}), then hands it back to saveResults(), which
+ * appends the hits to manuscript_pattern_match_result.
  *
- * In the eviction model the corpus index is scratch space holding only the in-flight batch: the
- * pattern-index handler indexes a batch, calls this to search it, then evicts it. Because results are
- * appended (not upserted), coverage accumulates across batches; because each call only sees the
- * current batch, every region of the corpus is searched exactly once per pass instead of the old
- * whole-index sweep that only ever re-reported the lowest article ids.
+ * Results are appended (not upserted), so coverage accumulates across batches; because each matcher
+ * only ever sees one batch, every region of the corpus is searched exactly once per pass rather than
+ * forever re-reporting the lowest article ids.
  */
 class ManuscriptCorpusSearchService
 {
     private const string LOG_SERVICE = '[ManuscriptCorpusSearchService]';
     private const int RESULTS_PER_WINDOW = 5;
     private const int MAX_TOTAL_HITS = 400;
-    // How many windows to bundle into a single _msearch round-trip. Kept conservative because the
-    // corpus ES is a single node: _msearch runs its sub-searches concurrently against the search
-    // threadpool, so an over-large batch is exactly the "No alive nodes" saturation risk. It also
-    // bounds the wasted work when the MAX_TOTAL_HITS early-exit fires mid-batch (a full chunk is
-    // always issued). Tune upward while watching ES rather than starting high.
-    private const int WINDOWS_PER_MSEARCH = 25;
+    // Rolling hash of the canonical pattern, still written into each hit's pattern_hash for
+    // continuity with result rows produced by the former Elasticsearch search.
+    private const int BASE = 101;
+    private const int MOD = 1000000007;
 
     public function __construct(
         private readonly ManuscriptPatternMatchScheduleRepository $scheduleRepository,
         private readonly ManuscriptPatternMatchRepository $matchRepository,
         private readonly ManuscriptPatternMatchResultRepository $resultRepository,
-        private readonly WikipediaPatternSearchService $searchService,
         private readonly ManuscriptCharacterGroupRepository $characterGroupRepository,
         private readonly ElasticsearchLogger $logger,
         // Feature flag (env MANUSCRIPT_CHARACTER_GROUPING_ENABLED). When on, configured multi-char
@@ -44,19 +41,15 @@ class ManuscriptCorpusSearchService
     ) {
     }
 
-    public function searchLanguage(?string $languageCode): void
+    /**
+     * Load every schedule's matches as $windowSize-token windows into a fresh matcher.
+     */
+    public function buildMatcher(int $windowSize): ManuscriptWindowMatcher
     {
-        $schedules = $this->scheduleRepository->getAll();
-        $this->logger->info(sprintf('Processing %d manuscript schedules against language=%s', count($schedules), $languageCode ?? 'all'), [
-            'service' => self::LOG_SERVICE,
-            'languageCode' => $languageCode,
-        ]);
+        $matcher = new ManuscriptWindowMatcher($windowSize, self::RESULTS_PER_WINDOW);
 
-        foreach ($schedules as $schedule) {
+        foreach ($this->scheduleRepository->getAll() as $schedule) {
             $matches = $this->matchRepository->findBySourceId($schedule->getId());
-            $this->logger->info(sprintf('Schedule "%s" (id: %d): found %d matches', $schedule->getManuscriptName(), $schedule->getId(), count($matches)), [
-                'service' => self::LOG_SERVICE,
-            ]);
 
             // Grouping sequences are per source, and every match here shares this schedule's id as
             // its sourceId (findBySourceId), so resolve them once for the whole schedule instead of
@@ -66,15 +59,12 @@ class ManuscriptCorpusSearchService
                 : [];
 
             foreach ($matches as $match) {
-                $normalized = $this->normalize($match->getSourceData());
-                $windowSize = WikipediaPatternSearchService::DEFAULT_WINDOW_SIZE;
-
                 // Tokenize into glyphs. With grouping enabled, sequences configured for this source
                 // collapse to a single token; otherwise every character is its own token (legacy).
                 // A window is $windowSize *tokens*, so a grouped window can span more than
                 // $windowSize characters while still producing a $windowSize-length canonical
-                // pattern — the length the per-character corpus index was built with.
-                $tokens = ManuscriptWindowTokenizer::tokenize($normalized, $sequences);
+                // pattern — the length of the per-character corpus windows.
+                $tokens = ManuscriptWindowTokenizer::tokenize($this->normalize($match->getSourceData()), $sequences);
                 $tokenCount = count($tokens);
 
                 if ($tokenCount < $windowSize) {
@@ -84,56 +74,73 @@ class ManuscriptCorpusSearchService
                     continue;
                 }
 
-                // Build every window once (keyed by token position), then search them against the
-                // corpus in batched _msearch round-trips instead of one ES request per window.
-                $windows = [];
                 for ($pos = 0; $pos <= $tokenCount - $windowSize; $pos++) {
-                    $windows[$pos] = array_slice($tokens, $pos, $windowSize);
-                }
-
-                $allHits = [];
-                $windowCount = count($windows);
-
-                foreach (array_chunk($windows, self::WINDOWS_PER_MSEARCH, true) as $windowChunk) {
-                    $hitsByPos = $this->searchService->searchByPatterns($windowChunk, self::RESULTS_PER_WINDOW, $languageCode);
-
-                    foreach ($hitsByPos as $pos => $windowHits) {
-                        // Recorded as-written: cipher_window is the concatenated glyphs (a grouped
-                        // token contributes all its characters) and cipher_position is the token index.
-                        $window = implode('', $windows[$pos]);
-                        foreach ($windowHits as $hit) {
-                            $hit['cipher_position'] = $pos;
-                            $hit['cipher_window'] = $window;
-                            $allHits[] = $hit;
-                        }
-
-                        // Cap total hits per match — this whole array becomes one JSON result row.
-                        // Checked per window (not per chunk) so the blob overshoots 400 by at most
-                        // one window's worth of hits, as it did before batching.
-                        if (count($allHits) >= self::MAX_TOTAL_HITS) {
-                            break 2;
-                        }
-                    }
-                }
-
-                $this->logger->info(sprintf('Match id=%d: found %d hits across %d windows', $match->getId(), count($allHits), $windowCount), [
-                    'service' => self::LOG_SERVICE,
-                ]);
-
-                if (empty($allHits)) {
-                    continue;
-                }
-
-                try {
-                    $this->resultRepository->insert($match->getId(), $schedule->getId(), json_encode($allHits, JSON_THROW_ON_ERROR));
-                    $this->logger->info(sprintf('Match id=%d: insert complete', $match->getId()), ['service' => self::LOG_SERVICE]);
-                } catch (\Throwable $e) {
-                    $this->logger->error(sprintf('Match id=%d: insert failed: %s', $match->getId(), $e->getMessage()), ['service' => self::LOG_SERVICE]);
+                    $matcher->addWindow($match->getId(), $schedule->getId(), $pos, array_slice($tokens, $pos, $windowSize));
                 }
             }
         }
 
-        $this->logger->info('Manuscript pattern search complete', ['service' => self::LOG_SERVICE]);
+        return $matcher;
+    }
+
+    /**
+     * Append one result row per match that got hits in this batch. Within a match, hits are taken
+     * window by window in cipher order (each window already capped at RESULTS_PER_WINDOW), and the
+     * match stops at MAX_TOTAL_HITS since the whole array becomes one JSON result row.
+     */
+    public function saveResults(ManuscriptWindowMatcher $matcher, string $languageCode): void
+    {
+        foreach ($matcher->getResultsByMatch() as $matchId => $windows) {
+            $allHits = [];
+            $sourceId = $windows[0]['sourceId'];
+
+            foreach ($windows as $window) {
+                foreach ($window['hits'] as [$articleId, $localPosition]) {
+                    // Recorded as-written: cipher_window is the concatenated glyphs (a grouped
+                    // token contributes all its characters) and cipher_position is the token index.
+                    $allHits[] = [
+                        'article_id'      => $articleId,
+                        'local_position'  => $localPosition,
+                        'pattern'         => $window['pattern'],
+                        'length'          => $matcher->getWindowSize(),
+                        'pattern_hash'    => $this->patternHash($window['pattern']),
+                        'language_code'   => $languageCode,
+                        'cipher_position' => $window['position'],
+                        'cipher_window'   => $window['window'],
+                    ];
+                }
+
+                // Checked per window (not per hit) so the blob overshoots MAX_TOTAL_HITS by at most
+                // one window's worth of hits.
+                if (count($allHits) >= self::MAX_TOTAL_HITS) {
+                    break;
+                }
+            }
+
+            $this->logger->info(sprintf('Match id=%d: found %d hits across %d windows in %s batch', $matchId, count($allHits), count($windows), $languageCode), [
+                'service' => self::LOG_SERVICE,
+            ]);
+
+            if ($allHits === []) {
+                continue;
+            }
+
+            try {
+                $this->resultRepository->insert($matchId, $sourceId, json_encode($allHits, JSON_THROW_ON_ERROR));
+            } catch (\Throwable $e) {
+                $this->logger->error(sprintf('Match id=%d: insert failed: %s', $matchId, $e->getMessage()), ['service' => self::LOG_SERVICE]);
+            }
+        }
+    }
+
+    private function patternHash(string $pattern): int
+    {
+        $hash = 0;
+        foreach (explode(',', $pattern) as $value) {
+            $hash = (($hash * self::BASE) + (int) $value) % self::MOD;
+        }
+
+        return $hash;
     }
 
     private function normalize(string $s): string

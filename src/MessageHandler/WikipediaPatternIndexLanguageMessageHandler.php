@@ -9,7 +9,7 @@ use App\Service\Logging\ElasticsearchLogger;
 use App\Service\Metrics\MetricName;
 use App\Service\Metrics\PrometheusMetricsService;
 use App\Service\Search\ManuscriptCorpusSearchService;
-use App\Service\Search\WikipediaPatternIndexerService;
+use App\Service\Search\WikipediaCorpusScanner;
 use Symfony\Component\Lock\Exception\LockConflictedException;
 use Symfony\Component\Lock\Exception\LockReleasingException;
 use Symfony\Component\Lock\LockFactory;
@@ -32,7 +32,7 @@ class WikipediaPatternIndexLanguageMessageHandler
     public const int MAX_ARTICLE_LIMIT = 500;
 
     public function __construct(
-        private readonly WikipediaPatternIndexerService $indexerService,
+        private readonly WikipediaCorpusScanner $corpusScanner,
         private readonly ManuscriptCorpusSearchService $corpusSearchService,
         private readonly WikipediaPatternIndexOffsetRepository $offsetRepository,
         private readonly LockFactory $lockFactory,
@@ -66,8 +66,7 @@ class WikipediaPatternIndexLanguageMessageHandler
 
         try {
             // Stamp last_run_at before the batch so the dispatch watchdog doesn't re-kick this
-            // language while we're running. Uses a direct DQL UPDATE so em->clear() inside
-            // indexBatchByLanguageCode cannot detach or invalidate this write.
+            // language while we're running.
             // Has no effect for languages with no offset row yet — new languages are safely
             // re-kicked by the watchdog if the first run fails.
             $this->offsetRepository->touchLastRunAt($languageCode);
@@ -84,60 +83,40 @@ class WikipediaPatternIndexLanguageMessageHandler
                 'service' => self::LOG_SERVICE,
             ]);
 
-            // Resolve the language's stable index once and write this batch straight into it.
-            // No per-batch index create / alias swap / delete: those cluster-state operations are
-            // what saturated the single ES node. A failed batch simply propagates and is retried;
-            // deterministic doc ids make the re-run an idempotent overwrite, so there is nothing
-            // to clean up on the error path.
-            $writeIndex = $this->indexerService->ensureWriteIndex($languageCode, $windowSize);
-
-            // The index is scratch space holding only the in-flight batch: index a region, search it
-            // for manuscript matches, then evict it. This bounds the index instead of accumulating
-            // every window of the corpus (the unbounded-growth flaw), while the advancing cursor
-            // still covers the whole corpus across passes. Clear up-front first to drop any residue
-            // from a crash between a prior batch's index and its eviction, so this batch is searched
-            // against exactly its own docs (no double-counted result rows on retry).
-            $this->indexerService->evictIndexContents($writeIndex);
+            // Join this batch against the manuscripts in memory: the matcher holds every manuscript
+            // window, the scanner streams the batch's corpus windows through it, and the hits are
+            // appended as result rows. Nothing about the batch outlives this message, so a failed
+            // batch simply propagates and is retried (its cursor was not advanced).
+            $matcher = $this->corpusSearchService->buildMatcher($windowSize);
 
             $batchStartMs = (int) round(microtime(true) * 1000);
 
-            $result = $this->indexerService->indexBatchByLanguageCode(
-                $windowSize,
+            $result = $this->corpusScanner->scan(
+                $matcher,
                 $languageCode,
-                $writeIndex,
                 $articleLimit,
                 $afterId,
-                $generation,
                 fn() => $lock->refresh(),
             );
 
             $articlesProcessed = $result['processed'];
 
-            // Count the articles just written into Elasticsearch. incBy is a no-op at 0, so an
-            // end-of-corpus empty batch doesn't touch the counter.
+            // incBy is a no-op at 0, so an end-of-corpus empty batch doesn't touch the counter.
             if ($articlesProcessed > 0) {
                 $this->metrics
                     ->counter(
                         MetricName::WIKIPEDIA_ARTICLES_INDEXED_TOTAL,
-                        'Total Wikipedia articles indexed into Elasticsearch by the pattern-index pipeline.',
+                        'Total Wikipedia articles scanned for manuscript matches by the pattern-index pipeline.',
                         ['language'],
                     )
                     ->incBy($articlesProcessed, [$languageCode]);
-            }
 
-            // Search this batch for manuscript matches while it is resident, then evict it. The
-            // index was just cleared, so the search sees only this batch's docs — every region is
-            // searched exactly once per pass (the old whole-index sweep only ever re-reported the
-            // lowest article ids). Refresh first so the just-indexed batch is visible.
-            if ($articlesProcessed > 0) {
-                $this->indexerService->refreshIndex($writeIndex);
                 $lock->refresh();
-                $this->corpusSearchService->searchLanguage($languageCode);
+                $this->corpusSearchService->saveResults($matcher, $languageCode);
             }
-            $this->indexerService->evictIndexContents($writeIndex);
 
-            // Measure the whole cycle (index + search + evict) so the adaptive limit keeps total
-            // batch wall-clock near the target — not just the indexing portion.
+            // Measure the whole cycle (scan + save) so the adaptive limit keeps total batch
+            // wall-clock near the target.
             $durationMs = (int) round(microtime(true) * 1000) - $batchStartMs;
 
             // A short batch means we reached the end of the corpus: wrap the cursor to 0 to re-sweep
@@ -147,10 +126,8 @@ class WikipediaPatternIndexLanguageMessageHandler
 
             $nextArticleLimit = $this->calculateNextLimit($articleLimit, $articlesProcessed, $durationMs);
 
-            // Re-fetch after indexBatchByLanguageCode: em->clear() inside doIndex detaches all
-            // previously-loaded entities, so reusing the $existing reference would cause
-            // persist() to attempt an INSERT and fail on the unique constraint.
-            $offsetEntity = $this->offsetRepository->findByLanguageCode($languageCode)
+            // $existing is still managed (nothing in the batch clears the EntityManager any more).
+            $offsetEntity = $existing
                 ?? (new WikipediaPatternIndexOffsetEntity())->setLanguageCode($languageCode);
             $offsetEntity
                 ->setLastArticleId($newCursor)
@@ -174,7 +151,7 @@ class WikipediaPatternIndexLanguageMessageHandler
                 $nextArticleLimit,
             ));
         } catch (LockConflictedException) {
-            // Lock expired mid-batch (ES flush took longer than LOCK_TTL_SECONDS between
+            // Lock expired mid-batch (a chunk took longer than LOCK_TTL_SECONDS between
             // heartbeat calls). lastRunAt was already set, so the dispatch watchdog will
             // re-kick this language after MAX_IDLE_SECONDS.
             $this->logger->info(sprintf('Lock for %s expired mid-batch — watchdog will recover after idle timeout', $languageCode), [
