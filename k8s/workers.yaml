@@ -169,7 +169,7 @@ metadata:
   name: messenger-wikipedia
   namespace: lingwhaat
 spec:
-  replicas: 4
+  replicas: 0 # paused since the 2026-09-29 MySQL migration
   selector:
     matchLabels:
       app: messenger-wikipedia
@@ -221,7 +221,7 @@ metadata:
   name: messenger-wikipedia-pattern-index
   namespace: lingwhaat
 spec:
-  replicas: 6
+  replicas: 0 # paused since the 2026-09-29 MySQL migration
   selector:
     matchLabels:
       app: messenger-wikipedia-pattern-index
@@ -307,7 +307,7 @@ metadata:
   name: messenger-manuscript-language-score
   namespace: lingwhaat
 spec:
-  replicas: 1
+  replicas: 0 # paused since the 2026-09-29 MySQL migration
   selector:
     matchLabels:
       app: messenger-manuscript-language-score
@@ -341,7 +341,7 @@ metadata:
   name: messenger-manuscript-language-atbash-score
   namespace: lingwhaat
 spec:
-  replicas: 1
+  replicas: 0 # paused since the 2026-09-29 MySQL migration
   selector:
     matchLabels:
       app: messenger-manuscript-language-atbash-score
@@ -375,7 +375,7 @@ metadata:
   name: messenger-words-popularity
   namespace: lingwhaat
 spec:
-  replicas: 2
+  replicas: 0 # paused since the 2026-09-29 MySQL migration
   selector:
     matchLabels:
       app: messenger-words-popularity
