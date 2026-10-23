@@ -6,7 +6,7 @@ COPY composer.loc[k] ./
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
 # Stage 2: Final image
-FROM php:8.5-apache
+FROM php:8.5.12-apache
 
 RUN pecl install redis || true
 RUN docker-php-ext-enable redis
